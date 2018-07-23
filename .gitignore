@@ -1,0 +1,6 @@
+/wardrobe/*.iml
+/wardrobe/.idea
+/wardrobe/api/*.iml
+/wardrobe/common/*.iml
+/wardrobe/platform/*.iml
+/wardrobe/admin/*.iml

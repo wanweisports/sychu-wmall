@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+	<!-- ================================================================= -->
+	<!-- a rolling file appender -->
+	<!-- ================================================================= -->
+
+	<!-- A time/date based rolling appender -->
+	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="./laiqu.log" />
+		<param name="Append" value="false" />
+		<param name="Threshold" value="ERROR" />
+		<!-- Rollover at midnight each day -->
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
+			<param name="ConversionPattern" value="%d %-5p %m %l%n" />
+		</layout>
+	</appender>
+
+	<!-- ================================================================= -->
+	<!-- a console appender -->
+	<!-- debug can be turned off by setting level of root to "off" -->
+	<!-- ================================================================= -->
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<!-- 部署到正式库时，将此改为ERROR,此为日志总开关 -->
+		<param name="Threshold" value="INFO" />
+
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %m %l%n" />
+		</layout>
+	</appender>
+
+<category name="com.laiqu">
+  <priority value="ERROR"/>
+</category>
+
+
+<category name="io.netty">
+    <priority value="ERROR"/>
+</category>
+<category name="org.hibernate">
+    <priority value="INFO"/>
+</category>
+<category name="org.springframework">
+    <priority value="ERROR"/>
+</category>
+<category name="org.quartz">
+    <priority value="ERROR"/>
+</category>
+
+
+
+
+
+<!-- 
+
+
+	<logger name="org.hibernate">
+		<level value="ERROR" />
+	</logger>
+	<logger name="org.springframework"> v
+		<level value="ERROR" />
+	</logger>
+	<logger name="org.quartz">
+		<level value="ERROR" />
+	</logger>
+
+	<logger name="io.netty.buffer.ByteBufUtil" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.NetUtil" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.internal.logging.InternalLoggerFactory" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.internal.logging.InternalLogger" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.channel.MultithreadEventLoopGroup" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.internal.PlatformDependent0" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.internal.PlatformDependent" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.channel.nio.NioEventLoop" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="io.netty.util.internal.ThreadLocalRandom" additivity="false">
+		<level value="OFF" />
+	</logger> -->
+
+	<!-- use this to turn on debug to a rolling file. -->
+	<root>
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</log4j:configuration>

@@ -1,0 +1,4 @@
+# Created by .ignore support plugin (hsz.mobi)
+target
+src/main/webapp/node_modules
+/*.target

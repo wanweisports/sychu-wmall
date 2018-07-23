@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<!-- 此标签库的一个简短描述 -->
+	<description>there are custom tags of tag</description>
+	<!-- 此标签库的版本，由标签开发者自行决定（必须元素） -->
+	<tlib-version>1.0</tlib-version>
+	<!-- 定义一个简短的名称，主要是给一些工具使用（必须元素） -->
+	<short-name>functionTag</short-name>
+	<!-- 定义此标签库的uri路径，用于唯一标识该数据库，便于页面的引用 -->
+	<uri>http://xiaosong.csdn.web.tag</uri>
+	<!-- 此标签库中的一个标签处理器的声明 -->
+	<tag>
+		<!-- 该标签处理器的一个简短描述 -->
+		<description>是否具有该功能的权限</description>
+		<!-- 该标签名称（必须元素） -->
+		<name>hasFunction</name> 
+		<!-- 该标签处理类的全限定名（必须元素） -->
+		<tag-class>com.laiqu.common.util.FunctionTag</tag-class>
+		<!-- 指明该标签主题类型） -->
+		<body-content>JSP</body-content>
+		<!-- 参数 -->
+		<attribute>
+        	<name>functionCode</name>
+         	<required>false</required>
+         	<rtexprvalue>true</rtexprvalue>
+    	</attribute>
+	</tag>
+	
+	<function>
+		<name>formatMyName</name>
+		<function-class>com.laiqu.common.util.FunctionTag</function-class>
+		<function-signature>java.lang.String formatMyName(java.lang.String)</function-signature>
+	</function>
+</taglib>

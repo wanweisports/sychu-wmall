@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+
+    <annotation-driven/>
+    <resources mapping="/**" location="/"/>
+    <beans:bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <beans:property name="viewResolvers">
+            <beans:list>
+                <beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+                <beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+                    <beans:property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+                    <beans:property name="prefix" value="/Views/"/>
+                    <beans:property name="suffix" value=".jsp"/>
+                </beans:bean>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<beans:property name="maxUploadSize">   
+    		<!-- 上传文件总大小不能超过5M -->
+        	<beans:value>5120000</beans:value>  
+    	</beans:property>
+    </beans:bean>
+    
+    <beans:bean class="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
+        <beans:property name="order" value="0"/>
+    </beans:bean>
+    <beans:bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <beans:property name="order" value="1"/>
+        <beans:property name="defaultStatusCode" value="500"/>
+    </beans:bean>
+    
+        <!-- 后台拦截器 -->
+	<mvc:interceptors>
+        <!-- 多个拦截器,顺序执行 -->
+        <mvc:interceptor> 
+        	<!-- 如果不配置或/**,将拦截所有的Controller -->
+           <mvc:mapping path="/**" />
+           <beans:bean class="com.wardrobe.interceptor.AuthorizationHandlerInterceptor"></beans:bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 自动扫描(自动注入) -->
+    <context:component-scan base-package="com.wardrobe">
+      <!-- 过滤不需要扫描的包 --> 
+<!--       <context:exclude-filter type="regex" expression="com.laiqu.netty" />    -->
+    </context:component-scan>
+    
+
+    <beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- <beans:bean id="userDao" class="com.osen.app.dao.impl.UserDaoImpl"/>
+    <beans:bean id="userService" class="com.osen.app.service.impl.UserServiceImpl"/> -->
+</beans:beans>
