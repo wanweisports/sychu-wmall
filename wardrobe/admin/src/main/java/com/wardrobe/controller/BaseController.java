@@ -1,33 +1,24 @@
 package com.wardrobe.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.UserOperator;
+import com.wardrobe.common.util.JsonUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
-import com.wardrobe.common.bean.PageBean;
-import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.util.PoiUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Set;
 
 public class BaseController {
 	public static final String REQUEST_HEAD = "text/html; charset=UTF-8";
@@ -54,7 +45,7 @@ public class BaseController {
 			out = response.getWriter();
 			String jsonStr = String.valueOf(o instanceof String || o instanceof Number || o instanceof Boolean ? o
 					: o instanceof List<?> || o instanceof Set<?> || o instanceof Object[] ? JSONArray.fromObject(o)
-							: JSONObject.fromObject(o));
+					: JSONObject.fromObject(o));
 			if (println)
 				System.out.println("zhe json string is " + jsonStr);
 			out.write(jsonStr);
@@ -128,17 +119,6 @@ public class BaseController {
 		model.addAttribute("currentPage", pageBean.getCurrentPage());
 		model.addAttribute("pageSize", pageBean.getPageSize());
     }
-    
-    protected void outExcel(HttpServletResponse response, Workbook workbook, String excelName) throws IOException {
-    	HttpServletRequest request = getRequest();
-		response.setHeader("Content-Disposition", "attachment;" + PoiUtil.getEncodingFileName(excelName + DateUtil.dateToString(new Date(), DateUtil.YYYYMMDD) + IPlatformConstant.EXCEL_EXTENSION_X, request.getHeader("User-Agent")));
-		response.setStatus(200);
-		ServletOutputStream outputStream = response.getOutputStream();
-		workbook.write(outputStream);
-		workbook.close();
-		outputStream.flush();
-		outputStream.close();
-	}
     
     protected String getStreamResult(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		request.setCharacterEncoding("UTF-8");
