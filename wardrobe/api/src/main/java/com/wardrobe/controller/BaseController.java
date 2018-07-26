@@ -28,20 +28,6 @@ public class BaseController {
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 
-	@Value("app_id")
-	private String appId;
-
-	@Value("appsecret")
-	private String appsecret;
-
-	public String getAppsecret() {
-		return appsecret;
-	}
-
-	public String getAppId() {
-		return appId;
-	}
-
 	/**
 	 * 为AJAX往前端输出的方法
 	 * 

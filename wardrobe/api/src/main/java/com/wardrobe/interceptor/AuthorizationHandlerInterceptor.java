@@ -40,7 +40,8 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
                     out.close();
                     return false;
                 }else {
-                	request.getRequestDispatcher(loginType(request)+"?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);    
+                    response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录json
+                	/*request.getRequestDispatcher("/login?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);*/
                     return false;// 终止拦截器继续传播
                 }
             }

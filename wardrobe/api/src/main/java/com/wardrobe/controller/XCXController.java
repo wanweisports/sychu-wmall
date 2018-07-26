@@ -1,6 +1,8 @@
 package com.wardrobe.controller;
 
+import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IXcxService;
 import net.sf.json.JSONObject;
@@ -26,27 +28,30 @@ public class XCXController extends BaseController {
     @Autowired
     private IXcxService xcxService;
 
+    @NotProtected
     @ResponseBody
     @RequestMapping("login")
     public ResponseBean xcxLogin(String code, String iv, String encryptedData, HttpServletRequest request){
-        try {
-            HttpSession session = request.getSession();
-            String sessionId = session.getId();
-            System.out.println(sessionId);
-            Map<String, Object> data = new HashMap<>();
-            System.out.println(session.getAttribute("sessionId"));
-            JSONObject jsonObject = xcxService.xcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, getAppId(), getAppsecret(), iv, encryptedData);
-            System.out.println(jsonObject);
-            data.put("sessionId", sessionId); //前端使用
-            data.put("skey", jsonObject.getString("unionId")); //由于小程序与公众号session不是同一个，则这里传unionId到公众号
-            session.setAttribute("sessionId", jsonObject.getString("openid")+"_"+jsonObject.getString("session_key"));
-            //request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, jsonObject.get("operator")); //session不一样
-            System.out.println("=========================================================================================");
-            return new ResponseBean(data);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseBean(false);
-        }
+        HttpSession session = request.getSession();
+        String sessionId = session.getId();
+        System.out.println(sessionId);
+        Map<String, Object> data = new HashMap<>();
+        System.out.println(session.getAttribute("sessionId"));
+        JSONObject jsonObject = xcxService.xcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, IPlatformConstant.APP_ID, IPlatformConstant.APP_SECRET, iv, encryptedData);
+        System.out.println(jsonObject);
+        data.put("sessionId", sessionId); //前端使用
+        data.put("skey", jsonObject.getString("unionId")); //由于小程序与公众号session不是同一个，则这里传unionId到公众号
+        session.setAttribute("sessionId", jsonObject.getString("openid")+"_"+jsonObject.getString("session_key"));
+        //request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, jsonObject.get("operator")); //session不一样
+        System.out.println("=========================================================================================");
+        return new ResponseBean(data);
+    }
+
+    @NotProtected
+    @ResponseBody
+    @RequestMapping("notLogin")
+    public ResponseBean notLogin(){
+        return new ResponseBean(IPlatformConstant.FAIL_NOT_LOGIN_CODE, null);
     }
 
 }
