@@ -3,7 +3,7 @@ package com.wardrobe.platform.dao.hibernate;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.dao.IBaseDao;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,6 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.*;
 
 public class BaseDao extends HibernateDaoSupport implements IBaseDao {
