@@ -15,9 +15,6 @@ import java.security.*;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Arrays;
 
-/**
- * Created by leida on 2017/11/8.
- */
 public class WXAppletUserInfo {
 
     /**

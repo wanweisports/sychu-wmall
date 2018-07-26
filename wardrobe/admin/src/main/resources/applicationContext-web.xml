@@ -90,5 +90,6 @@
 	</bean>
 	<bean id="baseDao" class="com.wardrobe.platform.dao.hibernate.BaseDao">
 		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
 </beans>

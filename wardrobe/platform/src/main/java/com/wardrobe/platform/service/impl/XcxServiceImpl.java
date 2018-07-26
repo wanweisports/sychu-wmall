@@ -2,19 +2,14 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.constant.XcxConstant;
 import com.wardrobe.common.util.StrUtil;
-import com.wardrobe.platform.dao.IBaseDao;
 import com.wardrobe.platform.service.IOperatorService;
 import com.wardrobe.platform.service.IXcxService;
-import com.wardrobe.wx.pojo.SNSUserInfo;
 import com.wardrobe.wx.util.WXAppletUserInfo;
 import com.wardrobe.wx.util.WeixinUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by leida on 2017/11/6.
- */
 @Service
 public class XcxServiceImpl extends BaseService implements IXcxService {
 
