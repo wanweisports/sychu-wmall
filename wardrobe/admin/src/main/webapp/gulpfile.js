@@ -1,63 +1,108 @@
+'use strict'
+
 var gulp = require('gulp');
-var stylus = require('gulp-stylus');
-var watch = require('gulp-watch');
-var notify = require('gulp-notify');
-var plumber = require('gulp-plumber');
+var browserSync = require('browser-sync').create();
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
+var filter = require('gulp-filter');
+var mainBowerFiles = require('main-bower-files');
+var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-var uglifyJs  = require('gulp-uglify');
-var through = require('through');
-var minifycss = require('gulp-minify-css');
-var clean = require('gulp-clean');
-var nib = require('nib');
-var jshint = require('gulp-jshint');
+var del = require('del');
+var runSequence = require('run-sequence');
+var replace = require('gulp-replace');
 
-gulp.task('stylus-compile', function() {
-    gulp.src(['./Content/style/**/*.styl', '!./Content/style/base.styl'])
-        .pipe(plumber({errorHandler: notify.onError('error message: <%= error.message %>')}))
-        .pipe(stylus({use: [nib()]}))
-        //.pipe(gulp.dest('./Content/style/'))
-        .pipe(notify({
-            message: '<%= file.relative %> compiled successful',
-            title: 'minify css'}))
-        .pipe(rename({suffix: '.min'}))
-        //.pipe(minifycss())
-        .pipe(plumber.stop())
-        .pipe(gulp.dest('./Content/style/'))
-        .pipe(notify({
-            message: '<%= file.relative %> minified successful',
-            title: 'minify css'}));
+gulp.paths = {
+    dist: 'dist',
+};
+
+var paths = gulp.paths;
+
+// Static Server + watching scss/html files
+gulp.task('serve', ['sass'], function() {
+
+    browserSync.init({
+        server: "./"
+    });
+
+    gulp.watch('scss/**/*.scss', ['sass']);
+    gulp.watch('**/*.html').on('change', browserSync.reload);
+    gulp.watch('js/**/*.js').on('change', browserSync.reload);
+
 });
 
-gulp.task('clean-files', function() {
-    gulp.src(['./Content/app/**/*.min.js', './Content/style/**/*.css'], {read: false})
-        .pipe(plumber({errorHandler: notify.onError('error message: <%= error.message %>')}))
-        .pipe(clean({force: true}))
-        .pipe(notify({
-            message: '<%= file.relative %> has bean removed successful',
-            title: 'clean files'}));
+// Static Server without watching scss files
+gulp.task('serve:lite', function() {
+
+    browserSync.init({
+        server: "./"
+    });
+
+    gulp.watch('**/*.css').on('change', browserSync.reload);
+    gulp.watch('**/*.html').on('change', browserSync.reload);
+    gulp.watch('js/**/*.js').on('change', browserSync.reload);
+
 });
 
-gulp.task('js-compile', function(){
-    gulp.src('./Content/app/**/*.js')
-        .pipe(uglifyJs())
-        .pipe(notify({
-            message: '<%= file.relative %> compiled successful',
-            title: 'minify js'
-        }))
-        .pipe(gulp.dest('./Content/dist'))
-        .pipe(notify({
-            message: '<%= file.relative %> minified successful',
-            title: 'minify js'}));
+gulp.task('sass', function () {
+    return gulp.src('./scss/style.scss')
+        .pipe(sass())
+        .pipe(gulp.dest('./css'))
+        .pipe(browserSync.stream());
 });
 
-gulp.task('js-hint', function() {
-    gulp.src(['./Content/app/**/*.js'])
-    .pipe(watch(function(files) {
-        return files.pipe(jshint())
-            .pipe(jshint.reporter());
-    }));
+gulp.task('sass:watch', function () {
+    gulp.watch('./scss/**/*.scss');
 });
 
-gulp.task('default', ['build']);
-gulp.task('build', ['clean-files', 'stylus-compile', 'js-compile']);
-gulp.task('clean', ['clean-files']);
+gulp.task('clean:dist', function () {
+    return del(paths.dist);
+});
+
+gulp.task('copy:bower', function () {
+    return gulp.src(mainBowerFiles(['**/*.js', '!**/*.min.js']))
+        .pipe(gulp.dest(paths.dist+'/js/libs'))
+        .pipe(uglify())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(paths.dist+'/js/libs'));
+});
+
+gulp.task('copy:css', function() {
+   gulp.src('./css/**/*')
+   .pipe(gulp.dest(paths.dist+'/css'));
+});
+
+gulp.task('copy:img', function() {
+   return gulp.src('./img/**/*')
+   .pipe(gulp.dest(paths.dist+'/img'));
+});
+
+gulp.task('copy:fonts', function() {
+   return gulp.src('./fonts/**/*')
+   .pipe(gulp.dest(paths.dist+'/fonts'));
+});
+
+gulp.task('copy:js', function() {
+   return gulp.src('./js/**/*')
+   .pipe(gulp.dest(paths.dist+'/js'));
+});
+
+gulp.task('copy:html', function() {
+   return gulp.src('./**/*.html')
+   .pipe(gulp.dest(paths.dist+'/'));
+});
+
+gulp.task('replace:bower', function(){
+    return gulp.src([
+        './dist/*.html',
+        './dist/**/*.js',
+    ], {base: './'})
+    .pipe(replace(/bower_components+.+(\/[a-z0-9][^/]*\.[a-z0-9]+(\'|\"))/ig, 'js/libs$1'))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('build:dist', function(callback) {
+    runSequence('clean:dist', 'copy:bower', 'copy:css', 'copy:img', 'copy:fonts', 'copy:js', 'copy:html', 'replace:bower', callback);
+});
+
+gulp.task('default', ['serve']);

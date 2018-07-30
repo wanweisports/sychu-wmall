@@ -1,0 +1,175 @@
+﻿/** 弹窗 **/
+.provinceCityAll {
+    position: absolute;
+    background: #FFF;
+    display: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+}
+.provinceCityAll .tabitems {
+    height: 36px;
+    border-right: none;
+    border-bottom: 1px solid #20a8d8;
+    overflow: hidden;
+}
+.provinceCityAll .tabitems li {
+    height: 36px;
+    float: left;
+    width: 33%;
+}
+.provinceCityAll .tabitems li:nth-child(2) {
+    width: 34%;
+}
+.provinceCityAll .tabitems li a,
+.provinceCity .tabitems li a:visited {
+    display: block;
+    height: 36px;
+    color: #777777;
+    line-height: 36px;
+    text-align: center;
+    text-decoration: none;
+    float: left;
+    width: 100%;
+    font-size: 14px;
+}
+.provinceCityAll .tabitems li a.current,
+.provinceCity .tabitems li a.current:visited {
+    background-color: #20a8d8;
+    color: #FFF
+}
+.provinceCityAll .tabitems ul {
+    overflow: hidden;
+}
+.provinceCityAll .con {
+    border-top: none;
+    padding: 10px;
+    overflow: hidden;
+}
+.provinceCityAll .provinceAll,
+.provinceCityAll .cityAll,
+.provinceCityAll .countyAll {
+    overflow: hidden;
+}
+.provinceCityAll .provinceAll .pre a,
+.provinceCityAll .provinceAll .pre a:visited,
+.provinceCityAll .cityAll .pre a,
+.provinceCityAll .cityAll .pre a:visited,
+.provinceCityAll .countyAll .pre a,
+.provinceCityAll .countyAll .pre a:visited {
+    float: left;
+    width: 12%;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #d6d6d6;
+}
+.provinceCityAll .provinceAll .pre a.can,
+.provinceCityAll .provinceAll .pre a.can:visited,
+.provinceCityAll .cityAll .pre a.can,
+.provinceCityAll .cityAll .pre a.can:visited,
+.provinceCityAll .countyAll .pre a.can,
+.provinceCityAll .countyAll .pre a.can:visited {
+    background-color: #20a8d8;
+    color: #fff;
+}
+.provinceCityAll .provinceAll .next a,
+.provinceCityAll .provinceAll .next a:visited,
+.provinceCityAll .cityAll .next a,
+.provinceCityAll .cityAll .next a:visited,
+.provinceCityAll .countyAll .next a,
+.provinceCityAll .countyAll .next a:visited {
+    float: right;
+    width: 12%;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #d6d6d6;
+}
+.provinceCityAll .provinceAll .next a.can,
+.provinceCityAll .provinceAll .next a.can:visited,
+.provinceCityAll .cityAll .next a.can,
+.provinceCityAll .cityAll .next a.can:visited,
+.provinceCityAll .countyAll .next a.can,
+.provinceCityAll .countyAll .next a.can:visited {
+    background-color: #20a8d8;
+    color: #fff;
+}
+.provinceCityAll .provinceAll .list,
+.provinceCityAll .cityAll .list,
+.provinceCityAll .countyAll .list {
+    float: left;
+    width: 76%;
+    margin: auto;
+}
+.provinceCityAll .provinceAll .list li,
+.provinceCityAll .cityAll .list li,
+.provinceCityAll .countyAll .list li {
+    float: left;
+    width: 33%;
+    text-align: center;
+    overflow: hidden;
+    padding: 5px 0;
+}
+.provinceCityAll .provinceAll .list li:nth-child(2),
+.provinceCityAll .cityAll .list li:nth-child(2),
+.provinceCityAll .countyAll .list li:nth-child(2) {
+    width: 34%;
+}
+.provinceCityAll .provinceAll .list li a,
+.provinceCityAll .provinceAll .list li a:visited,
+.provinceCityAll .cityAll .list li a,
+.provinceCityAll .cityAll .list li a:visited,
+.provinceCityAll .countyAll .list li a,
+.provinceCityAll .countyAll .list li a:visited {
+    color: #777777;
+    font-size: 14px;
+}
+
+.provinceCityAll .provinceAll .list li a.current,
+.provinceCityAll .provinceAll .list li a.current:visited,
+.provinceCityAll .cityAll .list li a.current,
+.provinceCityAll .cityAll .list li a.current:visited,
+.provinceCityAll .countyAll .list li a.current,
+.provinceCityAll .countyAll .list li a.current:visited {
+    color: #20a8d8;
+}
+.provinceCityAll img {
+    border: 0;
+    vertical-align: middle
+}
+.provinceCityAll a,
+.provinceCityAll a:visited {
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+}
+.provinceCityAll a:hover {
+    text-decoration: underline;
+    color: #333
+}
+.provinceCityAll a,.provinceCityAll a:hover {
+    text-decoration: none
+}
+.provinceCityAll ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.provinceCityAll li , .provinceCityAll .next, .provinceCityAll .pre {
+    cursor: pointer;
+}
+.provinceCityAll {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.provinceAll .list li:hover,
+.cityAll .list li:hover,
+.countyAll .list li a:hover {
+    background-color:#FFE4D2;
+}

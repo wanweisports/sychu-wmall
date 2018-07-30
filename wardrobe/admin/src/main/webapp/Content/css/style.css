@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+/**
+ * @license MIT
+ */
+
+.form-control-label, .checkbox-inline {
+    margin-top: 6px;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.alert-btn-p {
+    margin-bottom: 0;
+}
