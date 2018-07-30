@@ -5,6 +5,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,17 +128,6 @@ public class DateUtil {
 		return dateToString(c.getTime(), YYYYMMDD);
 	}
 	
-	/**
-	 * 计算会员卡截至日期
-	 */
-	public static String cardDeadline(String month) {
-		return !"0".equals(month) ? getAddMonth(month) : "0";
-	}
-	
-	public static String getNowDate() {
-		return dateToString(new Date(), YYYYMMDDHHMMSS);
-	}
-	
 	public static Date addHHMMTime(Date time, int field, int amount) throws ParseException{
 		Calendar c = Calendar.getInstance();
 		c.setTime(time);
@@ -153,59 +143,6 @@ public class DateUtil {
 	public static String getHHMM(Date time) throws ParseException{
 		DateFormat format = new SimpleDateFormat(HHMM);
 		return format.format(time);
-	}
-	
-	public static void pkDate(String startDateStr, String endDateStr, String week, String ssd, String snd) throws ParseException{
-		String[] weeks = week.split(",");
-		
-		Date startDate = stringToDate(startDateStr, null);
-		Date endDate = stringToDate(endDateStr, null);
-		Calendar startCal1 = Calendar.getInstance();
-		startCal1.setTime(startDate);
-		
-		Date ssdDate = stringToDate(ssd, null);
-		Date sndDate = stringToDate(snd, null);
-		Calendar startCal2 = Calendar.getInstance();
-		startCal2.setTime(ssdDate);
-		
-		while (startCal1.getTime().before(endDate)) {
-			while (startCal2.getTime().before(sndDate)) {
-				//if(startCal2.getTime().getTime()==startCal1.getTime().getTime() && )
-				startCal2.add(Calendar.DATE, 1);
-			}
-			startCal1.add(Calendar.DATE, 1);
-		}
-	}
-	
-	//获取时间范围内指定星期的数量
-	public static int getDateScopeWeekNums(String startDateStr, String endDateStr, String weeks) throws ParseException{
-		return getDateScopeByWeek(startDateStr, endDateStr, weeks, null).size();
-	}
-	
-	//获取时间范围内指定星期的时间List
-	public static List<String> getDateScopeWeekList(String startDateStr, String endDateStr, String weeks) throws ParseException{
-		return getDateScopeByWeek(startDateStr, endDateStr, weeks, null);
-	}
-	
-	public static List<String> getDateScopeByWeek(String startDateStr, String endDateStr, String weeks, String format) throws ParseException{
-		List<String> dataList = new ArrayList<String>();
-		List<String> weekList = Arrays.asList(weeks.split(","));
-		Date startDate = stringToDate(startDateStr, format);
-		Date endDate = stringToDate(endDateStr, format);
-		Calendar endCal = Calendar.getInstance();
-		endCal.setTime(endDate);
-		endCal.add(Calendar.DATE, 1); //为了循环到最后一天为止，故这里加一天
-		
-		Calendar startCal = Calendar.getInstance();
-		startCal.setTime(startDate);
-		while (dateToDate(startCal.getTime()).before(dateToDate(endCal.getTime()))) {
-			Date date = startCal.getTime();
-			if(weekList.contains(com.wardrobe.common.util.StrUtil.objToStr(getWeek(date)))){
-				 dataList.add(dateToString(date, YYYYMMDD));
-			}
-			startCal.add(Calendar.DATE, 1);
-		}
-		return dataList;
 	}
 	
 	//获取两个时间之间小时数
@@ -226,73 +163,6 @@ public class DateUtil {
 	public static Date dateToDate(Date date) throws ParseException{
 		DateFormat format = new SimpleDateFormat(YYYYMMDD);
 		return format.parse(format.format(date));
-	}
-	
-	/**
-	 * 当前时间在时间范围
-	 */
-	public static String withinTheTime(String startTimeStr, String endTimeStr) throws Exception{
-		Date startTime = stringToDate(startTimeStr, YYYYMMDDHHMM);
-		Date endTime = stringToDate(endTimeStr, YYYYMMDDHHMM);
-		Date nowTime = stringToDate(dateToString(new Date(), YYYYMMDDHHMM), YYYYMMDDHHMM);
-		if(nowTime.before(startTime)) return IDBConstant.LOGIC_STATUS_NO; //未完成
-		if(nowTime.after(startTime) && nowTime.before(endTime)) return IDBConstant.LOGIC_STATUS_OTHER; //进行中
-		if(nowTime.after(endTime)) return IDBConstant.LOGIC_STATUS_YES; //已完成
-		return "";
-	}
-	
-	public static String getWeekName(int i){
-    	switch (i) {
-		case 0:
-			return "周一";
-		case 1:
-			return "周二";
-		case 2:
-			return "周三";
-		case 3:
-			return "周四";
-		case 4:
-			return "周五";
-		case 5:
-			return "周六";
-		case 6:
-			return "周日";
-		}
-    	return "";
-    }
-	
-	public static String getMonthName(int i){
-    	switch (i) {
-		case 0:
-			return "一月";
-		case 1:
-			return "二月";
-		case 2:
-			return "三月";
-		case 3:
-			return "四月";
-		case 4:
-			return "五月";
-		case 5:
-			return "六月";
-		case 6:
-			return "七月";
-		case 7:
-			return "八月";
-		case 8:
-			return "九月";
-		case 9:
-			return "十月";
-		case 10:
-			return "十一月";
-		case 11:
-			return "十二月";
-    	}
-    	return "";
-    }
-	
-	public static String getDayName(int i){
-		return DAYS[i];
 	}
 
 	public static Date addDate(Date date, int addDay){
@@ -423,6 +293,10 @@ public class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.getActualMaximum(Calendar.DATE);
+	}
+
+	public static Timestamp getNowDate(){
+		return new Timestamp(new Date().getTime());
 	}
 
 

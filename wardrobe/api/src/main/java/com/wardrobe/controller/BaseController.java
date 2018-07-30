@@ -18,7 +18,9 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BaseController {
@@ -80,11 +82,7 @@ public class BaseController {
 			out.close();
 		}
 	}
-	
-	protected <T> T getData(String json, Class<T> clazz) {
-		return JsonUtils.fromJson(json, clazz);
-	}
-	
+
 	protected String redirect(String path) {
         return new StringBuilder(UrlBasedViewResolver.REDIRECT_URL_PREFIX).append(path).toString();
     }
@@ -97,20 +95,8 @@ public class BaseController {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 
-    protected UserOperator getUserInfo() {
-        UserOperator userInfo = getUserInfo(getRequest().getSession());
-        //方便测试，后期删除！
-        /*if(userInfo == null){
-        	userInfo = new UserOperator();
-        	userInfo.setId(1);
-        	userInfo.setOperatorId("admin");
-        	userInfo.setOperatorName("管理员");
-        }*/
-        return userInfo;
-    }
-
-    protected UserOperator getUserInfo(HttpSession session) {
-        return (UserOperator) session.getAttribute(IPlatformConstant.LOGIN_USER);
+    protected String getUserUnionId() {
+		return (String) getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER_UNIONID);
     }
 	
     protected void setPageInfo(Model model, PageBean pageBean){
@@ -120,6 +106,16 @@ public class BaseController {
 		model.addAttribute("currentPage", pageBean.getCurrentPage());
 		model.addAttribute("pageSize", pageBean.getPageSize());
     }
+
+	protected Map setPageInfo(PageBean pageBean){
+		Map map = new HashMap<>(5, 1);
+		map.put("list", pageBean.getList());
+		map.put("count", pageBean.getCount());
+		map.put("lastPage", pageBean.getLastPage());
+		map.put("currentPage", pageBean.getCurrentPage());
+		map.put("pageSize", pageBean.getPageSize());
+		return map;
+	}
     
     protected String getStreamResult(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		request.setCharacterEncoding("UTF-8");

@@ -39,10 +39,11 @@ public class XCXController extends BaseController {
         System.out.println(session.getAttribute("sessionId"));
         JSONObject jsonObject = xcxService.xcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, IPlatformConstant.APP_ID, IPlatformConstant.APP_SECRET, iv, encryptedData);
         System.out.println(jsonObject);
+        String unionId = jsonObject.getString("unionId");
         data.put("sessionId", sessionId); //前端使用
-        data.put("skey", jsonObject.getString("unionId")); //由于小程序与公众号session不是同一个，则这里传unionId到公众号
-        session.setAttribute("sessionId", jsonObject.getString("openid")+"_"+jsonObject.getString("session_key"));
-        //request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, jsonObject.get("operator")); //session不一样
+        data.put("unionId", unionId);
+        session.setAttribute("sessionId", jsonObject.getString("openid") + "_" + jsonObject.getString("session_key"));
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_UNIONID, unionId); //session不一样，需要解决
         System.out.println("=========================================================================================");
         return new ResponseBean(data);
     }

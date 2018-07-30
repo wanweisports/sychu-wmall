@@ -1,6 +1,6 @@
 package com.wardrobe.controller;
 
-import com.wardrobe.common.bean.PayInputView;
+import com.wardrobe.common.view.PayInputView;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.wx.WeiXinConnector;
 import com.wardrobe.wx.http.HttpConnect;

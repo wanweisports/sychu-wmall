@@ -9,11 +9,7 @@ public class ResponseBean {
 	
 	private String code;
 	private String message;
-	private Map<String, Object> data = new HashMap<String, Object>();
-	
-	public ResponseBean() {
-		
-	}
+	private Map<String, Object> data = new HashMap<>();
 	
 	public ResponseBean(Map<String, Object> data) {
 		this.code = IPlatformConstant.SUCCESS_CODE;
@@ -33,6 +29,10 @@ public class ResponseBean {
 	
 	public ResponseBean(String code, String message) {
 		this.code = code;
+		this.message = message;
+	}
+	public ResponseBean(boolean isSuccess, String message) {
+		this.code = isSuccess ? IPlatformConstant.SUCCESS_CODE : IPlatformConstant.FAIL_CODE;
 		this.message = message;
 	}
 	

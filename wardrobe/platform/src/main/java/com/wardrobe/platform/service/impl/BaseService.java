@@ -1,6 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
-import com.wardrobe.common.bean.BaseInputView;
+import com.wardrobe.common.view.BaseInputView;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.constant.SqlConfig;

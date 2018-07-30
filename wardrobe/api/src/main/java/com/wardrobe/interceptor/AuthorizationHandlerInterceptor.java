@@ -26,7 +26,7 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
         
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 未标记不受保护权限的Controller和方法，在没有登录的情况下跳转至登录页面
-        NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
+        /*NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
         if (classAnnotation == null && methodAnnotation == null) {
             if (request.getSession().getAttribute(IPlatformConstant.LOGIN_USER) == null) {
@@ -37,11 +37,11 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
                     return false;
                 }else {
                     response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录json
-                	/*request.getRequestDispatcher("/login?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);*/
+                	*//*request.getRequestDispatcher("/login?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);*//*
                     return false;// 终止拦截器继续传播
                 }
             }
-        }
+        }*/
         return true;
     }
 

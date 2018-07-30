@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://www.abies.com.cn:3306/www-test3</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <mapping class="com.wardrobe.common.po.CommodityColor"/>
+    <mapping class="com.wardrobe.common.po.CommodityInfo"/>
+    <mapping class="com.wardrobe.common.po.CommoditySize"/>
+    <mapping class="com.wardrobe.common.po.ReserveOrderDetail"/>
+    <mapping class="com.wardrobe.common.po.ReserveOrderInfo"/>
+    <mapping class="com.wardrobe.common.po.SysArea"/>
+    <mapping class="com.wardrobe.common.po.SysDeviceControl"/>
+    <mapping class="com.wardrobe.common.po.SysDeviceInfo"/>
+    <mapping class="com.wardrobe.common.po.SysDict"/>
+    <mapping class="com.wardrobe.common.po.SysResources"/>
+    <mapping class="com.wardrobe.common.po.UserAccount"/>
+    <mapping class="com.wardrobe.common.po.UserCouponInfo"/>
+    <mapping class="com.wardrobe.common.po.UserExpressInfo"/>
+    <mapping class="com.wardrobe.common.po.UserInfo"/>
+    <mapping class="com.wardrobe.common.po.UserOrderDetail"/>
+    <mapping class="com.wardrobe.common.po.UserOrderInfo"/>
+    <mapping class="com.wardrobe.common.po.UserShoppingCart"/>
+    <mapping class="com.wardrobe.common.po.UserTransactions"/>
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

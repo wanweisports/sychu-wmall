@@ -1,6 +1,6 @@
 package com.wardrobe.controller;
 
-import com.wardrobe.common.bean.PayInputView;
+import com.wardrobe.common.view.PayInputView;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.wx.WeiXinConnector;
 import com.wardrobe.wx.http.HttpConnect;
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 @Controller
 public class WXPayController extends BaseController {
 	
-	private static Logger logger = Logger.getLogger(WXCoreController.class);
+	private static Logger logger = Logger.getLogger(WXPayController.class);
 	
 	//微信支付商户开通后 微信会提供appid和appsecret和商户号partner
 		private static String appid = WeiXinConnector.APP_ID;//"wx86c89d3d834ee891";

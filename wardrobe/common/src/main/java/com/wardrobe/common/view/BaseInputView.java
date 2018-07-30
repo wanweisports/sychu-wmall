@@ -1,4 +1,4 @@
-package com.wardrobe.common.bean;
+package com.wardrobe.common.view;
 
 import com.wardrobe.common.annotation.GsonExclude;
 import com.wardrobe.common.util.StrUtil;
@@ -18,7 +18,7 @@ public class BaseInputView implements Serializable {
 
     @GsonExclude
     private String groupBy;
-    
+
     @GsonExclude
     private String operatorId;
 
