@@ -1,4 +1,4 @@
-package com.wardrobe.common.bean;
+package com.wardrobe.common.view;
 
 public class PayInputView extends BaseInputView {
 

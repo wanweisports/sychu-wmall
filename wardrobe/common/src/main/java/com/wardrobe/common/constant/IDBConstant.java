@@ -25,4 +25,8 @@ public interface IDBConstant {
     String BALANCE_TYPE_XF = "2";//消费
     String BALANCE_TYPE_OTHER = "3";//其他
 
+    int ZERO = 0;
+
+    String RESOURCE_COMMODITY_IMG = "10"; //商品图
+
 }

@@ -1,9 +1,11 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.constant.XcxConstant;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.StrUtil;
-import com.wardrobe.platform.service.IOperatorService;
+import com.wardrobe.platform.service.IUserService;
 import com.wardrobe.platform.service.IXcxService;
+import com.wardrobe.wx.pojo.SNSUserInfo;
 import com.wardrobe.wx.util.WXAppletUserInfo;
 import com.wardrobe.wx.util.WeixinUtil;
 import net.sf.json.JSONObject;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class XcxServiceImpl extends BaseService implements IXcxService {
 
     @Autowired
-    private IOperatorService operatorService;
+    private IUserService userService;
 
     @Override
     public JSONObject xcxLogn(String session_key, String code, String xcxAppId, String xcxAppsecret, String iv, String encryptedData){
@@ -40,15 +42,9 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
         //{"openId":"o0Dj10J1PA96qthKgNA3_IruBJ-Y","nickName":"Echo????","gender":1,"language":"zh_CN","city":"Chaoyang","province":"Beijing","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLWWlU9dp0nOxtyhLGD5OfRgLiaITQW8iayMcTKicdtyXWcLy1Ns5VH5iavefvPgYQAdLv2maib1EdoiaKg/0","unionId":"olTOa0feeB2tVuk8pKjfh2c9yH8c","watermark":{"timestamp":1512555016,"appid":"wx14967e4aaa8cb46f"},"session_key":"3tOWAoOE3xXnKOJdB9kqmw=="}
 
         String unionId = userInfo.getString("unionId");
-        /*Operator operator = operatorService.getOperatorByUnionId(unionId);
-        if(operator == null){
-            SNSUserInfo snsUserInfo = new SNSUserInfo();
-            snsUserInfo.setOpenId(userInfo.getString("openId"));
-            snsUserInfo.setNickname(userInfo.getString("nickName"));
-            snsUserInfo.setHeadImgUrl(userInfo.getString("avatarUrl"));
-            snsUserInfo.setUnionId(unionId);
-            operatorService.saveShareOperator(null, snsUserInfo);
-        }*/
+        if(userService.getUserInfo(unionId) == null){
+            userService.addUser(new UserInfo(userInfo.getString("openId"), unionId, userInfo.getString("nickName"), userInfo.getString("avatarUrl")));
+        }
         return userInfo;
     }
 
