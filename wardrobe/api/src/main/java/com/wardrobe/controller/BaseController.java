@@ -6,6 +6,7 @@ import com.wardrobe.common.po.UserOperator;
 import com.wardrobe.common.util.JsonUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,7 +28,7 @@ public class BaseController {
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 
-	/** 
+	/**
 	 * 为AJAX往前端输出的方法
 	 * 
 	 * @param o

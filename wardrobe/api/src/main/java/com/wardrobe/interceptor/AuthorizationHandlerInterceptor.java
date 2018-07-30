@@ -1,21 +1,17 @@
 package com.wardrobe.interceptor;
 
-import static com.wardrobe.interceptor.InterceptorHelp.NOT_LOGIN;
-import static com.wardrobe.interceptor.InterceptorHelp.isAjax;
-import static com.wardrobe.interceptor.InterceptorHelp.loginType;
-
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wardrobe.common.annotation.NotProtected;
+import com.wardrobe.common.constant.IPlatformConstant;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wardrobe.common.annotation.NotProtected;
-import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.util.RequestUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+
+import static com.wardrobe.interceptor.InterceptorHelp.NOT_LOGIN;
+import static com.wardrobe.interceptor.InterceptorHelp.isAjax;
 
 public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 	
@@ -40,7 +36,8 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
                     out.close();
                     return false;
                 }else {
-                	request.getRequestDispatcher(loginType(request)+"?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);    
+                    response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录json
+                	/*request.getRequestDispatcher("/login?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);*/
                     return false;// 终止拦截器继续传播
                 }
             }
