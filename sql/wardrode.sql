@@ -3691,7 +3691,7 @@ CREATE TABLE `sys_device_control` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_device_info`;
 CREATE TABLE `sys_device_info` (
-  `did` int(11) NOT NULL AUTO_INCREMENT COMMENT '柜子id',
+  `did` int(11) NOT NULL AUTO_INCREMENT COMMENT '设备id',
   `name` varchar(32) DEFAULT NULL COMMENT '设备名称',
   `areaId` varchar(32) DEFAULT NULL COMMENT '设备区域id',
   `address` varchar(255) DEFAULT NULL COMMENT '设备地址',
