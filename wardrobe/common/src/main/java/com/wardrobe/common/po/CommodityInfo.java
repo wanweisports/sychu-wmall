@@ -6,9 +6,6 @@ import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * Created by 雷达 on 2018/7/30.
- */
 @Entity
 @Table(name = "commodity_info", schema = "")
 public class CommodityInfo {
@@ -23,6 +20,8 @@ public class CommodityInfo {
     private Integer saleCount;
     private String status;
     private Integer seqNo;
+    private String hot;
+    private String newly;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -135,6 +134,26 @@ public class CommodityInfo {
 
     public void setSeqNo(Integer seqNo) {
         this.seqNo = seqNo;
+    }
+
+    @Basic
+    @Column(name = "hot")
+    public String getHot() {
+        return hot;
+    }
+
+    public void setHot(String hot) {
+        this.hot = hot;
+    }
+
+    @Basic
+    @Column(name = "newly")
+    public String getNewly() {
+        return newly;
+    }
+
+    public void setNewly(String newly) {
+        this.newly = newly;
     }
 
     @Basic

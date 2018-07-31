@@ -3,9 +3,6 @@ package com.wardrobe.common.po;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-/**
- * Created by 雷达 on 2018/7/30.
- */
 @Entity
 @Table(name = "sys_area", schema = "")
 public class SysArea {

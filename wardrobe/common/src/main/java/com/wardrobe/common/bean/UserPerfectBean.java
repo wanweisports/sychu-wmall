@@ -5,7 +5,7 @@ package com.wardrobe.common.bean;
  */
 public class UserPerfectBean {
 
-    private String unionId;
+    private Integer userId;
     private String sex;
     private String age;
     private String dressStyle;
@@ -13,12 +13,12 @@ public class UserPerfectBean {
     private String mobile;
     private String inviteCode;
 
-    public String getUnionId() {
-        return unionId;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getSex() {

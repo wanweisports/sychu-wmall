@@ -4,9 +4,6 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * UserOperator entity. @author MyEclipse Persistence Tools
- */
 @Entity
 @Table(name = "user_operator", catalog = "wardrobe", uniqueConstraints = @UniqueConstraint(columnNames = "operatorId"))
 public class UserOperator implements java.io.Serializable {

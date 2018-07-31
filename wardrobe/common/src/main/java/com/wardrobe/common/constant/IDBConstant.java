@@ -29,4 +29,8 @@ public interface IDBConstant {
 
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
 
+    String COMM_CATEGORY = "COMM_CATEGORY"; //品类
+    String COMM_STYLE = "COMM_STYLE"; //风格
+    String COMM_MATERIAL = "COMM_MATERIAL"; //材质
+
 }

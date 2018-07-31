@@ -24,9 +24,7 @@ public interface IPlatformConstant {
 	
     String time24 = " 23:59:59";
     
-    String LOGIN_USER_UNIONID = "USER_UNIONID";
-
-	String PERFECT_MOBILE_CAPTCHA = "PERFECT_MOBILE_CAPTCHA";
+    String LOGIN_USER_ID = "LOGIN_USER_ID";
 
 	String AND = "&";
     

@@ -10,6 +10,8 @@ public interface ICommodityService {
 
     PageBean getCommodityList(CommodityInputView commodityInputView);
 
-    PageBean getCommoditys(CommodityInputView commodityInputView);
+
+    //后台管理
+    PageBean getCommodityListIn(CommodityInputView commodityInputView);
 
 }

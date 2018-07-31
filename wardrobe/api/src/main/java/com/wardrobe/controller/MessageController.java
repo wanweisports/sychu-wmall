@@ -22,11 +22,10 @@ public class MessageController extends BaseController {
         System.out.println("type:" + type);
 
         MobileMessageEnum messageEnum = MobileMessageEnum.getMessageByType(type);
-        if(messageEnum.type == type) { //完善信息
-            int code = 1000 + new Random().nextInt(8999);
-            System.out.println(mobile + "下发短信验证码：" + code);
-            super.getRequest().getSession().setAttribute(IPlatformConstant.PERFECT_MOBILE_CAPTCHA, mobile + IPlatformConstant.AND + code);
-        }
+        int code = 1000 + new Random().nextInt(8999);
+        System.out.println(mobile + "下发短信验证码：" + code);
+        super.getRequest().getSession().setAttribute(messageEnum.name, mobile + IPlatformConstant.AND + code);
+
         return new ResponseBean(true);
     }
 
