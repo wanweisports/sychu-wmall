@@ -12,6 +12,8 @@ public interface IUserService {
 
     UserInfo getUserInfo(int uid);
 
+    UserInfo getUserInfoByUnionId(String unionId);
+
     void addUser(UserInfo userInfo);
 
     void updateUser(UserPerfectBean userPerfectBean);

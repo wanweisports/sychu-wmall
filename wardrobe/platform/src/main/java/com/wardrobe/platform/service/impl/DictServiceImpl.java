@@ -12,17 +12,17 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     @Override
     public List<SysDict> getDicts(String dictName){
-        return baseDao.queryByHql("FROM SysDict d WHERE dictName = ?", dictName);
+        return baseDao.queryByHql("FROM SysDict d WHERE dictName = ?1", dictName);
     }
 
     @Override
     public SysDict getDict(String dictName, String dictKey){
-        return baseDao.queryByHqlFirst("FROM SysDict d WHERE dictName = ? AND dictKey = ?", dictName, dictKey);
+        return baseDao.queryByHqlFirst("FROM SysDict d WHERE dictName = ?1 AND dictKey = ?2", dictName, dictKey);
     }
 
     @Override
     public String getDictValue(String dictName, String dictKey){
-        return StrUtil.objToStr(baseDao.queryBySqlFirst("SELECT dictValue FROM sys_dict WHERE  dictName = ? AND dictKey = ?", dictName, dictKey));
+        return StrUtil.objToStr(baseDao.queryBySqlFirst("SELECT dictValue FROM sys_dict WHERE  dictName = ?1 AND dictKey = ?2", dictName, dictKey));
     }
 
 }

@@ -21,5 +21,5 @@ public class UserTransactionsController extends BaseController {
     public ResponseBean index(UserTransactionsInputView userTransactionsInputView){
         return new ResponseBean(setPageInfo(userTransactionsService.getUserTransactionsList(userTransactionsInputView)));
     }
-    
+
 }

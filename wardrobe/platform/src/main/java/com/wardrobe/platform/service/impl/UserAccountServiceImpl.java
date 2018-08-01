@@ -31,7 +31,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Override
     public double getUserAccountBalance(int uid){
-        return baseDao.getUniqueResult("SELECT balance FROM user_account WHERE uid = ?", uid).doubleValue();
+        return baseDao.getUniqueResult("SELECT balance FROM user_account WHERE uid = ?1", uid).doubleValue();
     }
 
 }

@@ -27,6 +27,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         return baseDao.getToEvict(UserInfo.class, uid);
     }
 
+    @Override
+    public UserInfo getUserInfoByUnionId(String unionId){
+        return baseDao.queryByHqlFirst("FROM UserInfo WHERE unionId = ?1", unionId);
+    }
+
     /*
      * 授权登录添加用户
      */
@@ -81,7 +86,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     private Integer getUserIdByInviteCode(String inviteCode){
-        return StrUtil.objToInt(baseDao.getUniqueObjectResult("SELECT uid FROM user_info u WHERE u.inviteCode = ?", inviteCode));
+        return StrUtil.objToInt(baseDao.getUniqueObjectResult("SELECT uid FROM user_info u WHERE u.inviteCode = ?1", inviteCode));
     }
 
     /*
@@ -122,7 +127,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public boolean userIsPerfect(int uid){
-        return IDBConstant.LOGIC_STATUS_YES.equals(baseDao.getUniqueObjectResult("SELECT isPerfect FROM user_info WHERE uid = ?", uid));
+        return IDBConstant.LOGIC_STATUS_YES.equals(baseDao.getUniqueObjectResult("SELECT isPerfect FROM user_info WHERE uid = ?1", uid));
     }
 
 }
