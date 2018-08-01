@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.UserPerfectBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
@@ -32,6 +33,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public void addUser(UserInfo userInfo){
         Timestamp timestamp = DateUtil.getNowDate();
+        userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_NO); //待完善资料
         userInfo.setCreateTime(timestamp);
         userInfo.setRegisterTime(timestamp);
         baseDao.save(userInfo, null);
@@ -54,6 +56,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         userInfo.setUsualSize(userPerfectBean.getUsualSize());
         userInfo.setMobile(userPerfectBean.getMobile());
         userInfo.setInviteCode(inviteCode);
+        userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
 
 
         if(StrUtil.isNotBlank(inviteCode)){ //有邀请人时, 并且不能是自己的邀请码
@@ -115,6 +118,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserInfo userInfo = getUserInfo(uid);
         userInfo.setMobile(newMoblie);
         baseDao.save(userInfo, uid);
+    }
+
+    @Override
+    public boolean userIsPerfect(int uid){
+        return IDBConstant.LOGIC_STATUS_YES.equals(baseDao.getUniqueObjectResult("SELECT isPerfect FROM user_info WHERE uid = ?", uid));
     }
 
 }

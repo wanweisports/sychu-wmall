@@ -29,4 +29,9 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         return baseDao.getToEvict(UserAccount.class, uid);
     }
 
+    @Override
+    public double getUserAccountBalance(int uid){
+        return baseDao.getUniqueResult("SELECT balance FROM user_account WHERE uid = ?", uid).doubleValue();
+    }
+
 }

@@ -1,7 +1,12 @@
 package com.wardrobe.interceptor;
 
 import com.wardrobe.common.annotation.NotProtected;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.util.RequestUtil;
+import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.platform.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -10,38 +15,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
-import static com.wardrobe.interceptor.InterceptorHelp.NOT_LOGIN;
-import static com.wardrobe.interceptor.InterceptorHelp.isAjax;
-
 public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private IUserService userService;
 	
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        
-    	//if(1==1) return true; //方便测试，后期删除！
-        	
     	if (!(handler instanceof HandlerMethod)) {
             return true;
         }
         
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 未标记不受保护权限的Controller和方法，在没有登录的情况下跳转至登录页面
-        /*NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
+        NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
-        if (classAnnotation == null && methodAnnotation == null) {
-            if (request.getSession().getAttribute(IPlatformConstant.LOGIN_USER) == null) {
-                if(isAjax(request)){
-                    PrintWriter out = response.getWriter();
-                    out.write(NOT_LOGIN); //这里必须是数字, 不能是字符串(字符串会解析成js变量)
-                    out.close();
-                    return false;
-                }else {
-                    response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录json
-                	*//*request.getRequestDispatcher("/login?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);*//*
-                    return false;// 终止拦截器继续传播
-                }
+        if (classAnnotation == null && methodAnnotation == null) { //如果受保护
+            Integer uid = StrUtil.objToInt(request.getSession().getAttribute(IPlatformConstant.LOGIN_USER_ID));
+            if (uid == null) {
+                response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录状态10
+                return false;
             }
-        }*/
+            if(!userService.userIsPerfect(uid)) {
+                response.sendRedirect("/notPerfect"); //未完善资料---跳到统一接口：返回未完善资料状态20
+                return false;
+            }
+        }
         return true;
     }
 

@@ -75,7 +75,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("updateNewMobile")
     public ResponseBean updateNewMobile(String mobile, String code){
-        if(!super.checkMobileMessage(MobileMessageEnum.USER_UPDATE_MOBILE_OLD, mobile, code)) throw new MessageException("验证码不正确，请重新输入");
+        if(!super.checkMobileMessage(MobileMessageEnum.USER_UPDATE_MOBILE_NEW, mobile, code)) throw new MessageException("验证码不正确，请重新输入");
 
         userService.updateUserMobile(getUserId(), mobile);
         return new ResponseBean(true);

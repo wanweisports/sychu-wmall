@@ -13,4 +13,6 @@ public interface IUserAccountService {
 
     UserAccount getUserAccount(int uid);
 
+    double getUserAccountBalance(int uid);
+
 }

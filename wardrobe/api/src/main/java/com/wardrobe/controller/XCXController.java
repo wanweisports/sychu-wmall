@@ -43,7 +43,7 @@ public class XCXController extends BaseController {
         data.put("sessionId", sessionId); //前端使用
         data.put("unionId", unionId);
         session.setAttribute("sessionId", jsonObject.getString("openid") + "_" + jsonObject.getString("session_key"));
-        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_UNIONID, unionId); //session不一样，需要解决
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, unionId); //session不一样，需要解决
         System.out.println("=========================================================================================");
         return new ResponseBean(data);
     }
@@ -53,6 +53,12 @@ public class XCXController extends BaseController {
     @RequestMapping("notLogin")
     public ResponseBean notLogin(){
         return new ResponseBean(IPlatformConstant.FAIL_NOT_LOGIN_CODE, null);
+    }
+
+    @ResponseBody
+    @RequestMapping("notPerfect")
+    public ResponseBean notPerfect(){
+        return new ResponseBean(IPlatformConstant.FAIL_NOT_PERFECT_CODE, null);
     }
 
 }

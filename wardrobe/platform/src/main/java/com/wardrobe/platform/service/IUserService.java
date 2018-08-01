@@ -24,4 +24,6 @@ public interface IUserService {
 
     void updateUserMobile(int uid, String newMoblie);
 
+    boolean userIsPerfect(int uid);
+
 }

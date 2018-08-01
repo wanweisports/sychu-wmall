@@ -22,6 +22,7 @@ public class UserInfo {
     private Integer invitedBy;
     private Integer rank;
     private Integer point;
+    private String isPerfect;
     private Timestamp registerTime;
     private Timestamp createTime;
 
@@ -174,6 +175,16 @@ public class UserInfo {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    @Basic
+    @Column(name = "isPerfect")
+    public String getIsPerfect() {
+        return isPerfect;
+    }
+
+    public void setIsPerfect(String isPerfect) {
+        this.isPerfect = isPerfect;
     }
 
     @Basic

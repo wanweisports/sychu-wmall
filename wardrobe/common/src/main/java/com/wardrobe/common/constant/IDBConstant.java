@@ -33,4 +33,6 @@ public interface IDBConstant {
     String COMM_STYLE = "COMM_STYLE"; //风格
     String COMM_MATERIAL = "COMM_MATERIAL"; //材质
 
+    String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
+
 }
