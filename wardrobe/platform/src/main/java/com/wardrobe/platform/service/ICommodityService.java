@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.view.CommodityInputView;
 
 /**
@@ -13,5 +14,7 @@ public interface ICommodityService {
 
     //后台管理
     PageBean getCommodityListIn(CommodityInputView commodityInputView);
+
+    void addCommodity(CommodityInfo commodityInfo);
 
 }

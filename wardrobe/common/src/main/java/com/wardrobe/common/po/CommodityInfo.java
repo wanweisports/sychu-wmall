@@ -3,6 +3,7 @@ package com.wardrobe.common.po;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,6 +25,8 @@ public class CommodityInfo {
     private String newly;
     private Timestamp createTime;
     private Timestamp updateTime;
+
+    private List<CommodityColor> commodityColors;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -176,45 +179,12 @@ public class CommodityInfo {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CommodityInfo that = (CommodityInfo) o;
-
-        if (cid != that.cid) return false;
-        if (commName != null ? !commName.equals(that.commName) : that.commName != null) return false;
-        if (category != null ? !category.equals(that.category) : that.category != null) return false;
-        if (style != null ? !style.equals(that.style) : that.style != null) return false;
-        if (material != null ? !material.equals(that.material) : that.material != null) return false;
-        if (productDesc != null ? !productDesc.equals(that.productDesc) : that.productDesc != null) return false;
-        if (price != null ? !price.equals(that.price) : that.price != null) return false;
-        if (couPrice != null ? !couPrice.equals(that.couPrice) : that.couPrice != null) return false;
-        if (saleCount != null ? !saleCount.equals(that.saleCount) : that.saleCount != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (seqNo != null ? !seqNo.equals(that.seqNo) : that.seqNo != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
-
-        return true;
+    public List<CommodityColor> getCommodityColors() {
+        return commodityColors;
     }
 
-    @Override
-    public int hashCode() {
-        int result = cid;
-        result = 31 * result + (commName != null ? commName.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (style != null ? style.hashCode() : 0);
-        result = 31 * result + (material != null ? material.hashCode() : 0);
-        result = 31 * result + (productDesc != null ? productDesc.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (couPrice != null ? couPrice.hashCode() : 0);
-        result = 31 * result + (saleCount != null ? saleCount.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (seqNo != null ? seqNo.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
+    public void setCommodityColors(List<CommodityColor> commodityColors) {
+        this.commodityColors = commodityColors;
     }
+
 }

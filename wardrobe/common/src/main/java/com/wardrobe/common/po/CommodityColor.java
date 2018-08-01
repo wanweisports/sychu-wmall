@@ -2,6 +2,7 @@ package com.wardrobe.common.po;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -13,6 +14,8 @@ public class CommodityColor {
     private String colorName;
     private Timestamp createTime;
     private Timestamp updateTime;
+
+    private List<CommoditySize> commoditySizes;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -65,29 +68,12 @@ public class CommodityColor {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CommodityColor that = (CommodityColor) o;
-
-        if (coid != that.coid) return false;
-        if (cid != null ? !cid.equals(that.cid) : that.cid != null) return false;
-        if (colorName != null ? !colorName.equals(that.colorName) : that.colorName != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
-
-        return true;
+    public List<CommoditySize> getCommoditySizes() {
+        return commoditySizes;
     }
 
-    @Override
-    public int hashCode() {
-        int result = coid;
-        result = 31 * result + (cid != null ? cid.hashCode() : 0);
-        result = 31 * result + (colorName != null ? colorName.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
+    public void setCommoditySizes(List<CommoditySize> commoditySizes) {
+        this.commoditySizes = commoditySizes;
     }
+
 }

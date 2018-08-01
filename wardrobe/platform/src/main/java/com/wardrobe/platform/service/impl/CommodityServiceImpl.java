@@ -2,7 +2,11 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.po.CommodityColor;
+import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.SysResources;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
@@ -11,6 +15,8 @@ import com.wardrobe.platform.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -114,8 +120,38 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return typesSd.toString();
     }
 
-    public void addCommodity(){
-        
+    @Override
+    public void addCommodity(CommodityInfo commodityInfo){
+        Timestamp timestamp = DateUtil.getNowDate();
+        commodityInfo.setCreateTime(timestamp);
+        baseDao.save(commodityInfo, null);
+
+        ListIterator<CommodityColor> commodityColorListIterator = commodityInfo.getCommodityColors().listIterator();
+        while (commodityColorListIterator.hasNext()){
+            CommodityColor commodityColor = commodityColorListIterator.next();
+            commodityColor.setCid(commodityInfo.getCid());
+            commodityColor.setCreateTime(timestamp);
+            baseDao.save(commodityColor, null);
+            ListIterator<CommoditySize> commoditySizeListIterator = commodityColor.getCommoditySizes().listIterator();
+            while (commodityColorListIterator.hasNext()){
+                CommoditySize commoditySize = commoditySizeListIterator.next();
+                commoditySize.setCid(commodityInfo.getCid());
+                commoditySize.setCoid(commodityColor.getCoid());
+                commoditySize.setCreateTime(timestamp);
+                baseDao.save(commoditySize, null);
+            }
+        }
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

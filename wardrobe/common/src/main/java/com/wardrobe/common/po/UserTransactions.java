@@ -10,6 +10,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "user_transactions", schema = "")
 public class UserTransactions {
     private int tid;
+    private Integer uid;
     private String serviceType;
     private Integer serviceId;
     private BigDecimal price;
@@ -26,6 +27,16 @@ public class UserTransactions {
 
     public void setTid(int tid) {
         this.tid = tid;
+    }
+
+    @Basic
+    @Column(name = "uid")
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     @Basic
