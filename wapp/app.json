@@ -2,16 +2,21 @@
   "pages":[
     "pages/auth/index",
     "pages/index/index",
+    "pages/user/complete",
+    "pages/products/list",
+    "pages/products/detail",
+    "pages/wardrobe/draft",
+    "pages/wardrobe/confirm",
+    "pages/wardrobe/list",
+    "pages/wardrobe/detail",
     "pages/cart/index",
-    "pages/my/index",
+    "pages/cart/pay",
     "pages/user/index",
+    "pages/user/mobile",
+    "pages/orders/list",
+    "pages/orders/detail",
     "pages/balance/index",
-    "pages/trade/index",
-    "pages/address/index",
-    "pages/brand/index",
-    "pages/list/index",
-    "pages/details/index",
-    "pages/settle/index"
+    "pages/balance/log"
   ],
   "window":{
     "backgroundTextStyle":"white",
@@ -32,12 +37,22 @@
       "selectedIconPath": "images/footer-icon-01-active.png",
       "text": "闪衣橱"
     }, {
+      "pagePath": "pages/products/list",
+      "iconPath": "images/footer-icon-03.png",
+      "selectedIconPath": "images/footer-icon-03-active.png",
+      "text": "挑衣服"
+    }, {
+      "pagePath": "pages/wardrobe/list",
+      "iconPath": "images/footer-icon-03.png",
+      "selectedIconPath": "images/footer-icon-03-active.png",
+      "text": "试衣间"
+    }, {
       "pagePath": "pages/cart/index",
       "iconPath": "images/footer-icon-03.png",
       "selectedIconPath": "images/footer-icon-03-active.png",
       "text": "购物车"
     }, {
-      "pagePath": "pages/my/index",
+      "pagePath": "pages/user/index",
       "iconPath": "images/footer-icon-04.png",
       "selectedIconPath": "images/footer-icon-04-active.png",
       "text": "我的"

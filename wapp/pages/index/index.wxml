@@ -15,7 +15,7 @@
 
     <view class="text">
         <view class="line_flag"></view>
-        <text>主题馆</text>
+        <text>最新上架</text>
     </view>
     
     <view class="venues_box">
@@ -24,6 +24,8 @@
                 <view class="venues_item">
                     <navigator url="../brand/index?id={{item.id}}">
                         <image src="{{item.smallpic}}"/>
+                        <view class="title">{{item.title}}</view>
+                        <view class="price">{{item.price}}</view>
                     </navigator>
                 </view>
             </block>
@@ -32,7 +34,7 @@
 
     <view class="text">
         <view class="line_flag"></view>
-        <text>环球精选</text>
+        <text>人气热卖</text>
     </view>
 
     <view class="choice_box">
@@ -42,6 +44,7 @@
                     <view class="choice_item">
                         <image src="{{item.goodspics}}"/>
                         <view class="title">{{item.title}}</view>
+                        <view class="price">{{item.price}}</view>
                     </view>
                 </navigator>
             </block>

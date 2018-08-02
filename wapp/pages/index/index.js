@@ -54,22 +54,34 @@ Page({
         content.setData({
             venuesItems: [{
                 "id": "000001",
-                "smallpic": "../../wemall/goods/images/yifu001.jpg"
+                "smallpic": "../../wemall/goods/images/yifu001.jpg",
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000002",
-                "smallpic": "../../wemall/goods/images/yifu002.jpg"
+                "smallpic": "../../wemall/goods/images/yifu002.jpg",
+                "title": "夏季新款高腰连体裤搭配套装夏季新款高腰连体裤搭配套装",
+                "price": "￥1,128"
             }, {
                 "id": "000003",
-                "smallpic": "../../wemall/goods/images/yifu003.jpg"
+                "smallpic": "../../wemall/goods/images/yifu003.jpg",
+                "title": "夏季新款高腰连体裤搭配套装夏季新款高腰连体裤搭配套装夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000004",
-                "smallpic": "../../wemall/goods/images/yifu002.jpg"
+                "smallpic": "../../wemall/goods/images/yifu002.jpg",
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000005",
-                "smallpic": "../../wemall/goods/images/yifu001.jpg"
+                "smallpic": "../../wemall/goods/images/yifu001.jpg",
+                "title": "夏季新款高腰连体裤搭配套装夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000006",
-                "smallpic": "../../wemall/goods/images/yifu003.jpg"
+                "smallpic": "../../wemall/goods/images/yifu003.jpg",
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }]
         })
         setTimeout(function () {
@@ -101,27 +113,33 @@ Page({
             choiceItems: [{
                 "id": "000001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000002",
                 "goodspics": "../../wemall/goods/images/yifu002.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000003",
                 "goodspics": "../../wemall/goods/images/yifu003.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000004",
                 "goodspics": "../../wemall/goods/images/yifu002.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000005",
                 "goodspics": "../../wemall/goods/images/yifu003.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }, {
                 "id": "000006",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "title": "美女"
+                "title": "夏季新款高腰连体裤搭配套装",
+                "price": "￥128"
             }]
         })
         setTimeout(function () {

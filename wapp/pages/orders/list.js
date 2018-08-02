@@ -11,43 +11,28 @@ Page({
             list: [{
                 "id": "00001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "bigname": "杭州",
-                "country": "中国",
                 "title": "定时达大所大大所大所多撒大所多",
-                "ourprice": "12",
-                "marketprice": "14"
+                "price": "12"
             }, {
                 "id": "00001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "bigname": "杭州",
-                "country": "中国",
                 "title": "定时达大所大大所大所多撒大所多",
-                "ourprice": "12",
-                "marketprice": "14"
+                "price": "12"
             }, {
                 "id": "00001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "bigname": "杭州",
-                "country": "中国",
                 "title": "定时达大所大大所大所多撒大所多",
-                "ourprice": "12",
-                "marketprice": "14"
+                "price": "12"
             }, {
                 "id": "00001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "bigname": "杭州",
-                "country": "中国",
                 "title": "定时达大所大大所大所多撒大所多",
-                "ourprice": "12",
-                "marketprice": "14"
+                "price": "12"
             }, {
                 "id": "00001",
                 "goodspics": "../../wemall/goods/images/yifu001.jpg",
-                "bigname": "杭州",
-                "country": "中国",
                 "title": "定时达大所大大所大所多撒大所多",
-                "ourprice": "12",
-                "marketprice": "14"
+                "price": "12"
             }]
         });
         // wx.request({

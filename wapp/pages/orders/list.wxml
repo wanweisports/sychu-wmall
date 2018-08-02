@@ -1,0 +1,57 @@
+<view class="container">
+    <block wx:for="{{list}}">
+        <view class="venues_item">
+            <navigator url="../brand/index?id={{item.id}}">
+                <image src="{{item.smallpic}}"/>
+                <view class="title">{{item.title}}</view>
+                <view class="price">{{item.price}}</view>
+            </navigator>
+        </view>
+    </block>
+
+    <view class="search-layout" style="display:none">
+        <view class="section-title">
+            <text>品类</text>
+        </view>
+        <view class="section section_gap">
+            <checkbox-group name="checkbox-group">
+                <label class="checkbox"><checkbox value="1"/> 连衣裙</label>
+                <label class="checkbox"><checkbox value="2"/> 西服</label>
+                <label class="checkbox"><checkbox value="3"/> 半裙</label>
+                <label class="checkbox"><checkbox value="4"/> 上衣</label>
+                <label class="checkbox"><checkbox value="5"/> 牛仔</label>
+                <label class="checkbox"><checkbox value="5"/> 针织</label>
+                <label class="checkbox"><checkbox value="5"/> 外套</label>
+                <label class="checkbox"><checkbox value="5"/> 裤子</label>
+            </checkbox-group>
+        </view>
+
+        <view class="section-title">
+            <text>风格</text>
+        </view>
+        <view class="section section_gap">
+            <checkbox-group name="checkbox-group">
+                <label class="checkbox"><checkbox value="1"/> 职场</label>
+                <label class="checkbox"><checkbox value="2"/> 约会</label>
+                <label class="checkbox"><checkbox value="3"/> 度假</label>
+                <label class="checkbox"><checkbox value="4"/> 休闲</label>
+                <label class="checkbox"><checkbox value="5"/> 晚宴</label>
+            </checkbox-group>
+        </view>
+
+        <view class="section-title">
+            <text>材质</text>
+        </view>
+        <view class="section section_gap">
+            <checkbox-group name="checkbox-group">
+                <label class="checkbox"><checkbox value="1"/> 纯棉</label>
+                <label class="checkbox"><checkbox value="2"/> 棉麻</label>
+            </checkbox-group>
+        </view>
+
+        <view class="btn-area">
+            <button formType="reset">重置</button>
+            <button formType="submit">确认</button>
+        </view>
+    </view>
+</view>
