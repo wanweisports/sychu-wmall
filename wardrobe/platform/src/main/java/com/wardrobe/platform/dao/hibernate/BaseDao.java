@@ -86,7 +86,9 @@ public class BaseDao extends HibernateDaoSupport implements IBaseDao {
         if(id == null) return null;
         HibernateTemplate hibernateTemplate = getHibernateTemplate();
         T obj = clazz.cast(hibernateTemplate.get(clazz, id));
-        hibernateTemplate.evict(obj);
+        if(obj != null) {
+            hibernateTemplate.evict(obj);
+        }
         return obj;
     }
 
@@ -335,8 +337,8 @@ public class BaseDao extends HibernateDaoSupport implements IBaseDao {
         if(isMap)
             query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         if(params != null){
-            for (int i = 0; i < params.length; i++) {
-                query.setParameter(i, params[i]);
+            for (int i = 1; i <= params.length; i++) {
+                query.setParameter(i, params[i-1]);
             }
         }
         return query;
@@ -381,8 +383,8 @@ public class BaseDao extends HibernateDaoSupport implements IBaseDao {
     private Query getHqlQuery(Session s, String hql, Object ...params) {
         Query query = s.createQuery(hql);
         if(params != null){
-            for (int i = 0; i < params.length; i++) {
-                query.setParameter(i, params[i]);
+            for (int i = 1; i <= params.length; i++) {
+                query.setParameter(i, params[i-1]);
             }
         }
         return query;

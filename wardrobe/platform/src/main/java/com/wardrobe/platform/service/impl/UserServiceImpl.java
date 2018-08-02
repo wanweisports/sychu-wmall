@@ -37,13 +37,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public void addUser(UserInfo userInfo){
-        Timestamp timestamp = DateUtil.getNowDate();
-        userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_NO); //待完善资料
-        userInfo.setCreateTime(timestamp);
-        userInfo.setRegisterTime(timestamp);
-        baseDao.save(userInfo, null);
-
-        userAccountService.initUserAccount(userInfo.getUid(), timestamp);
+        baseDao.save(userInfo.init(), null);
+        userAccountService.initUserAccount(userInfo.getUid(), userInfo.getRegisterTime());
     }
 
     /*
@@ -66,11 +61,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         if(StrUtil.isNotBlank(inviteCode)){ //有邀请人时, 并且不能是自己的邀请码
             Integer inviteCodeUserId = checkInviteCode(inviteCode, userId);
-            if(inviteCodeUserId != null){
-                userInfo.setInvitedBy(inviteCodeUserId);
-                //其他操作：如邀请人增加积分..等等
+            userInfo.setInvitedBy(inviteCodeUserId);
+            //其他操作：如邀请人增加积分..等等
 
-            }
+
         }
         baseDao.save(userInfo, userInfo.getUid());
     }
@@ -81,6 +75,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public Integer checkInviteCode(String inviteCode, int uid){
         Integer inviteCodeUserId = getUserIdByInviteCode(inviteCode);
+        if(inviteCodeUserId == null) throw new MessageException("邀请码不存在！");
         if(inviteCodeUserId == uid) throw new MessageException("邀请码不能是自己的！");
         return inviteCodeUserId;
     }

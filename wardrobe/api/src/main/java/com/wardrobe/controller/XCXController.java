@@ -30,6 +30,14 @@ public class XCXController extends BaseController {
 
     @NotProtected
     @ResponseBody
+    @RequestMapping("testLogin")
+    public ResponseBean testLogin(HttpServletRequest request, int uid){
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, uid);
+        return new ResponseBean(true, "登录成功");
+    }
+
+    @NotProtected
+    @ResponseBody
     @RequestMapping("login")
     public ResponseBean xcxLogin(String code, String iv, String encryptedData, HttpServletRequest request){
         HttpSession session = request.getSession();

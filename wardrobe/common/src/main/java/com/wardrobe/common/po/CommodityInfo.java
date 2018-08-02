@@ -179,6 +179,7 @@ public class CommodityInfo {
         this.updateTime = updateTime;
     }
 
+    @Transient
     public List<CommodityColor> getCommodityColors() {
         return commodityColors;
     }

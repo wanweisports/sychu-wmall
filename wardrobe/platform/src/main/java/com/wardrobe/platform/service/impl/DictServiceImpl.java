@@ -12,7 +12,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     @Override
     public List<SysDict> getDicts(String dictName){
-        return baseDao.queryByHql("FROM SysDict d WHERE dictName = ?1", dictName);
+        return baseDao.queryByHql("FROM SysDict d WHERE dictName = ?1 ORDER BY seqNo", dictName);
     }
 
     @Override

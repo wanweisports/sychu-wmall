@@ -1,5 +1,8 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.util.DateUtil;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -205,6 +208,16 @@ public class UserInfo {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public UserInfo init(){
+        Timestamp timestamp = DateUtil.getNowDate();
+        this.isPerfect = IDBConstant.LOGIC_STATUS_NO; //待完善资料
+        this.createTime = timestamp;
+        this.registerTime = timestamp;
+        this.rank = 1;
+        this.point = 0;
+        return this;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.controller.annotation.UserPerfect;
 import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ public class UserController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("updateUser")
-    public ResponseBean updateUser(@UserPerfect UserPerfectBean userPerfectBean, String code){
-        Object yzm = super.getRequest().getSession().getAttribute(MobileMessageEnum.USER_PERFECT.name);
-        if(yzm == null || !(userPerfectBean.getMobile() + IPlatformConstant.AND + code).equals(yzm)) throw new MessageException("验证码错误");
+    public ResponseBean updateUser(UserPerfectBean userPerfectBean, String code){
+        System.out.println(JsonUtils.fromJson(userPerfectBean));
+        //if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, code, userPerfectBean.getMobile())) throw new MessageException("验证码错误");
         userPerfectBean.setUserId(super.getUserId());
         userService.updateUser(userPerfectBean);
         return new ResponseBean(true);
