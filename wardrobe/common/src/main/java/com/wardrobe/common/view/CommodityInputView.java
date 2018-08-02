@@ -8,6 +8,8 @@ public class CommodityInputView extends BaseInputView {
     private String category;
     private String style;
     private String material;
+    private String newly;
+    private String hot;
 
     public String getCategory() {
         return category;
@@ -31,5 +33,21 @@ public class CommodityInputView extends BaseInputView {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String getNewly() {
+        return newly;
+    }
+
+    public void setNewly(String newly) {
+        this.newly = newly;
+    }
+
+    public String getHot() {
+        return hot;
+    }
+
+    public void setHot(String hot) {
+        this.hot = hot;
     }
 }

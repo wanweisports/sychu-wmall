@@ -1,21 +1,11 @@
 package com.wardrobe.interceptor;
 
-import static com.wardrobe.interceptor.InterceptorHelp.NOT_LOGIN;
-import static com.wardrobe.interceptor.InterceptorHelp.isAjax;
-import static com.wardrobe.interceptor.InterceptorHelp.loginType;
-
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wardrobe.common.annotation.NotProtected;
-import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.util.RequestUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 	

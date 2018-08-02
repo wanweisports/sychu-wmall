@@ -30,6 +30,14 @@ public class XCXController extends BaseController {
 
     @NotProtected
     @ResponseBody
+    @RequestMapping("testLogin")
+    public ResponseBean testLogin(HttpServletRequest request, int uid){
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, uid);
+        return new ResponseBean(true, "登录成功");
+    }
+
+    @NotProtected
+    @ResponseBody
     @RequestMapping("login")
     public ResponseBean xcxLogin(String code, String iv, String encryptedData, HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -43,7 +51,7 @@ public class XCXController extends BaseController {
         data.put("sessionId", sessionId); //前端使用
         data.put("unionId", unionId);
         session.setAttribute("sessionId", jsonObject.getString("openid") + "_" + jsonObject.getString("session_key"));
-        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_UNIONID, unionId); //session不一样，需要解决
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, unionId); //session不一样，需要解决
         System.out.println("=========================================================================================");
         return new ResponseBean(data);
     }
@@ -53,6 +61,12 @@ public class XCXController extends BaseController {
     @RequestMapping("notLogin")
     public ResponseBean notLogin(){
         return new ResponseBean(IPlatformConstant.FAIL_NOT_LOGIN_CODE, null);
+    }
+
+    @ResponseBody
+    @RequestMapping("notPerfect")
+    public ResponseBean notPerfect(){
+        return new ResponseBean(IPlatformConstant.FAIL_NOT_PERFECT_CODE, null);
     }
 
 }

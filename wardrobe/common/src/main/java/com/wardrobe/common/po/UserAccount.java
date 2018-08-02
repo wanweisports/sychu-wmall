@@ -6,9 +6,6 @@ import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * Created by 雷达 on 2018/7/30.
- */
 @Entity
 @Table(name = "user_account", schema = "")
 public class UserAccount {
@@ -20,7 +17,6 @@ public class UserAccount {
     private Timestamp updateTime;
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "uid")
     public int getUid() {
         return uid;

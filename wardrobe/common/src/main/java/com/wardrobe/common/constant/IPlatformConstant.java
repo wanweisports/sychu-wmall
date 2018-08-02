@@ -15,8 +15,10 @@ public interface IPlatformConstant {
 	String FAIL_CODE = "-1";
 	
 	String FAIL_MESSAGE = "操作失败";
-    
-    String FAIL_NOT_LOGIN_CODE = "0";
+
+    String FAIL_NOT_LOGIN_CODE = "10"; //未登录
+
+	String FAIL_NOT_PERFECT_CODE = "20"; //未完善资料
 	
 	String REQUEST_JSON = "request_json";
 	
@@ -24,9 +26,7 @@ public interface IPlatformConstant {
 	
     String time24 = " 23:59:59";
     
-    String LOGIN_USER_UNIONID = "USER_UNIONID";
-
-	String PERFECT_MOBILE_CAPTCHA = "PERFECT_MOBILE_CAPTCHA";
+    String LOGIN_USER_ID = "LOGIN_USER_ID";
 
 	String AND = "&";
     

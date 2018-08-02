@@ -76,20 +76,6 @@ public class StrUtil extends StringUtils {
         return Double.parseDouble(decimalFormatThree.format(num));
     }
     
-    public static List<Map<String, Object>> zeroToLine(List<Map<String, Object>> list){
-    	if(list != null && list.size() > 0){
-    		for(Map<String, Object> map : list){
-    			for(String key : map.keySet()){
-    				Object obj = map.get(key);
-    				if(obj instanceof Number && ((Number)obj).intValue() == 0){
-    					map.put(key, "--");
-    				}
-    			}
-    		}
-    	}
-    	return list;
-    }
-    
     /**
 	 * 取出一个指定长度大小的随机正整数.
 	 * 

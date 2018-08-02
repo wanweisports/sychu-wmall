@@ -1,13 +1,13 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.util.DateUtil;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * Created by 雷达 on 2018/7/30.
- */
 @Entity
 @Table(name = "user_info", schema = "")
 public class UserInfo {
@@ -25,6 +25,7 @@ public class UserInfo {
     private Integer invitedBy;
     private Integer rank;
     private Integer point;
+    private String isPerfect;
     private Timestamp registerTime;
     private Timestamp createTime;
 
@@ -180,6 +181,16 @@ public class UserInfo {
     }
 
     @Basic
+    @Column(name = "isPerfect")
+    public String getIsPerfect() {
+        return isPerfect;
+    }
+
+    public void setIsPerfect(String isPerfect) {
+        this.isPerfect = isPerfect;
+    }
+
+    @Basic
     @Column(name = "registerTime")
     public Timestamp getRegisterTime() {
         return registerTime;
@@ -197,6 +208,16 @@ public class UserInfo {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public UserInfo init(){
+        Timestamp timestamp = DateUtil.getNowDate();
+        this.isPerfect = IDBConstant.LOGIC_STATUS_NO; //待完善资料
+        this.createTime = timestamp;
+        this.registerTime = timestamp;
+        this.rank = 1;
+        this.point = 0;
+        return this;
     }
 
     @Override

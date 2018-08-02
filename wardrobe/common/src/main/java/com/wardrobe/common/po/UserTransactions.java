@@ -6,17 +6,14 @@ import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * Created by 雷达 on 2018/7/30.
- */
 @Entity
 @Table(name = "user_transactions", schema = "")
 public class UserTransactions {
     private int tid;
+    private Integer uid;
     private String serviceType;
     private Integer serviceId;
     private BigDecimal price;
-    private Integer oid;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -29,6 +26,16 @@ public class UserTransactions {
 
     public void setTid(int tid) {
         this.tid = tid;
+    }
+
+    @Basic
+    @Column(name = "uid")
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     @Basic
@@ -62,16 +69,6 @@ public class UserTransactions {
     }
 
     @Basic
-    @Column(name = "oid")
-    public Integer getOid() {
-        return oid;
-    }
-
-    public void setOid(Integer oid) {
-        this.oid = oid;
-    }
-
-    @Basic
     @Column(name = "createTime")
     public Timestamp getCreateTime() {
         return createTime;
@@ -102,7 +99,6 @@ public class UserTransactions {
         if (serviceType != null ? !serviceType.equals(that.serviceType) : that.serviceType != null) return false;
         if (serviceId != null ? !serviceId.equals(that.serviceId) : that.serviceId != null) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
-        if (oid != null ? !oid.equals(that.oid) : that.oid != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
 
@@ -115,7 +111,6 @@ public class UserTransactions {
         result = 31 * result + (serviceType != null ? serviceType.hashCode() : 0);
         result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (oid != null ? oid.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;

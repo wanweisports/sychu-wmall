@@ -4,9 +4,6 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-/**
- * OtherResource entity. @author MyEclipse Persistence Tools
- */
 @Entity
 @Table(name = "other_resource")
 public class OtherResource implements java.io.Serializable {
