@@ -11,9 +11,8 @@
     http://www.springframework.org/schema/aop
      http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-
-    <annotation-driven/>
     <resources mapping="/**" location="/"/>
+
     <beans:bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <beans:property name="viewResolvers">
             <beans:list>
@@ -57,6 +56,21 @@
         <mvc:argument-resolvers>
             <beans:bean class="com.wardrobe.controller.bind.UserInfoMethodArgumentResolver"/>
         </mvc:argument-resolvers>
+
+        <!-- 处理responseBody 里面日期类型 -->
+        <mvc:message-converters>
+            <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <beans:property name="objectMapper">
+                    <beans:bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <beans:property name="dateFormat">
+                            <beans:bean class="java.text.SimpleDateFormat">
+                                <beans:constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+                            </beans:bean>
+                        </beans:property>
+                    </beans:bean>
+                </beans:property>
+            </beans:bean>
+        </mvc:message-converters>
     </mvc:annotation-driven>
 
     <!-- 自动扫描(自动注入) -->
