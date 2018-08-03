@@ -40,9 +40,10 @@ public class BaseController {
 		return StrUtil.objToInt(getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER_ID));
     }
 
-	protected boolean checkMobileMessage(MobileMessageEnum mobileMessageEnum, String code, String mobile){
+	protected boolean checkMobileMessage(MobileMessageEnum mobileMessageEnum, String mobile, String code){
 		HttpSession session = getRequest().getSession();
 		String mobileSessionKey = mobileMessageEnum.name;
+		System.out.println(session.getAttribute(mobileSessionKey));
 		if((mobile + IPlatformConstant.AND + code).equals(session.getAttribute(mobileSessionKey))){
 			session.removeAttribute(mobileSessionKey);
 			return true;

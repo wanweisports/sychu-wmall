@@ -25,7 +25,6 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
     	if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        if(1==1) return true; //测试，开发完后注释
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 未标记不受保护权限的Controller和方法，在没有登录的情况下跳转至登录页面

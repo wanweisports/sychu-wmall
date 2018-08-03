@@ -2,6 +2,7 @@ package com.wardrobe.common.po;
 
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.StrUtil;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -217,6 +218,7 @@ public class UserInfo {
         this.registerTime = timestamp;
         this.rank = 1;
         this.point = 0;
+        this.inviteCode = StrUtil.objToStr(StrUtil.initCode(4));
         return this;
     }
 

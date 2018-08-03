@@ -47,8 +47,8 @@ public class UserController extends BaseController {
      * 个人中心
      */
     @ResponseBody
-    @RequestMapping("getUserCenter")
-    public ResponseBean getUserCenter(){
+    @RequestMapping("userCenter")
+    public ResponseBean userCenter(){
         return new ResponseBean(userService.getUserCenter(getUserId()));
     }
 
@@ -56,8 +56,8 @@ public class UserController extends BaseController {
      * 个人设置
      */
     @ResponseBody
-    @RequestMapping("getUserSetting")
-    public ResponseBean getUserSetting(){
+    @RequestMapping("userSetting")
+    public ResponseBean userSetting(){
         return new ResponseBean(userService.getUserSetting(getUserId()));
     }
 
@@ -67,7 +67,11 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("checkOldMobile")
     public ResponseBean checkOldMobile(String mobile, String code){
-        return new ResponseBean(super.checkMobileMessage(MobileMessageEnum.USER_UPDATE_MOBILE_OLD, mobile, code));
+        boolean success = super.checkMobileMessage(MobileMessageEnum.USER_UPDATE_MOBILE_OLD, mobile, code);
+        if(!success) {
+            return new ResponseBean(false, "验证码不正确，请重新输入");
+        }
+        return new ResponseBean(true);
     }
 
     /*
