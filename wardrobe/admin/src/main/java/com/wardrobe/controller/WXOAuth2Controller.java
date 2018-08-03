@@ -30,7 +30,7 @@ public class WXOAuth2Controller extends BaseController {
 	public String oAuth2Login(HttpServletRequest request, HttpServletResponse response){
 		
 		// 用户同意授权后，能获取到code
-		String code = request.getParameter("code");
+		/*String code = request.getParameter("code");
 		String returnUrl = request.getParameter("returnUrl");
 		logger.info(code);
 		logger.info(returnUrl);
@@ -54,7 +54,7 @@ public class WXOAuth2Controller extends BaseController {
 			if(userOperator != null){
 				super.getRequest().getSession().setAttribute(IPlatformConstant.LOGIN_USER, userOperator);
 			}
-		}
+		}*/
 		return "";
 	}
 
