@@ -3,10 +3,25 @@ var log = require('./utils/log.js')
 App({
   onLaunch: function () {
     wx.login({
-        success: function (res) {
-          log.log(JSON.stringify(res))
+      success: function (result) {
+        if (result.code) {
+          wx.request({
+            url: 'https://test.com/onLogin',
+            data: {
+              code: result.code
+            },
+            success: function (res) {
+              console.log(res.data)
+            },
+            fail: function (err) {
+              console.log(err.message)
+            }
+          });
+        } else {
+          console.log('登录失败！' + res.errMsg)
         }
-      })
+      }
+    });
   },
   getUserInfo: function (callback) {
     var content = this

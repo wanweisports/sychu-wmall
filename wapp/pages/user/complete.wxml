@@ -4,78 +4,70 @@
         <text>欢迎来到闪衣橱，请完善以下信息以便为您选出更满意的衣服：</text>
     </view>
     <form bindsubmit="formSubmit" bindreset="formReset">
-      <view class="section-title">
-        <text>基本信息</text>
-      </view>
-      <view class="section section_gap">
-        <view class="section__title">性别：</view>
-        <radio-group name="radio-group">
-          <label><radio value="1"/>帅哥</label>
-          <label><radio value="2"/>美女</label>
-        </radio-group>
-      </view>
-      <view class="section section_gap">
-        <view class="section__title">年龄：</view>
-        <radio-group name="radio-group1">
-          <label><radio value="1"/>85后</label>
-          <label><radio value="2"/>90后</label>
-        </radio-group>
-      </view>
+        <view class="section-title">
+            <text>基本信息</text>
+        </view>
+        <view class="section section_gap">
+            <view class="section__title">性别：</view>
+            <picker bindchange="bindSexChange" value="{{index}}" range="{{sexList}}">
+                <view><text>{{sex[index]}}</text></view>
+            </picker>
+        </view>
+        <view class="section section_gap">
+            <view class="section__title">年龄：</view>
+            <picker bindchange="bindAgeChange" value="{{index}}" range="{{ageList}}">
+                <view><text>{{age[index]}}</text></view>
+            </picker>
+        </view>
 
-      <view class="section-title">
-        <text>风格偏好</text>
-      </view>
-      <view class="section section_gap">
-        <checkbox-group name="checkbox-group">
-          <label class="checkbox"><checkbox value="1"/> 职场</label>
-          <label class="checkbox"><checkbox value="2"/> 约会</label>
-          <label class="checkbox"><checkbox value="3"/> 休闲</label>
-          <label class="checkbox"><checkbox value="4"/> 度假</label>
-          <label class="checkbox"><checkbox value="5"/> 晚宴</label>
-        </checkbox-group>
-      </view>
+        <view class="section-title">
+            <text>风格偏好</text>
+        </view>
+        <view class="section section_gap">
+            <block wx:for="{{dressStyleList}}" wx:key="item">
+                <text class='text-over {{item.checked ? "selected" : ""}}' data-id='{{item.value}}' bindtap='bindDressStyleTap'>{{item.text}}</text>
+            </block>
+        </view>
 
-      <view class="section-title">
-        <text>尺码偏好</text>
-      </view>
-      <view class="section section_gap">
-        <checkbox-group name="checkbox-group2">
-          <label class="checkbox"><checkbox value="1"/> S</label>
-          <label class="checkbox"><checkbox value="2"/> M</label>
-          <label class="checkbox"><checkbox value="3"/> L</label>
-          <label class="checkbox"><checkbox value="4"/> XL</label>
-          <label class="checkbox"><checkbox value="5"/> XXl</label>
-        </checkbox-group>
-      </view>
+        <view class="section-title">
+            <text>尺码偏好</text>
+        </view>
+        <view class="section section_gap">
+            <view class="section section_gap">
+                <block wx:for="{{usualSizeList}}" wx:key="item">
+                    <text class='text-over {{item.checked ? "selected" : ""}}' data-id='{{item.value}}' bindtap='bindUsualSizeTap'>{{item.text}}</text>
+                </block>
+            </view>
+        </view>
 
-      <view class="section-title">
-        <text>手机验证</text>
-      </view>
-      <view class="section section_gap">
-        <view class="section__title">手机号：</view>
-        <input maxlength="11" type="number" placeholder="请输入手机号" confirm-type="done" />
-      </view>
-      <view class="section section_gap">
-        <view class="section__title">验证码：</view>
-        <input type="number" placeholder="请输入验证码" confirm-type="done" />
-        <button >获取验证码</button>
-      </view>
+        <view class="section-title">
+            <text>手机验证</text>
+        </view>
+        <view class="section section_gap">
+            <view class="section__title">手机号：</view>
+            <input maxlength="11" type="number" placeholder="请输入手机号" confirm-type="done" />
+        </view>
+        <view class="section section_gap">
+            <view class="section__title">验证码：</view>
+            <input type="number" placeholder="请输入验证码" confirm-type="done" />
+            <button >获取验证码</button>
+        </view>
 
-      <view class="section-title">
-        <text>邀请码</text>
-      </view>
-      <view class="section section_gap">
-        <view class="section__title">邀请码：</view>
-        <input type="text" placeholder="请输入邀请码" confirm-type="done" />
-      </view>
+        <view class="section-title">
+            <text>邀请码</text>
+        </view>
+        <view class="section section_gap">
+            <view class="section__title">邀请码：</view>
+            <input type="text" placeholder="请输入邀请码" confirm-type="done" />
+        </view>
 
-      <view class="section section_gap">
-        <label class="checkbox"><checkbox value="1"/> 阅读并同意《闪衣橱服务条款》</label>
-      </view>
+        <view class="section section_gap">
+            <label class="checkbox"><checkbox value="1"/> 阅读并同意《闪衣橱服务条款》</label>
+        </view>
 
-      <view class="btn-area">
-        <button formType="submit">进入闪衣橱</button>
-      </view>
+        <view class="btn-area">
+            <button formType="submit">进入闪衣橱</button>
+        </view>
     </form>
 
     <loading hidden="{{loadingHidden}}">

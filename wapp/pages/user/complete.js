@@ -3,26 +3,58 @@ var app = getApp()
 
 Page({
     data: {
-        loadingHidden: false
+        loadingHidden: false,
+
+        sexList: ['帅哥', '美女'],
+        ageList: ['85后', '90后', '95后'],
+        dressStyleList: [
+            {value: "1", text: "职场"},
+            {value: "2", text: "约会"},
+            {value: "3", text: "休闲"},
+            {value: "4", text: "度假"},
+            {value: "5", text: "晚宴"}
+        ],
+        usualSizeList: [
+            {value: "1", text: "S"},
+            {value: "2", text: "M"},
+            {value: "3", text: "L"},
+            {value: "4", text: "XL"},
+            {value: "5", text: "XXL"}
+        ],
+
+        submit: {
+            sex: "",
+            age: "",
+            dressStyle: "",
+            usualSize: "",
+            mobile: "",
+            inviteCode: ""
+        }
     },
     onLoad: function() {
-        log.log('The page auth load')
+        log.log('[P]用户完善信息页加载')
 
-        var content = this
-        //调用应用实例的方法获取全局数据
-        app.getUserInfo(function(userInfo) {
-            if (userInfo != null) {
-                wx.reLaunch({     //跳转至指定页面并关闭其他打开的所有页面（这个最好用在返回至首页的的时候）
-                    url:'/pages/index/index'
-                })
-            } else {
-                //更新数据
-                setTimeout(function () {
-                    content.setData({
-                        loadingHidden: true
-                    })
-                }, 1500)
-            }
-        })
+        var content = this;
+
+        content.data.dressStyleList[0].checked = true;
+
+        setTimeout(function () {
+            content.setData({
+                dressStyleList: content.data.dressStyleList,
+                loadingHidden: true
+            })
+        }, 1500)
+    },
+    bindSexChange: function (e) {
+        console.log(e);
+    },
+    bindAgeChange: function (e) {
+        console.log(e);
+    },
+    bindDressStyleTap: function (e) {
+        console.log(e);
+    },
+    bindUsualSizeTap: function (e) {
+        console.log(e);
     }
 })
