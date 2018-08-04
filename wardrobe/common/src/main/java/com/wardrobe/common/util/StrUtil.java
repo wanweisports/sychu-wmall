@@ -157,4 +157,21 @@ public class StrUtil extends StringUtils {
         return name;
     }
 
+    public static int initCode(int size){
+        if(size <= 0) throw new IllegalArgumentException("size 必须大于0");
+        if(size == 1) return new Random().nextInt(10);
+        StringBuilder initInt = new StringBuilder("1");
+        StringBuilder nextInt = new StringBuilder("8");
+        for(int i = 1; i < size; i++){
+            initInt.append("0");
+            nextInt.append("9");
+        }
+        int code = StrUtil.objToInt(initInt) + new Random().nextInt(StrUtil.objToInt(nextInt));
+        return code;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(initCode(3));
+    }
+
 }

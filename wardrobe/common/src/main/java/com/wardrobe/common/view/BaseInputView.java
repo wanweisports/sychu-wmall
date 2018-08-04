@@ -11,7 +11,7 @@ public class BaseInputView implements Serializable {
     private int page;
 
     @GsonExclude
-    private int pageSize = 10; //默认每页显示30条
+    private int pageSize = 10; //默认每页显示10条
 
     @GsonExclude
     private String orderBy = StrUtil.EMPTY; //排序sql

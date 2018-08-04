@@ -89,11 +89,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(4, 1);
+        Map<String, Object> data = new HashMap<>(5, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
         data.put("rank", userInfo.getRank());
+        data.put("point", userInfo.getPoint());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());

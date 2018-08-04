@@ -63,6 +63,7 @@ public class XCXController extends BaseController {
         return new ResponseBean(IPlatformConstant.FAIL_NOT_LOGIN_CODE, null);
     }
 
+    @NotProtected
     @ResponseBody
     @RequestMapping("notPerfect")
     public ResponseBean notPerfect(){
