@@ -28,8 +28,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public UserInfo getUserInfoByUnionId(String unionId){
-        return baseDao.queryByHqlFirst("FROM UserInfo WHERE unionId = ?1", unionId);
+    public UserInfo getUserInfoByOpenId(String unionId){
+        return baseDao.queryByHqlFirst("FROM UserInfo WHERE openId = ?1", unionId);
     }
 
     /*

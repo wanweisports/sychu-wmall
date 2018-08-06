@@ -12,7 +12,7 @@ public interface IUserService {
 
     UserInfo getUserInfo(int uid);
 
-    UserInfo getUserInfoByUnionId(String unionId);
+    UserInfo getUserInfoByOpenId(String unionId);
 
     void addUser(UserInfo userInfo);
 

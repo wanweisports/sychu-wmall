@@ -34,11 +34,11 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
         if (classAnnotation == null && methodAnnotation == null) { //如果受保护
             Object userInfo = request.getSession().getAttribute(IPlatformConstant.LOGIN_USER);
             if (userInfo == null) {
-                response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录状态10
+                request.getRequestDispatcher("/notLogin").forward(request, response); //未登录---跳到统一接口：返回未登录状态10
                 return false;
             }
             if(!userService.userIsPerfect(((UserInfo)userInfo).getUid())) {
-                response.sendRedirect("/notPerfect"); //未完善资料---跳到统一接口：返回未完善资料状态20
+                request.getRequestDispatcher("/notPerfect").forward(request, response); //未完善资料---跳到统一接口：返回未完善资料状态20
                 return false;
             }
         }

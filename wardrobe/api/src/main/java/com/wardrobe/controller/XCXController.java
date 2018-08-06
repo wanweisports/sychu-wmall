@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IUserService;
 import com.wardrobe.platform.service.IXcxService;
@@ -46,16 +47,21 @@ public class XCXController extends BaseController {
     public ResponseBean xcxLogin(String code, String iv, String encryptedData, HttpServletRequest request){
         HttpSession session = request.getSession();
         String sessionId = session.getId();
-        System.out.println(sessionId);
-        Map<String, Object> data = new HashMap<>();
-        System.out.println(session.getAttribute("sessionId"));
+        System.out.println("sessionId===>" + sessionId);
+        System.out.println("iv===>" + iv);
+        System.out.println("encryptedData===>" + encryptedData);
+        Map<String, Object> data = new HashMap<>(2, 1);
+        System.out.println("session.getAttribute(sessionId)===>" + session.getAttribute("sessionId"));
         JSONObject jsonObject = xcxService.xcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, IPlatformConstant.APP_ID, IPlatformConstant.APP_SECRET, iv, encryptedData);
         System.out.println(jsonObject);
-        String unionId = jsonObject.getString("unionId");
+        //String unionId = jsonObject.getString("unionId");
         data.put("sessionId", sessionId); //前端使用
-        data.put("unionId", unionId);
-        session.setAttribute("sessionId", jsonObject.getString("openid") + "_" + jsonObject.getString("session_key"));
-        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, jsonObject.get("user")); //session不一样，需要解决
+        //data.put("unionId", unionId);
+        String openId = jsonObject.getString("openId");
+        session.setAttribute("sessionId", openId + "_" + jsonObject.getString("session_key"));
+        UserInfo userInfo = userService.getUserInfoByOpenId(openId);
+        data.put("perfect", userInfo.getIsPerfect());
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, userInfo); //session不一样，需要解决
         System.out.println("=========================================================================================");
         return new ResponseBean(data);
     }

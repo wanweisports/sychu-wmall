@@ -26,7 +26,7 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
         if(session_key == null) { //4D8184E7B1C8A744895F9E1C88C74B71
             String xcxLoginUrl = XcxConstant.LOGIN_URL.replace("APPID", xcxAppId).replace("SECRET", xcxAppsecret).replace("JSCODE", code);
             JSONObject jsonObject = WeixinUtil.doGetStr(xcxLoginUrl);
-            System.out.println(jsonObject);
+            System.out.println("jsonObject===>" + jsonObject);
             session_key = jsonObject.getString("session_key"); //先查找session有无缓存session_key
         }
         if(StrUtil.isNotBlank(session_key)) {
@@ -41,13 +41,13 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
 
         //{"openId":"o0Dj10J1PA96qthKgNA3_IruBJ-Y","nickName":"Echo????","gender":1,"language":"zh_CN","city":"Chaoyang","province":"Beijing","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLWWlU9dp0nOxtyhLGD5OfRgLiaITQW8iayMcTKicdtyXWcLy1Ns5VH5iavefvPgYQAdLv2maib1EdoiaKg/0","unionId":"olTOa0feeB2tVuk8pKjfh2c9yH8c","watermark":{"timestamp":1512555016,"appid":"wx14967e4aaa8cb46f"},"session_key":"3tOWAoOE3xXnKOJdB9kqmw=="}
 
-        String unionId = userInfo.getString("unionId");
-        UserInfo user = userService.getUserInfoByUnionId(unionId);
+        System.out.println("userInfo===>" + userInfo);
+        String openId = userInfo.getString("openId");
+        UserInfo user = userService.getUserInfoByOpenId(openId);
         if(user == null){
-            user = new UserInfo(userInfo.getString("openId"), unionId, userInfo.getString("nickName"), userInfo.getString("avatarUrl"));
+            user = new UserInfo(openId, StrUtil.EMPTY, userInfo.getString("nickName"), userInfo.getString("avatarUrl"));
             userService.addUser(user);
         }
-        userInfo.put("user", user);
         return userInfo;
     }
 
