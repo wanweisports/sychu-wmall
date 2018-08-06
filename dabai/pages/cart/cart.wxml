@@ -1,0 +1,44 @@
+<view class="main">
+    <view wx:if="{{hasList}}">
+        <view class="cart-box">
+            <view class="cart-list" wx:for="{{carts}}" wx:key="{{index}}">
+                <icon wx:if="{{item.selected}}" type="success" color="#FF8601" data-index="{{index}}"  class="cart-pro-select" bindtap="selectList"/>
+                <icon wx:else type="circle" class="cart-pro-select" data-index="{{index}}" bindtap="selectList"/>
+                <navigator url="../details/details?id={{item.id}}"><image class="cart-thumb" src="{{item.image}}"></image></navigator>
+                <text class="cart-pro-name">{{item.title}}</text>
+                <text class="cart-pro-price">￥{{item.price}}</text>
+                <view class="cart-count-box">
+                    <text class="cart-count-down" bindtap="minusCount" data-obj="{{obj}}" data-index="{{index}}">-</text>
+                    <text class="cart-count-num">{{item.num}}</text>
+                    <text class="cart-count-add" bindtap="addCount" data-index="{{index}}">+</text>
+                </view>
+                <image class="cart-del" bindtap="deleteList" data-index="{{index}}" src="/image/del.png"></image>
+            </view>
+        </view>
+<image class="saoyisaofoot" bindtap="scanCode"  src="../../image/saoyisao.png"></image>
+        <view class="cart-footer">
+            <icon wx:if="{{selectAllStatus}}" type="success_circle" color="#FF8601" class="total-select" bindtap="selectAll"/>
+            <icon wx:else type="circle" color="#FF8601" class="total-select" bindtap="selectAll"/>
+            <view class="order-icon" bindtap="pay">
+               去结算
+            </view>
+            <text class='hei'>全选</text>
+            <text class="cart-toatl-price">￥{{totalPrice}}</text>
+        </view>
+    </view>
+    <view wx:else>
+    <view class="container">
+    <image class="ku" src="../../image/ku.png"></image>
+      <view class="page-body">
+      <view class="classname">
+        <text>购物车还是空的...</text>
+        </view>
+        <view class="btn-area" >
+        
+        <image wx:if="{{saoyisao}}" class="saoyisao" bindtap="scanCode"  src="../../image/saoyisao.png"></image>
+        <image wx:else class="saoyisao" src="../../image/huisaoyisao.png"></image>
+        </view>
+      </view>
+    </view>
+    </view>
+</view>

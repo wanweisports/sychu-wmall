@@ -14,17 +14,17 @@
             </li>
             <li class="nav-item nav-dropdown <c:if test="${param.menu == 'members'}">open</c:if>">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;">
-                    <i class="icon-home"></i> 会员管理
+                    <i class="icon-user"></i> 会员管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/members/list">
+                    <li class="nav-item <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">active</c:if>" href="/admin/members/list">
                             <i class="icon-arrow-right"></i> 会员列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'orders' || param.subMenu == 'detail'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'orders' || param.subMenu == 'detail'}">active</c:if>" href="/admin/order/list">
-                            <i class="icon-arrow-right"></i> 充值流水
+                    <li class="nav-item <c:if test="${param.subMenu == 'transactions'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/recharge/log">
+                            <i class="icon-arrow-right"></i> 交易记录
                         </a>
                     </li>
                 </ul>
@@ -35,6 +35,11 @@
                     <i class="icon-home"></i> 商品管理
                 </a>
                 <ul class="nav-dropdown-items">
+                    <li class="nav-item <c:if test="${param.subMenu == 'active'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'active'}">active</c:if>" href="/admin/products/active/settings">
+                            <i class="icon-arrow-right"></i> 活动设置
+                        </a>
+                    </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
                             <i class="icon-arrow-right"></i> 商品列表
@@ -53,6 +58,44 @@
                     <li class="nav-item <c:if test="${param.subMenu == 'add'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'add'}">active</c:if>" href="/admin/products/add">
                             <i class="icon-arrow-right"></i> 筛选管理
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
+                            <i class="icon-arrow-right"></i> 库存变更日志
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item nav-dropdown <c:if test="${param.menu == 'wardrobe'}">open</c:if>">
+                <a class="nav-link nav-dropdown-toggle" href="javascript:;">
+                    <i class="icon-home"></i> 试衣间管理
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/settings/wardrobe">
+                            <i class="icon-arrow-right"></i> 试衣间列表
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
+                            <i class="icon-arrow-right"></i> 预约面板
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
+                            <i class="icon-arrow-right"></i> 预约订单
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
+                            <i class="icon-arrow-right"></i> 预约订单详情
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'log'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'log'}">active</c:if>" href="/admin/settings/log">
+                            <i class="icon-arrow-right"></i> 试衣间设置
                         </a>
                     </li>
                 </ul>
@@ -93,7 +136,7 @@
                 <ul class="nav-dropdown-items">
                     <li class="nav-item <c:if test="${param.subMenu == 'wardrobe'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'wardrobe'}">active</c:if>" href="/admin/settings/wardrobe">
-                            <i class="icon-arrow-right"></i> 橱柜管理
+                            <i class="icon-arrow-right"></i> 充值金额设置
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'admin'}">open</c:if>">
@@ -101,31 +144,11 @@
                             <i class="icon-arrow-right"></i> 管理员管理
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'log'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'log'}">active</c:if>" href="/admin/settings/log">
-                            <i class="icon-arrow-right"></i> 系统日志
+                    <li class="nav-item <c:if test="${param.subMenu == 'database'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'database'}">active</c:if>" href="/admin/settings/database">
+                            <i class="icon-arrow-right"></i> 数据库备份
                         </a>
                     </li>
-                </ul>
-            </li>
-
-            <li class="nav-item nav-dropdown <c:if test="${param.menu == 'settings'}">open</c:if>">
-                <a class="nav-link nav-dropdown-toggle" href="javascript:;">
-                    <i class="icon-settings"></i> 系统设置
-                </a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'admin' || param.subMenu == 'profile'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'admin' || param.subMenu == 'profile'}">active</c:if>" href="/admin/settings/admin">
-                            <i class="icon-arrow-right"></i> 管理员设置
-                        </a>
-                    </li>
-                    <c:if test="${Admin.roleId <= 999}">
-                        <li class="nav-item <c:if test="${param.subMenu == 'database'}">open</c:if>">
-                            <a class="nav-link <c:if test="${param.subMenu == 'database'}">active</c:if>" href="/admin/settings/database">
-                                <i class="icon-arrow-right"></i> 数据库备份
-                            </a>
-                        </li>
-                    </c:if>
                     <li class="nav-item <c:if test="${param.subMenu == 'log'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'log'}">active</c:if>" href="/admin/settings/log">
                             <i class="icon-arrow-right"></i> 系统日志

@@ -28,6 +28,8 @@ public interface IPlatformConstant {
     
     String LOGIN_USER_ID = "LOGIN_USER_ID";
 
+	String LOGIN_USER = "LOGIN_USER";
+
 	String AND = "&";
     
     String ADMIN = "admin";

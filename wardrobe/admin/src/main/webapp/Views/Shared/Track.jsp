@@ -10,23 +10,18 @@
             <li class="breadcrumb-item active">工作台</li>
         </c:when>
 
-        <c:when test="${param.menu == 'venue'}">
-            <li class="breadcrumb-item">机构设置</li>
+        <c:when test="${param.menu == 'members'}">
+            <li class="breadcrumb-item">会员管理</li>
             <c:choose>
-                <c:when test="${param.subMenu == 'settings'}">
-                    <li class="breadcrumb-item active">基本资料</li>
+                <c:when test="${param.subMenu == 'list'}">
+                    <li class="breadcrumb-item active">会员列表</li>
                 </c:when>
-                <c:when test="${param.subMenu == 'branch'}">
-                    <li class="breadcrumb-item active">场馆设置</li>
+                <c:when test="${param.subMenu == 'detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/members/list">会员列表</a></li>
+                    <li class="breadcrumb-item active">会员详情</li>
                 </c:when>
-                <c:when test="${param.subMenu == 'sports'}">
-                    <li class="breadcrumb-item active">项目设置</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'course'}">
-                    <li class="breadcrumb-item active">课程管理</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'coaches'}">
-                    <li class="breadcrumb-item active">教练/班主任设置</li>
+                <c:when test="${param.subMenu == 'transactions'}">
+                    <li class="breadcrumb-item active">交易记录</li>
                 </c:when>
             </c:choose>
         </c:when>

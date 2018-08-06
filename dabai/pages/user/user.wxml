@@ -1,0 +1,55 @@
+<view class="main">
+    <view class="header">
+        <image src="userbg.png" class="bg"></image>
+        <image src="{{thumb}}" class="thumb"></image>
+        <text class="nickname">{{nickname}}</text>
+
+        <view class="top3">
+            <view class="top33">
+              <text class="t1">0.00元</text>
+              <text class="t2">账户余额</text>
+            </view>
+            <view class="top33">
+              <text class="t1">0张</text>
+              <text class="t2">优惠券</text>
+            </view>
+            <view class="top33">
+              <text class="t1">0个</text>
+              <text class="t2">积分数量</text>
+            </view>
+        </view>
+    </view>
+    
+    <view class="orders-box">
+        <view class="orders">积分充值</view>
+        
+        <view class="userbut" bindtap="Recharge">
+         <image src="../../image/userbut.png"></image>
+        </view>
+        
+
+
+    </view>
+
+
+    <view class="address-box">
+        <view class="address-manage">
+            <navigator url="/pages/order/order">全部订单</navigator>
+        </view>
+        <view wx:if="{{hasAddress}}" class="address-list">
+            <view>{{address.name}}</view>
+            <view>{{address.phone}}</view>
+            <view>{{address.detail}}</view>
+        </view>
+    </view>
+    <view class="address-box">
+        <view class="address-manage">
+            <navigator url="#">意见反馈</navigator>
+        </view>
+        <view wx:if="{{hasAddress}}" class="address-list">
+            <view>{{address.name}}</view>
+            <view>{{address.phone}}</view>
+            <view>{{address.detail}}</view>
+        </view>
+    </view>
+</view>

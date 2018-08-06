@@ -9,10 +9,10 @@
     <link href="Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css?v=${static_resource_version}" rel="stylesheet">
     <style type="text/css">
         .member-info th, .member-account th {
-            width: 15%;
+            width: 10%;
         }
         .member-info td, .member-account td {
-            width: 35%;
+            width: 25%;
         }
     </style>
 </layout:override>
@@ -38,57 +38,100 @@
                                 <tr>
                                     <th>用户编号：</th>
                                     <td>U20180612101155</td>
-                                    <th>微信唯一编号：</th>
+                                    <th>微信openId：</th>
                                     <td>65432423455633</td>
+                                    <th rowspan="3">用户头像：</th>
+                                    <td rowspan="3">
+                                        <img src="/Content/images/avatars/3.jpg" class="img-rounded" style="height: 7rem;">
+                                    </td>
                                 </tr>
                                 <tr>
+                                    <th>用户昵称：</th>
+                                    <td>孙延琦</td>
                                     <th>手机号码：</th>
                                     <td>158****3167</td>
-                                    <th>性别：</th>
-                                    <td>帅哥</td>
                                 </tr>
                                 <tr>
+                                    <th>性别：</th>
+                                    <td>帅哥</td>
                                     <th>年龄：</th>
                                     <td>158****3167</td>
+                                </tr>
+                                <tr>
+                                    <th>用户等级：</th>
+                                    <td>VIP5</td>
+                                    <th>尺码偏好：</th>
+                                    <td>S、M、L</td>
                                     <th>风格偏好：</th>
                                     <td>职场、约会、休闲、度假</td>
                                 </tr>
                                 <tr>
-                                    <th>尺码偏好：</th>
-                                    <td>S、M、L</td>
-                                    <th>用户邀请码：</th>
-                                    <td>U20180612101155</td>
-                                </tr>
-                                <tr>
-                                    <th>邀请人编号：</th>
-                                    <td>U20180612101155</td>
-                                    <th>注册时间：</th>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="table table-responsive-sm table-bordered member-account">
-                                <tbody>
-                                <tr>
-                                    <th>用户编号：</th>
-                                    <td>U20180612101155</td>
                                     <th>账户余额：</th>
                                     <td>￥10000.00</td>
-                                </tr>
-                                <tr>
                                     <th>衣橱币：</th>
                                     <td>99999</td>
                                     <th>积分：</th>
                                     <td>133333</td>
                                 </tr>
                                 <tr>
-                                    <th>最近登录时间：</th>
-                                    <td colspan="3">2018-07-24 14:46:33</td>
+                                    <th>用户邀请码：</th>
+                                    <td>U20180612101155</td>
+                                    <th>邀请人编号</th>
+                                    <td>U20180612101155</td>
+                                    <th>注册时间：</th>
+                                    <td>2018-07-24 14:46:33</td>
                                 </tr>
                                 </tbody>
                             </table>
-
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>优惠券列表</strong>
+                            <small>Members Coupons</small>
+                        </div>
+                        <div class="card-block">
+                            <table class="table table-responsive-sm table-bordered member-address">
+                                <thead>
+                                <tr>
+                                    <th>##</th>
+                                    <th>优惠券ID</th>
+                                    <th>优惠券业务类型</th>
+                                    <th>优惠券业务ID</th>
+                                    <th>优惠券面值</th>
+                                    <th>优惠券状态</th>
+                                    <th>优惠券到期时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>U20180612101155</td>
+                                    <td>满折扣</td>
+                                    <td>C12141</td>
+                                    <td>￥1,000</td>
+                                    <td>已使用</td>
+                                    <td>2018-07-24 14:46:33</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>U20180612101155</td>
+                                    <td>满折扣</td>
+                                    <td>C12141</td>
+                                    <td>￥1,000</td>
+                                    <td>已使用</td>
+                                    <td>2018-07-24 14:46:33</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>收货地址</strong>
+                            <small>Members Express Address</small>
+                        </div>
+                        <div class="card-block">
                             <table class="table table-responsive-sm table-bordered member-address">
                                 <thead>
                                 <tr>
@@ -150,6 +193,6 @@
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
-    <c:param name="menu" value="students"/>
-    <c:param name="subMenu" value="edit"/>
+    <c:param name="menu" value="members"/>
+    <c:param name="subMenu" value="detail"/>
 </c:import>

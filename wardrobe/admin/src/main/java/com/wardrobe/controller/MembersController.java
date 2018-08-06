@@ -40,37 +40,13 @@ public class MembersController extends BaseController {
         return setModelAndView(modelAndView);
     }
 
-    @Desc("会员编辑")
+    @Desc("会员充值流水")
     @NotProtected
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public ModelAndView renderMembersEdit(String memberId) {
-        ModelAndView modelAndView = new ModelAndView("Members/Edit");
+    @RequestMapping(value = "/transactions/log", method = RequestMethod.GET)
+    public ModelAndView renderMembersTransactionsLog() {
+        ModelAndView modelAndView = new ModelAndView("Members/TransactionsLog");
 
         return setModelAndView(modelAndView);
-    }
-
-    @Desc("会员添加")
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView renderMembersAdd() {
-
-        ModelAndView modelAndView = new ModelAndView("Members/Add");
-
-        return setModelAndView(modelAndView);
-    }
-
-    @Desc("保存会员信息")
-    @ResponseBody
-    @RequestMapping(value = "/saveMemberInfo", method = RequestMethod.POST)
-    public ResponseBean saveMemberInfo() {
-        try {
-            return new ResponseBean(true);
-        } catch (MessageException e) {
-            e.printStackTrace();
-            return new ResponseBean(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseBean(false);
-        }
     }
 
 }
