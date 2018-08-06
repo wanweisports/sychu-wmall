@@ -4,6 +4,7 @@ import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.platform.service.IUserService;
 import com.wardrobe.platform.service.IXcxService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,14 @@ public class XCXController extends BaseController {
     @Autowired
     private IXcxService xcxService;
 
+    @Autowired
+    private IUserService userService;
+
     @NotProtected
     @ResponseBody
     @RequestMapping("testLogin")
     public ResponseBean testLogin(HttpServletRequest request, int uid){
-        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, uid);
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, userService.getUserInfo(uid));
         return new ResponseBean(true, "登录成功");
     }
 
@@ -51,7 +55,7 @@ public class XCXController extends BaseController {
         data.put("sessionId", sessionId); //前端使用
         data.put("unionId", unionId);
         session.setAttribute("sessionId", jsonObject.getString("openid") + "_" + jsonObject.getString("session_key"));
-        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER_ID, unionId); //session不一样，需要解决
+        request.getSession().setAttribute(IPlatformConstant.LOGIN_USER, jsonObject.get("user")); //session不一样，需要解决
         System.out.println("=========================================================================================");
         return new ResponseBean(data);
     }

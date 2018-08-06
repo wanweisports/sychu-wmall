@@ -8,6 +8,7 @@ public class PayInputView extends BaseInputView {
 	private String notifyUrl;//这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等
 	private String body;// 商品描述根据情况修改
 	private String openId;//微信用户对一个公众号唯一
+	private String orderType; //订单类型：1：购物  2：充值
 	
 	/**
 	 * @return the orderId
@@ -81,5 +82,12 @@ public class PayInputView extends BaseInputView {
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-	
+
+	public String getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
 }

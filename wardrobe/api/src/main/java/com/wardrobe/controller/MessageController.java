@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
+import com.wardrobe.common.util.StrUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +23,7 @@ public class MessageController extends BaseController {
         System.out.println("type:" + type);
 
         MobileMessageEnum messageEnum = MobileMessageEnum.getMessageByType(type);
-        int code = 1000 + new Random().nextInt(8999);
+        int code = StrUtil.initCode(4);
         System.out.println(mobile + "下发短信验证码：" + code);
         super.getRequest().getSession().setAttribute(messageEnum.name, mobile + IPlatformConstant.AND + code);
 

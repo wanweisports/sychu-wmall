@@ -21,12 +21,12 @@ public class WeiXinConnector {
 	public static final String KEY = "5krH8dN26Qze0Lrn6Ry4G2l8cep2N24U";//商户号mch_id
 	
 	public static final String SECRET = "uHweaFnV-72CpM8_uq8XxS4zPXAkgHOymD-OODSBd7L3hFh4jkZcOFiq2ZgBHNoX";//企业的Secret
-	
+
 	//企业号TOKEN
-	private static final String ACCESS_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken";
+	//private static final String ACCESS_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken";
 	
 	//非企业号TOKEN
-	//public final static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+	public final static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
 	
 	public static String accessToken = null;

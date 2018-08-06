@@ -2,11 +2,9 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
-import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.controller.annotation.UserPerfect;
 import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +26,7 @@ public class UserController extends BaseController {
     public ResponseBean updateUser(UserPerfectBean userPerfectBean, String code){
         System.out.println(JsonUtils.fromJson(userPerfectBean));
         //if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, code, userPerfectBean.getMobile())) throw new MessageException("验证码错误");
-        userPerfectBean.setUserId(super.getUserId());
+        userPerfectBean.setUserId(getUserInfo().getUid());
         userService.updateUser(userPerfectBean);
         return new ResponseBean(true);
     }
@@ -39,7 +37,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("checkInviteCode")
     public ResponseBean checkInviteCode(String inviteCode){
-        userService.checkInviteCode(inviteCode, getUserId());
+        userService.checkInviteCode(inviteCode, getUserInfo().getUid());
         return new ResponseBean(true);
     }
 
@@ -49,7 +47,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("userCenter")
     public ResponseBean userCenter(){
-        return new ResponseBean(userService.getUserCenter(getUserId()));
+        return new ResponseBean(userService.getUserCenter(getUserInfo().getUid()));
     }
 
     /*
@@ -58,7 +56,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("userSetting")
     public ResponseBean userSetting(){
-        return new ResponseBean(userService.getUserSetting(getUserId()));
+        return new ResponseBean(userService.getUserSetting(getUserInfo().getUid()));
     }
 
     /*
@@ -82,9 +80,11 @@ public class UserController extends BaseController {
     public ResponseBean updateNewMobile(String mobile, String code){
         if(!super.checkMobileMessage(MobileMessageEnum.USER_UPDATE_MOBILE_NEW, mobile, code)) throw new MessageException("验证码不正确，请重新输入");
 
-        userService.updateUserMobile(getUserId(), mobile);
+        userService.updateUserMobile(getUserInfo().getUid(), mobile);
         return new ResponseBean(true);
     }
+
+
 
 }
 

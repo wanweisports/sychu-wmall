@@ -3,6 +3,7 @@ package com.wardrobe.common.po;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -12,6 +13,7 @@ public class UserOrderInfo {
     private int oid;
     private Integer uid;
     private Integer rid;
+    private String orderType;
     private BigDecimal priceSum;
     private BigDecimal payPrice;
     private String payStatus;
@@ -25,6 +27,7 @@ public class UserOrderInfo {
     private BigDecimal freight;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private List<UserOrderDetail> userOrderDetails;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -55,6 +58,16 @@ public class UserOrderInfo {
 
     public void setRid(Integer rid) {
         this.rid = rid;
+    }
+
+    @Basic
+    @Column(name = "orderType")
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     @Basic
@@ -185,6 +198,15 @@ public class UserOrderInfo {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public List<UserOrderDetail> getUserOrderDetails() {
+        return userOrderDetails;
+    }
+
+    public void setUserOrderDetails(List<UserOrderDetail> userOrderDetails) {
+        this.userOrderDetails = userOrderDetails;
     }
 
     @Override

@@ -12,4 +12,6 @@ public interface IDictService {
 
     String getDictValue(String dictName, String dictKey);
 
+    SysDict getDictById(int dictId);
+
 }

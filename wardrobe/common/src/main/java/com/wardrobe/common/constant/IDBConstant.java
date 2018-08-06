@@ -10,20 +10,7 @@ public interface IDBConstant {
     String LOGIC_STATUS_NO = "2";//否
     String LOGIC_STATUS_OTHER = "3"; //其他
     
-    String STATUS = "STATUS";//状态
-
-    String STATUS_YES = "1";//有效
-    String STATUS_NO = "2";//无效
-    
     String SEX = "SEX";//性别
-
-    String SEX_NAN = "1";//男
-    String SEX_NV = "2";//女
-    
-    String BALANCE_TYPE = "BALANCE_TYPE";//流水类型
-    String BALANCE_TYPE_CZ = "1";//充值
-    String BALANCE_TYPE_XF = "2";//消费
-    String BALANCE_TYPE_OTHER = "3";//其他
 
     int ZERO = 0;
 
@@ -34,5 +21,11 @@ public interface IDBConstant {
     String COMM_MATERIAL = "COMM_MATERIAL"; //材质
 
     String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
+    String TRANSACTIONS_TYPE_ZF = "10"; //支付
+    String TRANSACTIONS_TYPE_CZ = "20"; //充值
+    String TRANSACTIONS_TYPE_TK = "30"; //退款
+
+
+    String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小
 
 }

@@ -15,4 +15,6 @@ public interface IUserAccountService {
 
     double getUserAccountBalance(int uid);
 
+    void addRechargePrice(int uid, int dictId);
+
 }

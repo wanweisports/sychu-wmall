@@ -29,8 +29,7 @@ public class UserAccountController extends BaseController {
     @ResponseBody
     @RequestMapping("userAccountBalance")
     public ResponseBean userAccountBalance(){
-        UserAccount userAccount = userAccountService.getUserAccount(getUserId());
-        return new ResponseBean(new HashMap(1,1){{put("balance", userAccount.getBalance());}});
+        return new ResponseBean(new HashMap(1,1){{put("balance", userAccountService.getUserAccountBalance(getUserInfo().getUid()));}});
     }
 
 }

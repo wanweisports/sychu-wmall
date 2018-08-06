@@ -3,6 +3,7 @@ package com.wardrobe.interceptor;
 import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.RequestUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IUserService;
@@ -31,12 +32,12 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
         NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
         if (classAnnotation == null && methodAnnotation == null) { //如果受保护
-            Integer uid = StrUtil.objToInt(request.getSession().getAttribute(IPlatformConstant.LOGIN_USER_ID));
-            if (uid == null) {
+            Object userInfo = request.getSession().getAttribute(IPlatformConstant.LOGIN_USER);
+            if (userInfo == null) {
                 response.sendRedirect("/notLogin"); //未登录---跳到统一接口：返回未登录状态10
                 return false;
             }
-            if(!userService.userIsPerfect(uid)) {
+            if(!userService.userIsPerfect(((UserInfo)userInfo).getUid())) {
                 response.sendRedirect("/notPerfect"); //未完善资料---跳到统一接口：返回未完善资料状态20
                 return false;
             }

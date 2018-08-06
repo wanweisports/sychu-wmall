@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.StrUtil;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -36,8 +37,8 @@ public class BaseController {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 
-    protected Integer getUserId() {
-		return StrUtil.objToInt(getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER_ID));
+    protected UserInfo getUserInfo() {
+		return (UserInfo) getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER);
     }
 
 	protected boolean checkMobileMessage(MobileMessageEnum mobileMessageEnum, String mobile, String code){

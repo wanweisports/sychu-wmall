@@ -42,9 +42,12 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
         //{"openId":"o0Dj10J1PA96qthKgNA3_IruBJ-Y","nickName":"Echo????","gender":1,"language":"zh_CN","city":"Chaoyang","province":"Beijing","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLWWlU9dp0nOxtyhLGD5OfRgLiaITQW8iayMcTKicdtyXWcLy1Ns5VH5iavefvPgYQAdLv2maib1EdoiaKg/0","unionId":"olTOa0feeB2tVuk8pKjfh2c9yH8c","watermark":{"timestamp":1512555016,"appid":"wx14967e4aaa8cb46f"},"session_key":"3tOWAoOE3xXnKOJdB9kqmw=="}
 
         String unionId = userInfo.getString("unionId");
-        if(userService.getUserInfoByUnionId(unionId) == null){
-            userService.addUser(new UserInfo(userInfo.getString("openId"), unionId, userInfo.getString("nickName"), userInfo.getString("avatarUrl")));
+        UserInfo user = userService.getUserInfoByUnionId(unionId);
+        if(user == null){
+            user = new UserInfo(userInfo.getString("openId"), unionId, userInfo.getString("nickName"), userInfo.getString("avatarUrl"));
+            userService.addUser(user);
         }
+        userInfo.put("user", user);
         return userInfo;
     }
 
