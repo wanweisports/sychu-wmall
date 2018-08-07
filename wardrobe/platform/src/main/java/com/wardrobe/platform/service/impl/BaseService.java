@@ -7,6 +7,7 @@ import com.wardrobe.common.constant.SqlConfig;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.dao.IBaseDao;
+import com.wardrobe.platform.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class BaseService {
 
     @Autowired
     protected IBaseDao baseDao;
+
+    @Autowired
+    protected IDictService dictService;
 
     protected PageBean getPageBean(StringBuilder head, StringBuilder body, StringBuilder where, BaseInputView baseInputView, Map... otherParamMap){
         return getPageBean(head, body, where, baseInputView, false, otherParamMap);
@@ -58,5 +62,17 @@ public class BaseService {
 		}
 		return false;
 	}
+
+    protected String getTypes(String types, String dictName){
+        StringBuilder typesSd = new StringBuilder();
+        String[] typeArr = types.split(",");
+        for(String type : typeArr){
+            if(StrUtil.isNotBlank(type)){
+                if(typesSd.length() > 0) typesSd.append("、");
+                typesSd.append(dictService.getDictValue(dictName, type));
+            }
+        }
+        return typesSd.toString();
+    }
 
 }

@@ -19,9 +19,6 @@ import java.sql.Timestamp;
 @Service
 public class UserAccountServiceImpl extends BaseService implements IUserAccountService {
 
-    @Autowired
-    private IDictService dictService;
-
     @Override
     public void initUserAccount(int uid, Timestamp timestamp){
         UserAccount userAccount = new UserAccount();

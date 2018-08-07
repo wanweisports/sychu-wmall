@@ -30,9 +30,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     @Autowired
     private IResourceService resourceService;
 
-    @Autowired
-    private IDictService dictService;
-
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditys(commodityInputView);
@@ -83,9 +80,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             String category = StrUtil.objToStr(map.get("category"));
             String style = StrUtil.objToStr(map.get("style"));
             String material = StrUtil.objToStr(map.get("material"));
-            map.put("categoryName", getCommodityTypes(category, IDBConstant.COMM_CATEGORY));
-            map.put("styleName", getCommodityTypes(style, IDBConstant.COMM_STYLE));
-            map.put("materialName", getCommodityTypes(material, IDBConstant.COMM_MATERIAL));
+            map.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
+            map.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
+            map.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
         }
         return pageBean;
     }
@@ -106,18 +103,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
-    }
-
-    private String getCommodityTypes(String types, String dictName){
-        StringBuilder typesSd = new StringBuilder();
-        String[] typeArr = types.split(",");
-        for(String type : typeArr){
-            if(StrUtil.isNotBlank(type)){
-                if(typesSd.length() > 0) typesSd.append("、");
-                typesSd.append(dictService.getDictValue(dictName, type));
-            }
-        }
-        return typesSd.toString();
     }
 
     @Override

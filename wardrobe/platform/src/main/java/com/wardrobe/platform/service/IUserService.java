@@ -1,7 +1,9 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.view.UserInputView;
 
 import java.util.Map;
 
@@ -27,5 +29,7 @@ public interface IUserService {
     void updateUserMobile(int uid, String newMoblie);
 
     boolean userIsPerfect(int uid);
+
+    PageBean getUserListIn(UserInputView userInputView);
 
 }

@@ -20,6 +20,8 @@ public interface IDBConstant {
     String COMM_STYLE = "COMM_STYLE"; //风格
     String COMM_MATERIAL = "COMM_MATERIAL"; //材质
 
+    String USER_SIZE = "USER_SIZE"; //尺码偏好
+
     String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
     String TRANSACTIONS_TYPE_ZF = "10"; //支付
     String TRANSACTIONS_TYPE_CZ = "20"; //充值

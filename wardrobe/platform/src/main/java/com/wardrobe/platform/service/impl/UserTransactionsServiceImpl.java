@@ -22,9 +22,6 @@ import java.util.Map;
 @Service
 public class UserTransactionsServiceImpl extends BaseService implements IUserTransactionsService {
 
-    @Autowired
-    private IDictService dictService;
-
     @Override
     public PageBean getUserTransactionsList(UserTransactionsInputView userTransactionsInputView){
         PageBean pageBean = getUserTransactions(userTransactionsInputView);

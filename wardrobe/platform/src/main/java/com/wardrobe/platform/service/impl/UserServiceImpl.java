@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
@@ -7,6 +8,7 @@ import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserAccountService;
 import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.Map;
 
 @Service
@@ -124,6 +127,27 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public boolean userIsPerfect(int uid){
         return IDBConstant.LOGIC_STATUS_YES.equals(baseDao.getUniqueObjectResult("SELECT isPerfect FROM user_info WHERE uid = ?1", uid));
+    }
+
+    @Override
+    public PageBean getUserListIn(UserInputView userInputView){
+        PageBean pageBean = getUsersIn(userInputView);
+        ListIterator<Map<String, Object>> listIterator = pageBean.getList().listIterator();
+        while (listIterator.hasNext()){
+            Map<String, Object> map = listIterator.next();
+            String dressStyle = StrUtil.objToStr(map.get("dressStyle"));
+            String usualSize = StrUtil.objToStr(map.get("usualSize"));
+            map.put("dressStyleName", getTypes(dressStyle, IDBConstant.COMM_STYLE));
+            map.put("usualSizeName", getTypes(usualSize, IDBConstant.USER_SIZE));
+        }
+        return pageBean;
+    }
+
+    private PageBean getUsersIn(UserInputView userInputView){
+        StringBuilder headSql = new StringBuilder("SELECT *");
+        StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
+        StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
+        return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }
 
 }
