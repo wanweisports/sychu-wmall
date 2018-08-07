@@ -82,21 +82,21 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>学员添加</strong>
-                            <small>Add</small>
+                            <strong>商品添加</strong>
+                            <small>Product Add</small>
                         </div>
                         <div class="card-block">
-                            <form id="students_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
+                            <form id="product_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
                                 <div class="col-md-6">
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_realName">
-                                            <span class="text-danger">*</span> 学员姓名
+                                        <label class="col-md-3 form-control-label" for="p_commName">
+                                            <span class="text-danger">*</span> 商品名称
                                         </label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="stu_realName" placeholder="请输入学员姓名" name="realName"
-                                                   data-val="true" data-val-required="学员姓名不能为空"
-                                                   data-val-length-max="10" data-val-length-min="2" data-val-length="学员姓名必须包含 2~10 个字符">
-                                            <div data-valmsg-for="realName" data-valmsg-replace="true"></div>
+                                            <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
+                                                   data-val="true" data-val-required="商品名称不能为空"
+                                                   data-val-length-max="20" data-val-length-min="2" data-val-length="商品名称必须包含 2~20 个字符">
+                                            <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -212,6 +212,6 @@
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
-    <c:param name="menu" value="student"/>
+    <c:param name="menu" value="products"/>
     <c:param name="subMenu" value="add"/>
 </c:import>

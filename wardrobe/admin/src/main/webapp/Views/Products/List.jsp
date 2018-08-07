@@ -189,6 +189,6 @@
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
-    <c:param name="menu" value="students"/>
+    <c:param name="menu" value="products"/>
     <c:param name="subMenu" value="list"/>
 </c:import>

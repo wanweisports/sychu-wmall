@@ -26,34 +26,14 @@
             </c:choose>
         </c:when>
 
-        <c:when test="${param.menu == 'class'}">
-            <li class="breadcrumb-item">班级管理</li>
+        <c:when test="${param.menu == 'products'}">
+            <li class="breadcrumb-item">商品管理</li>
             <c:choose>
                 <c:when test="${param.subMenu == 'add'}">
-                    <li class="breadcrumb-item active">班级设置</li>
+                    <li class="breadcrumb-item active">商品添加</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'list'}">
-                    <li class="breadcrumb-item active">班级列表</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'edit'}">
-                    <li class="breadcrumb-item"><a href="/admin/class/list">班级列表</a></li>
-                    <li class="breadcrumb-item active">班级编辑</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'schedule'}">
-                    <li class="breadcrumb-item"><a href="/admin/class/list">班级列表</a></li>
-                    <li class="breadcrumb-item active">编辑排班</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'progress'}">
-                    <li class="breadcrumb-item active">上课进度</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'test'}">
-                    <li class="breadcrumb-item active">班级评测</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'coach'}">
-                    <li class="breadcrumb-item active">教练签到</li>
-                </c:when>
-                <c:when test="${param.subMenu == 'student'}">
-                    <li class="breadcrumb-item active">学员签到</li>
+                    <li class="breadcrumb-item active">商品列表</li>
                 </c:when>
             </c:choose>
         </c:when>
@@ -170,7 +150,7 @@
                 <i class="icon-speech"></i> &nbsp;联系我们
             </a>
             <a class="btn btn-secondary" href="/admin/dashboard/index">
-                <i class="icon-graph"></i> &nbsp;工作面板
+                <i class="icon-home"></i> &nbsp;商城首页
             </a>
             <a class="btn btn-secondary" href="/admin/settings/log">
                 <i class="icon-info"></i> &nbsp;系统日志

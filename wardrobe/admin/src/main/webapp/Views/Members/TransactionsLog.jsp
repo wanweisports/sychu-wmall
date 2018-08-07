@@ -11,10 +11,7 @@
             padding: 0.75rem;
         }
         .user-list td {
-            padding: 0.3rem 0.75rem;
-        }
-        .img-rounded {
-            width: 2rem;
+            padding: 0.75rem;
         }
     </style>
 </layout:override>
@@ -155,5 +152,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="members"/>
-    <c:param name="subMenu" value="recharge"/>
+    <c:param name="subMenu" value="transactions"/>
 </c:import>

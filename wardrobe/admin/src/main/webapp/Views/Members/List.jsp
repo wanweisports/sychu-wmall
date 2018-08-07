@@ -67,6 +67,7 @@
                                     <th>等级</th>
                                     <th>邀请人</th>
                                     <th>注册时间</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -90,6 +91,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/2.jpg" alt="用户头像" class="img-rounded"></td>
@@ -111,6 +115,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/3.jpg" alt="用户头像" class="img-rounded"></td>
@@ -132,6 +139,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/4.jpg" alt="用户头像" class="img-rounded"></td>
@@ -153,6 +163,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/5.jpg" alt="用户头像" class="img-rounded"></td>
@@ -174,6 +187,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/6.jpg" alt="用户头像" class="img-rounded"></td>
@@ -195,6 +211,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/7.jpg" alt="用户头像" class="img-rounded"></td>
@@ -216,6 +235,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/8.jpg" alt="用户头像" class="img-rounded"></td>
@@ -237,6 +259,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/6.jpg" alt="用户头像" class="img-rounded"></td>
@@ -258,6 +283,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 <tr data-id="">
                                     <td><img src="/Content/images/avatars/2.jpg" alt="用户头像" class="img-rounded"></td>
@@ -279,6 +307,9 @@
                                     <td>VIP5</td>
                                     <td>U20180724142512</td>
                                     <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
