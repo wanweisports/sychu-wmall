@@ -6,7 +6,7 @@
     <tlib-version>1.6</tlib-version>
     <jsp-version>2.2</jsp-version>
     <short-name>content-fetcher</short-name>
-    <uri>http://www.wanwei.com/tags/tag</uri>
+    <uri>http://www.sychu.com/tags/tag</uri>
     <display-name>Content Fetcher</display-name>
     <description>Content Fetcher</description>
 

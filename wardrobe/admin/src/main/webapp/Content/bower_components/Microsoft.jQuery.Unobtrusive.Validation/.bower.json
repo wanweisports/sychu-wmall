@@ -1,0 +1,37 @@
+{
+  "name": "Microsoft.jQuery.Unobtrusive.Validation",
+  "version": "3.2.3",
+  "authors": [
+    "Microsoft"
+  ],
+  "description": "jQuery plugin that unobtrusively sets up jQuery.Validation",
+  "main": "jquery.validate.unobtrusive.js",
+  "keywords": [
+    "jquery",
+    "asp.net",
+    "mvc",
+    "validation",
+    "unobtrusive"
+  ],
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery.validation": ">=1.8"
+  },
+  "homepage": "https://github.com/whyleee/Microsoft.jQuery.Unobtrusive.Validation",
+  "_release": "3.2.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.2.3",
+    "commit": "8dbcad765a9a5419e5cf6b11d073efdc75d8d26f"
+  },
+  "_source": "https://github.com/whyleee/Microsoft.jQuery.Unobtrusive.Validation.git",
+  "_target": "*",
+  "_originalSource": "Microsoft.jQuery.Unobtrusive.Validation"
+}
