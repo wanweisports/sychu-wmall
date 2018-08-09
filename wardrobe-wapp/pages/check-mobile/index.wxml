@@ -1,0 +1,20 @@
+<view class="container">
+    <form bindsubmit="bindSave">
+    <view class="form-box">
+        <view class="row-wrap">
+            <view class="label">原手机号</view>
+            <view class="label-right">
+                <input name="mobile" class="input" type="tel" placeholder="原手机号"/>
+            </view>
+        </view>
+        <view class="row-wrap">
+            <view class="label">验证码</view>
+            <view class="label-right">
+                <input name="code" class="input" type="tel" placeholder="短信验证码"/>
+            </view>
+        </view>
+    </view>
+    <button type="primary" class="save-btn" bindtap="getSMSCode">获取短信验证码</button>
+    <button type="primary" class="save-btn" bindtap="submitSMSCode">下一步</button>
+    </form>
+</view>

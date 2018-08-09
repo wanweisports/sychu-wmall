@@ -6,6 +6,4 @@
 
     <button wx:if="{{isSupported}}" open-type="getUserInfo" type="primary" class="btn-login" bindgetuserinfo="onGetUserInfo">授权登录</button>
     <view wx:else>请升级微信版本</view>
-
-    <loading hidden="{{loadingHidden}}">加载中...</loading>
 </view>

@@ -1,24 +1,24 @@
 const app = getApp()
 
 Page({
-	data: {
+  data: {
     balance:0,
     freeze:0,
     score:0,
     score_sign_continuous:0
   },
-	onLoad() {
+  onLoad() {
     
-	},	
+  },
   onShow() {
     this.getUserInfo();
     this.setData({
-      version: app.globalData.version
+      version: app.config.version
     });
     this.getUserApiInfo();
     this.getUserAmount();
     this.checkScoreSign();
-  },	
+  },
   getUserInfo: function (cb) {
       var that = this
       wx.login({
@@ -77,40 +77,42 @@ Page({
   },
   getUserApiInfo: function () {
     var that = this;
-    wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/detail',
-      data: {
-        token: app.globalData.token
-      },
-      success: function (res) {
+
+    app.wxRequest(
+      '/user/userCenter',
+      {},
+      function (res) {
         if (res.data.code == 0) {
           that.setData({
-            apiUserInfoMap: res.data.data,
-            userMobile: res.data.data.base.mobile
+            apiUserInfoMap: res.data,
+            userMobile: "12131231"
           });
         }
+      },
+      function (err) {
+        console.log(err);
       }
-    })
-
+    )
   },
   getUserAmount: function () {
     var that = this;
-    wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
-      data: {
-        token: app.globalData.token
-      },
-      success: function (res) {
+
+    app.wxRequest(
+      '/account/userAccountBalance',
+      {},
+      function (res) {
         if (res.data.code == 0) {
           that.setData({
-            balance: res.data.data.balance,
-            freeze: res.data.data.freeze,
-            score: res.data.data.score
+            balance: res.data.balance,
+            freeze: res.data.freeze,
+            score: res.data.score
           });
         }
+      },
+      function (err) {
+        console.log(err);
       }
-    })
-
+    )
   },
   checkScoreSign: function () {
     var that = this;

@@ -4,53 +4,85 @@ App({
     onLaunch: function () {
         wx.setStorageSync('mallName', "闪衣橱");
 
+        var sessionId = this.globalData.sessionId;
+        if (!!sessionId) {
+            return this.checkSession(null, this.login);
+        };
+
         this.login();
     },
 
-    login : function () {
+    checkSession: function (success, fail) {
         var that = this;
-        var token = that.globalData.token;
 
+        success = success || new Function;
+        fail = fail || new Function;
+
+         wx.checkSession({
+            success: function () {
+                success();
+            },
+            fail: function () {
+                fail();
+            }
+        });
+    },
+
+    login: function () {
         var that = this;
 
         wx.login({
             success: function (res) {
+                console.log(res);
                 var code = res.code;
 
                 wx.getUserInfo({
                     success: function (res) {
+                        console.log(res);
                         var iv = res.iv;
                         var encryptedData = res.encryptedData;
 
-                        wx.request({
-                            url: that.config.getApiHost() + '/login',
-                            data: {
+                        that.wxRequest(
+                            '/login',
+                            {
                                 code: code,
                                 encryptedData: encryptedData,
                                 iv: iv
                             },
-                            success: function (res) {
-                                wx.hideLoading();
-                                console.log(res);
-                                //that.login();
-
-                                wx.request({
-                                    url: 'http://192.168.207.156:8070/dict/getDicts?dictName=USER_SEX',
-                                    data: {}, // 设置请求的 参数
-                                    header: {
-                                        'Cookie': 'JSESSIONID=' + res.data.data.sessionId
-                                    },
-                                    success: function (res) {
-                                        console.log(res);
-                                        //that.login();
-                                    }
-                                });
+                            function (res) {
+                                if (res.code == 1) {
+                                    that.globalData.sessionId = res.data.sessionId;
+                                }
+                            },
+                            function (err) {
+                                console.log(err);
                             }
+                        );
+                    },
+                    fail: function (err) {
+                        console.log("[F][wx.getUserInfo]" + JSON.stringify(err));
+                        wx.redirectTo({
+                            url: "/pages/auth/index"
                         });
                     }
                 });
             }
         });
+    },
+
+    checkUserComplete: function (success, fail) {
+        var that = this;
+
+        that.wxRequest(
+            that.config.getApiHost() + '/checkUserComplete',
+            {},
+            function (res) {
+                success(res);
+            },
+            function (err) {
+                fail(err)
+            }
+        );
     },
 
     sendTempleMsg: function (orderId, trigger, template_id, form_id, page, postJsonString){
@@ -81,34 +113,40 @@ App({
         })
     },
 
-    wxRequest: function (url, data, success, fail) {
+    wxRequest: function (url, data, success, fail, isNotLogin) {
+        var that = this;
+
         success = success || new Function;
         fail = fail || new Function;
 
+        var header = isNotLogin ? {} : {
+            'Cookie': 'JSESSIONID=' + that.globalData.sessionId
+        };
+
         wx.request({
-            url: this.config.getApiHost() + url,
+            url: that.config.getApiHost() + url,
             data: data, 
-            header: {
-                'Cookie': 'JSESSIONID=' +this.globalData.sessionId
-            },
+            header: header,
             success: function (res) {
-                console.log("[REQUEST]：" + res);
-                success();
+                console.log("[R][REQUEST]：" + JSON.stringify(res));
+                success(res.data);
             },
             fail: function (err) {
-                fail();
+                console.log("【F】[REQUEST]：" + JSON.stringify(err));
+                fail(err);
             }
         });
     },
 
     globalData: {
         userInfo: null,
-        sessionId: ""
+        sessionId: "",
+        isPerfect: false
     },
 
     config: {
         getApiHost: function () {
-            return "https://jsonblob.com";
+            return "http://127.0.0.1:8070";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您' // 首页转发的时候话术
