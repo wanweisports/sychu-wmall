@@ -49,4 +49,13 @@ public class MembersController extends BaseController {
         return setModelAndView(modelAndView);
     }
 
+    @Desc("会员充值设置")
+    @NotProtected
+    @RequestMapping(value = "/recharge/settings", method = RequestMethod.GET)
+    public ModelAndView renderMembersRechargeSettings() {
+        ModelAndView modelAndView = new ModelAndView("Members/RechargeSettings");
+
+        return setModelAndView(modelAndView);
+    }
+
 }

@@ -22,13 +22,13 @@
                             <i class="icon-arrow-right"></i> 会员列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'wardrobe'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'wardrobe'}">active</c:if>" href="/admin/settings/wardrobe">
+                    <li class="nav-item <c:if test="${param.subMenu == 'balance'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'balance'}">active</c:if>" href="/admin/members/recharge/settings">
                             <i class="icon-arrow-right"></i> 充值金额设置
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'transactions'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/recharge/log">
+                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/transactions/logg">
                             <i class="icon-arrow-right"></i> 交易记录
                         </a>
                     </li>
