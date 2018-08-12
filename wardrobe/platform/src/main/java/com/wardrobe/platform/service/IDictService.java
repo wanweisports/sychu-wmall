@@ -14,4 +14,8 @@ public interface IDictService {
 
     SysDict getDictById(int dictId);
 
+    void addDict(SysDict sysDict);
+
+    void deleteDict(int dictId);
+
 }

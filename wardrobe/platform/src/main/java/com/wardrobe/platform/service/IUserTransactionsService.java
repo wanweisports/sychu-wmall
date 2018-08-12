@@ -14,4 +14,6 @@ public interface IUserTransactionsService {
 
     void addUserTransactions(int uid, int serviceId, String serviceType, BigDecimal price);
 
+    PageBean getUserTransactionsListIn(UserTransactionsInputView userTransactionsInputView);
+
 }

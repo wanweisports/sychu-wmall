@@ -32,16 +32,16 @@
                             <small>Members Transactions Log</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/transactions/log" <%--novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="" class="form-control" placeholder="会员编号">
+                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="" class="form-control" placeholder="会员手机号">
+                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}">
                                     </div>
                                     <div class="col-md-8">
-                                        <button type="button" class="btn btn-primary members-query-btn">
+                                        <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
                                     </div>
@@ -57,83 +57,23 @@
                                     <th>交易业务类型</th>
                                     <th>交易业务ID</th>
                                     <th>交易余额（元）</th>
-                                    <th>订单号</th>
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
                                     <th>交易时间</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <c:forEach var="t" items="${list}">
                                 <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
+                                    <td>${t.tid}</td>
+                                    <td>${t.serviceTypeName}</td>
+                                    <td>${t.serviceId}</td>
+                                    <td>${t.price}</td>
+                                    <td>${t.nickname}</td>
+                                    <td>${t.mobile}</td>
+                                    <td>${t.createTime}</td>
                                 </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>TA5462332424</td>
-                                    <td>---</td>
-                                    <td>12321</td>
-                                    <td>1,000.00</td>
-                                    <td>OD6545343213</td>
-                                    <td>王军</td>
-                                    <td>158****3167</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                             <div>

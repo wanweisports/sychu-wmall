@@ -143,10 +143,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public synchronized void saveUserRecharge(String dictKey, int userId){
-        SysDict sysDict = dictService.getDict(IDBConstant.RECHARGE_TYPE, dictKey);
-        UserAccount userAccount = userAccountService.getUserAccount(userId);
+    public synchronized void saveUserRecharge(int dictId, int userId){
+        SysDict sysDict = dictService.getDictById(dictId);
+        if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException();
 
+        UserAccount userAccount = userAccountService.getUserAccount(userId);
         Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
         Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
 

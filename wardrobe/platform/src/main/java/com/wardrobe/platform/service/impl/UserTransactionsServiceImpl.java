@@ -34,10 +34,23 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
     }
 
     private PageBean getUserTransactions(UserTransactionsInputView userTransactionsInputView){
-        StringBuilder headSql = new StringBuilder("SELECT *");
-        StringBuilder bodySql = new StringBuilder(" FROM user_transactions");
-        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
 
+        Integer uid = userTransactionsInputView.getUid();
+        String nickname = userTransactionsInputView.getNickname();
+        String mobile = userTransactionsInputView.getMobile();
+
+        StringBuilder headSql = new StringBuilder("SELECT ut.*, ui.nickname, ui.mobile");
+        StringBuilder bodySql = new StringBuilder(" FROM user_transactions ut, user_info ui");
+        StringBuilder whereSql = new StringBuilder(" WHERE ut.uid = ui.uid");
+        if(uid != null){
+            whereSql.append(" AND ut.uid = :uid");
+        }
+        if(StrUtil.isNotBlank(nickname)){
+            whereSql.append(" AND ui.nickname = :nickname");
+        }
+        if(StrUtil.isNotBlank(mobile)){
+            whereSql.append(" AND ui.mobile = :mobile");
+        }
         return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
     }
 
@@ -50,6 +63,11 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         userTransactions.setPrice(price);
         userTransactions.setCreateTime(DateUtil.getNowDate());
         baseDao.save(userTransactions, null);
+    }
+
+    @Override
+    public PageBean getUserTransactionsListIn(UserTransactionsInputView userTransactionsInputView){
+        return getUserTransactionsList(userTransactionsInputView);
     }
 
 }

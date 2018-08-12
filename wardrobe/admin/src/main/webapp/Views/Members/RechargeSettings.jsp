@@ -33,16 +33,15 @@
                             <small>Balance Settings</small>
                         </div>
                         <div class="card-block">
-                            <form id="balance_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
+                            <form id="balance_form" method="post" class="form-horizontal row" action="/admin/members/recharge/addRecharge" <%--novalidate onsubmit="return false;"--%>>
                                 <div class="col-md-4">
                                     <div class="form-group row">
                                         <label class="col-md-3 form-control-label" for="p_commName">
                                             <span class="text-danger">*</span> 充值金额
                                         </label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="p_commName" placeholder="请输入充值金额" name="commName"
-                                                   data-val="true" data-val-required="充值金额不能为空"
-                                                   data-val-length-max="20" data-val-length-min="2" data-val-length="充值金额必须包含 2~20 个字符">
+                                            <input type="text" class="form-control" id="p_commName" placeholder="请输入充值金额" name="dictValue"
+                                                   data-val="true" data-val-required="充值金额不能为空" >
                                             <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
@@ -53,9 +52,8 @@
                                             <span class="text-danger">*</span> 赠送金额
                                         </label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="stu_mobile" placeholder="请输入赠送金额" name="mobile"
-                                                   data-val="true" data-val-required="赠送金额不能为空"
-                                                   data-val-regex-pattern="^(13[0-9]|15[012356789]|166|17[0-9]|18[012356789]|14[57]|19[89])[0-9]{8}$" data-val-regex="赠送金额格式不正确">
+                                            <input type="text" class="form-control" id="stu_mobile" placeholder="请输入赠送金额" name="dictAdditional"
+                                                   data-val="true" data-val-required="赠送金额不能为空">
                                             <div data-valmsg-for="mobile" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
@@ -63,7 +61,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary">
                                                 <i class="fa fa-check"></i> 设 定
                                             </button>
                                         </div>
@@ -78,24 +76,24 @@
                                 <th>##</th>
                                 <th>充值金额</th>
                                 <th>赠送金额</th>
-                                <th>状态</th>
                                 <th>创建时间</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
+                            <c:forEach var="dict" items="${dicts}" varStatus="status">
                             <tr data-id="">
-                                <td>1</td>
-                                <td>￥1,000</td>
-                                <td>￥100</td>
-                                <td>有效</td>
-                                <td>2018-12-12 11:11:11</td>
+                                <td>${status.index+1}</td>
+                                <td>￥${dict.dictValue}</td>
+                                <td>￥${dict.dictAdditional}</td>
+                                <td>${dict.createTime}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-danger user-refresh" title="删除">
+                                    <a href="/admin/members/recharge/deleteRecharge?dictId=${dict.dictId}" class="btn btn-sm btn-danger user-refresh" title="删除">
                                         <i class="fa fa-pencil"></i> 删除
                                     </a>
                                 </td>
                             </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
                     </div>

@@ -4,11 +4,19 @@ import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserInputView;
+import com.wardrobe.common.view.UserTransactionsInputView;
+import com.wardrobe.platform.service.IDictService;
 import com.wardrobe.platform.service.IUserService;
+import com.wardrobe.platform.service.IUserTransactionsService;
+import org.apache.xpath.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +34,12 @@ public class MembersController extends BaseController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IUserTransactionsService userTransactionsService;
+
+    @Autowired
+    private IDictService dictService;
 
     private ModelAndView setModelAndView(ModelAndView modelAndView) {
         return modelAndView.addObject("Admin", super.getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER));
@@ -51,20 +65,39 @@ public class MembersController extends BaseController {
 
     @Desc("会员充值流水")
     @NotProtected
-    @RequestMapping(value = "/transactions/log", method = RequestMethod.GET)
-    public ModelAndView renderMembersTransactionsLog() {
-        ModelAndView modelAndView = new ModelAndView("Members/TransactionsLog");
-
-        return setModelAndView(modelAndView);
+    @RequestMapping(value = "/transactions/log")
+    public String renderMembersTransactionsLog(UserTransactionsInputView userTransactionsInputView, Model model) {
+        setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView));
+        model.addAllAttributes(JsonUtils.fromJson(userTransactionsInputView));
+        Integer uid = userTransactionsInputView.getUid();
+        if(uid != null){
+            UserInfo userInfo = userService.getUserInfo(uid);
+            model.addAttribute("nickname", userInfo.getNickname());
+            model.addAttribute("mobile", userInfo.getMobile());
+        }
+        return "Members/TransactionsLog";
     }
 
     @Desc("会员充值设置")
     @NotProtected
-    @RequestMapping(value = "/recharge/settings", method = RequestMethod.GET)
-    public ModelAndView renderMembersRechargeSettings() {
-        ModelAndView modelAndView = new ModelAndView("Members/RechargeSettings");
+    @RequestMapping(value = "/recharge/settings")
+    public String renderMembersRechargeSettings(Model model) {
+        model.addAttribute("dicts", dictService.getDicts(IDBConstant.RECHARGE_TYPE));
+        return "Members/RechargeSettings";
+    }
 
-        return setModelAndView(modelAndView);
+    @RequestMapping(value = "/recharge/addRecharge")
+    public String addRecharge(SysDict sysDict){
+        sysDict.setDictName(IDBConstant.RECHARGE_TYPE);
+        sysDict.setDictKey(StrUtil.EMPTY);
+        dictService.addDict(sysDict);
+        return redirect("/admin/members/recharge/settings");
+    }
+
+    @RequestMapping(value = "/recharge/deleteRecharge")
+    public String deleteRecharge(int dictId){
+        dictService.deleteDict(dictId);
+        return redirect("/admin/members/recharge/settings");
     }
 
 }

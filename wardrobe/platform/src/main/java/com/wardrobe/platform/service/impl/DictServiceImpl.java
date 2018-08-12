@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IDictService;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,17 @@ public class DictServiceImpl extends BaseService implements IDictService {
     @Override
     public SysDict getDictById(int dictId){
         return baseDao.getToEvict(SysDict.class, dictId);
+    }
+
+    @Override
+    public void addDict(SysDict sysDict){
+        sysDict.setCreateTime(DateUtil.getNowDate());
+        baseDao.save(sysDict, null);
+    }
+
+    @Override
+    public void deleteDict(int dictId){
+        baseDao.delete(getDictById(dictId));
     }
 
 }
