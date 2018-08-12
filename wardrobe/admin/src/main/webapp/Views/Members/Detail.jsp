@@ -103,9 +103,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="c" items="${userCoupon}">
+                                <c:forEach var="c" items="${userCoupon}" varStatus="status">
                                 <tr>
-                                    <td>${c.index+1}</td>
+                                    <td>${status.index+1}</td>
                                     <td>${c.cpid}</td>
                                     <td>${c.dictValue}</td>
                                     <td>￥${c.couponPrice}</td>

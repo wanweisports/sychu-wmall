@@ -4,8 +4,10 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
@@ -13,9 +15,11 @@ import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserAccountService;
 import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
+import com.wardrobe.platform.service.IUserTransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +34,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Autowired
     private IUserCouponService userCouponService;
+
+    @Autowired
+    private IUserTransactionsService userTransactionsService;
 
     @Override
     public UserInfo getUserInfo(int uid){
@@ -133,6 +140,23 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public boolean userIsPerfect(int uid){
         return IDBConstant.LOGIC_STATUS_YES.equals(baseDao.getUniqueObjectResult("SELECT isPerfect FROM user_info WHERE uid = ?1", uid));
+    }
+
+    @Override
+    public synchronized void saveUserRecharge(String dictKey, int userId){
+        SysDict sysDict = dictService.getDict(IDBConstant.RECHARGE_TYPE, dictKey);
+        UserAccount userAccount = userAccountService.getUserAccount(userId);
+
+        Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
+        Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
+
+        //累计用户金额
+        BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
+        userAccount.setBalance(rechargePriceSum);
+        baseDao.save(userAccount, userId);
+
+        //保存流水
+        userTransactionsService.addUserTransactions(userId, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
     }
 
     @Override

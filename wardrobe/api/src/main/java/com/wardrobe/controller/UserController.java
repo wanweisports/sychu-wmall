@@ -94,6 +94,13 @@ public class UserController extends BaseController {
         return new ResponseBean(new HashMap(1, 1){{put("isPerfect", isPerfect ? IDBConstant.LOGIC_STATUS_YES  : IDBConstant.LOGIC_STATUS_NO);}});
     }
 
+    @ResponseBody
+    @RequestMapping("userRecharge")
+    public ResponseBean userRecharge(String dictKey){
+        userService.saveUserRecharge(dictKey, getUserInfo().getUid());
+        return new ResponseBean(true);
+    }
+
 }
 
 
