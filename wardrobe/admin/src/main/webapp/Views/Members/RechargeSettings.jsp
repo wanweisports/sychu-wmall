@@ -70,32 +70,34 @@
                             </form>
                         </div>
                         <div class="card-footer"></div>
-                        <table class="table table-striped table-sm user-list">
-                            <thead>
-                            <tr>
-                                <th>##</th>
-                                <th>充值金额</th>
-                                <th>赠送金额</th>
-                                <th>创建时间</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach var="dict" items="${dicts}" varStatus="status">
-                            <tr data-id="">
-                                <td>${status.index+1}</td>
-                                <td>￥${dict.dictValue}</td>
-                                <td>￥${dict.dictAdditional}</td>
-                                <td>${dict.createTime}</td>
-                                <td>
-                                    <a href="/admin/members/recharge/deleteRecharge?dictId=${dict.dictId}" class="btn btn-sm btn-danger user-refresh" title="删除">
-                                        <i class="fa fa-pencil"></i> 删除
-                                    </a>
-                                </td>
-                            </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                        <div class="card-block">
+                            <table class="table table-striped table-sm user-list">
+                                <thead>
+                                <tr>
+                                    <th>##</th>
+                                    <th>充值金额</th>
+                                    <th>赠送金额</th>
+                                    <th>创建时间</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="dict" items="${dicts}" varStatus="status">
+                                    <tr data-id="">
+                                        <td>${status.index+1}</td>
+                                        <td>￥${dict.dictValue}</td>
+                                        <td>￥${dict.dictAdditional}</td>
+                                        <td>${dict.createTime}</td>
+                                        <td>
+                                            <a href="/admin/members/recharge/deleteRecharge?dictId=${dict.dictId}" class="btn btn-sm btn-danger user-refresh" title="删除">
+                                                <i class="fa fa-pencil"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

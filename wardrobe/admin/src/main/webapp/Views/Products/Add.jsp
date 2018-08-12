@@ -87,6 +87,42 @@
                         </div>
                         <div class="card-block">
                             <form id="product_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="p_commName">
+                                        <span class="text-danger">*</span> 商品名称
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
+                                               data-val="true" data-val-required="商品名称不能为空"
+                                               data-val-length-max="30" data-val-length-min="2" data-val-length="商品名称必须包含 2~30 个字符">
+                                        <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="p_productDesc">
+                                        <span class="text-danger">*</span> 商品描述
+                                    </label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" id="p_productDesc" placeholder="请输入商品描述" name="productDesc"
+                                               data-val="true" data-val-required="商品描述不能为空"></textarea>
+                                        <div data-valmsg-for="productDesc" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="p_categorySelect">
+                                        <span class="text-danger">*</span> 商品品类
+                                    </label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" id="p_categorySelect" name="categorySelect">
+                                            <option>请选择品类</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="p_category" placeholder="请输入商品品类" name="category"
+                                               data-val="true" data-val-required="请至少选择一种商品品类">
+                                        <div data-valmsg-for="category" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+
+
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <label class="col-md-3 form-control-label" for="p_commName">
@@ -95,7 +131,7 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
                                                    data-val="true" data-val-required="商品名称不能为空"
-                                                   data-val-length-max="20" data-val-length-min="2" data-val-length="商品名称必须包含 2~20 个字符">
+                                                   data-val-length-max="30" data-val-length-min="2" data-val-length="商品名称必须包含 2~30 个字符">
                                             <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
