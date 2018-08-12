@@ -6,7 +6,7 @@ App({
 
         var sessionId = this.globalData.sessionId;
         if (!!sessionId) {
-            return this.checkSession(null, this.login);
+            return this.checkSession(this.checkUserComplete, this.login);
         };
 
         this.login();
@@ -52,9 +52,15 @@ App({
                             function (res) {
                                 if (res.code == 1) {
                                     that.globalData.sessionId = res.data.sessionId;
+                                    if (res.data.perfect == 2) {
+                                        wx.redirectTo({
+                                            url: "/pages/user-complete/index"
+                                        });
+                                    }
                                 }
                             },
                             function (err) {
+                                console.log("[F][/login]" + JSON.stringify(err));
                                 console.log(err);
                             }
                         );
@@ -74,12 +80,20 @@ App({
         var that = this;
 
         that.wxRequest(
-            that.config.getApiHost() + '/checkUserComplete',
+            that.config.getApiHost() + '/user/isPerfect',
             {},
             function (res) {
-                success(res);
+                if (res.data.isPerfect == 2) {
+                    wx.redirectTo({
+                        url: "/pages/user-complete/index"
+                    });
+                }
+                else {
+                    success(res);
+                }
             },
             function (err) {
+                console.log("[F][/user/isPerfect]" + JSON.stringify(err));
                 fail(err)
             }
         );
@@ -128,11 +142,11 @@ App({
             data: data, 
             header: header,
             success: function (res) {
-                console.log("[R][REQUEST]：" + JSON.stringify(res));
+                console.log("[R][" + url + "]：" + JSON.stringify(res));
                 success(res.data);
             },
             fail: function (err) {
-                console.log("【F】[REQUEST]：" + JSON.stringify(err));
+                console.log("[F][" + url + "]：" + JSON.stringify(err));
                 fail(err);
             }
         });

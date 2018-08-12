@@ -72,32 +72,34 @@
                             </form>
                         </div>
                         <div class="card-footer"></div>
-                        <table class="table table-striped table-sm user-list">
-                            <thead>
-                            <tr>
-                                <th>##</th>
-                                <th>充值金额</th>
-                                <th>赠送金额</th>
-                                <th>状态</th>
-                                <th>创建时间</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr data-id="">
-                                <td>1</td>
-                                <td>￥1,000</td>
-                                <td>￥100</td>
-                                <td>有效</td>
-                                <td>2018-12-12 11:11:11</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-danger user-refresh" title="删除">
-                                        <i class="fa fa-pencil"></i> 删除
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="card-block">
+                            <table class="table table-striped table-sm user-list">
+                                <thead>
+                                <tr>
+                                    <th>##</th>
+                                    <th>充值金额</th>
+                                    <th>赠送金额</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-id="">
+                                    <td>1</td>
+                                    <td>￥1,000</td>
+                                    <td>￥100</td>
+                                    <td>有效</td>
+                                    <td>2018-12-12 11:11:11</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-danger user-refresh" title="删除">
+                                            <i class="fa fa-pencil"></i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

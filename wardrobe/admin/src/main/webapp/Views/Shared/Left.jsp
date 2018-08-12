@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'transactions'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/transactions/logg">
+                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/transactions/log">
                             <i class="icon-arrow-right"></i> 交易记录
                         </a>
                     </li>

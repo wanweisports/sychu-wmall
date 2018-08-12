@@ -1,0 +1,103 @@
+<view class="page">
+    <form bindsubmit="bindSave">
+
+    </form>
+    <view class="page__bd">
+        <view class="weui-cells__tips">欢迎来到闪衣橱</view>
+        <view class="weui-cells__tips">请完善以下信息以便为您选出更满意的衣服：</view>
+
+        <view class="weui-cells__title">基本信息</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_select">
+                <view class="weui-cell__hd weui-cell__hd_in-select-after">
+                    <view class="weui-label">性别</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindSexChange" value="{{sexIndex}}" range="{{userSexList}}">
+                        <view class="weui-select weui-select_in-select-after">{{userSexList[sexIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+            <view class="weui-cell weui-cell_select">
+                <view class="weui-cell__hd weui-cell__hd_in-select-after">
+                    <view class="weui-label">年龄</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{userAgeList}}">
+                        <view class="weui-select weui-select_in-select-after">{{userAgeList[ageIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+    
+        <view class="weui-cells__title">风格偏好</view>
+        <view class="button-sp-area">
+            <button class="weui-btn mini-btn weui-btn_primary" type="primary">职场</button>
+            <button class="weui-btn mini-btn weui-btn_default">约会</button>
+            <button class="weui-btn mini-btn weui-btn_default">约会</button>
+            <button class="weui-btn mini-btn weui-btn_default">约会</button>
+            <button class="weui-btn mini-btn weui-btn_default">约会</button>
+        </view>
+
+        <view class="weui-cells__title">尺码偏好</view>
+        <view class="button-sp-area">
+            <button class="weui-btn mini-btn weui-btn_primary">S</button>
+            <button class="weui-btn mini-btn weui-btn_default">M</button>
+            <button class="weui-btn mini-btn weui-btn_default">L</button>
+            <button class="weui-btn mini-btn weui-btn_default">XL</button>
+            <button class="weui-btn mini-btn weui-btn_default">XXL</button>
+        </view>
+
+        <view class="weui-cells__title">手机验证</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input weui-cell_vcode">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">手机号</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入手机号" />
+                </view>
+                <view class="weui-cell__ft">
+                    <view class="weui-vcode-btn" bindtap="getSMSCode">获取验证码</view>
+                </view>
+            </view>
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">验证码</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入验证码"/>
+                </view>
+            </view>
+        </view>
+
+        <view class="weui-cells__title">邀请码</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">邀请码</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入邀请码(选填)"/>
+                </view>
+            </view>
+        </view>
+
+        <checkbox-group bindchange="bindAgreeChange">
+            <label class="weui-agree" for="weuiAgree">
+                <view class="weui-agree__text">
+                    <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+                    <view class="weui-agree__checkbox-icon">
+                        <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+                    </view>
+                    阅读并同意<navigator url="" class="weui-agree__link">《闪衣橱服务条款》</navigator>
+                </view>
+            </label>
+        </checkbox-group>
+
+
+        <view class="weui-btn-area">
+            <button class="weui-btn" type="primary" bindtap="submitSMSCode">进入闪衣橱</button>
+        </view>
+    </view>
+</view>
