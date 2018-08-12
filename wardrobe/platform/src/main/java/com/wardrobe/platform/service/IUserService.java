@@ -32,4 +32,6 @@ public interface IUserService {
 
     PageBean getUserListIn(UserInputView userInputView);
 
+    Map<String, Object> getMembersDetailIn(int userId);
+
 }

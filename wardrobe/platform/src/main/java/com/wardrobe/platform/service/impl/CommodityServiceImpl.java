@@ -33,11 +33,10 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditys(commodityInputView);
-        ListIterator<Map<String, Object>> listIterator = pageBean.getList().listIterator();
-        while (listIterator.hasNext()){
-            Map<String, Object> commodity = listIterator.next();
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach((commodity) ->{
             commodity.put("resource", resourceService.getResource(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0));//0表示封面图
-        }
+        });
         return pageBean;
     }
 
@@ -74,16 +73,15 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     @Override
     public PageBean getCommodityListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditysIn(commodityInputView);
-        ListIterator<Map<String, Object>> listIterator = pageBean.getList().listIterator();
-        while (listIterator.hasNext()){
-            Map<String, Object> map = listIterator.next();
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach((map) ->{
             String category = StrUtil.objToStr(map.get("category"));
             String style = StrUtil.objToStr(map.get("style"));
             String material = StrUtil.objToStr(map.get("material"));
             map.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
             map.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
             map.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
-        }
+        });
         return pageBean;
     }
 

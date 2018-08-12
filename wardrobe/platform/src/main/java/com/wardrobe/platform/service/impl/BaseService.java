@@ -64,6 +64,7 @@ public class BaseService {
 	}
 
     protected String getTypes(String types, String dictName){
+        if(StrUtil.isBlank(types)) return StrUtil.EMPTY;
         StringBuilder typesSd = new StringBuilder();
         String[] typeArr = types.split(",");
         for(String type : typeArr){

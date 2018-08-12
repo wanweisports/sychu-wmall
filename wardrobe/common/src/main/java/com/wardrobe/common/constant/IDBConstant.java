@@ -9,12 +9,13 @@ public interface IDBConstant {
     String LOGIC_STATUS_YES = "1";//是
     String LOGIC_STATUS_NO = "2";//否
     String LOGIC_STATUS_OTHER = "3"; //其他
-    
-    String SEX = "SEX";//性别
 
     int ZERO = 0;
 
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
+
+    String USER_SEX = "USER_SEX";//性别
+    String USER_AGE = "USER_AGE";//年龄
 
     String COMM_CATEGORY = "COMM_CATEGORY"; //品类
     String COMM_STYLE = "COMM_STYLE"; //风格
@@ -29,5 +30,7 @@ public interface IDBConstant {
 
 
     String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小
+
+    String USER_COUPON = "USER_COUPON"; //优惠券类型
 
 }
