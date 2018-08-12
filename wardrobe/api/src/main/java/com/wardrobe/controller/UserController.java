@@ -2,6 +2,7 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.util.JsonUtils;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
 
 @RequestMapping("user")
 @Controller
@@ -84,7 +87,19 @@ public class UserController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @ResponseBody
+    @RequestMapping("isPerfect")
+    public ResponseBean isPerfect(){
+        boolean isPerfect = userService.userIsPerfect(getUserInfo().getUid());
+        return new ResponseBean(new HashMap(1, 1){{put("isPerfect", isPerfect ? IDBConstant.LOGIC_STATUS_YES  : IDBConstant.LOGIC_STATUS_NO);}});
+    }
 
+    @ResponseBody
+    @RequestMapping("userRecharge")
+    public ResponseBean userRecharge(String dictKey){
+        userService.saveUserRecharge(dictKey, getUserInfo().getUid());
+        return new ResponseBean(true);
+    }
 
 }
 

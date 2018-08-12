@@ -35,16 +35,16 @@
                             <small>Members List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list" novalidate<%-- onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="" class="form-control" placeholder="会员编号">
+                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="" class="form-control" placeholder="会员手机号">
+                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}">
                                     </div>
                                     <div class="col-md-8">
-                                        <button type="button" class="btn btn-primary members-query-btn">
+                                        <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
                                     </div>
@@ -71,246 +71,32 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 王军
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/2.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 程晓松
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/3.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 孙延琦
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/4.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 张自忠
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/5.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 刘心怡
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/6.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 王佳玉
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/7.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 李依依
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/8.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 赵蕊蕊
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/6.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 钱思茂
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/2.jpg" alt="用户头像" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> 诸葛宜
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>
-                                        <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-money"></i> 1000.00
-                                        </a>
-                                    </td>
-                                    <td>9999</td>
-                                    <td>9999</td>
-                                    <td>VIP5</td>
-                                    <td>U20180724142512</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
-                                    </td>
-                                </tr>
+                                <c:forEach var="user" items="${list}">
+                                    <tr data-id="">
+                                        <td><img src="${user.headImg}" alt="用户头像" class="img-rounded"></td>
+                                        <td>
+                                            <a href="/admin/members/detail?userId=${user.uid}" class="btn btn-sm btn-link" title="会员详情">
+                                                <i class="fa fa-user"></i> ${user.nickname}
+                                            </a>
+                                        </td>
+                                        <td>${user.mobile}</td>
+                                        <td>${user.sexName}</td>
+                                        <td>${user.ageName}</td>
+                                        <td>
+                                            <a href="/admin/members/transactions/log?memberId=" class="btn btn-sm btn-link" title="会员详情">
+                                                <i class="fa fa-money"></i> ${user.balance}
+                                            </a>
+                                        </td>
+                                        <td>${user.ycoid}</td>
+                                        <td>${user.score}</td>
+                                        <td>VIP${user.rank}</td>
+                                        <td>${user.invitedByUserName}</td>
+                                        <td>${user.registerTime}</td>
+                                        <td>
+                                            <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                             <div>

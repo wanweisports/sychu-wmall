@@ -4,18 +4,25 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserAccountService;
+import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
+import com.wardrobe.platform.service.IUserTransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -24,6 +31,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Autowired
     private IUserAccountService userAccountService;
+
+    @Autowired
+    private IUserCouponService userCouponService;
+
+    @Autowired
+    private IUserTransactionsService userTransactionsService;
 
     @Override
     public UserInfo getUserInfo(int uid){
@@ -130,24 +143,73 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
+    public synchronized void saveUserRecharge(String dictKey, int userId){
+        SysDict sysDict = dictService.getDict(IDBConstant.RECHARGE_TYPE, dictKey);
+        UserAccount userAccount = userAccountService.getUserAccount(userId);
+
+        Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
+        Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
+
+        //累计用户金额
+        BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
+        userAccount.setBalance(rechargePriceSum);
+        baseDao.save(userAccount, userId);
+
+        //保存流水
+        userTransactionsService.addUserTransactions(userId, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
+    }
+
+    @Override
     public PageBean getUserListIn(UserInputView userInputView){
         PageBean pageBean = getUsersIn(userInputView);
-        ListIterator<Map<String, Object>> listIterator = pageBean.getList().listIterator();
-        while (listIterator.hasNext()){
-            Map<String, Object> map = listIterator.next();
-            String dressStyle = StrUtil.objToStr(map.get("dressStyle"));
-            String usualSize = StrUtil.objToStr(map.get("usualSize"));
-            map.put("dressStyleName", getTypes(dressStyle, IDBConstant.COMM_STYLE));
-            map.put("usualSizeName", getTypes(usualSize, IDBConstant.USER_SIZE));
-        }
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach((map) ->{
+            getUserType(map);
+        });
         return pageBean;
     }
 
+    private Map<String, Object> getUserType(Map<String, Object> map) {
+        String dressStyle = StrUtil.objToStr(map.get("dressStyle"));
+        String usualSize = StrUtil.objToStr(map.get("usualSize"));
+        map.put("dressStyleName", getTypes(dressStyle, IDBConstant.COMM_STYLE));
+        map.put("usualSizeName", getTypes(usualSize, IDBConstant.USER_SIZE));
+        map.put("sexName", dictService.getDictValue(IDBConstant.USER_SEX, StrUtil.objToStr(map.get("sex"))));
+        map.put("ageName", dictService.getDictValue(IDBConstant.USER_AGE, StrUtil.objToStr(map.get("age"))));
+        Integer invitedBy = StrUtil.objToInt(map.get("invitedBy"));
+        if(invitedBy != null){
+            map.put("invitedByUserName", getUserInfo(invitedBy).getNickname());
+        }
+        return map;
+    }
+
     private PageBean getUsersIn(UserInputView userInputView){
-        StringBuilder headSql = new StringBuilder("SELECT *");
+
+        String nickname = userInputView.getNickname();
+        String mobile = userInputView.getMobile();
+
+        StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score");
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
         StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
+        if(StrUtil.isNotBlank(nickname)){
+            whereSql.append(" AND ui.nickname = :nickname");
+        }
+        if (StrUtil.isNotBlank(mobile)) {
+            whereSql.append(" AND ui.mobile = mobile");
+        }
         return super.getPageBean(headSql, bodySql, whereSql, userInputView);
+    }
+
+    @Override
+    public Map<String, Object> getMembersDetailIn(int userId){
+        Map<String, Object> data = new HashMap(4, 1);
+        Map<String, Object> userMap = JsonUtils.fromJson(getUserInfo(userId));
+        UserAccount userAccount = userAccountService.getUserAccount(userId);
+        data.put("user", getUserType(userMap));
+        data.put("userAccount", userAccount);
+        data.put("userCoupon", userCouponService.getUserCoupons(userId));
+
+        return data;
     }
 
 }

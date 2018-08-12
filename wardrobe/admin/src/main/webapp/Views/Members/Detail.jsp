@@ -36,50 +36,50 @@
                             <table class="table table-responsive-sm table-bordered member-info">
                                 <tbody>
                                 <tr>
-                                    <th>用户编号：</th>
-                                    <td>U20180612101155</td>
+                                    <th>用户id：</th>
+                                    <td>${user.uid}</td>
                                     <th>微信openId：</th>
-                                    <td>65432423455633</td>
+                                    <td>${user.openId}</td>
                                     <th rowspan="3">用户头像：</th>
                                     <td rowspan="3">
-                                        <img src="/Content/images/avatars/3.jpg" class="img-rounded" style="height: 7rem;">
+                                        <img src="${user.headImg}" class="img-rounded" style="height: 7rem;">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>用户昵称：</th>
-                                    <td>孙延琦</td>
+                                    <td>${user.nickname}</td>
                                     <th>手机号码：</th>
-                                    <td>158****3167</td>
+                                    <td>${user.mobile}</td>
                                 </tr>
                                 <tr>
                                     <th>性别：</th>
-                                    <td>帅哥</td>
+                                    <td>${user.sexName}</td>
                                     <th>年龄：</th>
-                                    <td>158****3167</td>
+                                    <td>${user.ageName}</td>
                                 </tr>
                                 <tr>
                                     <th>用户等级：</th>
-                                    <td>VIP5</td>
+                                    <td>VIP${user.rank}</td>
                                     <th>尺码偏好：</th>
-                                    <td>S、M、L</td>
+                                    <td>${user.usualSizeName}</td>
                                     <th>风格偏好：</th>
-                                    <td>职场、约会、休闲、度假</td>
+                                    <td>${user.dressStyleName}</td>
                                 </tr>
                                 <tr>
                                     <th>账户余额：</th>
-                                    <td>￥10000.00</td>
+                                    <td>￥${userAccount.balance}</td>
                                     <th>衣橱币：</th>
-                                    <td>99999</td>
+                                    <td>${userAccount.ycoid}</td>
                                     <th>积分：</th>
-                                    <td>133333</td>
+                                    <td>${userAccount.score}</td>
                                 </tr>
                                 <tr>
                                     <th>用户邀请码：</th>
-                                    <td>U20180612101155</td>
-                                    <th>邀请人编号</th>
-                                    <td>U20180612101155</td>
+                                    <td>${user.inviteCode}</td>
+                                    <th>邀请人</th>
+                                    <td>${user.invitedByUserName}</td>
                                     <th>注册时间：</th>
-                                    <td>2018-07-24 14:46:33</td>
+                                    <td>${user.registerTime}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -97,31 +97,25 @@
                                     <th>##</th>
                                     <th>优惠券ID</th>
                                     <th>优惠券业务类型</th>
-                                    <th>优惠券业务ID</th>
                                     <th>优惠券面值</th>
                                     <th>优惠券状态</th>
                                     <th>优惠券到期时间</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <c:forEach var="c" items="${userCoupon}" varStatus="status">
                                 <tr>
-                                    <td>1</td>
-                                    <td>U20180612101155</td>
-                                    <td>满折扣</td>
-                                    <td>C12141</td>
-                                    <td>￥1,000</td>
-                                    <td>已使用</td>
-                                    <td>2018-07-24 14:46:33</td>
+                                    <td>${status.index+1}</td>
+                                    <td>${c.cpid}</td>
+                                    <td>${c.dictValue}</td>
+                                    <td>￥${c.couponPrice}</td>
+                                    <td>
+                                        <c:if test="${c.status == '1'}">已使用</c:if>
+                                        <c:if test="${c.status != '1'}">未使用</c:if>
+                                    </td>
+                                    <td>${c.dueTime}</td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>U20180612101155</td>
-                                    <td>满折扣</td>
-                                    <td>C12141</td>
-                                    <td>￥1,000</td>
-                                    <td>已使用</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>

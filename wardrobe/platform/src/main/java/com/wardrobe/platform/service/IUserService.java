@@ -30,6 +30,10 @@ public interface IUserService {
 
     boolean userIsPerfect(int uid);
 
+    void saveUserRecharge(String dictKey, int userId);
+
     PageBean getUserListIn(UserInputView userInputView);
+
+    Map<String, Object> getMembersDetailIn(int userId);
 
 }
