@@ -5,6 +5,7 @@ import com.wardrobe.common.bean.ResponseBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -21,9 +22,9 @@ public class ProductsController extends BaseController {
     }
 
     @Desc("商品筛选属性设置")
-    @RequestMapping(value = "/category/settings", method = RequestMethod.GET)
-    public ModelAndView renderProductsCategorySettings() {
-        return new ModelAndView("/Products/CategorySettings");
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    public ModelAndView renderProductsSettings() {
+        return new ModelAndView("/Products/Settings");
     }
 
     @Desc("商品管理列表")
@@ -32,10 +33,44 @@ public class ProductsController extends BaseController {
         return new ModelAndView("/Products/List");
     }
 
+    @Desc("商品管理列表")
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public ModelAndView renderProductsDetail() {
+        return new ModelAndView("/Products/Detail");
+    }
+
+    @Desc("商品管理列表 -- 人气/热门商品")
+    @RequestMapping(value = "/hot/list", method = RequestMethod.GET)
+    public ModelAndView renderProductsHotList(String type) {
+        ModelAndView modelAndView = new ModelAndView("/Products/HotList");
+
+        if (type == null || type.isEmpty()) {
+            type = "hot";
+        }
+        modelAndView.addObject("type", type);
+
+        return modelAndView;
+    }
+
+    @Desc("商品管理列表 -- 人气/热门设定取消")
+    @ResponseBody
+    @RequestMapping(value = "/hotSetting", method = RequestMethod.POST)
+    public ResponseBean setHotSettings(int productId, String type, int status) {
+        return new ResponseBean(true);
+    }
+
     @Desc("商品添加")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView renderProductsAdd() {
         return new ModelAndView("/Products/Add");
+    }
+
+    @Desc("商品管理列表 -- 库存变更记录")
+    @RequestMapping(value = "/sku/list", method = RequestMethod.GET)
+    public ModelAndView renderProductsSkuList() {
+        ModelAndView modelAndView = new ModelAndView("/Products/SkuList");
+
+        return modelAndView;
     }
 
     @Desc("商品订单列表")

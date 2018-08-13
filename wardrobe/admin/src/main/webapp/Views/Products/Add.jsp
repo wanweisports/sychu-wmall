@@ -86,12 +86,12 @@
                             <small>Product Add</small>
                         </div>
                         <div class="card-block">
-                            <form id="product_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
+                            <form id="product_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="p_commName">
+                                    <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称
                                     </label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-8">
                                         <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
                                                data-val="true" data-val-required="商品名称不能为空"
                                                data-val-length-max="30" data-val-length-min="2" data-val-length="商品名称必须包含 2~30 个字符">
@@ -99,142 +99,235 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="p_productDesc">
+                                    <label class="col-md-2 form-control-label" for="p_productDesc">
                                         <span class="text-danger">*</span> 商品描述
                                     </label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-8">
                                         <textarea class="form-control" id="p_productDesc" placeholder="请输入商品描述" name="productDesc"
                                                data-val="true" data-val-required="商品描述不能为空"></textarea>
                                         <div data-valmsg-for="productDesc" data-valmsg-replace="true"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="p_categorySelect">
+                                    <label class="col-md-2 form-control-label" for="p_categorySelect">
                                         <span class="text-danger">*</span> 商品品类
                                     </label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-2">
                                         <select class="form-control" id="p_categorySelect" name="categorySelect">
-                                            <option>请选择品类</option>
+                                            <option>连衣裙</option>
                                         </select>
                                         <input type="hidden" class="form-control" id="p_category" placeholder="请输入商品品类" name="category"
                                                data-val="true" data-val-required="请至少选择一种商品品类">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                     </div>
-                                </div>
-
-
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="p_commName">
-                                            <span class="text-danger">*</span> 商品名称
-                                        </label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
-                                                   data-val="true" data-val-required="商品名称不能为空"
-                                                   data-val-length-max="30" data-val-length-min="2" data-val-length="商品名称必须包含 2~30 个字符">
-                                            <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_birthday">
-                                            <span class="text-danger">*</span> 出生日期
-                                        </label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control datepicker" id="stu_birthday" placeholder="请选择出生日期" name="birthday"
-                                                   data-val="true" data-val-required="出生日期不能为空"
-                                                   data-val-regex-pattern="^\d{4}-\d{2}-\d{2}$" data-val-regex="出生日期格式不正确">
-                                            <div data-valmsg-for="birthday" data-valmsg-replace="true"></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_height">
-                                            <span class="text-danger">*</span> 身高(cm)
-                                        </label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" id="stu_height" placeholder="请输入身高（eg:120）" name="height"
-                                                   data-val="true" data-val-required="身高不能为空"
-                                                   data-val-regex-pattern="^([3-9]\d|[1-2]\d{2})$" data-val-regex="身高格式不正确">
-                                            <div data-valmsg-for="height" data-valmsg-replace="true"></div>
-                                        </div>
+                                    <div class="col-md-8">
+                                        <button type="button" class="btn btn-success">连衣裙&nbsp;<i class="fa fa-remove"></i></button>
+                                        <button type="button" class="btn btn-success">西服&nbsp;<i class="fa fa-remove"></i></button>
+                                        <button type="button" class="btn btn-success">外套&nbsp;<i class="fa fa-remove"></i></button>
+                                        <button type="button" class="btn btn-success">下装&nbsp;<i class="fa fa-remove"></i></button>
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_mobile">
-                                            <span class="text-danger">*</span> 手机号码
-                                        </label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" id="stu_mobile" placeholder="请输入手机号码" name="mobile"
-                                                   data-val="true" data-val-required="手机号码不能为空"
-                                                   data-val-regex-pattern="^(13[0-9]|15[012356789]|166|17[0-9]|18[012356789]|14[57]|19[89])[0-9]{8}$" data-val-regex="手机号码格式不正确">
-                                            <div data-valmsg-for="mobile" data-valmsg-replace="true"></div>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品风格
+                                    </label>
+                                    <div class="col-md-10">
+                                        <button type="button" class="btn btn-success">职 场</button>
+                                        <button type="button" class="btn btn-success">约 会</button>
+                                        <button type="button" class="btn btn-secondary">职 场</button>
+                                        <button type="button" class="btn btn-secondary">职 场</button>
+                                        <button type="button" class="btn btn-success">职 场</button>
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">
-                                            <span class="text-danger">*</span> 性别
-                                        </label>
-                                        <div class="col-md-9">
-                                            <label class="radio-inline" for="sex1">
-                                                <input type="radio" id="sex1" name="sex" value="1" checked> 男
-                                            </label>
-                                            <label class="radio-inline" for="sex2">
-                                                <input type="radio" id="sex2" name="sex" value="2"> 女
-                                            </label>
-                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品材质
+                                    </label>
+                                    <div class="col-md-10">
+                                        <button type="button" class="btn btn-secondary">棉 麻</button>
+                                        <button type="button" class="btn btn-success">纯 棉</button>
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_weight">
-                                            <span class="text-danger">*</span> 体重(kg)
-                                        </label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" id="stu_weight" placeholder="请输入体重（eg:65）" name="weight"
-                                                   data-val="true" data-val-required="体重不能为空"
-                                                   data-val-regex-pattern="^([3-9]\d|[1-2]\d{2})$" data-val-regex="体重格式不正确">
-                                            <div data-valmsg-for="weight" data-valmsg-replace="true"></div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品价格
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="p_price" placeholder="请输入商品原价" name="price"
+                                               data-val="true" data-val-required="商品原价不能为空">
+                                        <div data-valmsg-for="price" data-valmsg-replace="true"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="p_couPrice" placeholder="请输入商品优惠价格" name="couPrice"
+                                               data-val="true" data-val-required="商品优惠价格不能为空">
+                                        <div data-valmsg-for="couPrice" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品图片
+                                    </label>
+                                    <div class="col-md-10 text-center">
+                                        <div class="pull-left mr-2">
+                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <p>封面图</p>
+                                        </div>
+                                        <div class="pull-left mr-2">
+                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <p>轮播图1</p>
+                                        </div>
+                                        <div class="pull-left mr-2">
+                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <p>轮播图2</p>
+                                        </div>
+                                        <div class="pull-left mr-2">
+                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <p>轮播图3</p>
+                                        </div>
+                                        <div class="pull-left">
+                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <p>轮播图4</p>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="card-footer"></div>
-                        <div class="card-block">
-                            <form id="class_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
-                                <input type="hidden" id="class_student_id" name="studentId">
-                                <input type="hidden" id="class_id" name="classId">
-                                <input type="hidden" id="class_ids" name="classIds">
-                                <div class="row class-list">
-                                    <c:forEach var="item" items="${orgClassList}" varStatus="loop">
-                                        <c:if test="${item.orgClass.status != 3}">
-                                            <div class="col-md-3 pull-left">
-                                                <div class="card">
-                                                    <div class="card-body p-3 clearfix class-item"
-                                                         data-id="${item.orgClass.id}"
-                                                         data-name="${item.orgClass.className}"
-                                                         data-price="${item.orgClass.classPrice}">
-                                                        <i class="icon-sports ${item.orgSports.sportIcon} bg-primary p-4 mr-3 float-left"></i>
-                                                        <div class="mb-0 pt-1"> ${item.orgClass.className}</div>
-                                                        <div class="text-muted text-uppercase font-weight-bold font-xs">
-                                                            <c:if test="${item.orgClass.status == 1}"><i class="fa fa-battery-empty" title="已开班"></i></c:if>
-                                                            <c:if test="${item.orgClass.status == 2}"><i class="fa fa-battery-half" title="上课中"></i></c:if>
-                                                            &nbsp;${item.orgClass.classPrice}元
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品颜色
+                                    </label>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" id="p_colorName" placeholder="请输入商品颜色" name="colorName"
+                                               data-val="true" data-val-required="请至少输入一种商品颜色">
+                                        <div data-valmsg-for="colorName" data-valmsg-replace="true"></div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i> 加颜色
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品尺码
+                                    </label>
+                                    <div class="col-md-10 row">
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    卡其
+                                                    <div class="card-actions">
+                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option selected>XL</option>
+                                                                <option>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
                                                         </div>
                                                     </div>
-                                                    <div class="card-footer px-3 py-2">
-                                                        <a class="font-weight-bold font-xs btn-block text-muted" href="/admin/class/list">
-                                                            班级列表 <i class="fa fa-angle-right float-right font-lg"></i>
-                                                        </a>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option>XL</option>
+                                                                <option selected>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </c:if>
-                                    </c:forEach>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    乳白
+                                                    <div class="card-actions">
+                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option selected>XL</option>
+                                                                <option>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option>XL</option>
+                                                                <option selected>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    紫红
+                                                    <div class="card-actions">
+                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option selected>XL</option>
+                                                                <option>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <select class="form-control">
+                                                                <option>XL</option>
+                                                                <option selected>XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" class="form-control" placeholder="初始库存">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer text-right">
                             <span class="text-danger pay-note"></span>
-                            <button type="button" class="btn btn-primary save-class">
+                            <button type="button" class="btn btn-primary save-products">
                                 <i class="fa fa-check"></i> 保 存
                             </button>
                         </div>
