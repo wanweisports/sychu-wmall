@@ -13,8 +13,8 @@
                     <view class="weui-label">性别</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <picker bindchange="bindSexChange" value="{{sexIndex}}" range="{{userSexList}}">
-                        <view class="weui-select weui-select_in-select-after">{{userSexList[sexIndex]}}</view>
+                    <picker bindchange="bindSexChange" value="{{sexIndex}}" range="{{userSexList}}" range-key="{{'dictValue'}}">
+                        <view class="picker weui-select weui-select_in-select-after">{{userSexList[sexIndex].dictValue}}</view>
                     </picker>
                 </view>
             </view>
@@ -23,8 +23,8 @@
                     <view class="weui-label">年龄</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{userAgeList}}">
-                        <view class="weui-select weui-select_in-select-after">{{userAgeList[ageIndex]}}</view>
+                    <picker bindchange="bindAgeChange" value="{{ageIndex}}" range="{{userAgeList}}" range-key="{{'dictValue'}}">
+                        <view class="weui-select weui-select_in-select-after">{{userAgeList[ageIndex].dictValue}}</view>
                     </picker>
                 </view>
             </view>
@@ -32,20 +32,12 @@
     
         <view class="weui-cells__title">风格偏好</view>
         <view class="button-sp-area">
-            <button class="weui-btn mini-btn weui-btn_primary" type="primary">职场</button>
-            <button class="weui-btn mini-btn weui-btn_default">约会</button>
-            <button class="weui-btn mini-btn weui-btn_default">约会</button>
-            <button class="weui-btn mini-btn weui-btn_default">约会</button>
-            <button class="weui-btn mini-btn weui-btn_default">约会</button>
+              <button wx:for="{{userStyleList}}" class="weui-btn mini-btn weui-btn_default" bindtap="bindStyleTap">{{item.dictValue}}</button>
         </view>
 
         <view class="weui-cells__title">尺码偏好</view>
         <view class="button-sp-area">
-            <button class="weui-btn mini-btn weui-btn_primary">S</button>
-            <button class="weui-btn mini-btn weui-btn_default">M</button>
-            <button class="weui-btn mini-btn weui-btn_default">L</button>
-            <button class="weui-btn mini-btn weui-btn_default">XL</button>
-            <button class="weui-btn mini-btn weui-btn_default">XXL</button>
+              <button wx:for="{{userSizeList}}" class="weui-btn mini-btn weui-btn_default" bindtap="bindSizeTap">{{item.dictValue}}</button>
         </view>
 
         <view class="weui-cells__title">手机验证</view>

@@ -16,6 +16,8 @@ Page({
         categories: [],
         activeCategoryId: 0,
         goods: [],
+        usersGoods: [],
+        hotGoods: [],
         scrollTop: "0",
         loadingMoreHidden: true,
 
@@ -70,6 +72,9 @@ Page({
         wx.setNavigationBarTitle({
             title: wx.getStorageSync('mallName')
         })
+
+        that.getHotGoodsList();
+        that.getUsersGoodsList();
        
         that.setData({
                         banners: [
@@ -78,98 +83,52 @@ Page({
                             {businessId: 121, picUrl: "http://pic.qiantucdn.com/58pic/18/48/86/562887145916b_1024.jpg"}
                         ]
                     });
-        that.setData({
-                    goods: [
-                            {id:"1", name: "衣服衣服衣服衣服衣服", pic: "http://images2.moonbasa.com/ProductImg/1/1602/huge/033016222-010-01-H.jpg", minPrice: "120.00"},
-                            {id:"2", name: "衣服衣服衣服衣服衣服衣服", pic: "http://img005.hc360.cn/hb/MTQ2MzI1NjA4NzI3NTM4MDA1Mjg3Mg==.jpg", minPrice: "120.00"},
-                            {id:"3", name: "衣服衣服衣服衣服", pic: "http://pic.qiantucdn.com/58pic/18/48/86/562887145916b_1024.jpg", minPrice: "120.00"},
-                            {id:"1", name: "衣服衣服衣服衣服衣服", pic: "http://images2.moonbasa.com/ProductImg/1/1602/huge/033016222-010-01-H.jpg", minPrice: "120.00"},
-                            {id:"2", name: "衣服衣服衣服衣服衣服衣服", pic: "http://img005.hc360.cn/hb/MTQ2MzI1NjA4NzI3NTM4MDA1Mjg3Mg==.jpg", minPrice: "120.00"},
-                            {id:"3", name: "衣服衣服衣服衣服", pic: "http://pic.qiantucdn.com/58pic/18/48/86/562887145916b_1024.jpg", minPrice: "120.00"},
-                            {id:"1", name: "衣服衣服衣服衣服衣服", pic: "http://images2.moonbasa.com/ProductImg/1/1602/huge/033016222-010-01-H.jpg", minPrice: "120.00"},
-                            {id:"2", name: "衣服衣服衣服衣服衣服衣服", pic: "http://img005.hc360.cn/hb/MTQ2MzI1NjA4NzI3NTM4MDA1Mjg3Mg==.jpg", minPrice: "120.00"}
-                        ]
-                });
-        // wx.request({
-        //     url: app.config.getApiHost() + '/products/banner/list',
-        //     data: {
-        //         key: 'mallName'
-        //     },
-        //     success: function (res) {
-        //         if (res.data.code == 404) {
-        //             wx.showModal({
-        //                 title: '提示',
-        //                 content: '请在后台添加 banner 轮播图片',
-        //                 showCancel: false
-        //             })
-        //         } else {
-        //             that.setData({
-        //                 banners: res.data.data
-        //             });
-        //         }
-        //     },
-        //     fail: function () {
-        //     }
-        // }); 
-
-        // wx.request({
-        //     url: app.config.getApiHost() + '/' + app.globalData.subDomain + '/shop/goods/category/all',
-        //     success: function(res) {
-        //         var categories = [{
-        //             id: 0,
-        //             name: "全部"
-        //         }];
-
-        //         if (res.data.code == 0) {
-        //             for (var i = 0; i < res.data.data.length; i++) {
-        //                 categories.push(res.data.data[i]);
-        //             }
-        //         }
-
-        //         that.setData({
-        //             categories: categories,
-        //             activeCategoryId: 0
-        //         });
-        //         that.getGoodsList(0);
-        //     }
-        // }); 
-
-        //that.getCoupons();
-        //that.getNotice();
     },
 
-    getGoodsList: function (categoryId) {
+    getUsersGoodsList: function (categoryId) {
         if (categoryId == 0) {
             categoryId = "";
         }
 
+        console.log(categoryId);
         var that = this;
 
-        wx.request({
-            url: app.config.getApiHost() + '/' + app.globalData.subDomain + '/shop/goods/list',
-            data: {
-                categoryId: categoryId
-            },
-            success: function(res) {
-                that.setData({
-                    goods: [],
-                    loadingMoreHidden: true
-                });
-                var goods = [];
-                if (res.data.code != 0 || res.data.data.length == 0) {
-                    that.setData({
-                        loadingMoreHidden: false,
-                    });
-                    return;
-                }
-                for (var i = 0; i < res.data.data.length; i++) {
-                    goods.push(res.data.data[i]);
-                }
-                that.setData({
-                    goods: goods,
-                });
+        app.wxRequest(
+          "/commodity/index",
+          {
+            newly : "1"
+          },
+          function (res) {
+            if (res.code == 1) {
+              that.setData({
+                usersGoods: res.data.list
+              });
             }
-        })
+          }
+        );
+    },
+
+    getHotGoodsList: function (categoryId) {
+        if (categoryId == 0) {
+            categoryId = "";
+        }
+
+        console.log(categoryId);
+        var that = this;
+
+        app.wxRequest(
+          "/commodity/index",
+          {
+            hot : "1"
+          },
+          function (res) {
+            if (res.code == 1) {
+              that.setData({
+                hotGoods: res.data.list
+              });
+            }
+          }
+        );
     },
     getCoupons: function() {
         var that = this;

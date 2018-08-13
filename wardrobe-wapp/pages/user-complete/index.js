@@ -2,8 +2,12 @@ var app = getApp()
 
 Page({
   data: {
-    userSexList: ["帅哥", "美女"],
-    userAgeList: ["85后", "90后"]
+    sexIndex: 0,
+    userSexList: [],
+    ageIndex: 0,
+    userAgeList: [],
+    userStyleList: [],
+    userSizeList: []
   },
   onLoad() {
     this.getStyleDicts();
@@ -12,60 +16,88 @@ Page({
     this.getUserAgeDicts();
   },
   getStyleDicts: function () {
+    var that = this;
+
     app.wxRequest(
       "/dict/getDicts",
       {
         dictName: "COMM_STYLE"
       },
       function (res) {
-        console.log(res)
-      },
-      function (err) {
-        console.log(err)
+        if (res.code == 1) {
+          that.setData({
+            userStyleList: res.data.dicts
+          });
+        }
       }
     );
   },
+  bindStyleTap: function (e) {
+    console.log(e)
+  },
   getUserSizeDicts: function () {
+    var that = this;
+
     app.wxRequest(
       "/dict/getDicts",
       {
         dictName: "USER_SIZE"
       },
       function (res) {
-        console.log(res)
-      },
-      function (err) {
-        console.log(err)
+        that.setData({
+            userSizeList: res.data.dicts
+        });
       }
     );
   },
+  bindSizeTap: function (e) {
+    console.log(e)
+  },
   getUserSexDicts: function () {
+    var that = this;
+
     app.wxRequest(
       "/dict/getDicts",
       {
         dictName: "USER_SEX"
       },
       function (res) {
-        console.log(res)
-      },
-      function (err) {
-        console.log(err)
+        if (res.code == 1) {
+          that.setData({
+            userSexList: res.data.dicts
+          });
+        }
       }
     );
   },
+  bindSexChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      sexIndex: e.detail.value
+    })
+  },
   getUserAgeDicts: function () {
+    var that = this;
+
     app.wxRequest(
       "/dict/getDicts",
       {
         dictName: "USER_AGE"
       },
       function (res) {
-        console.log(res)
-      },
-      function (err) {
-        console.log(err)
+        if (res.code == 1) {
+          that.setData({
+            userAgeList: res.data.dicts
+          });
+        }
       }
     );
+  },
+  bindAgeChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      ageIndex: e.detail.value
+    })
   },
   getSMSCode: function () {
     var that = this;
