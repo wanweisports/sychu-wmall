@@ -40,7 +40,7 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public void delete(int resourceId) {
-        baseDao.updateBySql("DELETE FROM resource WHERE resourceId = ?1", resourceId);
+        baseDao.updateBySql("DELETE FROM sys_resources WHERE resourceId = ?1", resourceId);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public void delete(int resourceServiceId, String resourceServiceType){
-        baseDao.updateBySql("DELETE FROM resource WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType);
+        baseDao.updateBySql("DELETE FROM sys_resources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType);
     }
 
     @Override
@@ -87,12 +87,17 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public SysResources getResource(int resourceServiceId, String resourceServiceType){
-        return baseDao.queryByHqlFirst("FROM Resource WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType);
+        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType);
     }
 
     @Override
     public SysResources getResource(int resourceServiceId, String resourceServiceType, int resourceSeq){
-        return baseDao.queryByHqlFirst("FROM Resource WHERE resourceServiceId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceId, resourceServiceType, resourceSeq);
+        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceId, resourceServiceType, resourceSeq);
+    }
+
+    @Override
+    public SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq){
+        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceParentId, resourceServiceType, resourceSeq);
     }
 
     @Override

@@ -11,6 +11,7 @@ public class SysResources {
     private int resourceId;
     private String resourceServiceType;
     private int resourceServiceId;
+    private Integer resourceServiceParentId;
     private Integer resourceSeq;
     private String resourceType;
     private String resourceName;
@@ -50,6 +51,16 @@ public class SysResources {
 
     public void setResourceServiceId(int resourceServiceId) {
         this.resourceServiceId = resourceServiceId;
+    }
+
+    @Basic
+    @Column(name = "resourceServiceParentId")
+    public Integer getResourceServiceParentId() {
+        return resourceServiceParentId;
+    }
+
+    public void setResourceServiceParentId(Integer resourceServiceParentId) {
+        this.resourceServiceParentId = resourceServiceParentId;
     }
 
     @Basic

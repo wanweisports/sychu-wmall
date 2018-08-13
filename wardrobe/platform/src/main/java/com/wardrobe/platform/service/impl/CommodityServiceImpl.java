@@ -35,7 +35,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getCommoditys(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((commodity) ->{
-            commodity.put("resource", resourceService.getResource(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0));//0表示封面图
+            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
+            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
         });
         return pageBean;
     }

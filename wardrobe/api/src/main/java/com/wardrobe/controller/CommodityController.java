@@ -24,4 +24,6 @@ public class CommodityController extends BaseController {
         return new ResponseBean(super.setPageInfo(commodityService.getCommodityList(commodityInputView)));
     }
 
+
+
 }
