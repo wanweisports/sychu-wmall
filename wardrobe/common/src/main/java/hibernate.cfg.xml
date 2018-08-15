@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://www.abies.com.cn:3306/www-test3</property>
+    <property name="connection.url">jdbc:mysql://47.94.196.103:3306/wardrobe</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <mapping class="com.wardrobe.common.po.CommodityColor"/>
     <mapping class="com.wardrobe.common.po.CommodityInfo"/>
@@ -24,6 +24,7 @@
     <mapping class="com.wardrobe.common.po.UserOrderInfo"/>
     <mapping class="com.wardrobe.common.po.UserShoppingCart"/>
     <mapping class="com.wardrobe.common.po.UserTransactions"/>
+    <mapping class="com.wardrobe.common.po.SysRankInfo"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

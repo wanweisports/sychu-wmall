@@ -109,12 +109,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
-        data.put("rank", userInfo.getRank());
-        data.put("point", userInfo.getPoint());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());
-        data.put("ycoid", userAccount.getYcoid().doubleValue());
+        data.put("ycoid", userAccount.getYcoid());
+        data.put("rank", userAccount.getRank());
+        data.put("point", userAccount.getScore());
         return data;
     }
 
@@ -189,7 +189,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         String nickname = userInputView.getNickname();
         String mobile = userInputView.getMobile();
 
-        StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score");
+        StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score, ua.rank");
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
         StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
         if(StrUtil.isNotBlank(nickname)){
