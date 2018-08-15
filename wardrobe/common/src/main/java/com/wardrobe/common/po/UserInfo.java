@@ -3,9 +3,11 @@ package com.wardrobe.common.po;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -18,7 +20,8 @@ public class UserInfo {
     private String nickname;
     private String headImg;
     private String sex;
-    private String age;
+    @DateTimeFormat(pattern = DateUtil.YYYYMMDD)
+    private Date age;
     private String dressStyle;
     private String usualSize;
     private String mobile;
@@ -31,11 +34,12 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String openId, String unionId, String nickname, String headImg) {
+    public UserInfo(String openId, String unionId, String nickname, String headImg, String sex) {
         this.openId = openId;
         this.unionId = unionId;
         this.nickname = nickname;
         this.headImg = headImg;
+        this.sex = sex;
     }
 
     @Id
@@ -101,11 +105,11 @@ public class UserInfo {
 
     @Basic
     @Column(name = "age")
-    public String getAge() {
+    public Date getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Date age) {
         this.age = age;
     }
 

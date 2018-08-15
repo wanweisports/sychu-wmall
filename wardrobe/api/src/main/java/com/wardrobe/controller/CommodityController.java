@@ -24,6 +24,10 @@ public class CommodityController extends BaseController {
         return new ResponseBean(super.setPageInfo(commodityService.getCommodityList(commodityInputView)));
     }
 
-
+    @ResponseBody
+    @RequestMapping("detail")
+    public ResponseBean index(int cid){
+        return new ResponseBean(commodityService.getCommodityDetail(cid));
+    }
 
 }

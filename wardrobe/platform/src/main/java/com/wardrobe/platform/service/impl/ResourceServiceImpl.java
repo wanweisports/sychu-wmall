@@ -101,6 +101,20 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
+    public List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType){
+        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2", resourceServiceParentId, resourceServiceType);
+    }
+
+    @Override
+    public List<String> getResourcesPath(List<SysResources> sysResources){
+        List<String> resourcesPath = new ArrayList<>();
+        sysResources.stream().forEach((sysResource)->{
+            resourcesPath.add(sysResource.getResourcePath());
+        });
+        return resourcesPath;
+    }
+
+    @Override
     public SysResources saveResource(MultipartFile multipartFile, int serviceId, String serviceType, String resourceType, String fold){
         String originalFilename = multipartFile.getOriginalFilename();
         String resourceName = StrUtil.getUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));

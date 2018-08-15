@@ -23,6 +23,7 @@ public class CommodityInfo {
     private Integer seqNo;
     private String hot;
     private String newly;
+    private Integer groupId;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -157,6 +158,14 @@ public class CommodityInfo {
 
     public void setNewly(String newly) {
         this.newly = newly;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
     @Basic

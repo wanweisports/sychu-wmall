@@ -1,18 +1,18 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.StrUtil;
-import com.wardrobe.platform.service.IDictService;
-import com.wardrobe.platform.service.ISysRankService;
-import com.wardrobe.platform.service.IUserAccountService;
-import com.wardrobe.platform.service.IUserService;
+import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -26,6 +26,9 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Autowired
     private ISysRankService sysRankService;
+
+    @Autowired
+    private IUserTransactionsService userTransactionsService;
 
     @Override
     public synchronized void addUserScoreAndYcoid(int uid, double priceSum){
@@ -85,14 +88,23 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Override
     public synchronized void addRechargePrice(int uid, int dictId){
-        UserAccount userAccount = getUserAccount(uid);
         SysDict sysDict = dictService.getDictById(dictId);
+        if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException();
 
-        Double price = StrUtil.objToDouble(sysDict.getDictValue());
-        userAccount.setBalance(Arith.conversion(Arith.add(Arith.add(userAccount.getBalance().doubleValue(), price), StrUtil.objToDouble(sysDict.getDictAdditional()))));
+        UserAccount userAccount = getUserAccount(uid);
+        Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
+        Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
+
+        //累计用户金额
+        BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
+        userAccount.setBalance(rechargePriceSum);
         baseDao.save(userAccount, uid);
 
-        this.addUserScore(uid, price);
+        //保存流水
+        userTransactionsService.addUserTransactions(uid, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
+
+        //积分累计
+        this.addUserScore(uid, rechargePrice);
     }
 
 }
