@@ -51,12 +51,12 @@
         <text>最新上架</text>
     </view>
     <view class="goods-container">
-        <view class="goods-box" wx:for-items="{{goods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.id}}">
+        <view class="goods-box" wx:for-items="{{usersGoods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}">
            <view class="img-box">
-              <image src="{{item.pic}}" class="image" mode="aspectFill" lazy-load="true"/>
+              <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
            </view>
-           <view class="goods-title">{{item.name}}</view>
-           <view class="goods-price">¥ {{item.minPrice}}</view>
+           <view class="goods-title">{{item.commName}}</view>
+           <view class="goods-price">¥ {{item.price}}</view>
         </view>
     </view>
     <view class="text">
@@ -64,12 +64,12 @@
         <text>人气热卖</text>
     </view>
     <view class="goods-container">
-        <view class="goods-box" wx:for-items="{{goods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.id}}">
+        <view class="goods-box" wx:for-items="{{hotGoods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}">
            <view class="img-box">
-              <image src="{{item.pic}}" class="image" mode="aspectFill" lazy-load="true"/>
+              <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
            </view>
-           <view class="goods-title">{{item.name}}</view>
-           <view class="goods-price">¥ {{item.minPrice}}</view>
+           <view class="goods-title">{{item.commName}}</view>
+           <view class="goods-price">¥ {{item.price}}</view>
         </view>
     </view>
     <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">没有更多啦</view>

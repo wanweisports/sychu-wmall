@@ -40,14 +40,14 @@
                     <i class="icon-basket"></i> 商品管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'active'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'active'}">active</c:if>" href="/admin/products/active/settings">
-                            <i class="icon-arrow-right"></i> 活动设置
-                        </a>
-                    </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
                             <i class="icon-arrow-right"></i> 商品列表
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'hot'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'hot'}">active</c:if>" href="/admin/products/hot/list">
+                            <i class="icon-arrow-right"></i> 人气/热门商品
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'add'}">open</c:if>">
@@ -55,32 +55,14 @@
                             <i class="icon-arrow-right"></i> 商品添加
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'add'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'add'}">active</c:if>" href="/admin/products/add">
-                            <i class="icon-arrow-right"></i> 商品品类管理
+                    <li class="nav-item <c:if test="${param.subMenu == 'settings'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'settings'}">active</c:if>" href="/admin/products/settings">
+                            <i class="icon-arrow-right"></i> 商品设置
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
-                            <i class="icon-arrow-right"></i> 库存管理
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="nav-item nav-dropdown <c:if test="${param.menu == 'active'}">open</c:if>">
-                <a class="nav-link nav-dropdown-toggle" href="javascript:;">
-                    <i class="icon-basket"></i> 销售管理
-                </a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'active'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'active'}">active</c:if>" href="/admin/products/active/settings">
-                            <i class="icon-arrow-right"></i> 促销管理
-                        </a>
-                    </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
-                            <i class="icon-arrow-right"></i> 礼券设置
+                    <li class="nav-item <c:if test="${param.subMenu == 'sku'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'sku'}">active</c:if>" href="/admin/products/sku/list">
+                            <i class="icon-arrow-right"></i> 库存变更记录
                         </a>
                     </li>
                 </ul>
@@ -99,6 +81,24 @@
                     <li class="nav-item <c:if test="${param.subMenu == 'refund'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.subMenu == 'refund'}">active</c:if>" href="/admin/order/list">
                             <i class="icon-arrow-right"></i> 退款订单
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item nav-dropdown <c:if test="${param.menu == 'active'}">open</c:if>">
+                <a class="nav-link nav-dropdown-toggle" href="javascript:;">
+                    <i class="icon-basket"></i> 销售管理
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item <c:if test="${param.subMenu == 'active'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'active'}">active</c:if>" href="/admin/products/active/settings">
+                            <i class="icon-arrow-right"></i> 促销管理
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.subMenu == 'coupon'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.subMenu == 'coupon'}">active</c:if>" href="/admin/products/list">
+                            <i class="icon-arrow-right"></i> 礼券设置
                         </a>
                     </li>
                 </ul>

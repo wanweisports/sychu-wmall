@@ -50,31 +50,23 @@ Page({
         console.log(categoryId);
         var that = this;
 
-        wx.request({
-            url: app.config.getApiHost() + '/' + app.globalData.subDomain + '/shop/goods/list',
-            data: {
-                categoryId: categoryId
-            },
-            success: function(res) {
-                that.setData({
-                    goods: [],
-                    loadingMoreHidden: true
-                });
-                var goods = [];
-                if (res.data.code != 0 || res.data.data.length == 0) {
-                    that.setData({
-                        loadingMoreHidden: false,
-                    });
-                    return;
-                }
-                for (var i = 0; i < res.data.data.length; i++) {
-                    goods.push(res.data.data[i]);
-                }
-                that.setData({
-                    goods: goods,
-                });
+        var that = this;
+
+        app.wxRequest(
+          "/commodity/index",
+          {
+            category : "",
+            style : "",
+            material : "",
+          },
+          function (res) {
+            if (res.code == 1) {
+              that.setData({
+                goods: res.data.list
+              });
             }
-        })
+          }
+        );
     },
     onShareAppMessage: function() {
         return {

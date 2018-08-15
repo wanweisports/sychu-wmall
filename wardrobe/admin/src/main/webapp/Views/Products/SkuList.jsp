@@ -7,10 +7,10 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .user-list th {
+        .products-list th {
             padding: 0.75rem;
         }
-        .user-list td {
+        .products-list td {
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
@@ -31,8 +31,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>商品列表</strong>
-                            <small>Products List</small>
+                            <strong>库存变更记录</strong>
+                            <small>Sku Log</small>
                         </div>
                         <div class="card-block">
                             <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list" novalidate onsubmit="return false;">
@@ -44,9 +44,6 @@
                                         <button type="submit" class="btn btn-primary products-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
-                                        <a href="/admin/products/add" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i> 添加商品
-                                        </a>
                                     </div>
                                 </div>
                             </form>
@@ -58,11 +55,10 @@
                                 <tr>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
-                                    <th>商品风格</th>
-                                    <th>商品原价</th>
-                                    <th>优惠价格</th>
-                                    <th>已售数量</th>
-                                    <th></th>
+                                    <th>变更原因</th>
+                                    <th>变更数量</th>
+                                    <th>变更发起人</th>
+                                    <th>变更时间</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -71,27 +67,20 @@
                                     <td>
                                         <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
                                     </td>
-                                    <td>约会,度假,休闲</td>
-                                    <td>￥600</td>
-                                    <td>￥399</td>
-                                    <td>2012</td>
+                                    <td>商品入库</td>
+                                    <td class="text-success">+100</td>
+                                    <td>张思思</td>
+                                    <td>2018-12-12 11:11:11</td>
+                                </tr>
+                                <tr data-id="">
+                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
                                     <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="上架">
-                                            <i class="fa fa-level-up"></i> 上架
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="下架">
-                                            <i class="fa fa-level-down"></i> 下架
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-warning" title="人气">
-                                            <i class="fa fa-heart"></i> 人气
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-warning" title="热门">
-                                            <i class="fa fa-bolt"></i> 热门
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="上架">
-                                            <i class="fa fa-pencil"></i> 编辑
-                                        </a>
+                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
                                     </td>
+                                    <td>库存盘点</td>
+                                    <td class="text-danger">-100</td>
+                                    <td>张思思</td>
+                                    <td>2018-12-12 11:11:11</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -111,5 +100,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="list"/>
+    <c:param name="subMenu" value="sku"/>
 </c:import>
