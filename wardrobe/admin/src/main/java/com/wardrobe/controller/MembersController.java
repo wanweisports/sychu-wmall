@@ -86,6 +86,7 @@ public class MembersController extends BaseController {
         return "Members/RechargeSettings";
     }
 
+    @Desc("添加充值")
     @RequestMapping(value = "/recharge/addRecharge")
     public String addRecharge(SysDict sysDict){
         sysDict.setDictName(IDBConstant.RECHARGE_TYPE);
@@ -94,6 +95,7 @@ public class MembersController extends BaseController {
         return redirect("/admin/members/recharge/settings");
     }
 
+    @Desc("删除充值")
     @RequestMapping(value = "/recharge/deleteRecharge")
     public String deleteRecharge(int dictId){
         dictService.deleteDict(dictId);

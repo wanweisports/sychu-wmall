@@ -81,7 +81,7 @@
                                         </td>
                                         <td>${user.mobile}</td>
                                         <td>${user.sexName}</td>
-                                        <td>${user.ageName}</td>
+                                        <td>${user.age}</td>
                                         <td>
                                             <a href="/admin/members/transactions/log?uid=${user.uid}" class="btn btn-sm btn-link" title="会员详情">
                                                 <i class="fa fa-money"></i> ${user.balance}

@@ -9,6 +9,10 @@ import java.sql.Timestamp;
  */
 public interface IUserAccountService {
 
+    void addUserScoreAndYcoid(int uid, double priceSum);
+
+    void addUserScore(int uid, double priceSum);
+
     void initUserAccount(int uid, Timestamp timestamp);
 
     UserAccount getUserAccount(int uid);

@@ -55,7 +55,7 @@
                                     <th>性别：</th>
                                     <td>${user.sexName}</td>
                                     <th>年龄：</th>
-                                    <td>${user.ageName}</td>
+                                    <td>${user.age}</td>
                                 </tr>
                                 <tr>
                                     <th>用户等级：</th>

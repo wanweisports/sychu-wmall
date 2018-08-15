@@ -41,5 +41,11 @@ public interface IPlatformConstant {
 	String APP_SECRET = (String) CustomizedPropertyConfigurer.getContextProperty("appsecret"); //密钥
     
     String WX_OPEN_ID_KEY = "openId";
-	
+
+	int ADD_USER_YCOID = 1;
+
+	int ADD_USER_SCORE = 1;
+
+	int INIT_USER_SCORE = 500;
+
 }

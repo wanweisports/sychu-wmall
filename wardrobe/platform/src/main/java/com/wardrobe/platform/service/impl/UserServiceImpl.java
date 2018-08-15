@@ -35,9 +35,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Autowired
     private IUserCouponService userCouponService;
 
-    @Autowired
-    private IUserTransactionsService userTransactionsService;
-
     @Override
     public UserInfo getUserInfo(int uid){
         return baseDao.getToEvict(UserInfo.class, uid);
@@ -109,12 +106,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
-        data.put("rank", userInfo.getRank());
-        data.put("point", userInfo.getPoint());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());
-        data.put("ycoid", userAccount.getYcoid().doubleValue());
+        data.put("ycoid", userAccount.getYcoid());
+        data.put("rank", userAccount.getRank());
+        data.put("point", userAccount.getScore());
         return data;
     }
 
@@ -144,20 +141,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public synchronized void saveUserRecharge(int dictId, int userId){
-        SysDict sysDict = dictService.getDictById(dictId);
-        if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException();
-
-        UserAccount userAccount = userAccountService.getUserAccount(userId);
-        Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
-        Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
-
-        //累计用户金额
-        BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
-        userAccount.setBalance(rechargePriceSum);
-        baseDao.save(userAccount, userId);
-
-        //保存流水
-        userTransactionsService.addUserTransactions(userId, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
+        userAccountService.addRechargePrice(userId, dictId);
     }
 
     @Override
@@ -176,7 +160,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
         map.put("dressStyleName", getTypes(dressStyle, IDBConstant.COMM_STYLE));
         map.put("usualSizeName", getTypes(usualSize, IDBConstant.USER_SIZE));
         map.put("sexName", dictService.getDictValue(IDBConstant.USER_SEX, StrUtil.objToStr(map.get("sex"))));
-        map.put("ageName", dictService.getDictValue(IDBConstant.USER_AGE, StrUtil.objToStr(map.get("age"))));
         Integer invitedBy = StrUtil.objToInt(map.get("invitedBy"));
         if(invitedBy != null){
             map.put("invitedByUserName", getUserInfo(invitedBy).getNickname());
@@ -189,7 +172,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         String nickname = userInputView.getNickname();
         String mobile = userInputView.getMobile();
 
-        StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score");
+        StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score, ua.rank");
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
         StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
         if(StrUtil.isNotBlank(nickname)){

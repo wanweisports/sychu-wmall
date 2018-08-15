@@ -15,6 +15,9 @@ public interface IDBConstant {
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
 
     String USER_SEX = "USER_SEX";//性别
+    String USER_SEX_MALE = "10";//性别男
+    String USER_SEX_FEMALE = "20";//性别女
+
     String USER_AGE = "USER_AGE";//年龄
 
     String COMM_CATEGORY = "COMM_CATEGORY"; //品类

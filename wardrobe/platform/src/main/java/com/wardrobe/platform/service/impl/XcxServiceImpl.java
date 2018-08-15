@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.XcxConstant;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.StrUtil;
@@ -45,7 +46,8 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
         String openId = userInfo.getString("openId");
         UserInfo user = userService.getUserInfoByOpenId(openId);
         if(user == null){
-            user = new UserInfo(openId, StrUtil.EMPTY, userInfo.getString("nickName"), userInfo.getString("avatarUrl"));
+            int gender = userInfo.getInt("gender");
+            user = new UserInfo(openId, StrUtil.EMPTY, userInfo.getString("nickName"), userInfo.getString("avatarUrl"), gender == 1 ? IDBConstant.USER_SEX_MALE : IDBConstant.USER_SEX_FEMALE);
             userService.addUser(user);
         }
         return userInfo;

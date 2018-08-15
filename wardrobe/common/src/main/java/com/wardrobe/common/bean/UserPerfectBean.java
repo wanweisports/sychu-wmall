@@ -1,5 +1,10 @@
 package com.wardrobe.common.bean;
 
+import com.wardrobe.common.util.DateUtil;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 /**
  * Created by cxs on 2018/7/30.
  */
@@ -7,7 +12,8 @@ public class UserPerfectBean {
 
     private Integer userId;
     private String sex;
-    private String age;
+    @DateTimeFormat(pattern = DateUtil.YYYYMMDD)
+    private Date age;
     private String dressStyle;
     private String usualSize;
     private String mobile;
@@ -29,11 +35,11 @@ public class UserPerfectBean {
         this.sex = sex;
     }
 
-    public String getAge() {
+    public Date getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Date age) {
         this.age = age;
     }
 

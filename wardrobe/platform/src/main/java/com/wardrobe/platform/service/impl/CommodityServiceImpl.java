@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cxs on 2018/7/30.
@@ -72,6 +69,32 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
+    public Map<String, Object> getCommodityDetail(int cid){
+        Map<String, Object> data = new HashMap<>(6, 1);
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        data.put("sizes", getCommoditySizes(cid));
+        data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
+        data.put("commName", commodityInfo.getCommName());
+        data.put("price", commodityInfo.getPrice());
+        data.put("desc", commodityInfo.getProductDesc());
+        data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
+        return data;
+    }
+
+    private CommodityInfo getCommodityInfo(int cid){
+        return baseDao.getToEvict(CommodityInfo.class, cid);
+    }
+
+    private List<Map<String, Object>> getCommodityColors(int groupId){
+        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?", groupId);
+    }
+
+    private String[] getCommoditySizes(int cid){
+        String sizes = StrUtil.objToStr(baseDao.getUniqueObjectResult("SELECT GROUP_CONCAT(size) FROM commodity_size WHERE cid = ?", cid));
+        return sizes.split(",");
+    }
+
+    @Override
     public PageBean getCommodityListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditysIn(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
@@ -105,7 +128,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void addCommodity(CommodityInfo commodityInfo){
+    public void addCommodityIn(CommodityInfo commodityInfo){
         Timestamp timestamp = DateUtil.getNowDate();
         commodityInfo.setCreateTime(timestamp);
         baseDao.save(commodityInfo, null);

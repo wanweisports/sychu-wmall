@@ -3,9 +3,11 @@ package com.wardrobe.common.po;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -18,14 +20,13 @@ public class UserInfo {
     private String nickname;
     private String headImg;
     private String sex;
-    private String age;
+    @DateTimeFormat(pattern = DateUtil.YYYYMMDD)
+    private Date age;
     private String dressStyle;
     private String usualSize;
     private String mobile;
     private String inviteCode;
     private Integer invitedBy;
-    private Integer rank;
-    private Integer point;
     private String isPerfect;
     private Timestamp registerTime;
     private Timestamp createTime;
@@ -33,11 +34,12 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String openId, String unionId, String nickname, String headImg) {
+    public UserInfo(String openId, String unionId, String nickname, String headImg, String sex) {
         this.openId = openId;
         this.unionId = unionId;
         this.nickname = nickname;
         this.headImg = headImg;
+        this.sex = sex;
     }
 
     @Id
@@ -103,11 +105,11 @@ public class UserInfo {
 
     @Basic
     @Column(name = "age")
-    public String getAge() {
+    public Date getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Date age) {
         this.age = age;
     }
 
@@ -162,26 +164,6 @@ public class UserInfo {
     }
 
     @Basic
-    @Column(name = "rank")
-    public Integer getRank() {
-        return rank;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
-    }
-
-    @Basic
-    @Column(name = "point")
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
-    }
-
-    @Basic
     @Column(name = "isPerfect")
     public String getIsPerfect() {
         return isPerfect;
@@ -216,8 +198,6 @@ public class UserInfo {
         this.isPerfect = IDBConstant.LOGIC_STATUS_NO; //待完善资料
         this.createTime = timestamp;
         this.registerTime = timestamp;
-        this.rank = 1;
-        this.point = 0;
         this.inviteCode = StrUtil.objToStr(StrUtil.initCode(4));
         return this;
     }
@@ -241,8 +221,6 @@ public class UserInfo {
         if (mobile != null ? !mobile.equals(userInfo.mobile) : userInfo.mobile != null) return false;
         if (inviteCode != null ? !inviteCode.equals(userInfo.inviteCode) : userInfo.inviteCode != null) return false;
         if (invitedBy != null ? !invitedBy.equals(userInfo.invitedBy) : userInfo.invitedBy != null) return false;
-        if (rank != null ? !rank.equals(userInfo.rank) : userInfo.rank != null) return false;
-        if (point != null ? !point.equals(userInfo.point) : userInfo.point != null) return false;
         if (registerTime != null ? !registerTime.equals(userInfo.registerTime) : userInfo.registerTime != null)
             return false;
         if (createTime != null ? !createTime.equals(userInfo.createTime) : userInfo.createTime != null) return false;
@@ -264,8 +242,6 @@ public class UserInfo {
         result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
         result = 31 * result + (inviteCode != null ? inviteCode.hashCode() : 0);
         result = 31 * result + (invitedBy != null ? invitedBy.hashCode() : 0);
-        result = 31 * result + (rank != null ? rank.hashCode() : 0);
-        result = 31 * result + (point != null ? point.hashCode() : 0);
         result = 31 * result + (registerTime != null ? registerTime.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
