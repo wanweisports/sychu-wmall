@@ -70,12 +70,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> getCommodityDetail(int cid){
-        Map<String, Object> data = new HashMap<>(5, 1);
+        Map<String, Object> data = new HashMap<>(6, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizes(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
         data.put("commName", commodityInfo.getCommName());
         data.put("price", commodityInfo.getPrice());
+        data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
         return data;
     }
