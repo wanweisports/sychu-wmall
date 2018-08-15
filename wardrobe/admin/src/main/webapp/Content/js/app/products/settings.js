@@ -5,12 +5,8 @@ requirejs.config({
         "tether"    : 'bower_components/tether/dist/js/tether',
         "bootstrap" : 'bower_components/bootstrap/dist/js/bootstrap',
         "pace"      : 'bower_components/pace/pace',
-        "chart"     : 'bower_components/chart.js/dist/Chart',
 
         "alert"     : 'utils/jqueryAlert/alert/alert',
-
-        "jquery.validate"              : 'bower_components/jquery.validation/dist/jquery.validate',
-        "jquery.validate.unobtrusive"  : 'bower_components/Microsoft.jQuery.Unobtrusive.Validation/jquery.validate.unobtrusive',
 
         "base"      : 'js/widgets/base',
         "override"  : 'js/widgets/override',
@@ -22,36 +18,14 @@ requirejs.config({
         },
         "alert": {
             deps: ["jquery"]
-        },
-        "jquery.validate": {
-            deps: ["jquery", "override"]
-        },
-        "jquery.validate.unobtrusive": {
-            deps: ["jquery", "jquery.validate"]
         }
     },  // 依赖关系
     waitSeconds: 0,
     urlArgs: '_=' + new Date().getTime()
 });
 
-require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 'jquery.validate.unobtrusive', 'productsLabelSettings'], function ($, jqueryAlert) {
+require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSettings'], function ($, jqueryAlert) {
     'use strict';
-
-    // 表单校验配置
-    $(document).ready(function () {
-        $('#product_form').validate();
-    });
-
-    $.postJSON = function(url, data, callback) {
-        return $.ajax({
-            'type' : 'POST',
-            'url' : url,
-            'contentType' : 'application/json',
-            'data' : JSON.stringify(data),
-            'dataType' : 'json',
-            'success' : callback
-        });
-    };
 
     /* category *************************************************/
     var $category = new $.ProductsLabelSettings({
@@ -80,48 +54,27 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 
         }
     });
 
-    function queryCatetory() {
-        $category.query({}, function (data) {
-            var htmls = [];
-
-            for (var i = 0; i < data.length; i++) {
-                htmls.push('<option value="' + data.value + '">' + data.value + '</option>');
-            }
-
-            $("#p_categorySelect").html(htmls.join(""));
-        });
-    }
-    queryCatetory();
-
     $(".category-list").on("click", ".category-item.fa-remove", function (e) {
         e.preventDefault;
 
         var $this = $(this);
-        $this.parents(".btn-close").remove();
 
-        var selectors = $(".category-list").find(".category-item");
-        var selectorsValue = [];
-        selectors.each(function (i) {
-            selectorsValue.push(selectors.eq(i).attr("data-value"));
+        $category.delete({id: $this.attr("data-id")}, function (status) {
+            if (status) {
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            }
+            else {
+                jqueryAlert({
+                    'icon'      : '/Content/images/icon-error.png',
+                    'content'   : "商品品类删除失败, 请稍后重试",
+                    'closeTime' : 2000,
+                    'modal'        : true,
+                    'isModalClose' : true
+                });
+            }
         });
-        $("#p_category").val(selectorsValue.join(","));
-
-        queryCatetory();
-    });
-
-    $("#p_categorySelect").on("change", function (e) {
-        e.preventDefault;
-
-        var $this = $(this);
-        $(".category-add").before('<button type="button" class="btn btn-success btn-close">' + $this.val() + '<i class="fa fa-remove"></i></button>');
-
-        var selectors = $(".category-list").find(".category-item.category-active");
-        var selectorsValue = [];
-        selectors.each(function (i) {
-            selectorsValue.push(selectors.eq(i).attr("data-value"));});
-        $("#p_category").val(selectorsValue.join(","));
-
-        queryCatetory();
     });
 
     /* style *************************************************/
@@ -151,6 +104,29 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 
         }
     });
 
+    $(".style-list").on("click", ".style-item.fa-remove", function (e) {
+        e.preventDefault;
+
+        var $this = $(this);
+
+        $style.delete({id: $this.attr("data-id")}, function (status) {
+            if (status) {
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            }
+            else {
+                jqueryAlert({
+                    'icon'      : '/Content/images/icon-error.png',
+                    'content'   : "商品风格删除失败, 请稍后重试",
+                    'closeTime' : 2000,
+                    'modal'        : true,
+                    'isModalClose' : true
+                });
+            }
+        });
+    });
+
     /* material *************************************************/
     var $material = new $.ProductsLabelSettings({
         type: "material",
@@ -177,14 +153,27 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 
             }, 1500);
         }
     });
-    var $this = $(this);
 
-    $this.toggleClass("style-selected");
+    $(".material-list").on("click", ".material-item.fa-remove", function (e) {
+        e.preventDefault;
 
-    var selectors = $(".style-list").find(".style-item");
-    var selectorsValue = [];
-    selectors.each(function (i) {
-        selectorsValue.push('<option value="' +  (selectors.eq(i).attr("data-value")) + '">' + (selectors.eq(i).attr("data-value")) + '</option>');
+        var $this = $(this);
+
+        $material.delete({id: $this.attr("data-id")}, function (status) {
+            if (status) {
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            }
+            else {
+                jqueryAlert({
+                    'icon'      : '/Content/images/icon-error.png',
+                    'content'   : "商品材质删除失败, 请稍后重试",
+                    'closeTime' : 2000,
+                    'modal'        : true,
+                    'isModalClose' : true
+                });
+            }
+        });
     });
-    $("#p_style").val(selectorsValue.join(","));
 });

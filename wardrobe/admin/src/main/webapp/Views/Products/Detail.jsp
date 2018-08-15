@@ -13,72 +13,12 @@
         .user-list td {
             padding: 0.3rem 0.75rem;
         }
-        #user_recharge .modal-body {
-            padding-top: 2rem;
-        }
-        .icon-sports {
-            display: block;
-        }
-        .icon-gaoerfu {
-            background: url("/Content/images/sports/icon-gaoerfu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-huaxue {
-            background: url("/Content/images/sports/icon-huaxue.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-lanqiu {
-            background: url("/Content/images/sports/icon-lanqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-paiqiu {
-            background: url("/Content/images/sports/icon-paiqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-pingpangqiu {
-            background: url("/Content/images/sports/icon-pingpangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-wangqiu {
-            background: url("/Content/images/sports/icon-wangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-youyong {
-            background: url("/Content/images/sports/icon-youyong.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-yumaoqiu {
-            background: url("/Content/images/sports/icon-yumaoqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-zuqiu {
-            background: url("/Content/images/sports/icon-zuqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-bangqiu {
-            background: url("/Content/images/sports/icon-bangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-
-        .class-item {
-            cursor: pointer;
-            height: 7.5rem;
-            position: relative;
-        }
-        .class-item .class-price {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
-        .class-item.class-item-selected {
-            border: 2px solid #4dbd74;
-        }
     </style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/students/list.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/products/list.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -88,8 +28,18 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>会员列表</strong>
-                            <small>Members List</small>
+                            <ol class="breadcrumb" style="background: inherit;padding: 0;margin: 0;">
+                                <li class="breadcrumb-item">
+                                    <strong>商品详情</strong>
+                                    <small>Products Info</small>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="/admin/products/hot/list?type=users">
+                                        <strong>人气商品</strong>
+                                        <small>Users Products</small>
+                                    </a>
+                                </li>
+                            </ol>
                         </div>
                         <div class="card-block">
                             <form id="members_query_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">

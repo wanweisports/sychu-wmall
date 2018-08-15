@@ -3,9 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -21,10 +19,35 @@ public class ProductsController extends BaseController {
         return new ModelAndView("/Products/ActiveSettings");
     }
 
+    /***********
+     * type: "category", "style", "material"
+     */
+
     @Desc("商品筛选属性设置")
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public ModelAndView renderProductsSettings() {
         return new ModelAndView("/Products/Settings");
+    }
+
+    @Desc("商品筛选属性设置 - 提交")
+    @ResponseBody
+    @RequestMapping(value = "/{type}/save", method = RequestMethod.POST)
+    public ResponseBean saveProductsTypeSettings(@PathVariable String type, ProductsTypeSettingsRequest request) {
+        return new ResponseBean(true);
+    }
+
+    @Desc("商品筛选属性设置 - 删除")
+    @ResponseBody
+    @RequestMapping(value = "/{type}/delete", method = RequestMethod.POST)
+    public ResponseBean deleteProductsTypeSettings(@PathVariable String type) {
+        return new ResponseBean(true);
+    }
+
+    @Desc("商品筛选属性设置 - 查询")
+    @ResponseBody
+    @RequestMapping(value = "/{type}/query", method = RequestMethod.GET)
+    public ResponseBean queryProductsTypeSettings() {
+        return new ResponseBean(true);
     }
 
     @Desc("商品管理列表")

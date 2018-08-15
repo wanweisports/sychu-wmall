@@ -6,74 +6,7 @@
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
-    <style type="text/css">
-        .user-list th {
-            padding: 0.75rem;
-        }
-        .user-list td {
-            padding: 0.3rem 0.75rem;
-        }
-        #user_recharge .modal-body {
-            padding-top: 2rem;
-        }
-        .icon-sports {
-            display: block;
-        }
-        .icon-gaoerfu {
-            background: url("/Content/images/sports/icon-gaoerfu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-huaxue {
-            background: url("/Content/images/sports/icon-huaxue.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-lanqiu {
-            background: url("/Content/images/sports/icon-lanqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-paiqiu {
-            background: url("/Content/images/sports/icon-paiqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-pingpangqiu {
-            background: url("/Content/images/sports/icon-pingpangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-wangqiu {
-            background: url("/Content/images/sports/icon-wangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-youyong {
-            background: url("/Content/images/sports/icon-youyong.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-yumaoqiu {
-            background: url("/Content/images/sports/icon-yumaoqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-zuqiu {
-            background: url("/Content/images/sports/icon-zuqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-bangqiu {
-            background: url("/Content/images/sports/icon-bangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-
-        .class-item {
-            cursor: pointer;
-            height: 7.5rem;
-            position: relative;
-        }
-        .class-item .class-price {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
-        .class-item.class-item-selected {
-            border: 2px solid #4dbd74;
-        }
-    </style>
+    <style type="text/css"></style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">

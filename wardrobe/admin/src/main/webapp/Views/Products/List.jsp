@@ -38,7 +38,14 @@
                             <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list" novalidate onsubmit="return false;">
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="商品名称">
+                                        <input type="text" name="name" class="form-control" placeholder="商品名称">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="status">
+                                            <option>全部商品</option>
+                                            <option>已上架</option>
+                                            <option>已下架</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary products-query-btn">
@@ -62,6 +69,7 @@
                                     <th>商品原价</th>
                                     <th>优惠价格</th>
                                     <th>已售数量</th>
+                                    <th>商品状态</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -74,22 +82,37 @@
                                     <td>约会,度假,休闲</td>
                                     <td>￥600</td>
                                     <td>￥399</td>
-                                    <td>2012</td>
                                     <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="上架">
-                                            <i class="fa fa-level-up"></i> 上架
-                                        </a>
+                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">2012件</a>
+                                    </td>
+                                    <td><span class="badge badge-success">已上架</span></td>
+                                    <td>
                                         <a href="javascript:;" class="btn btn-sm btn-danger" title="下架">
                                             <i class="fa fa-level-down"></i> 下架
                                         </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-warning" title="人气">
+                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="人气">
                                             <i class="fa fa-heart"></i> 人气
                                         </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-warning" title="热门">
+                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="热门">
                                             <i class="fa fa-bolt"></i> 热门
                                         </a>
+                                    </td>
+                                </tr>
+                                <tr data-id="">
+                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
+                                    <td>
+                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
+                                    </td>
+                                    <td>约会,度假,休闲</td>
+                                    <td>￥600</td>
+                                    <td>￥399</td>
+                                    <td>
+                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">2012件</a>
+                                    </td>
+                                    <td><span class="badge badge-danger">已下架</span></td>
+                                    <td>
                                         <a href="javascript:;" class="btn btn-sm btn-primary" title="上架">
-                                            <i class="fa fa-pencil"></i> 编辑
+                                            <i class="fa fa-level-up"></i> 上架
                                         </a>
                                     </td>
                                 </tr>

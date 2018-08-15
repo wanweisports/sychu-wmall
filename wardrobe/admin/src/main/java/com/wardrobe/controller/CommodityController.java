@@ -34,7 +34,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("addCommodity")
     public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, MultipartFile[] multipartFiles){
-       commodityService.addCommodity(commodityInfo);
+       commodityService.addCommodityIn(commodityInfo);
         return new ResponseBean(true);
     }
 

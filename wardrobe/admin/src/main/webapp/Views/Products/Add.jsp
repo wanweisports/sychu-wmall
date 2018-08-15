@@ -12,69 +12,17 @@
             text-align: right;
             font-weight: bold;
         }
-        .icon-sports {}
-        .icon-gaoerfu {
-            background: url("/Content/images/sports/icon-gaoerfu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-huaxue {
-            background: url("/Content/images/sports/icon-huaxue.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-lanqiu {
-            background: url("/Content/images/sports/icon-lanqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-paiqiu {
-            background: url("/Content/images/sports/icon-paiqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-pingpangqiu {
-            background: url("/Content/images/sports/icon-pingpangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-wangqiu {
-            background: url("/Content/images/sports/icon-wangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-youyong {
-            background: url("/Content/images/sports/icon-youyong.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-yumaoqiu {
-            background: url("/Content/images/sports/icon-yumaoqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-zuqiu {
-            background: url("/Content/images/sports/icon-zuqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .icon-bangqiu {
-            background: url("/Content/images/sports/icon-bangqiu.png") no-repeat center;
-            background-size: 1.5rem;
-        }
-        .class-item {
-            cursor: pointer;
-        }
-        .class-item.class-item-selected {
-            border: 2px solid #4dbd74;
-        }
-        label.radio-inline {
-            margin-right: .5rem;
-            margin-bottom: 0;
-            margin-top: .25rem;
-        }
     </style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/students/add.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
 
-    <%@ include file="../Shared/Payment.jsp" %>
+    <%@ include file="./LabelSettings.jsp" %>
 
     <div class="container-fluid">
         <div class="animated fadeIn">
@@ -120,12 +68,26 @@
                                                data-val="true" data-val-required="请至少选择一种商品品类">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <button type="button" class="btn btn-success">连衣裙&nbsp;<i class="fa fa-remove"></i></button>
-                                        <button type="button" class="btn btn-success">西服&nbsp;<i class="fa fa-remove"></i></button>
-                                        <button type="button" class="btn btn-success">外套&nbsp;<i class="fa fa-remove"></i></button>
-                                        <button type="button" class="btn btn-success">下装&nbsp;<i class="fa fa-remove"></i></button>
-                                        <button type="button" class="btn btn-primary">
+                                    <div class="col-md-8 category-list">
+                                        <button type="button" class="btn btn-success btn-close category-item">
+                                            连衣裙<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success  btn-close category-item">
+                                            西服<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-close category-item">
+                                            连衣裙<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-close category-item">
+                                            连衣裙<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success  btn-close category-item">
+                                            西服<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-close category-item">
+                                            连衣裙<i class="fa fa-remove"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-primary category-add" data-toggle="modal" data-target="#product_category_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -135,12 +97,15 @@
                                         <span class="text-danger">*</span> 商品风格
                                     </label>
                                     <div class="col-md-10">
+                                        <input type="hidden" class="form-control" id="p_style" placeholder="请选择商品风格" name="style"
+                                               data-val="true" data-val-required="请至少选择一种商品风格">
+                                        <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                         <button type="button" class="btn btn-success">职 场</button>
                                         <button type="button" class="btn btn-success">约 会</button>
                                         <button type="button" class="btn btn-secondary">职 场</button>
                                         <button type="button" class="btn btn-secondary">职 场</button>
                                         <button type="button" class="btn btn-success">职 场</button>
-                                        <button type="button" class="btn btn-primary">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_style_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -150,9 +115,11 @@
                                         <span class="text-danger">*</span> 商品材质
                                     </label>
                                     <div class="col-md-10">
+                                        <input type="hidden" class="form-control" id="p_material" placeholder="请选择商品材质" name="material"
+                                               data-val="true" data-val-required="请至少选择一种商品材质">
                                         <button type="button" class="btn btn-secondary">棉 麻</button>
                                         <button type="button" class="btn btn-success">纯 棉</button>
-                                        <button type="button" class="btn btn-primary">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_material_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -203,124 +170,70 @@
                                     <label class="col-md-2 form-control-label">
                                         <span class="text-danger">*</span> 商品颜色
                                     </label>
-                                    <div class="col-md-2">
+                                    <div class="col-md-8">
                                         <input type="text" class="form-control" id="p_colorName" placeholder="请输入商品颜色" name="colorName"
                                                data-val="true" data-val-required="请至少输入一种商品颜色">
                                         <div data-valmsg-for="colorName" data-valmsg-replace="true"></div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <button type="button" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i> 加颜色
-                                        </button>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label">
                                         <span class="text-danger">*</span> 商品尺码
                                     </label>
-                                    <div class="col-md-10 row">
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    卡其
-                                                    <div class="card-actions">
-                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="card-block">
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option selected>XL</option>
-                                                                <option>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option>XL</option>
-                                                                <option selected>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    乳白
-                                                    <div class="card-actions">
-                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="card-block">
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option selected>XL</option>
-                                                                <option>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option>XL</option>
-                                                                <option selected>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    紫红
-                                                    <div class="card-actions">
-                                                        <a href="javascript:;" class="btn-close"><i class="icon-close"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="card-block">
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option selected>XL</option>
-                                                                <option>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <select class="form-control">
-                                                                <option>XL</option>
-                                                                <option selected>XXL</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" placeholder="初始库存">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control">
+                                            <option selected>XL</option>
+                                            <option>XXL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="初始库存">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-2 col-md-2">
+                                        <select class="form-control">
+                                            <option selected>XL</option>
+                                            <option>XXL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="初始库存">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-2 col-md-2">
+                                        <select class="form-control">
+                                            <option selected>XL</option>
+                                            <option>XXL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="初始库存">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
