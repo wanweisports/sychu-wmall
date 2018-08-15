@@ -34,31 +34,31 @@
                         </div>
                         <div class="card-block">
                             <form id="balance_form" method="post" class="form-horizontal row" action="/admin/members/recharge/addRecharge" <%--novalidate onsubmit="return false;"--%>>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="p_commName">
+                                        <label class="col-md-4 form-control-label" for="p_commName">
                                             <span class="text-danger">*</span> 充值金额
                                         </label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" class="form-control" id="p_commName" placeholder="请输入充值金额" name="dictValue"
                                                    data-val="true" data-val-required="充值金额不能为空" >
                                             <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="stu_mobile">
+                                        <label class="col-md-4 form-control-label" for="stu_mobile">
                                             <span class="text-danger">*</span> 赠送金额
                                         </label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" class="form-control" id="stu_mobile" placeholder="请输入赠送金额" name="dictAdditional"
                                                    data-val="true" data-val-required="赠送金额不能为空">
                                             <div data-valmsg-for="mobile" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <button type="submit" class="btn btn-primary">
@@ -90,7 +90,7 @@
                                         <td>${dict.createTime}</td>
                                         <td>
                                             <a href="/admin/members/recharge/deleteRecharge?dictId=${dict.dictId}" class="btn btn-sm btn-danger user-refresh" title="删除">
-                                                <i class="fa fa-pencil"></i> 删除
+                                                <i class="fa fa-remove"></i> 删除
                                             </a>
                                         </td>
                                     </tr>

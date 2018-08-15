@@ -7,10 +7,10 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .user-list th {
+        .members-list th {
             padding: 0.75rem;
         }
-        .user-list td {
+        .members-list td {
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
@@ -21,7 +21,7 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/students/list.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/members/list.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -35,7 +35,7 @@
                             <small>Members List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list" novalidate<%-- onsubmit="return false;"--%>>
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list" novalidate onsubmit="return false;">
                                 <div class="form-group row">
                                     <div class="col-md-2">
                                         <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
@@ -53,7 +53,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm user-list">
+                            <table class="table table-striped table-sm members-list">
                                 <thead>
                                 <tr>
                                     <th>用户头像</th>
@@ -72,7 +72,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="user" items="${list}">
-                                    <tr data-id="">
+                                    <tr data-id="${user.id}">
                                         <td><img src="${user.headImg}" alt="用户头像" class="img-rounded"></td>
                                         <td>
                                             <a href="/admin/members/detail?userId=${user.uid}" class="btn btn-sm btn-link" title="会员详情">
@@ -93,7 +93,9 @@
                                         <td>${user.invitedByUserName}</td>
                                         <td>${user.registerTime}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-primary btn-sm">关闭</a>
+                                            <a href="javascript:;" class="btn btn-primary btn-sm member-stop">
+                                                <i class="fa fa-stop-circle-o"></i> 停用
+                                            </a>
                                         </td>
                                     </tr>
                                 </c:forEach>

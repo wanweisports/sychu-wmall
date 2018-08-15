@@ -55,12 +55,12 @@ public class MembersController extends BaseController {
         return "Members/List";
     }
 
-    @Desc("会员详情")
+    @Desc("会员停用")
+    @ResponseBody
     @NotProtected
-    @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public String renderMembersDetail(int userId, Model model) {
-        model.addAllAttributes(userService.getMembersDetailIn(userId));
-        return "Members/Detail";
+    @RequestMapping(value = "/setCloseStatus", method = RequestMethod.POST)
+    public ResponseBean setCloseStatus(int memberId) {
+        return new ResponseBean(true);
     }
 
     @Desc("会员充值流水")

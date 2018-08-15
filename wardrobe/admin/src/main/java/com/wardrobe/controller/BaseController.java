@@ -36,6 +36,7 @@ public class BaseController {
 		model.addAttribute("lastPage", pageBean.getLastPage());
 		model.addAttribute("currentPage", pageBean.getCurrentPage());
 		model.addAttribute("pageSize", pageBean.getPageSize());
+		model.addAttribute("page", pageBean);
     }
 
     protected String getStreamResult(HttpServletRequest request, HttpServletResponse response) throws Exception{
