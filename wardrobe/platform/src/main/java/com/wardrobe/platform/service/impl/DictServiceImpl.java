@@ -27,6 +27,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
     }
 
     @Override
+    public String getDictValue(String dictName, int dictId){
+        return StrUtil.objToStr(baseDao.getUniqueObjectResult("SELECT dictValue FROM sys_dict WHERE  dictName = ?1 AND dictId = ?2", dictName, dictId));
+    }
+
+    @Override
     public SysDict getDictById(int dictId){
         return baseDao.getToEvict(SysDict.class, dictId);
     }

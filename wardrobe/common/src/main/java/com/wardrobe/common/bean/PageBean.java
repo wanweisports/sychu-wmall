@@ -15,7 +15,7 @@ public class PageBean {
 	/**
 	 * 总记录数
 	 */
-	private int count;
+	private int totalCount;
 	
 	/**
 	 * 总页数
@@ -80,14 +80,14 @@ public class PageBean {
 		this.list = list;
 		this.currentPage = (currentPage==0?1:currentPage);
 		this.pageSize = pageSize;
-		this.count = count;
+		this.totalCount = count;
 	}
 
 	/**
 	 * 初始化分页信息
 	 */
 	public void init() {
-		this.totalPage = countTotalPage(pageSize, count);
+		this.totalPage = countTotalPage(pageSize, totalCount);
 		this.isFirstPage = isFirstPage();
 		this.isLastPage = isLastPage();
 		this.hasPreviousPage = isHasPreviousPage();
@@ -185,12 +185,12 @@ public class PageBean {
 		this.list = list;
 	}
 
-	public int getCount() {
-		return count;
+	public int getTotalCount() {
+		return totalCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 
 	public int getTotalPage() {

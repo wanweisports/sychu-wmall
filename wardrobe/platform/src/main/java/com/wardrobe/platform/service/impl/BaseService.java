@@ -70,7 +70,7 @@ public class BaseService {
         for(String type : typeArr){
             if(StrUtil.isNotBlank(type)){
                 if(typesSd.length() > 0) typesSd.append("、");
-                typesSd.append(dictService.getDictValue(dictName, type));
+                typesSd.append(dictService.getDictValue(dictName, StrUtil.objToInt(type)));
             }
         }
         return typesSd.toString();

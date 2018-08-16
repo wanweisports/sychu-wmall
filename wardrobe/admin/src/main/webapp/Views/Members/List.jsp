@@ -89,7 +89,7 @@
                                         </td>
                                         <td>${user.ycoid}</td>
                                         <td>${user.score}</td>
-                                        <td>VIP${user.rank}</td>
+                                        <td>${user.rankName}</td>
                                         <td>${user.invitedByUserName}</td>
                                         <td>${user.registerTime}</td>
                                         <td>

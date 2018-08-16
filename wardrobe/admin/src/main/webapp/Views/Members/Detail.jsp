@@ -59,7 +59,7 @@
                                 </tr>
                                 <tr>
                                     <th>用户等级：</th>
-                                    <td>VIP${user.rank}</td>
+                                    <td>${userAccount.rankName}</td>
                                     <th>尺码偏好：</th>
                                     <td>${user.usualSizeName}</td>
                                     <th>风格偏好：</th>

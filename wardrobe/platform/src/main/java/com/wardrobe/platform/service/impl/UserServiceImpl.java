@@ -12,10 +12,7 @@ import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserInputView;
-import com.wardrobe.platform.service.IUserAccountService;
-import com.wardrobe.platform.service.IUserCouponService;
-import com.wardrobe.platform.service.IUserService;
-import com.wardrobe.platform.service.IUserTransactionsService;
+import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +31,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Autowired
     private IUserCouponService userCouponService;
+
+    @Autowired
+    private ISysRankService sysRankService;
 
     @Override
     public UserInfo getUserInfo(int uid){
@@ -148,8 +148,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public PageBean getUserListIn(UserInputView userInputView){
         PageBean pageBean = getUsersIn(userInputView);
         List<Map<String, Object>> list = pageBean.getList();
-        list.stream().forEach((map) ->{
+        list.stream().forEach((map) -> {
             getUserType(map);
+            getUserAccountType(map);
         });
         return pageBean;
     }
@@ -164,6 +165,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(invitedBy != null){
             map.put("invitedByUserName", getUserInfo(invitedBy).getNickname());
         }
+        return map;
+    }
+
+    private Map<String, Object> getUserAccountType(Map<String, Object> map) {
+        map.put("rankName", sysRankService.getRankInfoByRank(StrUtil.objToInt(map.get("rank"))).getRankName());
         return map;
     }
 
@@ -187,10 +193,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public Map<String, Object> getMembersDetailIn(int userId){
         Map<String, Object> data = new HashMap(4, 1);
-        Map<String, Object> userMap = JsonUtils.fromJson(getUserInfo(userId));
-        UserAccount userAccount = userAccountService.getUserAccount(userId);
-        data.put("user", getUserType(userMap));
-        data.put("userAccount", userAccount);
+        data.put("user", getUserType(JsonUtils.fromJson(getUserInfo(userId))));
+        data.put("userAccount", getUserAccountType(JsonUtils.fromJson(userAccountService.getUserAccount(userId))));
         data.put("userCoupon", userCouponService.getUserCoupons(userId));
 
         return data;

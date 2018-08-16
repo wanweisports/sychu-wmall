@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 
-<c:if test="${page.count > 0}">
+<c:if test="${page.totalCount > 0}">
     <div class="row">
         <div class="col-md-12">
             <ul class="pagination pull-right">
@@ -63,7 +63,7 @@
                     </li>
                 </c:if>
                 <li class="page-item disabled">
-                    <a class="page-link" href="javascript:;">第${page.currentPage}页，共${page.count}条</a>
+                    <a class="page-link" href="javascript:;">第${page.currentPage}页，共${page.totalCount}条</a>
                 </li>
             </ul>
         </div>

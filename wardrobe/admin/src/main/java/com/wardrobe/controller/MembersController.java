@@ -56,6 +56,14 @@ public class MembersController extends BaseController {
         return "Members/List";
     }
 
+    @Desc("会员详情")
+    @NotProtected
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public String renderMembersDetail(int userId, Model model) {
+        model.addAllAttributes(userService.getMembersDetailIn(userId));
+        return "Members/Detail";
+    }
+
     @Desc("会员停用")
     @ResponseBody
     @NotProtected
@@ -68,14 +76,14 @@ public class MembersController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/transactions/log")
     public String renderMembersTransactionsLog(UserTransactionsInputView userTransactionsInputView, Model model) {
-        super.setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView), "/admin/members/transactions/log", userTransactionsInputView);
-        model.addAllAttributes(JsonUtils.fromJson(userTransactionsInputView));
+        model.addAllAttributes(JsonUtils.fromJsonDF(userTransactionsInputView));
         Integer uid = userTransactionsInputView.getUid();
         if(uid != null){
             UserInfo userInfo = userService.getUserInfo(uid);
             model.addAttribute("nickname", userInfo.getNickname());
             model.addAttribute("mobile", userInfo.getMobile());
         }
+        super.setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView), "/admin/members/transactions/log", userTransactionsInputView);
         return "Members/TransactionsLog";
     }
 

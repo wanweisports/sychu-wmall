@@ -63,7 +63,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${list}">
+                                <c:forEach var="t" items="${page.list}">
                                 <tr data-id="">
                                     <td>${t.tid}</td>
                                     <td>${t.serviceTypeName}</td>
