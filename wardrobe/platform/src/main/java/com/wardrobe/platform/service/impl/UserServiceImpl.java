@@ -179,7 +179,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
             whereSql.append(" AND ui.nickname = :nickname");
         }
         if (StrUtil.isNotBlank(mobile)) {
-            whereSql.append(" AND ui.mobile = mobile");
+            whereSql.append(" AND ui.mobile = :mobile");
         }
         return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }

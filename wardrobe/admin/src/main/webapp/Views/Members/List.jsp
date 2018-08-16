@@ -71,7 +71,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="user" items="${list}">
+                                <c:forEach var="user" items="${page.list}">
                                     <tr data-id="${user.id}">
                                         <td><img src="${user.headImg}" alt="用户头像" class="img-rounded"></td>
                                         <td>

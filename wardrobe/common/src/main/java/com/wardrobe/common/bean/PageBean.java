@@ -20,7 +20,7 @@ public class PageBean {
 	/**
 	 * 总页数
 	 */
-	private int lastPage;
+	private int totalPage;
 	
 	/**
 	 * 当前页
@@ -87,7 +87,7 @@ public class PageBean {
 	 * 初始化分页信息
 	 */
 	public void init() {
-		this.lastPage = countTotalPage(pageSize, count);
+		this.totalPage = countTotalPage(pageSize, count);
 		this.isFirstPage = isFirstPage();
 		this.isLastPage = isLastPage();
 		this.hasPreviousPage = isHasPreviousPage();
@@ -106,7 +106,7 @@ public class PageBean {
 	}
 
 	public boolean isLastPage() {
-		return currentPage == lastPage; //如果当前页是最后一页
+		return currentPage == totalPage; //如果当前页是最后一页
 	}
 
 	public boolean isHasPreviousPage() {
@@ -114,7 +114,7 @@ public class PageBean {
 	}
 
 	public boolean isHasNextPage() {
-		return currentPage != lastPage && lastPage > 0; //只要当前页不是最后1页
+		return currentPage != totalPage && totalPage > 0; //只要当前页不是最后1页
 	}
 
 	/**
@@ -193,12 +193,12 @@ public class PageBean {
 		this.count = count;
 	}
 
-	public int getLastPage() {
-		return lastPage;
+	public int getTotalPage() {
+		return totalPage;
 	}
 
-	public void setLastPage(int lastPage) {
-		this.lastPage = lastPage;
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
 	}
 
 	public int getCurrentPage() {

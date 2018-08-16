@@ -1,6 +1,8 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.view.BaseInputView;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,13 +32,27 @@ public class BaseController {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 	
-    protected void setPageInfo(Model model, PageBean pageBean){
-    	model.addAttribute("list", pageBean.getList());
-		model.addAttribute("count", pageBean.getCount());
-		model.addAttribute("lastPage", pageBean.getLastPage());
-		model.addAttribute("currentPage", pageBean.getCurrentPage());
-		model.addAttribute("pageSize", pageBean.getPageSize());
+    protected void setPageInfo(Model model, PageBean pageBean, String pageURL, BaseInputView baseInputView){
 		model.addAttribute("page", pageBean);
+
+		int splitPage = 5;
+		int currentPage = pageBean.getCurrentPage();
+		int totalPage = pageBean.getTotalPage();
+		int startPage = 1, endPage = totalPage;
+		if(currentPage > splitPage){
+			startPage = currentPage - splitPage + 1;
+			model.addAttribute("prefix", true);
+		}
+
+		if(currentPage+splitPage < totalPage){
+			endPage = currentPage + splitPage;
+			model.addAttribute("suffix", true);
+		}
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+
+		//参数
+		model.addAttribute("pageURL", pageURL + "?syc=" + StrUtil.objToHtmlParams(baseInputView));
     }
 
     protected String getStreamResult(HttpServletRequest request, HttpServletResponse response) throws Exception{

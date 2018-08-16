@@ -27,7 +27,7 @@ public class CommodityController extends BaseController {
     @RequestMapping("getCommoditys")
     public String getCommoditys(CommodityInputView commodityInputView, Model model){
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean);
+        setPageInfo(model, pageBean, "/commodity/getCommoditys", commodityInputView);
         return "";
     }
 

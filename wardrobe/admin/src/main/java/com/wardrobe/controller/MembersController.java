@@ -49,9 +49,10 @@ public class MembersController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/list")
     public String renderMembersList(UserInputView userInputView, Model model) {
+        userInputView.setPageSize(1D); //测试分页
         model.addAllAttributes(JsonUtils.fromJson(userInputView));
         PageBean pageBean = userService.getUserListIn(userInputView);
-        super.setPageInfo(model, pageBean);
+        super.setPageInfo(model, pageBean, "/admin/members/list", userInputView);
         return "Members/List";
     }
 
@@ -67,7 +68,7 @@ public class MembersController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/transactions/log")
     public String renderMembersTransactionsLog(UserTransactionsInputView userTransactionsInputView, Model model) {
-        setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView));
+        super.setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView), "/admin/members/transactions/log", userTransactionsInputView);
         model.addAllAttributes(JsonUtils.fromJson(userTransactionsInputView));
         Integer uid = userTransactionsInputView.getUid();
         if(uid != null){

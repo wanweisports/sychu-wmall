@@ -1,4 +1,5 @@
 package com.wardrobe.common.util;
+import com.wardrobe.common.view.UserInputView;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -170,8 +171,20 @@ public class StrUtil extends StringUtils {
         return code;
     }
 
+    public static String objToHtmlParams(Object obj) {
+        StringBuilder htmlParams = new StringBuilder();
+        Set<Map.Entry<String, Object>> paraMapSet = JsonUtils.fromJsonDF(obj).entrySet();
+        paraMapSet.stream().forEach((Map.Entry<String, Object> param) -> {
+            htmlParams.append("&").append(param.getKey()).append("=").append(param.getValue());
+        });
+        return htmlParams.toString();
+    }
+
     public static void main(String[] args) {
-        System.out.println(initCode(3));
+        UserInputView userInputView = new UserInputView();
+        userInputView.setNickname("网红");
+        userInputView.setMobile("13999999910");
+        System.out.println(objToHtmlParams(userInputView));
     }
 
 }
