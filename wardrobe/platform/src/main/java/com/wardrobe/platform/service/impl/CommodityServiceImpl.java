@@ -128,25 +128,21 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void addCommodityIn(CommodityInfo commodityInfo){
+    public void addCommodityIn(CommodityInfo commodityInfo, CommodityColor commodityColor){
         Timestamp timestamp = DateUtil.getNowDate();
         commodityInfo.setCreateTime(timestamp);
         baseDao.save(commodityInfo, null);
 
-        ListIterator<CommodityColor> commodityColorListIterator = commodityInfo.getCommodityColors().listIterator();
-        while (commodityColorListIterator.hasNext()){
-            CommodityColor commodityColor = commodityColorListIterator.next();
-            commodityColor.setCid(commodityInfo.getCid());
-            commodityColor.setCreateTime(timestamp);
-            baseDao.save(commodityColor, null);
-            ListIterator<CommoditySize> commoditySizeListIterator = commodityColor.getCommoditySizes().listIterator();
-            while (commodityColorListIterator.hasNext()){
-                CommoditySize commoditySize = commoditySizeListIterator.next();
-                commoditySize.setCid(commodityInfo.getCid());
-                commoditySize.setCoid(commodityColor.getCoid());
-                commoditySize.setCreateTime(timestamp);
-                baseDao.save(commoditySize, null);
-            }
+        commodityColor.setCid(commodityInfo.getCid());
+        commodityColor.setCreateTime(timestamp);
+        baseDao.save(commodityColor, null);
+        ListIterator<CommoditySize> commoditySizeListIterator = commodityColor.getCommoditySizes().listIterator();
+        while (commoditySizeListIterator.hasNext()){
+            CommoditySize commoditySize = commoditySizeListIterator.next();
+            commoditySize.setCid(commodityInfo.getCid());
+            commoditySize.setCoid(commodityColor.getCoid());
+            commoditySize.setCreateTime(timestamp);
+            baseDao.save(commoditySize, null);
         }
     }
 
