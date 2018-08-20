@@ -16,8 +16,8 @@
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
-    <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>
+<%--    <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
+            data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>--%>
     <script src="/Content/lib/jquery.min.js"></script>
     <script src="/Content/lib/jquery-form.js"></script>
     <script src="/Content/lib/formToJson.js"></script>
@@ -39,6 +39,10 @@
                     categorys += $(this).data("id");
                 }
             });
+            if(!categorys){
+                alert("品类必选");
+                return;
+            }
             product['category'] = "," + categorys + ",";
 
             //风格
@@ -50,6 +54,10 @@
                     styles += $(this).data("id");
                 }
             });
+            if(!categorys){
+                alert("风格必选");
+                return;
+            }
             product['style'] = "," + styles + ",";
 
             //材质
@@ -61,6 +69,10 @@
                     materials += $(this).data("id");
                 }
             });
+            if(!categorys){
+                alert("材质必选");
+                return;
+            }
             product['material'] = "," + materials + ",";
 
             //提交数据
@@ -72,7 +84,7 @@
                 success: function (res) {
                     alert(res.message);
                     if(res.code == 1){
-                        window.location.reload();
+                        
                     }
                 },
                 error: function (msg) {
@@ -133,8 +145,10 @@
                         </div>
                         <div class="card-block">
                             <form id="product_form" method="post" class="form-horizontal" enctype="multipart/form-data" novalidate onsubmit="return false;">
-                                <input type="hidden" name="cid" value="${commodity.cid}" />
-                                <input type="hidden" name="coid" value="${commodityColor.coid}" />
+                                <c:if test="${commodity.cid gt 0}">
+                                    <input type="hidden" name="cid" value="${commodity.cid}" />
+                                    <input type="hidden" name="coid" value="${commodityColor.coid}" />
+                                </c:if>
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称

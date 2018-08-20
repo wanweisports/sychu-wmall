@@ -43,7 +43,7 @@ public class CommodityMethodArgumentResolver implements HandlerMethodArgumentRes
             CommoditySize commoditySize = new CommoditySize();
             commoditySize.setSize(size);
             commoditySize.setStock(StrUtil.objToInt(stocks[i]));
-            if(i < sids.length){
+            if(sids != null && i < sids.length){
                 commoditySize.setSid(StrUtil.objToInt(sids[i]));
             }
             commoditySizes.add(commoditySize);
