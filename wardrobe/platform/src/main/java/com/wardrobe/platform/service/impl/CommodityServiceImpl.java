@@ -85,13 +85,21 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return baseDao.getToEvict(CommodityInfo.class, cid);
     }
 
+    private CommodityColor getCommodityColor(int cid){
+        return baseDao.queryByHqlFirst("FROM CommodityColor WHERE cid = ?1", cid);
+    }
+
     private List<Map<String, Object>> getCommodityColors(int groupId){
-        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?", groupId);
+        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
     }
 
     private String[] getCommoditySizes(int cid){
-        String sizes = StrUtil.objToStr(baseDao.getUniqueObjectResult("SELECT GROUP_CONCAT(size) FROM commodity_size WHERE cid = ?", cid));
+        String sizes = StrUtil.objToStr(baseDao.getUniqueObjectResult("SELECT GROUP_CONCAT(size) FROM commodity_size WHERE cid = ?1", cid));
         return sizes.split(",");
+    }
+
+    private List<CommoditySize> getCommoditySizeList(int cid){
+        return baseDao.queryByHql("FROM CommoditySize WHERE cid = ?1", cid);
     }
 
     @Override
@@ -125,6 +133,23 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
+    }
+
+    @Override
+    public Map<String, Object> renderProductsAddIn(Integer cid){
+        Map<String, Object> data = new HashMap<>(9, 1);
+        data.put("categoryList", dictService.getDicts(IDBConstant.COMM_CATEGORY));
+        data.put("styleList", dictService.getDicts(IDBConstant.COMM_STYLE));
+        data.put("materialList", dictService.getDicts(IDBConstant.COMM_MATERIAL));
+        data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
+        if(cid != null){
+            data.put("commodity", getCommodityInfo(cid));
+            data.put("commodityColor", getCommodityColor(cid));
+            data.put("commoditySizeList", getCommoditySizeList(cid));
+            data.put("coverImg", resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+            data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+        }
+        return data;
     }
 
     @Override

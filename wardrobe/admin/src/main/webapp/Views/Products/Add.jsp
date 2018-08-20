@@ -18,6 +18,32 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>
+    <script src="/Content/lib/jquery.min.js"></script>
+    <script src="/Content/lib/formToJson.js/js/formToJson.js"></script>
+    <script type="text/javascript">
+        function addSubmit(){
+            //验证都必填...
+
+            //封装数据
+            var product = $('#product_form').serializeJson();
+
+            //提交数据
+            $("#smsForm").ajaxSubmit({
+                type: "post",
+                dataType: "json",
+                data: {json: JSON.stringify(product)},
+                url: "/sms/parseExcelSms",
+                success: function (data) {
+
+
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+        }
+
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -40,7 +66,7 @@
                                         <span class="text-danger">*</span> 商品名称
                                     </label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName"
+                                        <input type="text" class="form-control" id="p_commName" placeholder="请输入商品名称" name="commName" value="${commodity.commName}"
                                                data-val="true" data-val-required="商品名称不能为空"
                                                data-val-length-max="30" data-val-length-min="2" data-val-length="商品名称必须包含 2~30 个字符">
                                         <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
@@ -52,7 +78,7 @@
                                     </label>
                                     <div class="col-md-8">
                                         <textarea class="form-control" id="p_productDesc" placeholder="请输入商品描述" name="productDesc"
-                                               data-val="true" data-val-required="商品描述不能为空"></textarea>
+                                               data-val="true" data-val-required="商品描述不能为空">${commodity.productDesc}</textarea>
                                         <div data-valmsg-for="productDesc" data-valmsg-replace="true"></div>
                                     </div>
                                 </div>
@@ -62,31 +88,20 @@
                                     </label>
                                     <div class="col-md-2">
                                         <select class="form-control" id="p_categorySelect" name="categorySelect">
-                                            <option>连衣裙</option>
+                                            <c:forEach var="c" items="${categoryList}">
+                                                <option value="${c.dictId}" <c:if test="${commodity.category==c.dictId}">selected</c:if>>${c.dictValue}</option>
+                                            </c:forEach>
                                         </select>
                                         <input type="hidden" class="form-control" id="p_category" placeholder="请输入商品品类" name="category"
                                                data-val="true" data-val-required="请至少选择一种商品品类">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                     </div>
                                     <div class="col-md-8 category-list">
-                                        <button type="button" class="btn btn-success btn-close category-item">
-                                            连衣裙<i class="fa fa-remove"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success  btn-close category-item">
-                                            西服<i class="fa fa-remove"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-close category-item">
-                                            连衣裙<i class="fa fa-remove"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-close category-item">
-                                            连衣裙<i class="fa fa-remove"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success  btn-close category-item">
-                                            西服<i class="fa fa-remove"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-close category-item">
-                                            连衣裙<i class="fa fa-remove"></i>
-                                        </button>
+                                        <c:forEach var="c" items="${categoryList}">
+                                            <button type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
+                                                    ${c.dictValue}<%--<i class="fa fa-remove"></i>--%>
+                                            </button>
+                                        </c:forEach>
                                         <button type="button" class="btn btn-primary category-add" data-toggle="modal" data-target="#product_category_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -100,11 +115,9 @@
                                         <input type="hidden" class="form-control" id="p_style" placeholder="请选择商品风格" name="style"
                                                data-val="true" data-val-required="请至少选择一种商品风格">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
-                                        <button type="button" class="btn btn-success">职 场</button>
-                                        <button type="button" class="btn btn-success">约 会</button>
-                                        <button type="button" class="btn btn-secondary">职 场</button>
-                                        <button type="button" class="btn btn-secondary">职 场</button>
-                                        <button type="button" class="btn btn-success">职 场</button>
+                                        <c:forEach var="s" items="${styleList}">
+                                            <button type="button" class="btn btn-secondary <c:if test="${fn:contains(commodity.style, dh.concat(s.dictId).concat(dh))}">btn-success</c:if>" data-id="${s.dictId}">${s.dictValue}</button>
+                                        </c:forEach>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_style_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -117,8 +130,9 @@
                                     <div class="col-md-10">
                                         <input type="hidden" class="form-control" id="p_material" placeholder="请选择商品材质" name="material"
                                                data-val="true" data-val-required="请至少选择一种商品材质">
-                                        <button type="button" class="btn btn-secondary">棉 麻</button>
-                                        <button type="button" class="btn btn-success">纯 棉</button>
+                                        <c:forEach var="m" items="${materialList}">
+                                            <button type="button" class="btn btn-secondary  <c:if test="${fn:contains(commodity.material, dh.concat(m.dictId).concat(dh))}">btn-success</c:if>" data-id="${m.dictId}">${m.dictValue}</button>
+                                        </c:forEach>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_material_add">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -129,15 +143,15 @@
                                         <span class="text-danger">*</span> 商品价格
                                     </label>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" id="p_price" placeholder="请输入商品原价" name="price"
+                                        <input type="text" class="form-control" id="p_price" placeholder="请输入商品原价" name="price" value="${commodity.price}"
                                                data-val="true" data-val-required="商品原价不能为空">
                                         <div data-valmsg-for="price" data-valmsg-replace="true"></div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" id="p_couPrice" placeholder="请输入商品优惠价格" name="couPrice"
+                                    <%--<div class="col-md-4">
+                                        <input type="text" class="form-control" id="p_couPrice" placeholder="请输入商品优惠价格" name="couPrice" value="${commodity.couPrice}"
                                                data-val="true" data-val-required="商品优惠价格不能为空">
                                         <div data-valmsg-for="couPrice" data-valmsg-replace="true"></div>
-                                    </div>
+                                    </div>--%>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label">
@@ -145,24 +159,24 @@
                                     </label>
                                     <div class="col-md-10 text-center">
                                         <div class="pull-left mr-2">
-                                            <img src="/Content/images/upload.png" style="width: 100px">
+                                            <c:if test="${coverImg != null}">
+                                                <img src="${coverImg.resourcePath}" style="width: 100px">
+                                            </c:if>
+                                            <c:if test="${coverImg == null}">
+                                                <input type="file" name="file_0" />
+                                            </c:if>
                                             <p>封面图</p>
                                         </div>
+                                        <%--这里可以点击一个加号，添加一个轮播图--%>
+                                        <c:forEach var="broadImg" items="${broadImgList}" varStatus="status">
+                                            <div class="pull-left mr-2">
+                                                <img src="${broadImg.resourcePath}" style="width: 100px">
+                                                <p>轮播图${status.index+1}</p>
+                                            </div>
+                                        </c:forEach>
                                         <div class="pull-left mr-2">
-                                            <img src="/Content/images/upload.png" style="width: 100px">
-                                            <p>轮播图1</p>
-                                        </div>
-                                        <div class="pull-left mr-2">
-                                            <img src="/Content/images/upload.png" style="width: 100px">
-                                            <p>轮播图2</p>
-                                        </div>
-                                        <div class="pull-left mr-2">
-                                            <img src="/Content/images/upload.png" style="width: 100px">
-                                            <p>轮播图3</p>
-                                        </div>
-                                        <div class="pull-left">
-                                            <img src="/Content/images/upload.png" style="width: 100px">
-                                            <p>轮播图4</p>
+                                            <input type="file" name="file_1" />
+                                            <p>轮播图${fn:length(broadImgList)+1}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -171,76 +185,72 @@
                                         <span class="text-danger">*</span> 商品颜色
                                     </label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="p_colorName" placeholder="请输入商品颜色" name="colorName"
+                                        <input type="text" class="form-control" id="p_colorName" placeholder="请输入商品颜色" name="colorName" value="${commodityColor.colorName}"
                                                data-val="true" data-val-required="请至少输入一种商品颜色">
                                         <div data-valmsg-for="colorName" data-valmsg-replace="true"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 form-control-label">
-                                        <span class="text-danger">*</span> 商品尺码
-                                    </label>
-                                    <div class="col-md-2">
-                                        <select class="form-control">
-                                            <option selected>XL</option>
-                                            <option>XXL</option>
-                                        </select>
+                                <c:set var="show" value="true" />
+                                <c:if test="${fn:length(commoditySizeList) == 0}">
+                                    <div class="form-group row">
+                                        <label class="col-md-2 form-control-label">
+                                            <span class="text-danger">*</span> 商品尺码
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select class="form-control" name="size">
+                                                <c:forEach var="s" items="${sizeList}">
+                                                    <option value="${s.dictValue}" <c:if test="${cs.size==s.dictValue}"></c:if>>${s.dictValue}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" name="stock" placeholder="初始库存" value="${cs.stock}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-primary">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <input type="text" class="form-control" placeholder="初始库存">
+                                    <c:set var="show" value="false" />
+                                </c:if>
+                                <c:forEach var="cs" items="${commoditySizeList}" varStatus="status">
+                                    <div class="form-group row">
+                                        <input type="hidden" name="sid" value="${cs.sid}" />
+                                        <c:if test="${show}">
+                                            <label class="col-md-2 form-control-label">
+                                                <span class="text-danger">*</span> 商品尺码
+                                            </label>
+                                        </c:if>
+                                        <div class="<c:if test="${!show}">offset-2</c:if> col-md-2">
+                                            <select class="form-control" name="size">
+                                                <c:forEach var="s" items="${sizeList}">
+                                                    <option value="${s.dictValue}" <c:if test="${cs.size==s.dictValue}"></c:if>>${s.dictValue}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" name="stock" placeholder="初始库存" value="${cs.stock}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-primary" <c:if test="${fn:length(commoditySizeList)!=status.index+1}">style="visibility: hidden;"</c:if>>
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <button type="button" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger">
-                                            <i class="fa fa-remove"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="offset-2 col-md-2">
-                                        <select class="form-control">
-                                            <option selected>XL</option>
-                                            <option>XXL</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="text" class="form-control" placeholder="初始库存">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="button" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger">
-                                            <i class="fa fa-remove"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="offset-2 col-md-2">
-                                        <select class="form-control">
-                                            <option selected>XL</option>
-                                            <option>XXL</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="text" class="form-control" placeholder="初始库存">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="button" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger">
-                                            <i class="fa fa-remove"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                    <c:set var="show" value="false" />
+                                </c:forEach>
                             </form>
                         </div>
                         <div class="card-footer text-right">
                             <span class="text-danger pay-note"></span>
-                            <button type="button" class="btn btn-primary save-products">
+                            <button type="button" class="btn btn-primary save-products" onclick="addSubmit()">
                                 <i class="fa fa-check"></i> 保 存
                             </button>
                         </div>

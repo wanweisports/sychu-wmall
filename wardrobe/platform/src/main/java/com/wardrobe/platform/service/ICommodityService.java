@@ -19,6 +19,8 @@ public interface ICommodityService {
     //后台管理
     PageBean getCommodityListIn(CommodityInputView commodityInputView);
 
+    Map<String, Object> renderProductsAddIn(Integer cid);
+
     void addCommodityIn(CommodityInfo commodityInfo, CommodityColor commodityColor);
 
 }

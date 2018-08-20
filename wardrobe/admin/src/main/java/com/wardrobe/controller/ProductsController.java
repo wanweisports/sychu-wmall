@@ -2,8 +2,16 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.CommodityColor;
+import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.controller.annotation.CommodityResolver;
+import com.wardrobe.platform.service.ICommodityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -12,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/admin/products")
 public class ProductsController extends BaseController {
+
+    @Autowired
+    private ICommodityService commodityService;
 
     @Desc("商品活动设置")
     @RequestMapping(value = "/active/settings", method = RequestMethod.GET)
@@ -82,10 +93,20 @@ public class ProductsController extends BaseController {
         return new ResponseBean(true);
     }
 
-    @Desc("商品添加")
+    @Desc("进入商品添加页面")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView renderProductsAdd() {
-        return new ModelAndView("/Products/Add");
+    public String renderProductsAdd(Integer cid, Model model) {
+        model.addAllAttributes(commodityService.renderProductsAddIn(cid));
+        model.addAttribute("dh", IPlatformConstant.DOU_HAO);
+        return "Products/Add";
+    }
+
+    @Desc("商品添加/修改")
+    @ResponseBody
+    @RequestMapping("addCommodity")
+    public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, CommodityColor commodityColor, MultipartFile[] multipartFiles){
+        commodityService.addCommodityIn(commodityInfo, commodityColor);
+        return new ResponseBean(true);
     }
 
     @Desc("商品管理列表 -- 库存变更记录")

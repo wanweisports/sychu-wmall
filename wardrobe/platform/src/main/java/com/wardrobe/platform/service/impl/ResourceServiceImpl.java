@@ -106,6 +106,11 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
+    public List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType, int notResourceSeq){
+        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq != ?3", resourceServiceParentId, resourceServiceType, notResourceSeq);
+    }
+
+    @Override
     public List<String> getResourcesPath(List<SysResources> sysResources){
         List<String> resourcesPath = new ArrayList<>();
         sysResources.stream().forEach((sysResource)->{

@@ -2,6 +2,7 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.controller.annotation.CommodityResolver;
@@ -29,13 +30,6 @@ public class CommodityController extends BaseController {
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
         setPageInfo(model, pageBean, "/commodity/getCommoditys", commodityInputView);
         return "";
-    }
-
-    @ResponseBody
-    @RequestMapping("addCommodity")
-    public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, MultipartFile[] multipartFiles){
-       commodityService.addCommodityIn(commodityInfo);
-        return new ResponseBean(true);
     }
 
 }
