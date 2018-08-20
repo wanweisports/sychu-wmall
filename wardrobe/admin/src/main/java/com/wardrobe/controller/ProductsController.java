@@ -101,14 +101,6 @@ public class ProductsController extends BaseController {
         return "Products/Add";
     }
 
-    @Desc("商品添加/修改")
-    @ResponseBody
-    @RequestMapping("addCommodity")
-    public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, CommodityColor commodityColor, MultipartFile[] multipartFiles){
-        commodityService.addCommodityIn(commodityInfo, commodityColor);
-        return new ResponseBean(true);
-    }
-
     @Desc("商品管理列表 -- 库存变更记录")
     @RequestMapping(value = "/sku/list", method = RequestMethod.GET)
     public ModelAndView renderProductsSkuList() {

@@ -19,7 +19,7 @@
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>
     <script src="/Content/lib/jquery.min.js"></script>
-    <script src="/Content/lib/formToJson.js/js/formToJson.js"></script>
+    <script src="/Content/lib/formToJson.js"></script>
     <script type="text/javascript">
         function addSubmit(){
             //验证都必填...
@@ -27,12 +27,36 @@
             //封装数据
             var product = $('#product_form').serializeJson();
 
+            //风格
+            var $style = $("button[name='styleBtn']");
+            var styles = "";
+            $.each($style, function () {
+                if($(this).hasClass("btn-success")){
+                    if(styles) styles += ",";
+                    styles += $(this).data("id");
+                }
+            });
+            product['style'] = "," + styles + ",";
+
+            //材质
+            var $material = $("button[name='materialBtn']");
+            var materials = "";
+            $.each($style, function () {
+                if($(this).hasClass("btn-success")){
+                    if(styles) styles += ",";
+                    styles += $(this).data("id");
+                }
+            });
+            product['style'] = "," + styles + ",";
+
+            alert(JSON.stringify(product))
+
             //提交数据
-            $("#smsForm").ajaxSubmit({
+            /*$("#smsForm").ajaxSubmit({
                 type: "post",
                 dataType: "json",
                 data: {json: JSON.stringify(product)},
-                url: "/sms/parseExcelSms",
+                url: "/commodity/addCommodity",
                 success: function (data) {
 
 
@@ -40,7 +64,7 @@
                 error: function (msg) {
                     alert(msg);
                 }
-            });
+            });*/
         }
 
     </script>
@@ -99,7 +123,7 @@
                                     <div class="col-md-8 category-list">
                                         <c:forEach var="c" items="${categoryList}">
                                             <button type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
-                                                    ${c.dictValue}<%--<i class="fa fa-remove"></i>--%>
+                                                    ${c.dictValue}<i class="fa fa-remove"></i>
                                             </button>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary category-add" data-toggle="modal" data-target="#product_category_add">
@@ -116,7 +140,7 @@
                                                data-val="true" data-val-required="请至少选择一种商品风格">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                         <c:forEach var="s" items="${styleList}">
-                                            <button type="button" class="btn btn-secondary <c:if test="${fn:contains(commodity.style, dh.concat(s.dictId).concat(dh))}">btn-success</c:if>" data-id="${s.dictId}">${s.dictValue}</button>
+                                            <button name="styleBtn" type="button" class="btn btn-secondary <c:if test="${fn:contains(commodity.style, dh.concat(s.dictId).concat(dh))}">btn-success</c:if>" data-id="${s.dictId}">${s.dictValue}</button>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_style_add">
                                             <i class="fa fa-plus"></i>

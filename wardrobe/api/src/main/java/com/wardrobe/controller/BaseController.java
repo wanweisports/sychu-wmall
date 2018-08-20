@@ -54,8 +54,8 @@ public class BaseController {
 	
     protected void setPageInfo(Model model, PageBean pageBean){
     	model.addAttribute("list", pageBean.getList());
-		model.addAttribute("count", pageBean.getCount());
-		model.addAttribute("lastPage", pageBean.getLastPage());
+		model.addAttribute("count", pageBean.getTotalCount());
+		model.addAttribute("lastPage", pageBean.getTotalPage());
 		model.addAttribute("currentPage", pageBean.getCurrentPage());
 		model.addAttribute("pageSize", pageBean.getPageSize());
     }
@@ -63,8 +63,8 @@ public class BaseController {
 	protected Map setPageInfo(PageBean pageBean){
 		Map map = new HashMap<>(5, 1);
 		map.put("list", pageBean.getList());
-		map.put("count", pageBean.getCount());
-		map.put("lastPage", pageBean.getLastPage());
+		map.put("count", pageBean.getTotalCount());
+		map.put("lastPage", pageBean.getTotalPage());
 		map.put("currentPage", pageBean.getCurrentPage());
 		map.put("pageSize", pageBean.getPageSize());
 		return map;

@@ -32,4 +32,11 @@ public class CommodityController extends BaseController {
         return "";
     }
 
+    @ResponseBody
+    @RequestMapping("addCommodity")
+    public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, CommodityColor commodityColor, MultipartFile[] multipartFiles){
+       commodityService.addCommodityIn(commodityInfo, commodityColor);
+        return new ResponseBean(true);
+    }
+
 }
