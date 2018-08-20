@@ -1,6 +1,9 @@
 package com.wardrobe.common.util;
 
+import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.OtherResource;
+import com.wardrobe.common.po.SysResources;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +11,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -89,6 +94,51 @@ public class FileUtil {
 		}
 		FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), file);
 		return photoPath;
+	}
+
+	public static List<SysResources> getSpringUpload(MultipartHttpServletRequest multipartRequest, String fold) throws IOException{
+		return saveMultipartFiles(springUpload(multipartRequest), fold);
+	}
+
+	public static List<MultipartFile> springUpload(MultipartHttpServletRequest multipartRequest){
+		List<MultipartFile> fileList = new ArrayList();
+		if(multipartRequest != null) {
+			for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext(); ) {
+				String key = it.next();
+				MultipartFile file = multipartRequest.getFile(key);
+				if (file.getOriginalFilename().length() > 0) {
+					fileList.add(file);
+				}
+			}
+		}
+		return fileList;
+	}
+
+	public static List<SysResources> saveMultipartFiles(List<MultipartFile> multipartFiles, String fold) throws IOException{
+		List<SysResources> resources = new ArrayList();
+		Timestamp timestamp = new Timestamp(new Date().getTime());
+		multipartFiles.stream().forEach((multipartFile) -> {
+			String originalFilename = multipartFile.getOriginalFilename();
+			String fileName = getFileName(timestamp, originalFilename);
+			SysResources resource = new SysResources();
+			resource.setResourceName(fileName);
+			resource.setResourceOriginal(originalFilename);
+			resource.setFileSize(multipartFile.getSize());
+			resource.setStatus(IDBConstant.LOGIC_STATUS_YES);
+			resource.setName(multipartFile.getName());
+			resource.setResourcePath(fold + File.separator + fileName);
+			resource.setCreateTime(timestamp);
+			resource.setResourceServiceParentId(null);  //上传之后修改
+			resource.setResourceServiceId(IDBConstant.ZERO); //上传之后修改
+			resource.setResourceServiceType(StrUtil.EMPTY); //上传之后修改
+			resource.setResourceType(StrUtil.EMPTY); //上传之后修改
+			resources.add(resource);
+		});
+		return resources;
+	}
+
+	public static String getFileName(Timestamp timestamp, String originalFilename) {
+		return StrUtil.getUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
 	}
 
 }

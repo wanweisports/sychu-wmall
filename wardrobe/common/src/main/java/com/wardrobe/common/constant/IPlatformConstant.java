@@ -48,4 +48,6 @@ public interface IPlatformConstant {
 
 	int INIT_USER_SCORE = 500;
 
+	String UNDERLINE = "_";
+
 }

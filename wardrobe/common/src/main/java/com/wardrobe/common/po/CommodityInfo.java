@@ -27,6 +27,8 @@ public class CommodityInfo {
     private Timestamp createTime;
     private Timestamp updateTime;
 
+    private CommodityColor commodityColor;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "cid")
@@ -186,4 +188,12 @@ public class CommodityInfo {
         this.updateTime = updateTime;
     }
 
+    @Transient
+    public CommodityColor getCommodityColor() {
+        return commodityColor;
+    }
+
+    public void setCommodityColor(CommodityColor commodityColor) {
+        this.commodityColor = commodityColor;
+    }
 }

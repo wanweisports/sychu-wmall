@@ -2,11 +2,13 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.SysResources;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.FileUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
@@ -14,7 +16,10 @@ import com.wardrobe.platform.service.IDictService;
 import com.wardrobe.platform.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -85,7 +90,15 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return baseDao.getToEvict(CommodityInfo.class, cid);
     }
 
-    private CommodityColor getCommodityColor(int cid){
+    private CommodityColor getCommodityColor(int coid){
+        return baseDao.getToEvict(CommodityColor.class, coid);
+    }
+
+    private CommoditySize getCommoditySize(int sid){
+        return baseDao.getToEvict(CommoditySize.class, sid);
+    }
+
+    private CommodityColor getCommodityColorByCid(int cid){
         return baseDao.queryByHqlFirst("FROM CommodityColor WHERE cid = ?1", cid);
     }
 
@@ -106,7 +119,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     public PageBean getCommodityListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditysIn(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
-        list.stream().forEach((map) ->{
+        list.stream().forEach((map) -> {
             String category = StrUtil.objToStr(map.get("category"));
             String style = StrUtil.objToStr(map.get("style"));
             String material = StrUtil.objToStr(map.get("material"));
@@ -144,7 +157,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
         if(cid != null){
             data.put("commodity", getCommodityInfo(cid));
-            data.put("commodityColor", getCommodityColor(cid));
+            data.put("commodityColor", getCommodityColorByCid(cid));
             data.put("commoditySizeList", getCommoditySizeList(cid));
             data.put("coverImg", resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
             data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
@@ -153,22 +166,81 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void addCommodityIn(CommodityInfo commodityInfo, CommodityColor commodityColor){
+    public void addUpdateCommodity(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException{
+        int cid = commodityInfo.getCid();
+        int coid = commodityInfo.getCommodityColor().getCoid();
         Timestamp timestamp = DateUtil.getNowDate();
-        commodityInfo.setCreateTime(timestamp);
-        baseDao.save(commodityInfo, null);
+        CommodityColor commodityColor = commodityInfo.getCommodityColor();
+        if(cid == 0) {
+            commodityInfo.setCreateTime(timestamp);
+            commodityInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+            commodityInfo.setSeqNo(0);
+            baseDao.save(commodityInfo, null);
 
-        commodityColor.setCid(commodityInfo.getCid());
-        commodityColor.setCreateTime(timestamp);
-        baseDao.save(commodityColor, null);
-        ListIterator<CommoditySize> commoditySizeListIterator = commodityColor.getCommoditySizes().listIterator();
-        while (commoditySizeListIterator.hasNext()){
-            CommoditySize commoditySize = commoditySizeListIterator.next();
-            commoditySize.setCid(commodityInfo.getCid());
-            commoditySize.setCoid(commodityColor.getCoid());
-            commoditySize.setCreateTime(timestamp);
-            baseDao.save(commoditySize, null);
+            commodityColor.setCid(commodityInfo.getCid());
+            commodityColor.setCreateTime(timestamp);
+            baseDao.save(commodityColor, null);
+
+            commodityColor.getCommoditySizes().stream().forEach((commoditySize -> {
+                commoditySize.setCreateTime(timestamp);
+                commoditySize.setLockStock(0);
+                commoditySize.setCid(commodityInfo.getCid());
+                commoditySize.setCoid(commodityColor.getCoid());
+                baseDao.save(commoditySize, null);
+            }));
+
+            cid = commodityInfo.getCid();
+            coid = commodityColor.getCoid();
+        }else{
+            CommodityInfo commodityInfoDB = getCommodityInfo(cid);
+            commodityInfoDB.setCommName(commodityInfo.getCommName());
+            commodityInfoDB.setCategory(commodityInfo.getCategory());
+            commodityInfoDB.setStyle(commodityInfo.getStyle());
+            commodityInfoDB.setMaterial(commodityInfo.getMaterial());
+            commodityInfoDB.setPrice(commodityInfo.getPrice());
+            commodityInfoDB.setProductDesc(commodityInfo.getProductDesc());
+            commodityInfoDB.setUpdateTime(timestamp);
+            baseDao.save(commodityInfoDB, cid);
+
+            CommodityColor commodityColorDB = getCommodityColor(commodityColor.getCoid());
+            commodityColorDB.setColorName(commodityColor.getColorName());
+            commodityColorDB.setUpdateTime(timestamp);
+            baseDao.save(commodityColorDB, commodityColorDB.getCoid());
+
+            commodityColor.getCommoditySizes().stream().forEach((commoditySize -> {
+                int sid = commoditySize.getSid();
+                if (sid > 0) {
+                    CommoditySize commoditySizeDB = getCommoditySize(sid);
+                    commoditySizeDB.setUpdateTime(timestamp);
+                    commoditySizeDB.setSize(commoditySize.getSize());
+                    commoditySizeDB.setStock(commoditySize.getStock());
+                    baseDao.save(commoditySizeDB, sid);
+                } else {
+                    commoditySize.setCreateTime(timestamp);
+                    commoditySize.setLockStock(0);
+                    commoditySize.setCid(commodityInfo.getCid());
+                    commoditySize.setCoid(commodityColor.getCoid());
+                    baseDao.save(commoditySize, null);
+                }
+            }));
         }
+        //处理图片
+        List<SysResources> sysResources = FileUtil.getSpringUpload(request, StrUtil.EMPTY);
+        for(SysResources sysResource : sysResources){
+            String name = sysResource.getName();
+            sysResource.setResourceSeq(StrUtil.objToInt(name.substring(name.lastIndexOf(IPlatformConstant.UNDERLINE)+1)));
+            sysResource.setResourceServiceParentId(cid);
+            sysResource.setResourceServiceId(coid);
+            sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_IMG);
+            sysResource.setResourceType(IDBConstant.RESOURCE_TYPE_IMG);
+            baseDao.save(sysResource, null);
+        }
+    }
+
+    @Override
+    public void deleteSize(int sid){
+        CommoditySize commoditySize = getCommoditySize(sid);
+        baseDao.delete(commoditySize);
     }
 
 }

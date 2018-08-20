@@ -29,7 +29,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* category *************************************************/
     var $category = new $.ProductsLabelSettings({
-        type: "category",
+        type: "COMM_CATEGORY",
         failure: function () {
             jqueryAlert({
                 'icon'      : '/Content/images/icon-error.png',
@@ -79,7 +79,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* style *************************************************/
     var $style = new $.ProductsLabelSettings({
-        type: "style",
+        type: "COMM_STYLE",
         failure: function () {
             jqueryAlert({
                 'icon'      : '/Content/images/icon-error.png',
@@ -129,7 +129,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* material *************************************************/
     var $material = new $.ProductsLabelSettings({
-        type: "material",
+        type: "COMM_MATERIAL",
         failure: function () {
             jqueryAlert({
                 'icon'      : '/Content/images/icon-error.png',

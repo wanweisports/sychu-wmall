@@ -4,7 +4,10 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.view.CommodityInputView;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -21,6 +24,8 @@ public interface ICommodityService {
 
     Map<String, Object> renderProductsAddIn(Integer cid);
 
-    void addCommodityIn(CommodityInfo commodityInfo, CommodityColor commodityColor);
+    void addUpdateCommodity(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
+
+    void deleteSize(int sid);
 
 }

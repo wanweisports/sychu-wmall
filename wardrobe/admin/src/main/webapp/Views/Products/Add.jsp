@@ -19,13 +19,27 @@
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/add.js?v=${static_resource_version}"></script>
     <script src="/Content/lib/jquery.min.js"></script>
+    <script src="/Content/lib/jquery-form.js"></script>
     <script src="/Content/lib/formToJson.js"></script>
     <script type="text/javascript">
+        //添加或修改商品
         function addSubmit(){
             //验证都必填...
 
+
             //封装数据
             var product = $('#product_form').serializeJson();
+
+            //品类
+            var $category = $("button[name='categoryBtn']");
+            var categorys = "";
+            $.each($category, function () {
+                if($(this).hasClass("btn-success")){
+                    if(categorys) categorys += ",";
+                    categorys += $(this).data("id");
+                }
+            });
+            product['category'] = "," + categorys + ",";
 
             //风格
             var $style = $("button[name='styleBtn']");
@@ -41,30 +55,64 @@
             //材质
             var $material = $("button[name='materialBtn']");
             var materials = "";
-            $.each($style, function () {
+            $.each($material, function () {
                 if($(this).hasClass("btn-success")){
-                    if(styles) styles += ",";
-                    styles += $(this).data("id");
+                    if(materials) materials += ",";
+                    materials += $(this).data("id");
                 }
             });
-            product['style'] = "," + styles + ",";
-
-            alert(JSON.stringify(product))
+            product['material'] = "," + materials + ",";
 
             //提交数据
-            /*$("#smsForm").ajaxSubmit({
+            $("#product_form").ajaxSubmit({
                 type: "post",
                 dataType: "json",
                 data: {json: JSON.stringify(product)},
-                url: "/commodity/addCommodity",
-                success: function (data) {
-
-
+                url: "/commodity/addUpdateCommodity",
+                success: function (res) {
+                    alert(res.message);
+                    if(res.code == 1){
+                        window.location.reload();
+                    }
                 },
                 error: function (msg) {
                     alert(msg);
                 }
-            });*/
+            });
+        }
+
+        //删除图片
+        function delRes(resourceId){
+            if(resourceId && window.confirm("确认删除吗？")) {
+                $.post("/resource/delRes", {resourceId: resourceId}, function (res) {
+                    alert(res.message);
+                    if (res.code == 1) {
+
+                    }
+                });
+            }
+        }
+
+        //删除尺码
+        function delSize(sid){
+            if(sid && window.confirm("确认删除吗？")) {
+                $.post("/commodity/delSize", {sid: sid}, function (res) {
+                    alert(res.message);
+                    if (res.code == 1) {
+
+                    }
+                });
+            }
+        }
+
+        //添加类型
+        function addCommTpye(type, dictValue){
+            $.post('/admin/products/' + type + '/save', {dictValue: dictValue}, function (res) {
+                alert(res.message);
+                if (res.code == 1) {
+
+                }
+            });
         }
 
     </script>
@@ -84,7 +132,9 @@
                             <small>Product Add</small>
                         </div>
                         <div class="card-block">
-                            <form id="product_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                            <form id="product_form" method="post" class="form-horizontal" enctype="multipart/form-data" novalidate onsubmit="return false;">
+                                <input type="hidden" name="cid" value="${commodity.cid}" />
+                                <input type="hidden" name="coid" value="${commodityColor.coid}" />
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称
@@ -113,7 +163,7 @@
                                     <div class="col-md-2">
                                         <select class="form-control" id="p_categorySelect" name="categorySelect">
                                             <c:forEach var="c" items="${categoryList}">
-                                                <option value="${c.dictId}" <c:if test="${commodity.category==c.dictId}">selected</c:if>>${c.dictValue}</option>
+                                                <option value="${c.dictId}">${c.dictValue}</option>
                                             </c:forEach>
                                         </select>
                                         <input type="hidden" class="form-control" id="p_category" placeholder="请输入商品品类" name="category"
@@ -122,9 +172,11 @@
                                     </div>
                                     <div class="col-md-8 category-list">
                                         <c:forEach var="c" items="${categoryList}">
-                                            <button type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
-                                                    ${c.dictValue}<i class="fa fa-remove"></i>
-                                            </button>
+                                            <c:if test="${fn:contains(commodity.category, dh.concat(c.dictId).concat(dh))}">
+                                                <button name="categoryBtn" type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
+                                                        ${c.dictValue}<i class="fa fa-remove"></i>
+                                                </button>
+                                            </c:if>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary category-add" data-toggle="modal" data-target="#product_category_add">
                                             <i class="fa fa-plus"></i>
@@ -155,7 +207,7 @@
                                         <input type="hidden" class="form-control" id="p_material" placeholder="请选择商品材质" name="material"
                                                data-val="true" data-val-required="请至少选择一种商品材质">
                                         <c:forEach var="m" items="${materialList}">
-                                            <button type="button" class="btn btn-secondary  <c:if test="${fn:contains(commodity.material, dh.concat(m.dictId).concat(dh))}">btn-success</c:if>" data-id="${m.dictId}">${m.dictValue}</button>
+                                            <button name="materialBtn" type="button" class="btn btn-secondary  <c:if test="${fn:contains(commodity.material, dh.concat(m.dictId).concat(dh))}">btn-success</c:if>" data-id="${m.dictId}">${m.dictValue}</button>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#product_material_add">
                                             <i class="fa fa-plus"></i>
@@ -185,9 +237,10 @@
                                         <div class="pull-left mr-2">
                                             <c:if test="${coverImg != null}">
                                                 <img src="${coverImg.resourcePath}" style="width: 100px">
+                                                <button type="button" onclick="delRes(${coverImg.resourceId})">删除</button>
                                             </c:if>
                                             <c:if test="${coverImg == null}">
-                                                <input type="file" name="file_0" />
+                                                <input type="file" name="file_0" /> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
                                             </c:if>
                                             <p>封面图</p>
                                         </div>
@@ -195,11 +248,12 @@
                                         <c:forEach var="broadImg" items="${broadImgList}" varStatus="status">
                                             <div class="pull-left mr-2">
                                                 <img src="${broadImg.resourcePath}" style="width: 100px">
+                                                <button type="button" onclick="delRes(${broadImg.resourceId})">删除</button>
                                                 <p>轮播图${status.index+1}</p>
                                             </div>
                                         </c:forEach>
                                         <div class="pull-left mr-2">
-                                            <input type="file" name="file_1" />
+                                            <input type="file" name="file_1" /> <%--此处name不能和其他file的name相同，后缀1开始，相当于排序--%>
                                             <p>轮播图${fn:length(broadImgList)+1}</p>
                                         </div>
                                     </div>
@@ -252,7 +306,7 @@
                                         <div class="<c:if test="${!show}">offset-2</c:if> col-md-2">
                                             <select class="form-control" name="size">
                                                 <c:forEach var="s" items="${sizeList}">
-                                                    <option value="${s.dictValue}" <c:if test="${cs.size==s.dictValue}"></c:if>>${s.dictValue}</option>
+                                                    <option value="${s.dictValue}" <c:if test="${cs.size==s.dictValue}">selected</c:if>>${s.dictValue}</option>
                                                 </c:forEach>
                                             </select>
                                         </div>
@@ -263,7 +317,7 @@
                                             <button type="button" class="btn btn-primary" <c:if test="${fn:length(commoditySizeList)!=status.index+1}">style="visibility: hidden;"</c:if>>
                                                 <i class="fa fa-plus"></i>
                                             </button>
-                                            <button type="button" class="btn btn-danger">
+                                            <button type="button" class="btn btn-danger" onclick="delSize(${cs.sid})">
                                                 <i class="fa fa-remove"></i>
                                             </button>
                                         </div>

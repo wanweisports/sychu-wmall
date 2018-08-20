@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.util.StrUtil;
+
 import javax.persistence.*;
 
 import java.sql.Timestamp;
@@ -12,11 +14,19 @@ public class SysDict {
     private int dictId;
     private Integer parentDictId;
     private String dictName;
-    private String dictKey;
+    private String dictKey = StrUtil.EMPTY;
     private String dictValue;
     private String dictAdditional;
     private Integer seqNo = 0;
     private Timestamp createTime;
+
+    public SysDict() {
+    }
+
+    public SysDict(String dictName, String dictValue) {
+        this.dictName = dictName;
+        this.dictValue = dictValue;
+    }
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

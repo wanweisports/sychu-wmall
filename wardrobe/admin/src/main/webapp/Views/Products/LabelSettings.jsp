@@ -42,7 +42,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_category_save">
+                <button type="button" class="btn btn-primary btn-sm" id="product_category_save" onclick="addCommTpye('COMM_CATEGORY', $('#pc_category').val())">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>
@@ -72,7 +72,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_style_save">
+                <button type="button" class="btn btn-primary btn-sm" id="product_style_save" onclick="addCommTpye('COMM_STYLE', $('#ps_style').val())">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>
@@ -102,7 +102,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_material_save">
+                <button type="button" class="btn btn-primary btn-sm" id="product_material_save" onclick="addCommTpye('COMM_MATERIAL', $('#pm_material').val())">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>

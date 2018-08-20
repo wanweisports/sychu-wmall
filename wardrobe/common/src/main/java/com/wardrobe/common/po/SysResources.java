@@ -22,6 +22,8 @@ public class SysResources {
     private Timestamp createTime;
     private Timestamp updateTime;
 
+    private String name; //前端file的name名称，用于业务判断
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "resourceId")
@@ -151,6 +153,15 @@ public class SysResources {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

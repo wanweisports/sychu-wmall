@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
+
 /**
  * Created by cxs on 2018/7/30.
  */
@@ -33,9 +35,16 @@ public class CommodityController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("addCommodity")
-    public ResponseBean addCommodity(@CommodityResolver CommodityInfo commodityInfo, CommodityColor commodityColor, MultipartFile[] multipartFiles){
-       commodityService.addCommodityIn(commodityInfo, commodityColor);
+    @RequestMapping("addUpdateCommodity")
+    public ResponseBean addUpdateCommodity(@CommodityResolver CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException {
+       commodityService.addUpdateCommodity(commodityInfo, request);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("delSize")
+    public ResponseBean deleteSize(int sid){
+        commodityService.deleteSize(sid);
         return new ResponseBean(true);
     }
 

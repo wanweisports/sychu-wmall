@@ -66,24 +66,24 @@ define(["jquery"], function ($) {
             type: ""   // 必须
         };
 
-        options.type = (["category", "style", "material"].indexOf(options.type) > -1) ? options.type : "category";
+        options.type = (["COMM_CATEGORY", "COMM_STYLE", "COMM_MATERIAL"].indexOf(options.type) > -1) ? options.type : "COMM_CATEGORY";
 
         var opts = $.extend({}, __default, options);
         
         function __init() {
-            if (opts.type === "category") {
+            if (opts.type === "COMM_CATEGORY") {
                 opts.wrapperDiv = $("#product_category_add");
                 opts.wrapperForm = $("#product_category_form");
                 opts.confirmInput = $("#pc_category");
                 opts.confirmBtn = $("#product_category_save");
             }
-            else if (opts.type === "style") {
+            else if (opts.type === "COMM_STYLE") {
                 opts.wrapperDiv = $("#product_style_add");
                 opts.wrapperForm = $("#product_style_form");
                 opts.confirmInput = $("#ps_style");
                 opts.confirmBtn = $("#product_style_save");
             }
-            else if (opts.type === "material") {
+            else if (opts.type === "COMM_MATERIAL") {
                 opts.wrapperDiv = $("#product_material_add");
                 opts.wrapperForm = $("#product_material_form");
                 opts.confirmInput = $("#pm_material");

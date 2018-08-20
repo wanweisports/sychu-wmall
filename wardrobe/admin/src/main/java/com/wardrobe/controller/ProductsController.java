@@ -5,8 +5,10 @@ import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.common.po.SysDict;
 import com.wardrobe.controller.annotation.CommodityResolver;
 import com.wardrobe.platform.service.ICommodityService;
+import com.wardrobe.platform.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,9 @@ public class ProductsController extends BaseController {
 
     @Autowired
     private ICommodityService commodityService;
+
+    @Autowired
+    private IDictService dictService;
 
     @Desc("商品活动设置")
     @RequestMapping(value = "/active/settings", method = RequestMethod.GET)
@@ -43,7 +48,8 @@ public class ProductsController extends BaseController {
     @Desc("商品筛选属性设置 - 提交")
     @ResponseBody
     @RequestMapping(value = "/{type}/save", method = RequestMethod.POST)
-    public ResponseBean saveProductsTypeSettings(@PathVariable String type, ProductsTypeSettingsRequest request) {
+    public ResponseBean saveProductsTypeSettings(@PathVariable String type, String dictValue, ProductsTypeSettingsRequest request) {
+        dictService.addDict(new SysDict(type, dictValue));
         return new ResponseBean(true);
     }
 

@@ -12,6 +12,9 @@ public interface IDBConstant {
 
     int ZERO = 0;
 
+    String RESOURCE_TYPE_IMG = "10"; //图片
+    String RESOURCE_TYPE_FILE = "20"; //文件
+
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
 
     String USER_SEX = "USER_SEX";//性别
