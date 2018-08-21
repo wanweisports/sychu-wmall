@@ -10,6 +10,8 @@ public class CommodityInputView extends BaseInputView {
     private String material;
     private String newly;
     private String hot;
+    private String commName;
+    private String status;
 
     public String getCategory() {
         return category;
@@ -49,5 +51,21 @@ public class CommodityInputView extends BaseInputView {
 
     public void setHot(String hot) {
         this.hot = hot;
+    }
+
+    public String getCommName() {
+        return commName;
+    }
+
+    public void setCommName(String commName) {
+        this.commName = commName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

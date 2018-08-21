@@ -38,7 +38,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment'], functio
         });
     };
 
-    $(".products-list").on("click", ".product-hot-cancel", function () {
+/*    $(".products-list").on("click", ".product-hot-cancel", function () {
         var productId = $(this).parents("tr").attr("data-id");
 
         if (window.prompt("您确定要取消此商品的热门设定吗？")) {
@@ -63,6 +63,73 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment'], functio
                 }
                 else {
                     alert("取消设定人气失败！")
+                }
+            });
+        }
+    });*/
+
+    $(".js-status-down").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认下架吗？")) {
+            $.post("/commodity/updateStatus", {cid: cid, status: 2}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+    $(".js-status-top").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认上架吗？")) {
+            $.post("/commodity/updateStatus", {cid: cid, status: 1}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+    $(".js-hot-down").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认取消热门吗？")) {
+            $.post("/commodity/updateHot", {cid: cid, hot: 2}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+    $(".js-hot-top").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认热门吗？")) {
+            $.post("/commodity/updateHot", {cid: cid, hot: 1}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+    $(".js-newly-down").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认取消最新吗？")) {
+            $.post("/commodity/updateNewly", {cid: cid, newly: 2}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+    $(".js-newly-top").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认最新吗？")) {
+            $.post("/commodity/updateNewly", {cid: cid, newly: 1}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
                 }
             });
         }

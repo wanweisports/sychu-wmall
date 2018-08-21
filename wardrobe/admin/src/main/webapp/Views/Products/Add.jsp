@@ -84,7 +84,7 @@
                 success: function (res) {
                     alert(res.message);
                     if(res.code == 1){
-                        
+
                     }
                 },
                 error: function (msg) {

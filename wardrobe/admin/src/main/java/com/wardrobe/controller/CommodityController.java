@@ -37,14 +37,28 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("addUpdateCommodity")
     public ResponseBean addUpdateCommodity(@CommodityResolver CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException {
-       commodityService.addUpdateCommodity(commodityInfo, request);
+       commodityService.addUpdateCommodityIn(commodityInfo, request);
         return new ResponseBean(true);
     }
 
     @ResponseBody
-    @RequestMapping("delSize")
-    public ResponseBean deleteSize(int sid){
-        commodityService.deleteSize(sid);
+    @RequestMapping("updateStatus")
+    public ResponseBean updateStatus(int cid, String status){
+        commodityService.updateCommodityStatusIn(cid, status);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("updateHot")
+    public ResponseBean updateHot(int cid, String hot){
+        commodityService.updateCommodityHotIn(cid, hot);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("updateNewly")
+    public ResponseBean updateNewly(int cid, String newly){
+        commodityService.updateCommodityNewlyIn(cid, newly);
         return new ResponseBean(true);
     }
 

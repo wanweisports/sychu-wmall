@@ -119,13 +119,16 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     public PageBean getCommodityListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getCommoditysIn(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
-        list.stream().forEach((map) -> {
-            String category = StrUtil.objToStr(map.get("category"));
-            String style = StrUtil.objToStr(map.get("style"));
-            String material = StrUtil.objToStr(map.get("material"));
-            map.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
-            map.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
-            map.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
+        list.stream().forEach((commodity) -> {
+            String category = StrUtil.objToStr(commodity.get("category"));
+            String style = StrUtil.objToStr(commodity.get("style"));
+            String material = StrUtil.objToStr(commodity.get("material"));
+            commodity.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
+            commodity.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
+            commodity.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
+            commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
+            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
+            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
         });
         return pageBean;
     }
@@ -133,6 +136,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     private PageBean getCommoditysIn(CommodityInputView commodityInputView){
         String newly = commodityInputView.getNewly();
         String hot = commodityInputView.getHot();
+        String commName = commodityInputView.getCommName();
+        String status = commodityInputView.getStatus();
 
         StringBuilder headSql = new StringBuilder("SELECT ci.*");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
@@ -142,6 +147,12 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         if(IDBConstant.LOGIC_STATUS_YES.equals(hot)){
             whereSql.append(" AND ci.hot = :hot");
+        }
+        if(StrUtil.isNotBlank(commName)){
+            whereSql.append(" AND ci.commName = :commName");
+        }
+        if(StrUtil.isNotBlank(status)){
+            whereSql.append(" AND ci.status = :status");
         }
         whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
@@ -166,7 +177,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void addUpdateCommodity(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException{
+    public void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException{
         int cid = commodityInfo.getCid();
         int coid = commodityInfo.getCommodityColor().getCoid();
         Timestamp timestamp = DateUtil.getNowDate();
@@ -174,7 +185,11 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(cid == 0) {
             commodityInfo.setCreateTime(timestamp);
             commodityInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+            commodityInfo.setHot(IDBConstant.LOGIC_STATUS_NO);
+            commodityInfo.setNewly(IDBConstant.LOGIC_STATUS_NO);
+            commodityInfo.setSaleCount(0);
             commodityInfo.setSeqNo(0);
+            commodityInfo.setCouPrice(commodityInfo.getPrice());
             baseDao.save(commodityInfo, null);
 
             commodityColor.setCid(commodityInfo.getCid());
@@ -238,9 +253,29 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void deleteSize(int sid){
+    public void deleteSizeIn(int sid){
         CommoditySize commoditySize = getCommoditySize(sid);
         baseDao.delete(commoditySize);
+    }
+
+    @Override
+    public void updateCommodityStatusIn(int cid, String status){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        commodityInfo.setStatus(status);
+        baseDao.save(commodityInfo, cid);
+    }
+
+    @Override
+    public void updateCommodityHotIn(int cid, String hot){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        commodityInfo.setHot(hot);
+        baseDao.save(commodityInfo, cid);
+    }
+    @Override
+    public void updateCommodityNewlyIn(int cid, String newly){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        commodityInfo.setNewly(newly);
+        baseDao.save(commodityInfo, cid);
     }
 
 }
