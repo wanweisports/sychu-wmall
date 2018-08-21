@@ -91,28 +91,30 @@ define(["jquery"], function ($) {
             }
         }
 
-        opts.confirmBtn.on("click", function (e) {
-            e.preventDefault();
+        if(opts.confirmBtn) {
+            opts.confirmBtn.on("click", function (e) {
+                e.preventDefault();
 
-            var $form = opts.wrapperForm;
-            var conditions = $form.serialize();
+                var $form = opts.wrapperForm;
+                var conditions = $form.serialize();
 
-            if ($form.attr("submitting") == "submitting") {
-                return false;
-            }
-
-            $form.attr("submitting", "submitting");
-
-            $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
-                $form.attr("submitting", "");
-
-                if (res.code == 1) {
-                    opts.success();
-                } else {
-                    opts.failure();
+                if ($form.attr("submitting") == "submitting") {
+                    return false;
                 }
+
+                $form.attr("submitting", "submitting");
+
+                $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
+                    $form.attr("submitting", "");
+
+                    if (res.code == 1) {
+                        opts.success();
+                    } else {
+                        opts.failure();
+                    }
+                });
             });
-        });
+        }
 
         __init();
     };

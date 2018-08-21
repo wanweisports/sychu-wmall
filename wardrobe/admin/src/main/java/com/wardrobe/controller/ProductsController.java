@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 访问商品相关的接口
  */
@@ -44,8 +47,14 @@ public class ProductsController extends BaseController {
 
     @Desc("商品筛选属性设置")
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView renderProductsSettings() {
-        return new ModelAndView("/Products/Settings");
+    public String renderProductsSettings(Model model) {
+        Map<String, Object> data = new HashMap<>(3, 1);
+        data.put("categoryList", dictService.getDicts(IDBConstant.COMM_CATEGORY));
+        data.put("styleList", dictService.getDicts(IDBConstant.COMM_STYLE));
+        data.put("materialList", dictService.getDicts(IDBConstant.COMM_MATERIAL));
+        model.addAllAttributes(data);
+        return "Products/Settings";
+
     }
 
     @Desc("商品筛选属性设置 - 提交")
