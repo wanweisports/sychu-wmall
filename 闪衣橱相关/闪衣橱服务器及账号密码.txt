@@ -14,3 +14,6 @@ Mysql5.7
 ÕËºÅ£ºroot
 ÃÜÂë£ºsycSYC2018!
 ¶Ë¿Ú£º3306
+
+
+ÓòÃû£ºstore.yifoutech.com

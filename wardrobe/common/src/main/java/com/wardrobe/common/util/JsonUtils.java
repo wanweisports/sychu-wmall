@@ -12,14 +12,11 @@ public class JsonUtils {
     private static Gson jsonCreator = null;
     private static Gson jsonDateFormat = null;
     static  {
-    	//不过滤
+        //不过滤
         jsonCreator = new GsonBuilder()
-                .registerTypeAdapter(Integer.class, new JsonSerializer<Integer>() {
-                    @Override
-                    public JsonElement serialize(Integer src, Type typeOfSrc, JsonSerializationContext context) {
-                        return new JsonPrimitive(StrUtil.objToStr(src));
-                    }
-                }).setDateFormat(DateUtil.YYYYMMDDHHMMSS).create();
+                .registerTypeAdapter(Integer.class, (JsonSerializer<Integer>)(src, typeOfSrc, context) ->
+                    new JsonPrimitive(StrUtil.objToStr(src))
+                ).setDateFormat(DateUtil.YYYYMMDDHHMMSS).create();
 
         //过滤
         jsonDateFormat = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -34,12 +31,11 @@ public class JsonUtils {
             public boolean shouldSkipClass(Class<?> clazz) {
                 return false;
             }
-        }).registerTypeAdapter(Integer.class, new JsonSerializer<Integer>() {
-            @Override
-            public JsonElement serialize(Integer src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(StrUtil.objToStr(src));
-            }
-        }).setDateFormat(DateUtil.YYYYMMDDHHMMSS).create();
+        }).registerTypeAdapter(Integer.class, (JsonSerializer<Integer>)(src, typeOfSrc, context) ->
+                new JsonPrimitive(StrUtil.objToStr(src))
+        ).registerTypeAdapter(Long.class, (JsonSerializer<Long>)(src, typeOfSrc, context) ->
+                new JsonPrimitive(StrUtil.objToStr(src))
+        ).setDateFormat(DateUtil.YYYYMMDDHHMMSS).create();
     }
 
     public static String toJson(Object obj){
@@ -78,7 +74,7 @@ public class JsonUtils {
     public static <T> List<T> stringToArray(List list, Class<T[]> clazz) {
         return stringToArray(toJsonDF(list), clazz);
     }
-    
+
     public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {
         T[] arr = jsonDateFormat.fromJson(s, clazz);
         return Arrays.asList(arr);
@@ -98,38 +94,6 @@ public class JsonUtils {
 
     public static Map<String, String> fromJsonToMapStrDF(Object obj){
         return jsonDateFormat.fromJson(toJsonDF(obj), Map.class);
-    }
-
-    public static Map<String, Object> arraysToJsonMap(String json){
-        Map<String, Object> map = fromJsonDF(json, Map.class);
-        Map resultMap = new HashMap();
-        if(MapUtils.isNotEmpty(map)){
-            for(String key : map.keySet()){
-                Object value = map.get(key);
-                if(!(value instanceof List)){
-                    resultMap.put(key, value);
-                }else{ //横向解析
-                    String objMapKey = key.substring(0, key.indexOf("."));
-                    String objName = key.substring(key.indexOf(".") + 1);
-                    List listValue = (List) value;
-                    if (!resultMap.containsKey(objMapKey)) {
-                        List resultList = new ArrayList();
-                        for (Object lv : listValue) {
-                            Map newObj = new HashMap();
-                            newObj.put(objName, lv);
-                            resultList.add(newObj);
-                        }
-                        resultMap.put(objMapKey, resultList);
-                    }else{
-                        List<Map> existObjs = (List<Map>) resultMap.get(objMapKey);
-                        for(int i=0; i < existObjs.size(); i++){                    //int size = existObjs.size() >= listValue.size() ? existObjs.size() : listValue.size();
-                            existObjs.get(i).put(objName, listValue.get(i));
-                        }
-                    }
-                }
-            }
-        }
-        return resultMap;
     }
 
 }
