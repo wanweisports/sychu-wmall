@@ -2,11 +2,15 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.controller.annotation.CommodityResolver;
+import com.wardrobe.controller.request.ProductRequest;
+import com.wardrobe.controller.request.SysDictRequest;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +18,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
+import java.rmi.server.UID;
+import java.util.*;
 
 /**
  * 访问商品相关的接口
@@ -48,8 +57,8 @@ public class ProductsController extends BaseController {
     @Desc("商品筛选属性设置 - 提交")
     @ResponseBody
     @RequestMapping(value = "/{type}/save", method = RequestMethod.POST)
-    public ResponseBean saveProductsTypeSettings(@PathVariable String type, String dictValue, ProductsTypeSettingsRequest request) {
-        dictService.addDict(new SysDict(type, dictValue));
+    public ResponseBean saveProductsTypeSettings(@PathVariable String type, SysDictRequest request) {
+        dictService.addDict(new SysDict(type, request.getDictValue()));
         return new ResponseBean(true);
     }
 
@@ -101,10 +110,95 @@ public class ProductsController extends BaseController {
 
     @Desc("进入商品添加页面")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String renderProductsAdd(Integer cid, Model model) {
+    public String renderProductsAdd(Integer groupId, Model model) {
+        return "Products/Add";
+    }
+
+    @Desc("进入商品编辑页面")
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public String renderProductsAdd(Integer cid, String groupId, Model model) {
         model.addAllAttributes(commodityService.renderProductsAddIn(cid));
         model.addAttribute("dh", IPlatformConstant.DOU_HAO);
+
         return "Products/Add";
+    }
+
+    @Desc("进入商品各种设置字典")
+    @ResponseBody
+    @RequestMapping(value = "/getProductSettingsList", method = RequestMethod.GET)
+    public ResponseBean getProductCategoryList() {
+        Map map = new HashMap<>();
+
+        map.put("COMM_CATEGORY", dictService.getDicts(IDBConstant.COMM_CATEGORY));
+        map.put("COMM_STYLE", dictService.getDicts(IDBConstant.COMM_STYLE));
+        map.put("COMM_MATERIAL", dictService.getDicts(IDBConstant.COMM_MATERIAL));
+        map.put("USER_SIZE", dictService.getDicts(IDBConstant.USER_SIZE));
+
+        return new ResponseBean(map);
+    }
+
+    @Desc("商品提交")
+    @ResponseBody
+    @RequestMapping(value = "/saveAdd", method = RequestMethod.POST)
+    public ResponseBean saveProductsAdd(ProductRequest productRequest, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+
+        CommodityInfo commodityInfo = new CommodityInfo();
+        commodityInfo.setCommName(productRequest.getCommName());
+        commodityInfo.setProductDesc(productRequest.getProductDesc());
+        commodityInfo.setCategory(productRequest.getCategory());
+        commodityInfo.setStyle(productRequest.getStyle());
+        commodityInfo.setMaterial(productRequest.getMaterial());
+        commodityInfo.setPrice(productRequest.getPrice());
+        commodityInfo.setCouPrice(productRequest.getCouPrice());
+        commodityInfo.setGroupId(productRequest.getGroupId());
+
+        CommodityColor commodityColor = new CommodityColor();
+        commodityColor.setColorName(productRequest.getColorName());
+
+        List<CommoditySize> commoditySizeList = new ArrayList<>();
+        String[] sizeArr = productRequest.getSize().split(",");
+        String[] stockArr = productRequest.getStock().split(",");
+        for (int i = 0; i < sizeArr.length; i++) {
+            CommoditySize commoditySize = new CommoditySize();
+            commoditySize.setSize(sizeArr[i]);
+            commoditySize.setStock(Integer.parseInt(stockArr[i]));
+
+            commoditySizeList.add(commoditySize);
+        }
+        commodityColor.setCommoditySizes(commoditySizeList);
+        commodityInfo.setCommodityColor(commodityColor);
+
+        commodityService.addUpdateCommodity(commodityInfo, multipartHttpServletRequest);
+
+        return new ResponseBean(true);
+    }
+
+    @Desc("商品提交")
+    @ResponseBody
+    @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
+    public ResponseBean saveProductsEdit(ProductRequest productRequest, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+
+        CommodityInfo commodityInfo = new CommodityInfo();
+        commodityInfo.setCid(productRequest.getCid());
+        commodityInfo.setCommName(productRequest.getCommName());
+        commodityInfo.setProductDesc(productRequest.getProductDesc());
+        commodityInfo.setCategory(productRequest.getCategory());
+        commodityInfo.setStyle(productRequest.getStyle());
+        commodityInfo.setMaterial(productRequest.getMaterial());
+        commodityInfo.setPrice(productRequest.getPrice());
+        commodityInfo.setCouPrice(productRequest.getCouPrice());
+        commodityInfo.setGroupId(productRequest.getGroupId());
+
+        CommodityColor commodityColor = new CommodityColor();
+        commodityColor.setCid(productRequest.getCid());
+        commodityColor.setCoid(productRequest.getCoid());
+        commodityColor.setColorName(productRequest.getColorName());
+
+        commodityInfo.setCommodityColor(commodityColor);
+
+        commodityService.addUpdateCommodity(commodityInfo, multipartHttpServletRequest);
+
+        return new ResponseBean(true);
     }
 
     @Desc("商品管理列表 -- 库存变更记录")

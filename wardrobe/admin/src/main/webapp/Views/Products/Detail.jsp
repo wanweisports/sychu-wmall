@@ -28,105 +28,141 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <ol class="breadcrumb" style="background: inherit;padding: 0;margin: 0;">
-                                <li class="breadcrumb-item">
-                                    <strong>商品详情</strong>
-                                    <small>Products Info</small>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="/admin/products/hot/list?type=users">
-                                        <strong>人气商品</strong>
-                                        <small>Users Products</small>
-                                    </a>
-                                </li>
-                            </ol>
+                            <strong>商品详情</strong>
+                            <small>Products Information</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
-                                <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <input type="text" name="" class="form-control" placeholder="会员编号">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="" class="form-control" placeholder="会员手机号">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button type="button" class="btn btn-primary members-query-btn">
-                                            <i class="fa fa-search"></i> 检 索
-                                        </button>
-                                        <a href="/admin/members/add" class="btn btn-primary pull-right" title="会员添加">
-                                            <i class="fa fa-user-plus"></i> 会员添加
-                                        </a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="card-footer text-right"></div>
-                        <div class="card-block">
-                            <table class="table table-striped table-sm user-list">
-                                <thead>
-                                <tr>
-                                    <th>##</th>
-                                    <th>会员编号</th>
-                                    <th>手机号码</th>
-                                    <th>性别</th>
-                                    <th>年龄</th>
-                                    <th>风格偏好</th>
-                                    <th>账户余额</th>
-                                    <th>衣橱币</th>
-                                    <th>积分</th>
-                                    <th>邀请人</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
+                            <table class="table table-responsive-sm table-bordered member-info">
                                 <tbody>
-                                <tr data-id="">
-                                    <td>1</td>
+                                <tr>
+                                    <th>商品id：</th>
+                                    <td>${product.cid}</td>
+                                    <th>商品名称：</th>
+                                    <td>${product.commName}</td>
+                                    <th>销售数量：</th>
                                     <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> U20180724142512
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>帅哥</td>
-                                    <td>85后</td>
-                                    <td>职场、约会、休闲、度假</td>
-                                    <td>￥1000.00</td>
-                                    <td>9999</td>
-                                    <td>65431</td>
-                                    <td>U20180724142512</td>
-                                    <td>
-                                        <a href="/admin/members/edit?memberId=" class="btn btn-sm btn-primary user-refresh" title="重新编辑">
-                                            <i class="fa fa-pencil"></i> 修改
-                                        </a>
+                                        <a href="/admin/sku/list?cid=${product.cid}">${product.saleCount}</a>
                                     </td>
                                 </tr>
-                                <tr data-id="">
-                                    <td>2</td>
-                                    <td>
-                                        <a href="/admin/members/detail?memberId=" class="btn btn-sm btn-link" title="会员详情">
-                                            <i class="fa fa-user"></i> U20180612101155
-                                        </a>
-                                    </td>
-                                    <td>158****3167</td>
-                                    <td>美女</td>
-                                    <td>90后</td>
-                                    <td>职场、约会、休闲、度假</td>
-                                    <td>￥1000.00</td>
-                                    <td>9999</td>
-                                    <td>65431</td>
-                                    <td>U20180724142512</td>
-                                    <td>
-                                        <a href="/admin/members/edit?memberId=" class="btn btn-sm btn-primary user-refresh" title="重新编辑">
-                                            <i class="fa fa-pencil"></i> 修改
-                                        </a>
-                                    </td>
+                                <tr>
+                                    <th>商品品类：</th>
+                                    <td>${product.category}</td>
+                                    <th>商品风格：</th>
+                                    <td>${product.style}</td>
+                                    <th>商品材质：</th>
+                                    <td>${product.material}</td>
+                                </tr>
+                                <tr>
+                                    <th>商品原价：</th>
+                                    <td>${product.price}</td>
+                                    <th>商品优惠价：</th>
+                                    <td>${product.couPrice}</td>
+                                    <th>商品组ID：</th>
+                                    <td>${product.groupId}</td>
+                                </tr>
+                                <tr>
+                                    <th>商品描述：</th>
+                                    <td colspan="5">${product.productDesc}</td>
+                                </tr>
+                                <tr>
+                                    <th>商品颜色：</th>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <div>
-                                <%@ include file="../Shared/Pagination.jsp" %>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>尺码列表</strong>
+                            <small>Members Coupons</small>
+                        </div>
+                        <div class="card-block">
+                            <table class="table table-responsive-sm table-bordered member-address">
+                                <thead>
+                                <tr>
+                                    <th>##</th>
+                                    <th>优惠券ID</th>
+                                    <th>优惠券业务类型</th>
+                                    <th>优惠券面值</th>
+                                    <th>优惠券状态</th>
+                                    <th>优惠券到期时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="c" items="${userCoupon}" varStatus="status">
+                                    <tr>
+                                        <td>${status.index+1}</td>
+                                        <td>${c.cpid}</td>
+                                        <td>${c.dictValue}</td>
+                                        <td>￥${c.couponPrice}</td>
+                                        <td>
+                                            <c:if test="${c.status == '1'}">已使用</c:if>
+                                            <c:if test="${c.status != '1'}">未使用</c:if>
+                                        </td>
+                                        <td>${c.dueTime}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>收货地址</strong>
+                            <small>Members Express Address</small>
+                        </div>
+                        <div class="card-block">
+                            <table class="table table-responsive-sm table-bordered member-address">
+                                <thead>
+                                <tr>
+                                    <th>##</th>
+                                    <th>地址编号</th>
+                                    <th>省市区</th>
+                                    <th>详细地址</th>
+                                    <th>邮编</th>
+                                    <th>收货人姓名</th>
+                                    <th>收货人手机</th>
+                                    <th>是否默认</th>
+                                    <th>设置时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>U20180612101155</td>
+                                    <td>山东省-潍坊市-坊子区</td>
+                                    <td>舜王街道程戈庄村100号</td>
+                                    <td>262202</td>
+                                    <td>唐四毛</td>
+                                    <td>158****3167</td>
+                                    <td>是</td>
+                                    <td>2018-07-24 14:46:33</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>U20180612101155</td>
+                                    <td>山东省-潍坊市-坊子区</td>
+                                    <td>舜王街道程戈庄村100号</td>
+                                    <td>262202</td>
+                                    <td>唐四毛</td>
+                                    <td>158****3167</td>
+                                    <td>是</td>
+                                    <td>2018-07-24 14:46:33</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>U20180612101155</td>
+                                    <td>山东省-潍坊市-坊子区</td>
+                                    <td>舜王街道程戈庄村100号</td>
+                                    <td>262202</td>
+                                    <td>唐四毛</td>
+                                    <td>158****3167</td>
+                                    <td>是</td>
+                                    <td>2018-07-24 14:46:33</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -140,5 +176,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="list"/>
+    <c:param name="subMenu" value="details"/>
 </c:import>

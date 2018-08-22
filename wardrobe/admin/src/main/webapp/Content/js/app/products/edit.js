@@ -54,10 +54,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
     var $materialAdd = $(".material-add");
     var $materialSelected = $("#p_material");
 
-    var $sizeList = $(".size-list");
-    var $sizeAdd = $(".size-add");
-    var $sizeRemove = $(".size-remove");
-
     function __setProductSettingsList(type) {
         $.getJSON("/admin/products/getProductSettingsList", {}, function (res) {
             var data = res.data;
@@ -298,57 +294,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         __setMaterialSelected();
     });
 
-    /* size *************************************************/
-    function __setSizeList() {
-        var $items = $sizeList.find(".size-item");
-        var sizeList = [], stockList = [];
-
-        for (var i = 0; i < $items.length; i++) {
-            var size = $items.eq(i).find("[name='initSize']").val();
-            var stock = $items.eq(i).find("[name='initStock']").val();
-            if (!stock) {
-                continue;
-            }
-
-            sizeList.push(size);
-            stockList.push(stock);
-        }
-
-        $("#p_size").val(sizeList.join(","));
-        $("#p_stock").val(stockList.join(","));
-    }
-
-    $sizeList.on("click", ".size-add", function (e) {
-        e.preventDefault();
-
-        var $item = $(this).parents(".size-item");
-        var $clone = $item.clone();
-
-        $item.find(".size-add").hide();
-
-        $sizeList.append($clone);
-    });
-
-    $sizeList.on("click", ".size-remove", function (e) {
-        e.preventDefault();
-
-        if ($sizeList.find(".size-item").length <= 1) {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "已经是最后一个尺码了",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-            return false;
-        }
-
-        var $item = $(this).parents(".size-item");
-        $item.remove();
-
-        $sizeList.find(".size-item:last-child .size-add").show();
-    });
-
     /* img *************************************************/
     var $fileImages = $(".product-image-file");
     $fileImages.on("change", function (e) {
@@ -425,8 +370,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
     $(".save-products").on("click", function (e) {
         e.preventDefault();
-
-        __setSizeList();
 
         var $form = $("#product_form");
         var conditions = $form.serializeArray();

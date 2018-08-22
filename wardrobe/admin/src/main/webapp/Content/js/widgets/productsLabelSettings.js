@@ -62,6 +62,7 @@ define(["jquery"], function ($) {
             cancel: new Function(),
             success: new Function(),
             failure: new Function(),
+            load: new Function,
 
             type: ""   // 必须
         };
@@ -89,30 +90,9 @@ define(["jquery"], function ($) {
                 opts.confirmInput = $("#pm_material");
                 opts.confirmBtn = $("#product_material_save");
             }
+
+            opts.load(opts);
         }
-
-        opts.confirmBtn.on("click", function (e) {
-            e.preventDefault();
-
-            var $form = opts.wrapperForm;
-            var conditions = $form.serialize();
-
-            if ($form.attr("submitting") == "submitting") {
-                return false;
-            }
-
-            $form.attr("submitting", "submitting");
-
-            $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
-                $form.attr("submitting", "");
-
-                if (res.code == 1) {
-                    opts.success();
-                } else {
-                    opts.failure();
-                }
-            });
-        });
 
         __init();
     };
