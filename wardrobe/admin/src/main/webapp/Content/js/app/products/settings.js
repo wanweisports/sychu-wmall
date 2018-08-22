@@ -29,37 +29,47 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* category *************************************************/
     var $category = new $.ProductsLabelSettings({
-        type: "category",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品品类保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-ok.png',
-                'content'   : "商品品类保存成功",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
+        type: "COMM_CATEGORY",
+        load: function (opts) {
+            opts.confirmBtn.on("click", function (e) {
+                e.preventDefault();
 
-            window.setTimeout(function () {
-                window.location.reload();
-            }, 1500);
+                var $form = opts.wrapperForm;
+                var conditions = $form.serialize();
+
+                if ($form.attr("submitting") == "submitting") {
+                    return false;
+                }
+
+                $form.attr("submitting", "submitting");
+
+                $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
+                    $form.attr("submitting", "");
+
+                    if (res.code == 1) {
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品品类保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
+                    }
+                });
+            });
         }
     });
 
-    $(".category-list").on("click", ".category-item.fa-remove", function (e) {
-        e.preventDefault;
+    $(".category-list").on("click", ".category-item .fa-remove", function (e) {
+        e.preventDefault();
 
         var $this = $(this);
 
-        $category.delete({id: $this.attr("data-id")}, function (status) {
+        $category.delete({dictId: $this.parent().attr("data-id")}, function (status) {
             if (status) {
                 window.setTimeout(function () {
                     window.location.reload();
@@ -79,37 +89,47 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* style *************************************************/
     var $style = new $.ProductsLabelSettings({
-        type: "style",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品风格保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-ok.png',
-                'content'   : "商品风格保存成功",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
+        type: "COMM_STYLE",
+        load: function (opts) {
+            opts.confirmBtn.on("click", function (e) {
+                e.preventDefault();
 
-            window.setTimeout(function () {
-                window.location.reload();
-            }, 1500);
+                var $form = opts.wrapperForm;
+                var conditions = $form.serialize();
+
+                if ($form.attr("submitting") == "submitting") {
+                    return false;
+                }
+
+                $form.attr("submitting", "submitting");
+
+                $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
+                    $form.attr("submitting", "");
+
+                    if (res.code == 1) {
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品风格保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
+                    }
+                });
+            });
         }
     });
 
-    $(".style-list").on("click", ".style-item.fa-remove", function (e) {
-        e.preventDefault;
+    $(".style-list").on("click", ".style-item .fa-remove", function (e) {
+        e.preventDefault();
 
         var $this = $(this);
 
-        $style.delete({id: $this.attr("data-id")}, function (status) {
+        $style.delete({dictId: $this.parent().attr("data-id")}, function (status) {
             if (status) {
                 window.setTimeout(function () {
                     window.location.reload();
@@ -129,37 +149,47 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
     /* material *************************************************/
     var $material = new $.ProductsLabelSettings({
-        type: "material",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品材质保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-ok.png',
-                'content'   : "商品材质保存成功",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
+        type: "COMM_MATERIAL",
+        load: function (opts) {
+            opts.confirmBtn.on("click", function (e) {
+                e.preventDefault();
 
-            window.setTimeout(function () {
-                window.location.reload();
-            }, 1500);
+                var $form = opts.wrapperForm;
+                var conditions = $form.serialize();
+
+                if ($form.attr("submitting") == "submitting") {
+                    return false;
+                }
+
+                $form.attr("submitting", "submitting");
+
+                $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
+                    $form.attr("submitting", "");
+
+                    if (res.code == 1) {
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品材质保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
+                    }
+                });
+            });
         }
     });
 
-    $(".material-list").on("click", ".material-item.fa-remove", function (e) {
-        e.preventDefault;
+    $(".material-list").on("click", ".material-item .fa-remove", function (e) {
+        e.preventDefault();
 
         var $this = $(this);
 
-        $material.delete({id: $this.attr("data-id")}, function (status) {
+        $material.delete({dictId: $this.parent().attr("data-id")}, function (status) {
             if (status) {
                 window.setTimeout(function () {
                     window.location.reload();
@@ -177,16 +207,16 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
         });
     });
 
-    $(".fa-remove").click(function () {
-        if(window.confirm("删除后不能恢复，确认删除吗？")) {
-            var dictId = $(this).parent().data('id');
-            $.post("/dict/delDict", {dictId: dictId}, function (res) {
-                alert(res.message);
-                if(res.code == 1){
-                    window.location.reload();
-                }
-            });
-        }
-    });
+    // $(".fa-remove").click(function () {
+    //     if(window.confirm("删除后不能恢复，确认删除吗？")) {
+    //         var dictId = $(this).parent().data('id');
+    //         $.post("/dict/delDict", {dictId: dictId}, function (res) {
+    //             alert(res.message);
+    //             if(res.code == 1){
+    //                 window.location.reload();
+    //             }
+    //         });
+    //     }
+    // });
 
 });

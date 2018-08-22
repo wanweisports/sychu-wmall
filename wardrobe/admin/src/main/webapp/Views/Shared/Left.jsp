@@ -18,28 +18,28 @@
                     <i class="icon-basket"></i> 商品管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/products/list">
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'list' || param.subMenu == 'detail' || param.subMenu == 'edit')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'list' || param.subMenu == 'detail' || param.subMenu == 'edit')}">active</c:if>" href="/admin/products/list">
                             <i class="icon-arrow-right"></i> 商品列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'hot'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'hot'}">active</c:if>" href="/admin/products/hot/list?hot=1">
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'hot')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'hot')}">active</c:if>" href="/admin/products/hot/list?hot=1">
                             <i class="icon-arrow-right"></i> 人气/热门商品
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'add'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'add'}">active</c:if>" href="/admin/products/add">
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'add')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'add')}">active</c:if>" href="/admin/products/add">
                             <i class="icon-arrow-right"></i> 商品添加
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'settings'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'settings'}">active</c:if>" href="/admin/products/settings">
-                            <i class="icon-arrow-right"></i> 商品设置
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/products/settings">
+                            <i class="icon-arrow-right"></i> 商品标签设置
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'sku'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'sku'}">active</c:if>" href="/admin/products/sku/list">
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">active</c:if>" href="/admin/products/sku/list">
                             <i class="icon-arrow-right"></i> 库存变更记录
                         </a>
                     </li>

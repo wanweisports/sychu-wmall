@@ -7,10 +7,10 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .user-list th {
+        .size-list th {
             padding: 0.75rem;
         }
-        .user-list td {
+        .size-list td {
             padding: 0.3rem 0.75rem;
         }
     </style>
@@ -35,13 +35,13 @@
                             <table class="table table-responsive-sm table-bordered member-info">
                                 <tbody>
                                 <tr>
-                                    <th>商品id：</th>
-                                    <td>${product.cid}</td>
                                     <th>商品名称：</th>
                                     <td>${product.commName}</td>
+                                    <th>商品标签：</th>
+                                    <td><span class="badge badge-danger">热门</span><span class="badge badge-danger">人气</span></td>
                                     <th>销售数量：</th>
                                     <td>
-                                        <a href="/admin/sku/list?cid=${product.cid}">${product.saleCount}</a>
+                                        <a href="/admin/products/sku/list?cid=${product.cid}">${product.saleCount}</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -57,112 +57,69 @@
                                     <td>${product.price}</td>
                                     <th>商品优惠价：</th>
                                     <td>${product.couPrice}</td>
-                                    <th>商品组ID：</th>
-                                    <td>${product.groupId}</td>
+                                    <th>其他颜色：</th>
+                                    <td>
+                                        <a href="/admin/products/list?groupId=${product.groupId}">黄色</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>商品描述：</th>
                                     <td colspan="5">${product.productDesc}</td>
                                 </tr>
                                 <tr>
-                                    <th>商品颜色：</th>
-                                    <td></td>
+                                    <th>商品图片：</th>
+                                    <td colspan="5">
+                                        <img src="/Content/images/upload.png" style="width: 100px; height: 100px;" alt="封面图">
+                                        <img src="/Content/images/upload.png" style="width: 100px; height: 100px;" alt="轮播图1">
+                                        <img src="/Content/images/upload.png" style="width: 100px; height: 100px;" alt="轮播图2">
+                                        <img src="/Content/images/upload.png" style="width: 100px; height: 100px;" alt="轮播图3">
+                                        <img src="/Content/images/upload.png" style="width: 100px; height: 100px;" alt="轮播图4">
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/admin/products/edit?cid=${product.cid}" class="btn btn-primary">
+                                <i class="fa fa-pencil"></i> 编辑商品
+                            </a>
+                            <a href="/admin/products/add?groupId=${product.groupId}" class="btn btn-primary">
+                                <i class="fa fa-plus"></i> 添加同类商品
+                            </a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header">
                             <strong>尺码列表</strong>
-                            <small>Members Coupons</small>
+                            <small>Size List</small>
                         </div>
                         <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered member-address">
+                            <table class="table table-responsive-sm table-bordered size-list">
                                 <thead>
                                 <tr>
                                     <th>##</th>
-                                    <th>优惠券ID</th>
-                                    <th>优惠券业务类型</th>
-                                    <th>优惠券面值</th>
-                                    <th>优惠券状态</th>
-                                    <th>优惠券到期时间</th>
+                                    <th>尺码大小</th>
+                                    <th>初始库存</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="c" items="${userCoupon}" varStatus="status">
-                                    <tr>
-                                        <td>${status.index+1}</td>
-                                        <td>${c.cpid}</td>
-                                        <td>${c.dictValue}</td>
-                                        <td>￥${c.couponPrice}</td>
-                                        <td>
-                                            <c:if test="${c.status == '1'}">已使用</c:if>
-                                            <c:if test="${c.status != '1'}">未使用</c:if>
-                                        </td>
-                                        <td>${c.dueTime}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <strong>收货地址</strong>
-                            <small>Members Express Address</small>
-                        </div>
-                        <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered member-address">
-                                <thead>
-                                <tr>
-                                    <th>##</th>
-                                    <th>地址编号</th>
-                                    <th>省市区</th>
-                                    <th>详细地址</th>
-                                    <th>邮编</th>
-                                    <th>收货人姓名</th>
-                                    <th>收货人手机</th>
-                                    <th>是否默认</th>
-                                    <th>设置时间</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                <tr data-id="">
                                     <td>1</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
+                                    <td>XL</td>
+                                    <td>1000</td>
+                                    <td>
+                                        <a href="javascript:;" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-remove"></i> 删除
+                                        </a>
+                                    </td>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:;" class="btn btn-primary">
+                                <i class="fa fa-plus"></i> 增加尺码
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -176,5 +133,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="details"/>
+    <c:param name="subMenu" value="detail"/>
 </c:import>

@@ -30,7 +30,7 @@
                             <span class="text-danger">*</span> 商品品类
                         </label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" id="pc_category" placeholder="请输入商品品类" name="category"
+                            <input type="text" class="form-control" id="pc_category" placeholder="请输入商品品类" name="dictValue"
                                    data-val="true" data-val-required="商品品类不能为空"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品品类必须包含 2~5 个字符">
                             <div data-valmsg-for="category" data-valmsg-replace="true"></div>
@@ -42,7 +42,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_category_save" onclick="addCommTpye('COMM_CATEGORY', $('#pc_category').val())">
+                <button type="button" class="btn btn-primary btn-sm" id="product_category_save">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>
@@ -60,7 +60,7 @@
                             <span class="text-danger">*</span> 商品风格
                         </label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" id="ps_style" placeholder="请输入商品风格" name="style"
+                            <input type="text" class="form-control" id="ps_style" placeholder="请输入商品风格" name="dictValue"
                                    data-val="true" data-val-required="商品风格不能为空"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品风格必须包含 2~5 个字符">
                             <div data-valmsg-for="style" data-valmsg-replace="true"></div>
@@ -72,7 +72,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_style_save" onclick="addCommTpye('COMM_STYLE', $('#ps_style').val())">
+                <button type="button" class="btn btn-primary btn-sm" id="product_style_save">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>
@@ -90,7 +90,7 @@
                             <span class="text-danger">*</span> 商品材质
                         </label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" id="pm_material" placeholder="请输入商品风格" name="material"
+                            <input type="text" class="form-control" id="pm_material" placeholder="请输入商品风格" name="dictValue"
                                    data-val="true" data-val-required="商品材质不能为空"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品材质必须包含 2~5 个字符">
                             <div data-valmsg-for="style" data-valmsg-replace="true"></div>
@@ -102,7 +102,7 @@
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                     <i class="fa fa-remove"></i> 取消
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="product_material_save" onclick="addCommTpye('COMM_MATERIAL', $('#pm_material').val())">
+                <button type="button" class="btn btn-primary btn-sm" id="product_material_save">
                     <i class="fa fa-check"></i> 保存
                 </button>
             </div>

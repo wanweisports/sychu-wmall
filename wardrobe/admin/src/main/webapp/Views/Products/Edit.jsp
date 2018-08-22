@@ -243,5 +243,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="add"/>
+    <c:param name="subMenu" value="edit"/>
 </c:import>

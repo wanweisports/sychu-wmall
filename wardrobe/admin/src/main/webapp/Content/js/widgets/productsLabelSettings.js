@@ -35,7 +35,7 @@ define(["jquery"], function ($) {
         this.delete = function (conditions, callback) {
             callback = callback || new Function();
 
-            $.post('/admin/products/' + opts.type + '/delete', conditions, function (res) {
+            $.post('/dict/delDict', conditions, function (res) {
                 if (res.code == 1) {
                     callback(true);
                 } else {

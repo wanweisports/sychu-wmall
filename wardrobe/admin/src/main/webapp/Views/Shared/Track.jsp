@@ -38,6 +38,14 @@
                 <c:when test="${param.subMenu == 'list'}">
                     <li class="breadcrumb-item active">商品列表</li>
                 </c:when>
+                <c:when test="${param.subMenu == 'detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/products/list">商品列表</a></li>
+                    <li class="breadcrumb-item active">商品详情</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'edit'}">
+                    <li class="breadcrumb-item"><a href="/admin/products/list">商品列表</a></li>
+                    <li class="breadcrumb-item active">商品编辑</li>
+                </c:when>
             </c:choose>
         </c:when>
 
