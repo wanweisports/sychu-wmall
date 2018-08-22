@@ -162,7 +162,7 @@
                                 </thead>
                                 <tbody id="tbody">
                                     <c:forEach var="s" items="${productSizeList}" varStatus="status">
-                                    <tr data-id="${s.sid}" <c:if test="${status.index==0}">id="size_tpl"</c:if>>
+                                    <tr data-id="${s.sid}">
                                         <td>${status.index+1}</td>
                                         <td>${s.size}</td>
                                         <td>${s.stock}</td>
