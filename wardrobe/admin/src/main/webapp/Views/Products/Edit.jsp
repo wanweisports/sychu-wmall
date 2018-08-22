@@ -159,11 +159,11 @@
                                                data-val="true" data-val-required="商品原价不能为空" autocomplete="off" value="${commodity.price}">
                                         <div data-valmsg-for="price" data-valmsg-replace="true"></div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <%--<div class="col-md-4">
                                         <input type="text" class="form-control" id="p_couPrice" placeholder="请输入商品优惠价格" name="couPrice"
                                                data-val="true" data-val-required="商品优惠价格不能为空" autocomplete="off" value="${commodity.couPrice}">
                                         <div data-valmsg-for="couPrice" data-valmsg-replace="true"></div>
-                                    </div>
+                                    </div>--%>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label">

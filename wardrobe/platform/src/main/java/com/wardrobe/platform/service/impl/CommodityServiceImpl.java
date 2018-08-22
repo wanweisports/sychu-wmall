@@ -16,6 +16,7 @@ import com.wardrobe.platform.service.IDictService;
 import com.wardrobe.platform.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -222,22 +223,25 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityColorDB.setUpdateTime(timestamp);
             baseDao.save(commodityColorDB, commodityColorDB.getCoid());
 
-            commodityColor.getCommoditySizes().stream().forEach((commoditySize -> {
-                int sid = commoditySize.getSid();
-                if (sid > 0) {
-                    CommoditySize commoditySizeDB = getCommoditySize(sid);
-                    commoditySizeDB.setUpdateTime(timestamp);
-                    commoditySizeDB.setSize(commoditySize.getSize());
-                    commoditySizeDB.setStock(commoditySize.getStock());
-                    baseDao.save(commoditySizeDB, sid);
-                } else {
-                    commoditySize.setCreateTime(timestamp);
-                    commoditySize.setLockStock(0);
-                    commoditySize.setCid(commodityInfo.getCid());
-                    commoditySize.setCoid(commodityColor.getCoid());
-                    baseDao.save(commoditySize, null);
-                }
-            }));
+            List<CommoditySize> commoditySizes = commodityColor.getCommoditySizes();
+            if(!CollectionUtils.isEmpty(commoditySizes)) {
+                commoditySizes.stream().forEach((commoditySize -> {
+                    int sid = commoditySize.getSid();
+                    if (sid > 0) {
+                        CommoditySize commoditySizeDB = getCommoditySize(sid);
+                        commoditySizeDB.setUpdateTime(timestamp);
+                        commoditySizeDB.setSize(commoditySize.getSize());
+                        commoditySizeDB.setStock(commoditySize.getStock());
+                        baseDao.save(commoditySizeDB, sid);
+                    } else {
+                        commoditySize.setCreateTime(timestamp);
+                        commoditySize.setLockStock(0);
+                        commoditySize.setCid(commodityInfo.getCid());
+                        commoditySize.setCoid(commodityColor.getCoid());
+                        baseDao.save(commoditySize, null);
+                    }
+                }));
+            }
         }
         //处理图片
         List<SysResources> sysResources = FileUtil.getSpringUpload(request, StrUtil.EMPTY);

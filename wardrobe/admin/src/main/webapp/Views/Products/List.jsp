@@ -71,6 +71,7 @@
                                     <%--<th>优惠价格</th>--%>
                                     <th>已售数量</th>
                                     <th>商品状态</th>
+                                    <th>操作</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -90,6 +91,9 @@
                                     </td>
                                     <td>
                                         <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/products/edit?cid=${c.cid}" class="btn btn-primary">编辑</a>
                                     </td>
                                     <td>
                                         <c:if test="${c.status=='1'}">
