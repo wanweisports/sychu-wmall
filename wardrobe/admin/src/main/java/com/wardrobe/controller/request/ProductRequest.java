@@ -1,12 +1,6 @@
 package com.wardrobe.controller.request;
 
-import com.wardrobe.common.po.CommodityColor;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Created by wangjun on 2018/8/21.

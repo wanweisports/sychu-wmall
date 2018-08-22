@@ -9,32 +9,26 @@ import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.SysDict;
-import com.wardrobe.controller.annotation.CommodityResolver;
-import com.wardrobe.controller.request.ProductRequest;
-import com.wardrobe.controller.request.SysDictRequest;
-import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.view.CommodityInputView;
+import com.wardrobe.controller.request.ProductRequest;
+import com.wardrobe.controller.request.SysDictRequest;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
-import java.rmi.server.UID;
-import java.util.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -129,6 +123,7 @@ public class ProductsController extends BaseController {
     @Desc("进入商品添加页面")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String renderProductsAdd(Integer groupId, Model model) {
+        model.addAllAttributes(commodityService.renderProductsAddIn(null));
         return "Products/Add";
     }
 
@@ -138,7 +133,7 @@ public class ProductsController extends BaseController {
         model.addAllAttributes(commodityService.renderProductsAddIn(cid));
         model.addAttribute("dh", IPlatformConstant.DOU_HAO);
 
-        return "Products/Add";
+        return "Products/Edit";
     }
 
     @Desc("进入商品各种设置字典")
