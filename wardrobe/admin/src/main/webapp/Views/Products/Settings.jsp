@@ -46,10 +46,10 @@
                         <div class="card-block category-list">
                             <c:forEach var="c" items="${categoryList}">
                             <button type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
-                                ${c.dictValue}<i class="fa fa-remove"></i>
+                                ${c.dictValue}<i class="fa fa-remove" style="z-index: 100"></i>
                             </button>
                             </c:forEach>
-                            <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_category_add">
+                            <button type="button" class="btn btn-primary btn-close category-add" data-toggle="modal" data-target="#product_category_add">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -64,7 +64,7 @@
                         <div class="card-block style-list">
                             <c:forEach var="s" items="${styleList}">
                             <button type="button" class="btn btn-success btn-close style-item" data-id="${s.dictId}">
-                                ${s.dictValue}<i class="fa fa-remove"></i>
+                                ${s.dictValue}<i class="fa fa-remove" style="z-index: 100"></i>
                             </button>
                             </c:forEach>
                             <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_style_add">
@@ -82,7 +82,7 @@
                         <div class="card-block material-list">
                             <c:forEach var="m" items="${materialList}">
                             <button type="button" class="btn btn-success btn-close material-item" data-id="${m.dictId}">
-                                ${m.dictValue}<i class="fa fa-remove"></i>
+                                ${m.dictValue}<i class="fa fa-remove" style="z-index: 100"></i>
                             </button>
                             </c:forEach>
                             <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_material_add">

@@ -44,16 +44,9 @@ public class ProductsController extends BaseController {
     @Autowired
     private IDictService dictService;
 
-    @Desc("商品活动设置")
-    @RequestMapping(value = "/active/settings", method = RequestMethod.GET)
-    public ModelAndView renderProductsActiveSettings() {
-        return new ModelAndView("/Products/ActiveSettings");
-    }
-
     /***********
      * type: "category", "style", "material"
      */
-
     @Desc("商品筛选属性设置")
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String renderProductsSettings(Model model) {
@@ -76,6 +69,7 @@ public class ProductsController extends BaseController {
 
     @Desc("商品筛选属性设置 - 删除")
     @ResponseBody
+    // 被替换 DictController.delDict
     @RequestMapping(value = "/{type}/delete", method = RequestMethod.POST)
     public ResponseBean deleteProductsTypeSettings(@PathVariable String type) {
         return new ResponseBean(true);
@@ -97,10 +91,12 @@ public class ProductsController extends BaseController {
         return "Products/List";
     }
 
-    @Desc("商品管理列表")
+    @Desc("商品管理详情")
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public ModelAndView renderProductsDetail() {
-        return new ModelAndView("/Products/Detail");
+    public String renderProductsDetail(Integer productId, Model model) {
+        model.addAttribute("product", new CommodityInfo());
+
+        return "/Products/Detail";
     }
 
     @Desc("商品管理列表 -- 人气/热门商品")
@@ -129,7 +125,7 @@ public class ProductsController extends BaseController {
 
     @Desc("进入商品编辑页面")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String renderProductsAdd(Integer cid, String groupId, Model model) {
+    public String renderProductsEdit(Integer cid, Model model) {
         model.addAllAttributes(commodityService.renderProductsAddIn(cid));
         model.addAttribute("dh", IPlatformConstant.DOU_HAO);
 

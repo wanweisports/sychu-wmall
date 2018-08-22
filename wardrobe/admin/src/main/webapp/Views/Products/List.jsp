@@ -7,10 +7,10 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .user-list th {
+        .products-list th {
             padding: 0.75rem;
         }
-        .user-list td {
+        .products-list td {
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
@@ -91,9 +91,6 @@
                                     </td>
                                     <td>
                                         <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
-                                    </td>
-                                    <td>
-                                        <a href="/admin/products/edit?cid=${c.cid}" class="btn btn-primary">编辑</a>
                                     </td>
                                     <td>
                                         <c:if test="${c.status=='1'}">

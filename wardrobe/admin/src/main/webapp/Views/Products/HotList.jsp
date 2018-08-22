@@ -6,7 +6,17 @@
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
-    <style type="text/css"></style>
+    <style type="text/css">
+        .products-list th {
+            padding: 0.75rem;
+        }
+        .products-list td {
+            padding: 0.3rem 0.75rem;
+        }
+        .img-rounded {
+            width: 2rem;
+        }
+    </style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
@@ -84,14 +94,14 @@
                                                 <c:if test="${hot=='1'}">
                                                     <c:if test="${c.hot == '1'}">
                                                         <a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">
-                                                            <i class="fa fa-remove"></i> 取消热门
+                                                            <i class="fa fa-remove"></i> 取消
                                                         </a>
                                                     </c:if>
                                                 </c:if>
                                                 <c:if test="${newly=='1'}">
                                                     <c:if test="${c.newly == '1'}">
                                                         <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">
-                                                            <i class="fa fa-remove"></i> 取消最新
+                                                            <i class="fa fa-remove"></i> 取消
                                                         </a>
                                                     </c:if>
                                                 </c:if>
