@@ -16,7 +16,18 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/products/settins.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/products/settings.js?v=${static_resource_version}"></script>
+    <script type="text/javascript">
+        //添加类型
+        function addCommTpye(type, dictValue){
+            $.post('/admin/products/' + type + '/save', {dictValue: dictValue}, function (res) {
+                alert(res.message);
+                if (res.code == 1) {
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -33,36 +44,11 @@
                             <small>Category</small>
                         </div>
                         <div class="card-block category-list">
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                连衣裙<i class="fa fa-remove"></i>
+                            <c:forEach var="c" items="${categoryList}">
+                            <button type="button" class="btn btn-success btn-close category-item" data-id="${c.dictId}">
+                                ${c.dictValue}<i class="fa fa-remove"></i>
                             </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                西服<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                外套<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                下装<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                下装<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                连衣裙<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                西服<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                下装<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                连衣裙<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close category-item" data-id="1">
-                                西服<i class="fa fa-remove"></i>
-                            </button>
+                            </c:forEach>
                             <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_category_add">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -76,21 +62,11 @@
                             <small>Style</small>
                         </div>
                         <div class="card-block style-list">
-                            <button type="button" class="btn btn-success btn-close style-item" data-id="1">
-                                职场<i class="fa fa-remove"></i>
+                            <c:forEach var="s" items="${styleList}">
+                            <button type="button" class="btn btn-success btn-close style-item" data-id="${s.dictId}">
+                                ${s.dictValue}<i class="fa fa-remove"></i>
                             </button>
-                            <button type="button" class="btn btn-success btn-close">
-                                职场<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close">
-                                职场<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close">
-                                职场<i class="fa fa-remove"></i>
-                            </button>
-                            <button type="button" class="btn btn-success btn-close">
-                                职场<i class="fa fa-remove"></i>
-                            </button>
+                            </c:forEach>
                             <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_style_add">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -104,12 +80,11 @@
                             <small>Material</small>
                         </div>
                         <div class="card-block material-list">
-                            <button type="button" class="btn btn-success btn-close material-item" data-id="1">
-                                纯棉<i class="fa fa-remove"></i>
+                            <c:forEach var="m" items="${materialList}">
+                            <button type="button" class="btn btn-success btn-close material-item" data-id="${m.dictId}">
+                                ${m.dictValue}<i class="fa fa-remove"></i>
                             </button>
-                            <button type="button" class="btn btn-success btn-close">
-                                纯棉<i class="fa fa-remove"></i>
-                            </button>
+                            </c:forEach>
                             <button type="button" class="btn btn-primary btn-close" data-toggle="modal" data-target="#product_material_add">
                                 <i class="fa fa-plus"></i>
                             </button>

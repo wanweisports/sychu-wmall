@@ -35,16 +35,16 @@
                             <small>Products List</small>
                         </div>
                         <div class="card-block">
-                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list" novalidate onsubmit="return false;">
+                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="name" class="form-control" placeholder="商品名称">
+                                        <input type="text" name="commName" class="form-control" placeholder="商品名称" value="${commName}">
                                     </div>
                                     <div class="col-md-2">
                                         <select class="form-control" name="status">
-                                            <option>全部商品</option>
-                                            <option>已上架</option>
-                                            <option>已下架</option>
+                                            <option value>全部商品</option>
+                                            <option value="1" <c:if test="${status=='1'}">selected</c:if>>已上架</option>
+                                            <option value="2" <c:if test="${status=='2'}">selected</c:if>>已下架</option>
                                         </select>
                                     </div>
                                     <div class="col-md-8">
@@ -65,57 +65,66 @@
                                 <tr>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
-                                    <th>商品风格</th>
+                                    <th>商品品类</th>
+                                    <th>商品材质</th>
                                     <th>商品原价</th>
-                                    <th>优惠价格</th>
+                                    <%--<th>优惠价格</th>--%>
                                     <th>已售数量</th>
                                     <th>商品状态</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <c:forEach var="c" items="${page.list}" varStatus="status">
                                 <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
+                                    <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                     <td>
-                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
+                                        <a href="/admin/products/detail?productId=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
                                     </td>
-                                    <td>约会,度假,休闲</td>
-                                    <td>￥600</td>
-                                    <td>￥399</td>
+                                    <td>${c.styleName}</td>
+                                    <td>${c.materialName}</td>
+                                    <td>￥${c.price}</td>
+                                    <%--<td>￥399</td>--%>
                                     <td>
-                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">2012件</a>
+                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
                                     </td>
-                                    <td><span class="badge badge-success">已上架</span></td>
                                     <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="下架">
-                                            <i class="fa fa-level-down"></i> 下架
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="人气">
-                                            <i class="fa fa-heart"></i> 人气
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="热门">
-                                            <i class="fa fa-bolt"></i> 热门
-                                        </a>
+                                        <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
+                                    </td>
+                                    <td>
+                                        <c:if test="${c.status=='1'}">
+                                            <a href="javascript:;" class="btn btn-sm btn-danger js-status-down" title="下架" data-id="${c.cid}">
+                                                <i class="fa fa-level-down"></i> 下架
+                                            </a>
+                                            <c:if test="${c.hot == '1'}">
+                                                <a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">
+                                                    <i class="fa fa-remove"></i> 取消热门
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${c.hot != '1'}">
+                                                <a href="javascript:;" class="btn btn-sm btn-primary js-hot-top" title="添加到热门" data-id="${c.cid}">
+                                                    <i class="fa fa-heart"></i> 热门
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${c.newly == '1'}">
+                                                <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">
+                                                    <i class="fa fa-remove"></i> 取消最新
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${c.newly != '1'}">
+                                                <a href="javascript:;" class="btn btn-sm btn-primary js-newly-top" title="添加到最新" data-id="${c.cid}">
+                                                    <i class="fa fa-bolt"></i> 最新
+                                                </a>
+                                            </c:if>
+                                        </c:if>
+                                        <c:if test="${c.status!='1'}">
+                                            <a href="javascript:;" class="btn btn-sm btn-primary js-status-top" title="上架" data-id="${c.cid}">
+                                                <i class="fa fa-level-up"></i> 上架
+                                            </a>
+                                        </c:if>
                                     </td>
                                 </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
-                                    </td>
-                                    <td>约会,度假,休闲</td>
-                                    <td>￥600</td>
-                                    <td>￥399</td>
-                                    <td>
-                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">2012件</a>
-                                    </td>
-                                    <td><span class="badge badge-danger">已下架</span></td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="上架">
-                                            <i class="fa fa-level-up"></i> 上架
-                                        </a>
-                                    </td>
-                                </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                             <div>

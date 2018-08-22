@@ -24,7 +24,7 @@
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.subMenu == 'hot'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'hot'}">active</c:if>" href="/admin/products/hot/list">
+                        <a class="nav-link <c:if test="${param.subMenu == 'hot'}">active</c:if>" href="/admin/products/hot/list?hot=1">
                             <i class="icon-arrow-right"></i> 人气/热门商品
                         </a>
                     </li>

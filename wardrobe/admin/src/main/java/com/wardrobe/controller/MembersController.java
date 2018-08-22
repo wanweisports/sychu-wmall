@@ -49,7 +49,6 @@ public class MembersController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/list")
     public String renderMembersList(UserInputView userInputView, Model model) {
-        userInputView.setPageSize(1D); //测试分页
         model.addAllAttributes(JsonUtils.fromJson(userInputView));
         PageBean pageBean = userService.getUserListIn(userInputView);
         super.setPageInfo(model, pageBean, "/admin/members/list", userInputView);

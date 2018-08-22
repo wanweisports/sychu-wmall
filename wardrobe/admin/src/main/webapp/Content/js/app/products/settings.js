@@ -176,4 +176,17 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
             }
         });
     });
+
+    $(".fa-remove").click(function () {
+        if(window.confirm("删除后不能恢复，确认删除吗？")) {
+            var dictId = $(this).parent().data('id');
+            $.post("/dict/delDict", {dictId: dictId}, function (res) {
+                alert(res.message);
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+
 });

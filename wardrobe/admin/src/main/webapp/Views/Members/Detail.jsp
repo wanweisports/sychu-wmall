@@ -120,7 +120,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card">
+                    <%--<div class="card">
                         <div class="card-header">
                             <strong>收货地址</strong>
                             <small>Members Express Address</small>
@@ -177,7 +177,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div>--%>
                 </div>
             </div>
             <!--/.row-->

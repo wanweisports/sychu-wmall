@@ -24,8 +24,14 @@ public interface ICommodityService {
 
     Map<String, Object> renderProductsAddIn(Integer cid);
 
-    void addUpdateCommodity(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
+    void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
 
-    void deleteSize(int sid);
+    void deleteSizeIn(int sid);
+
+    void updateCommodityStatusIn(int cid, String status);
+
+    void updateCommodityHotIn(int cid, String hot);
+
+    void updateCommodityNewlyIn(int cid, String newly);
 
 }

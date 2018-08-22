@@ -1,6 +1,7 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
@@ -11,6 +12,9 @@ import com.wardrobe.common.po.SysDict;
 import com.wardrobe.controller.annotation.CommodityResolver;
 import com.wardrobe.controller.request.ProductRequest;
 import com.wardrobe.controller.request.SysDictRequest;
+import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IDictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,14 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.rmi.server.UID;
 import java.util.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 访问商品相关的接口
@@ -50,8 +62,14 @@ public class ProductsController extends BaseController {
 
     @Desc("商品筛选属性设置")
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView renderProductsSettings() {
-        return new ModelAndView("/Products/Settings");
+    public String renderProductsSettings(Model model) {
+        Map<String, Object> data = new HashMap<>(3, 1);
+        data.put("categoryList", dictService.getDicts(IDBConstant.COMM_CATEGORY));
+        data.put("styleList", dictService.getDicts(IDBConstant.COMM_STYLE));
+        data.put("materialList", dictService.getDicts(IDBConstant.COMM_MATERIAL));
+        model.addAllAttributes(data);
+        return "Products/Settings";
+
     }
 
     @Desc("商品筛选属性设置 - 提交")
@@ -77,9 +95,12 @@ public class ProductsController extends BaseController {
     }
 
     @Desc("商品管理列表")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView renderProductsList() {
-        return new ModelAndView("/Products/List");
+    @RequestMapping(value = "/list")
+    public String renderProductsList(CommodityInputView commodityInputView, Model model) {
+        PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        return "Products/List";
     }
 
     @Desc("商品管理列表")
@@ -90,15 +111,12 @@ public class ProductsController extends BaseController {
 
     @Desc("商品管理列表 -- 人气/热门商品")
     @RequestMapping(value = "/hot/list", method = RequestMethod.GET)
-    public ModelAndView renderProductsHotList(String type) {
-        ModelAndView modelAndView = new ModelAndView("/Products/HotList");
-
-        if (type == null || type.isEmpty()) {
-            type = "hot";
-        }
-        modelAndView.addObject("type", type);
-
-        return modelAndView;
+    public String renderProductsHotList(CommodityInputView commodityInputView, Model model) {
+        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        return "Products/HotList";
     }
 
     @Desc("商品管理列表 -- 人气/热门设定取消")

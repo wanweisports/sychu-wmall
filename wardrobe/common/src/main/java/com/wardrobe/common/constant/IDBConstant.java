@@ -39,4 +39,6 @@ public interface IDBConstant {
 
     String USER_COUPON = "USER_COUPON"; //优惠券类型
 
+    String COMM_STATUS = "COMM_STATUS"; //商品状态
+
 }
