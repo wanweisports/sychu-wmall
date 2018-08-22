@@ -108,7 +108,7 @@
                                             </c:if>
                                         </td>
                                     </tr>
-                                </c:forEach>
+                                </c:forEach>；
                             </table>
                             <div>
                                 <%@ include file="../Shared/Pagination.jsp" %>

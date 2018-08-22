@@ -31,7 +31,7 @@ public class MessageController extends BaseController {
         int code = StrUtil.initCode(4);
         System.out.println(mobile + "下发短信验证码：" + code);
 
-        String sendJson = SmsYunPianApi.sendCode(StrUtil.objToStr(code), mobile, SmsUrlConstant.TPL_ID_CODE);//发送短信
+        String sendJson = SmsYunPianApi.sendCode(StrUtil.objToStr(code), mobile, messageEnum.tplId);//发送短信
 
         if(sendJson != null) {
             Map<String, Object> sendMap = JsonUtils.fromJsonDF(sendJson);  //解析发送短信json数据
