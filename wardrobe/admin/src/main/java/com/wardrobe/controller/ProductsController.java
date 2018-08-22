@@ -186,7 +186,7 @@ public class ProductsController extends BaseController {
         commodityColor.setCommoditySizes(commoditySizeList);
         commodityInfo.setCommodityColor(commodityColor);
 
-        commodityService.addUpdateCommodity(commodityInfo, multipartHttpServletRequest);
+        commodityService.addUpdateCommodityIn(commodityInfo, multipartHttpServletRequest);
 
         return new ResponseBean(true);
     }
@@ -214,7 +214,7 @@ public class ProductsController extends BaseController {
 
         commodityInfo.setCommodityColor(commodityColor);
 
-        commodityService.addUpdateCommodity(commodityInfo, multipartHttpServletRequest);
+        commodityService.addUpdateCommodityIn(commodityInfo, multipartHttpServletRequest);
 
         return new ResponseBean(true);
     }
