@@ -3,21 +3,21 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.SysResources;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.FileUtil;
+import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
-import com.wardrobe.platform.service.IDictService;
 import com.wardrobe.platform.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
@@ -50,6 +50,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String material = commodityInputView.getMaterial(); //regexp ',1,|,333,'
         String newly = commodityInputView.getNewly();
         String hot = commodityInputView.getHot();
+        Integer groupId = commodityInputView.getGroupId();
 
         StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
@@ -69,6 +70,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(IDBConstant.LOGIC_STATUS_YES.equals(hot)){
             whereSql.append(" AND ci.hot = :hot");
         }
+        if(groupId != null){
+            whereSql.append(" AND ci.groupId = :groupId");
+        }
         whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
@@ -78,7 +82,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     public Map<String, Object> getCommodityDetail(int cid){
         Map<String, Object> data = new HashMap<>(6, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
-        data.put("sizes", getCommoditySizes(cid));
+        data.put("sizes", getCommoditySizeNames(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
         data.put("commName", commodityInfo.getCommName());
         data.put("price", commodityInfo.getPrice());
@@ -107,7 +111,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
     }
 
-    private String[] getCommoditySizes(int cid){
+    private String[] getCommoditySizeNames(int cid){
         String sizes = StrUtil.objToStr(baseDao.getUniqueObjectResult("SELECT GROUP_CONCAT(size) FROM commodity_size WHERE cid = ?1", cid));
         return sizes.split(",");
     }
@@ -121,12 +125,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getCommoditysIn(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((commodity) -> {
-            String category = StrUtil.objToStr(commodity.get("category"));
-            String style = StrUtil.objToStr(commodity.get("style"));
-            String material = StrUtil.objToStr(commodity.get("material"));
-            commodity.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
-            commodity.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
-            commodity.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
+            getType(commodity);
             commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
             SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
             commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
@@ -134,11 +133,22 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return pageBean;
     }
 
+    private Map<String, Object> getType(Map<String, Object> commodity){
+        String category = StrUtil.objToStr(commodity.get("category"));
+        String style = StrUtil.objToStr(commodity.get("style"));
+        String material = StrUtil.objToStr(commodity.get("material"));
+        commodity.put("categoryName", getTypes(category, IDBConstant.COMM_CATEGORY));
+        commodity.put("styleName", getTypes(style, IDBConstant.COMM_STYLE));
+        commodity.put("materialName", getTypes(material, IDBConstant.COMM_MATERIAL));
+        return commodity;
+    }
+
     private PageBean getCommoditysIn(CommodityInputView commodityInputView){
         String newly = commodityInputView.getNewly();
         String hot = commodityInputView.getHot();
         String commName = commodityInputView.getCommName();
         String status = commodityInputView.getStatus();
+        Integer groupId = commodityInputView.getGroupId();
 
         StringBuilder headSql = new StringBuilder("SELECT ci.*");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
@@ -154,6 +164,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");
+        }
+        if(groupId != null){
+            whereSql.append(" AND ci.groupId = :groupId");
         }
         whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
@@ -188,9 +201,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
             commodityInfo.setHot(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setNewly(IDBConstant.LOGIC_STATUS_NO);
+            commodityInfo.setGroupId(commodityInfo.getGroupId());
             commodityInfo.setSaleCount(0);
             commodityInfo.setSeqNo(0);
-            commodityInfo.setCouPrice(commodityInfo.getPrice());
             baseDao.save(commodityInfo, null);
 
             commodityColor.setCid(commodityInfo.getCid());
@@ -214,6 +227,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfoDB.setStyle(commodityInfo.getStyle());
             commodityInfoDB.setMaterial(commodityInfo.getMaterial());
             commodityInfoDB.setPrice(commodityInfo.getPrice());
+            commodityInfoDB.setCouPrice(commodityInfo.getCouPrice());
             commodityInfoDB.setProductDesc(commodityInfo.getProductDesc());
             commodityInfoDB.setUpdateTime(timestamp);
             baseDao.save(commodityInfoDB, cid);
@@ -257,6 +271,28 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
+    public void updateSizeIn(CommoditySize commoditySize){
+        if(StrUtil.isBlank(commoditySize.getSize())) throw new MessageException("请选择尺码!");
+        if(commoditySize.getStock() == null) throw new MessageException("请输入库存!");
+
+        int sid = commoditySize.getSid();
+        Timestamp nowDate = DateUtil.getNowDate();
+        if(sid > 0) {
+            CommoditySize commoditySizeDB = getCommoditySize(sid);
+            commoditySizeDB.setSize(commoditySize.getSize());
+            commoditySizeDB.setStock(commoditySize.getStock());
+            commoditySizeDB.setUpdateTime(nowDate);
+            baseDao.save(commoditySizeDB, sid);
+        }else{
+            CommodityColor commodityColor = getCommodityColorByCid(commoditySize.getCid());
+            commoditySize.setCoid(commodityColor.getCoid());
+            commoditySize.setLockStock(0);
+            commoditySize.setCreateTime(nowDate);
+            baseDao.save(commoditySize, null);
+        }
+    }
+
+    @Override
     public void deleteSizeIn(int sid){
         CommoditySize commoditySize = getCommoditySize(sid);
         baseDao.delete(commoditySize);
@@ -280,6 +316,26 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         commodityInfo.setNewly(newly);
         baseDao.save(commodityInfo, cid);
+    }
+
+    @Override
+    public Map<String, Object> renderCommodityDetailIn(int cid){
+        Map<String, Object> data = new HashMap<>(6, 1);
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        Integer groupId = commodityInfo.getGroupId();
+        data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
+        data.put("productSizeList", getCommoditySizeList(cid));
+        data.put("coverImg", resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+        data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+        if(groupId != null) {
+            data.put("groupCommodityColorList", getCommodityColorByGroupId(groupId));
+        }
+        data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
+        return data;
+    }
+
+    private List<Map<String, Object>> getCommodityColorByGroupId(int groupId){
+        return baseDao.queryBySql("SELECT cc.* FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
     }
 
 }

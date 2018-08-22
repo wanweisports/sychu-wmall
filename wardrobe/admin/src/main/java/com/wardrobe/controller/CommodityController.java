@@ -4,6 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.controller.annotation.CommodityResolver;
 import com.wardrobe.platform.service.ICommodityService;
@@ -59,6 +60,20 @@ public class CommodityController extends BaseController {
     @RequestMapping("updateNewly")
     public ResponseBean updateNewly(int cid, String newly){
         commodityService.updateCommodityNewlyIn(cid, newly);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("updateSize")
+    public ResponseBean updateSize(CommoditySize commoditySize){
+        commodityService.updateSizeIn(commoditySize);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("delSize")
+    public ResponseBean deleteSize(int sid){
+        commodityService.deleteSizeIn(sid);
         return new ResponseBean(true);
     }
 

@@ -57,6 +57,7 @@
                             <iframe name="product_form_result" id="product_form_result" style="position: absolute; left: -9999px;"></iframe>
                             <form id="product_form" method="post" class="form-horizontal" action="/admin/products/saveAdd"
                                   enctype="multipart/form-data" novalidat target="product_form_result">
+                                <input type="hidden" name="groupId" value="${groupId}" />
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称
@@ -139,11 +140,11 @@
                                                data-val="true" data-val-required="商品原价不能为空" autocomplete="off">
                                         <div data-valmsg-for="price" data-valmsg-replace="true"></div>
                                     </div>
-                                    <%--<div class="col-md-4">
+                                    <div class="col-md-4">
                                         <input type="text" class="form-control" id="p_couPrice" placeholder="请输入商品优惠价格" name="couPrice"
                                                data-val="true" data-val-required="商品优惠价格不能为空" autocomplete="off">
                                         <div data-valmsg-for="couPrice" data-valmsg-replace="true"></div>
-                                    </div>--%>
+                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label">

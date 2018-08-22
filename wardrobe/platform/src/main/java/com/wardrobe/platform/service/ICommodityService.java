@@ -3,6 +3,7 @@ package com.wardrobe.platform.service;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
+import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.view.CommodityInputView;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -26,6 +27,8 @@ public interface ICommodityService {
 
     void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
 
+    void updateSizeIn(CommoditySize commoditySize);
+
     void deleteSizeIn(int sid);
 
     void updateCommodityStatusIn(int cid, String status);
@@ -33,5 +36,7 @@ public interface ICommodityService {
     void updateCommodityHotIn(int cid, String hot);
 
     void updateCommodityNewlyIn(int cid, String newly);
+
+    Map<String, Object> renderCommodityDetailIn(int cid);
 
 }

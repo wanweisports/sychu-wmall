@@ -12,6 +12,7 @@ public class CommodityInputView extends BaseInputView {
     private String hot;
     private String commName;
     private String status;
+    private Integer groupId;
 
     public String getCategory() {
         return category;
@@ -68,4 +69,13 @@ public class CommodityInputView extends BaseInputView {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
 }

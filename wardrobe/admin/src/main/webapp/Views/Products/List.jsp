@@ -36,6 +36,7 @@
                         </div>
                         <div class="card-block">
                             <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list"<%-- novalidate onsubmit="return false;"--%>>
+                                <input type="hidden" name="groupId" value="${groupId}" />
                                 <div class="form-group row">
                                     <div class="col-md-2">
                                         <input type="text" name="commName" class="form-control" placeholder="商品名称" value="${commName}">
@@ -71,7 +72,6 @@
                                     <%--<th>优惠价格</th>--%>
                                     <th>已售数量</th>
                                     <th>商品状态</th>
-                                    <th>操作</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -80,7 +80,7 @@
                                 <tr data-id="">
                                     <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                     <td>
-                                        <a href="/admin/products/detail?productId=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
+                                        <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
                                     </td>
                                     <td>${c.styleName}</td>
                                     <td>${c.materialName}</td>
@@ -97,6 +97,12 @@
                                             <a href="javascript:;" class="btn btn-sm btn-danger js-status-down" title="下架" data-id="${c.cid}">
                                                 <i class="fa fa-level-down"></i> 下架
                                             </a>
+                                        </c:if>
+                                        <c:if test="${c.status!='1'}">
+                                            <a href="javascript:;" class="btn btn-sm btn-primary js-status-top" title="上架" data-id="${c.cid}">
+                                                <i class="fa fa-level-up"></i> 上架
+                                            </a>
+                                        </c:if>
                                             <c:if test="${c.hot == '1'}">
                                                 <a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">
                                                     <i class="fa fa-remove"></i> 取消热门
@@ -117,12 +123,6 @@
                                                     <i class="fa fa-bolt"></i> 最新
                                                 </a>
                                             </c:if>
-                                        </c:if>
-                                        <c:if test="${c.status!='1'}">
-                                            <a href="javascript:;" class="btn btn-sm btn-primary js-status-top" title="上架" data-id="${c.cid}">
-                                                <i class="fa fa-level-up"></i> 上架
-                                            </a>
-                                        </c:if>
                                     </td>
                                 </tr>
                                 </c:forEach>

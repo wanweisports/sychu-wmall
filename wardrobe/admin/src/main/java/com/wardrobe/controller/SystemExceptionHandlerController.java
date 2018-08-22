@@ -18,6 +18,7 @@ import java.util.Date;
 @ControllerAdvice
 public class SystemExceptionHandlerController {
 
+    @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseBean exceptionHandler(Exception e, HttpServletRequest request)throws Exception{
         System.out.println(DateUtil.formatDate(new Date()) + "【错误日志】：" + e.getMessage());

@@ -93,9 +93,8 @@ public class ProductsController extends BaseController {
 
     @Desc("商品管理详情")
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public String renderProductsDetail(Integer productId, Model model) {
-        model.addAttribute("product", new CommodityInfo());
-
+    public String renderProductsDetail(int cid, Model model) {
+        model.addAllAttributes(commodityService.renderCommodityDetailIn(cid));
         return "/Products/Detail";
     }
 
@@ -120,6 +119,7 @@ public class ProductsController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String renderProductsAdd(Integer groupId, Model model) {
         model.addAllAttributes(commodityService.renderProductsAddIn(null));
+        model.addAttribute("groupId", groupId);
         return "Products/Add";
     }
 
