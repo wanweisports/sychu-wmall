@@ -19,7 +19,7 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/students/edit.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/members/rechargeSettings.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -33,35 +33,35 @@
                             <small>Balance Settings</small>
                         </div>
                         <div class="card-block">
-                            <form id="balance_form" method="post" class="form-horizontal row" action="/admin/members/recharge/addRecharge" <%--novalidate onsubmit="return false;"--%>>
+                            <form id="balance_settings_form" method="post" class="form-horizontal row" novalidate onsubmit="return false;">
                                 <div class="col-md-3">
                                     <div class="form-group row">
-                                        <label class="col-md-4 form-control-label" for="p_commName">
+                                        <label class="col-md-4 form-control-label" for="bs_balance">
                                             <span class="text-danger">*</span> 充值金额
                                         </label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" id="p_commName" placeholder="请输入充值金额" name="dictValue"
-                                                   data-val="true" data-val-required="充值金额不能为空" >
-                                            <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
+                                            <input type="text" class="form-control" id="bs_balance" placeholder="请输入充值金额" name="dictValue"
+                                                   data-val="true" data-val-required="充值金额不能为空" autocomplete="off">
+                                            <div data-valmsg-for="dictValue" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group row">
-                                        <label class="col-md-4 form-control-label" for="stu_mobile">
+                                        <label class="col-md-4 form-control-label" for="bs_balance_addi">
                                             <span class="text-danger">*</span> 赠送金额
                                         </label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" id="stu_mobile" placeholder="请输入赠送金额" name="dictAdditional"
-                                                   data-val="true" data-val-required="赠送金额不能为空">
-                                            <div data-valmsg-for="mobile" data-valmsg-replace="true"></div>
+                                            <input type="text" class="form-control" id="bs_balance_addi" placeholder="请输入赠送金额" name="dictAdditional"
+                                                   data-val="true" data-val-required="赠送金额不能为空" autocomplete="off">
+                                            <div data-valmsg-for="dictAdditional" data-valmsg-replace="true"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary" id="bs_settings">
                                                 <i class="fa fa-check"></i> 设 定
                                             </button>
                                         </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="card-footer"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm user-list">
+                            <table class="table table-striped table-sm balance-list">
                                 <thead>
                                 <tr>
                                     <th>##</th>
@@ -89,7 +89,7 @@
                                         <td>￥${dict.dictAdditional}</td>
                                         <td>${dict.createTime}</td>
                                         <td>
-                                            <a href="/admin/members/recharge/deleteRecharge?dictId=${dict.dictId}" class="btn btn-sm btn-danger user-refresh" title="删除">
+                                            <a href="javascript:;" class="btn btn-sm btn-danger balance-delete" title="删除" data-id="${dict.dictId}">
                                                 <i class="fa fa-remove"></i> 删除
                                             </a>
                                         </td>
