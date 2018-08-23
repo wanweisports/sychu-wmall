@@ -54,7 +54,7 @@
             var $td_stock = $tr.find("td").eq(2).find("input");
 
             var sid = $tr.data('id');
-            $.post("/commodity/updateSize", {size: $td_size.val(), stock: $td_stock.val(), cid: ${product.cid}, sid: sid}, function (res) {
+            $.post("/commodity/updateSize", {size: $td_size.val(), stock: $td_stock.val(), cid: $("#cid").val(), sid: sid}, function (res) {
                 if(res.code == 1){
                     window.location.reload();
                 }else{
@@ -200,6 +200,7 @@
             <option value="${s.dictValue}">${s.dictValue}</option>
         </c:forEach>
     </select>
+    <input type="hidden" id="cid" value="${product.cid}" />
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
