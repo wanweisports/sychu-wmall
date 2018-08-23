@@ -18,7 +18,7 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/students/list.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/members/transactionsLog.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">

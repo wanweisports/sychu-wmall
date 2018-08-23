@@ -95,19 +95,22 @@ public class MembersController extends BaseController {
     }
 
     @Desc("添加充值")
+    @ResponseBody
     @RequestMapping(value = "/recharge/addRecharge")
-    public String addRecharge(SysDict sysDict){
+    public ResponseBean addRecharge(SysDict sysDict){
         sysDict.setDictName(IDBConstant.RECHARGE_TYPE);
         sysDict.setDictKey(StrUtil.EMPTY);
         dictService.addDict(sysDict);
-        return redirect("/admin/members/recharge/settings");
+
+        return new ResponseBean(true);
     }
 
     @Desc("删除充值")
+    @ResponseBody
     @RequestMapping(value = "/recharge/deleteRecharge")
-    public String deleteRecharge(int dictId){
+    public ResponseBean deleteRecharge(int dictId){
         dictService.deleteDict(dictId);
-        return redirect("/admin/members/recharge/settings");
+        return new ResponseBean(true);
     }
 
 }

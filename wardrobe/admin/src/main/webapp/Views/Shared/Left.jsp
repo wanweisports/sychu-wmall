@@ -112,18 +112,18 @@
                     <i class="icon-user"></i> 客户管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">active</c:if>" href="/admin/members/list">
+                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'list' || param.subMenu == 'detail')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'list' || param.subMenu == 'detail')}">active</c:if>" href="/admin/members/list">
                             <i class="icon-arrow-right"></i> 会员列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'balance'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'balance'}">active</c:if>" href="/admin/members/recharge/settings">
+                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">active</c:if>" href="/admin/members/recharge/settings">
                             <i class="icon-arrow-right"></i> 充值金额设置
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'transactions'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'transactions'}">active</c:if>" href="/admin/members/transactions/log">
+                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'transactions')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'transactions')}">active</c:if>" href="/admin/members/transactions/log">
                             <i class="icon-arrow-right"></i> 交易记录
                         </a>
                     </li>
