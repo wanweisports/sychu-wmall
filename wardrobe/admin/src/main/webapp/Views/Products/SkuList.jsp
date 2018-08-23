@@ -35,21 +35,23 @@
                             <small>Sku Log</small>
                         </div>
                         <div class="card-block">
-                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/sku/list" novalidate onsubmit="return false;">
+                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/sku/list" <%--novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <select class="form-control" name="skuType">
-                                            <option>全部类型</option>
-                                            <option>商品入库</option>
-                                            <option>商品出库</option>
-                                            <option>商品销售</option>
+                                        <select class="form-control" name="type">
+                                            <option value="">全部类型</option>
+                                            <c:forEach var="d" items="${types}">
+                                                <option value="${d.dictKey}" <c:if test="${d.dictKey == type}">selected</c:if>>${d.dictValue}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="开始时间">
+                                        <!--年-月-日 小时:分钟:秒-->
+                                        <input type="text" name="startTime" class="form-control" placeholder="开始时间" value="${startTime}">
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="结束时间">
+                                        <!--年-月-日 小时:分钟:秒-->
+                                        <input type="text" name="endTime" class="form-control" placeholder="结束时间" value="${endTime}">
                                     </div>
                                     <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary products-query-btn">
@@ -74,39 +76,24 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <c:forEach var="c" items="${page.list}">
                                 <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
+                                    <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
                                     <td>
-                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
+                                        <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
-                                    <td>颜色：红色，尺码：XL</td>
-                                    <td>商品入库</td>
-                                    <td class="text-success">+100</td>
-                                    <td>张思思：入库</td>
-                                    <td>2018-12-12 11:11:11</td>
+                                    <td>颜色：${c.colorName}，尺码：${c.size}</td>
+                                    <td>${c.typeName}</td>
+                                    <c:if test="${c.type=='10' || c.type=='30'}">
+                                        <td class="text-success">+${c.num}</td>
+                                    </c:if>
+                                    <c:if test="${c.type=='20'}">
+                                        <td class="text-danger">-${c.num}</td>
+                                    </c:if>
+                                    <td>${c.operatorId}：${c.remark}</td>
+                                    <td>${c.createTime}</td>
                                 </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
-                                    </td>
-                                    <td>颜色：红色，尺码：XL</td>
-                                    <td>商品出库</td>
-                                    <td class="text-danger">-100</td>
-                                    <td>张思思：商品破损，导致损耗数量</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
-                                <tr data-id="">
-                                    <td><img src="/Content/images/avatars/1.jpg" alt="商品名称" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/products/detail?productId=1" class="btn btn-sm btn-link" title="商品名称">骆驼女士优雅风衣</a>
-                                    </td>
-                                    <td>颜色：红色，尺码：XL</td>
-                                    <td>商品销售</td>
-                                    <td class="text-success">-100</td>
-                                    <td>张思思：销售</td>
-                                    <td>2018-12-12 11:11:11</td>
-                                </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                             <div>

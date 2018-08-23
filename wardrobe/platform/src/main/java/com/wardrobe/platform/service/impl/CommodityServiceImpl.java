@@ -4,10 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
-import com.wardrobe.common.po.CommodityColor;
-import com.wardrobe.common.po.CommodityInfo;
-import com.wardrobe.common.po.CommoditySize;
-import com.wardrobe.common.po.SysResources;
+import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.FileUtil;
 import com.wardrobe.common.util.JsonUtils;
@@ -216,6 +213,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
                 commoditySize.setCid(commodityInfo.getCid());
                 commoditySize.setCoid(commodityColor.getCoid());
                 baseDao.save(commoditySize, null);
+
+                //保存库存留痕
+                this.saveStock(new CommodityStock(commoditySize.getSid(), IDBConstant.COMM_STOCK_TYPE_ADD, commoditySize.getStock(), "入库", 0));
             }));
 
             cid = commodityInfo.getCid();
@@ -336,6 +336,52 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     private List<Map<String, Object>> getCommodityColorByGroupId(int groupId){
         return baseDao.queryBySql("SELECT cc.* FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
+    }
+
+    @Override
+    public void saveStock(CommodityStock commodityStock){
+        CommoditySize commoditySize = getCommoditySize(commodityStock.getSid());
+        if(IDBConstant.COMM_STOCK_TYPE_SUB.equals(commodityStock.getType())) {
+            commoditySize.setStock(commoditySize.getStock() - commodityStock.getNum());
+            if (commoditySize.getStock() < 0) throw new MessageException("库存少于0，不能操作！");
+        }else{
+            commoditySize.setStock(commoditySize.getStock() + commodityStock.getNum());
+        }
+        baseDao.save(commoditySize, commoditySize.getSid());
+
+        baseDao.save(commodityStock, null);
+    }
+
+    @Override
+    public PageBean getStockListIn(CommodityInputView commodityInputView){
+        PageBean pageBean = getStocks(commodityInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach(commodity -> {
+            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
+            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
+            commodity.put("typeName", dictService.getDict(IDBConstant.COMM_STOCK_TYPE, StrUtil.objToStr(commodity.get("type"))).getDictValue());
+        });
+        return pageBean;
+    }
+
+    private PageBean getStocks(CommodityInputView commodityInputView){
+        String type = commodityInputView.getType();
+        String startTime = commodityInputView.getStartTime();
+        String endTime = commodityInputView.getEndTime();
+
+        StringBuilder headSql = new StringBuilder("SELECT ct.*, cs.size, cc.colorName, ci.commName, ci.cid");
+        StringBuilder bodySql = new StringBuilder(" FROM commodity_stock ct, commodity_size cs, commodity_color cc, commodity_info ci");
+        StringBuilder whereSql = new StringBuilder(" WHERE ct.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
+        if(StrUtil.isNotBlank(type)){
+            whereSql.append(" AND ct.type = :type");
+        }
+        if(StrUtil.isNotBlank(startTime)){
+            whereSql.append(" AND ct.createTime >= :startTime");
+        }
+        if(StrUtil.isNotBlank(endTime)){
+            whereSql.append(" AND ct.createTime <= :endTime");
+        }
+        return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 
 }

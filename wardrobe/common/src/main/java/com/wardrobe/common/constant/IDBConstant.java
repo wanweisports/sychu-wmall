@@ -41,4 +41,8 @@ public interface IDBConstant {
 
     String COMM_STATUS = "COMM_STATUS"; //商品状态
 
+    String COMM_STOCK_TYPE = "COMM_STOCK_TYPE"; //商品库存变更类型
+    String COMM_STOCK_TYPE_ADD = "10"; //商品库存增加
+    String COMM_STOCK_TYPE_SUB = "20"; //商品库存减少
+
 }

@@ -22,10 +22,14 @@
     <script type="text/javascript" src="Content/lib/jquery.min.js"></script>
     <script type="text/javascript">
         function deleteSize(obj){
+            var $obj = $(obj);
+            var $tr = $obj.parent().parent();
+            var sid = $tr.data('id');
+            if(!sid){
+                $tr.remove();
+                return;
+            }
             if(window.confirm('删除后不可恢复，确认删除吗？')) {
-                var $obj = $(obj);
-                var $tr = $obj.parent().parent();
-                var sid = $tr.data('id');
                 $.post("/commodity/delSize", {sid: sid}, function (res) {
                     if (res.code == 1) {
                         window.location.reload();
@@ -36,31 +40,27 @@
             }
         }
 
-        function showEdit(obj){
-            var $obj = $(obj);
-            $obj.hide().next().show();
-            var $tr = $obj.parent().parent();
-            var $td_size = $tr.find("td").eq(1);
-            $td_size.html($('#sizeSed').clone().show().val($td_size.html()));
+        function showKC(obj, add){
+            $("#stock_div").show();
 
-            var $td_stock = $tr.find("td").eq(2);
-            $td_stock.html("<input class='form-control' type='text' name='size' value='"+$td_stock.html()+"' />");
+            var $obj = $(obj);
+            var $tr = $obj.parent().parent();
+            var sid = $tr.data('id');
+
+            $("#tip").html(add ? '增加库存' : "减少库存");
+            $("#sid").val(sid);
+            $("#type").val(add ? '10' : '20');
         }
 
-        function editSize(obj){
-            var $obj = $(obj);
-            var $tr = $obj.parent().parent();
-            var $td_size = $tr.find("td").eq(1).find("select");
-            var $td_stock = $tr.find("td").eq(2).find("input");
-
-            var sid = $tr.data('id');
-            $.post("/commodity/updateSize", {size: $td_size.val(), stock: $td_stock.val(), cid: $("#cid").val(), sid: sid}, function (res) {
-                if(res.code == 1){
-                    window.location.reload();
-                }else{
+        function saveStock(){
+            if(window.confirm("确认保存吗？")){
+                $.post("/admin/products/saveStock", $("#kcForm").serialize(), function (res) {
                     alert(res.message);
-                }
-            });
+                    if(res.code == 1){
+                        window.location.reload();
+                    }
+                });
+            }
         }
 
         function addSizeTpl(){
@@ -167,11 +167,11 @@
                                         <td>${s.size}</td>
                                         <td>${s.stock}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showEdit(this)">
-                                                <i class="fa fa-edit"></i> 编辑
+                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showKC(this, true)">
+                                                <i class="fa fa-edit"></i> 增加库存
                                             </a>
-                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" style="display: none" onclick="editSize(this)">
-                                                <i class="fa fa-check"></i> 保存
+                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showKC(this, false)">
+                                                <i class="fa fa-edit"></i> 减少库存
                                             </a>
                                             <a href="javascript:;" class="btn btn-sm btn-danger" onclick="deleteSize(this)">
                                                 <i class="fa fa-remove"></i> 删除
@@ -201,6 +201,22 @@
         </c:forEach>
     </select>
     <input type="hidden" id="cid" value="${product.cid}" />
+
+
+    <!---增减库存临时弹框-->
+    <div style="display: none;" id="stock_div">
+        <div id="tip"></div>
+        <form id="kcForm" method="post">
+            <input type="hidden" id="sid" name="sid" />
+            <input type="hidden" id="type" name="type" />
+            <input type="text" class="form-control" id="num" name="num" placeholder="库存数量" />
+            <textarea class="form-control" id="remark" name="remark" placeholder="请输入备注"></textarea>
+            <button type="button" class="btn btn-primary save-products" onclick="saveStock()">
+                <i class="fa fa-check"></i> 保 存
+            </button>
+        </form>
+    </div>
+
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">

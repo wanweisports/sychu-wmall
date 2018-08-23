@@ -4,6 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.po.CommoditySize;
+import com.wardrobe.common.po.CommodityStock;
 import com.wardrobe.common.view.CommodityInputView;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -38,5 +39,9 @@ public interface ICommodityService {
     void updateCommodityNewlyIn(int cid, String newly);
 
     Map<String, Object> renderCommodityDetailIn(int cid);
+
+    void saveStock(CommodityStock commodityStock);
+
+    PageBean getStockListIn(CommodityInputView commodityInputView);
 
 }

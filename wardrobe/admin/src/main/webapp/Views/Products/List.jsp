@@ -78,9 +78,9 @@
                                 <tbody>
                                 <c:forEach var="c" items="${page.list}" varStatus="status">
                                 <tr data-id="">
-                                    <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
+                                    <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
                                     <td>
-                                        <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
+                                        <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
                                     <td>${c.styleName}</td>
                                     <td>${c.materialName}</td>

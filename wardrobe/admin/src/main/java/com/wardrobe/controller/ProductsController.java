@@ -5,10 +5,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.po.CommodityColor;
-import com.wardrobe.common.po.CommodityInfo;
-import com.wardrobe.common.po.CommoditySize;
-import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.controller.request.ProductRequest;
@@ -210,12 +207,21 @@ public class ProductsController extends BaseController {
         return new ResponseBean(true);
     }
 
-    @Desc("商品管理列表 -- 库存变更记录")
-    @RequestMapping(value = "/sku/list", method = RequestMethod.GET)
-    public ModelAndView renderProductsSkuList() {
-        ModelAndView modelAndView = new ModelAndView("/Products/SkuList");
+    @ResponseBody
+    @RequestMapping("saveStock")
+    public ResponseBean saveStock(CommodityStock commodityStock){
+        commodityService.saveStock(commodityStock);
+        return new ResponseBean(true);
+    }
 
-        return modelAndView;
+    @Desc("商品管理列表 -- 库存变更记录")
+    @RequestMapping(value = "/sku/list")
+    public String renderProductsSkuList(CommodityInputView commodityInputView, Model model) {
+        PageBean pageBean = commodityService.getStockListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/sku/list", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        model.addAttribute("types", dictService.getDicts(IDBConstant.COMM_STOCK_TYPE));
+        return "Products/SkuList";
     }
 
     @Desc("商品订单列表")
