@@ -28,7 +28,7 @@ public interface ICommodityService {
 
     void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
 
-    void updateSizeIn(CommoditySize commoditySize);
+    void addSizeIn(CommoditySize commoditySize);
 
     void deleteSizeIn(int sid);
 
@@ -40,7 +40,7 @@ public interface ICommodityService {
 
     Map<String, Object> renderCommodityDetailIn(int cid);
 
-    void saveStock(CommodityStock commodityStock);
+    void saveStock(CommodityStock commodityStock, boolean add);
 
     PageBean getStockListIn(CommodityInputView commodityInputView);
 

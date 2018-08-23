@@ -203,19 +203,23 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfo.setSeqNo(0);
             baseDao.save(commodityInfo, null);
 
-            commodityColor.setCid(commodityInfo.getCid());
+            int newCid = commodityInfo.getCid();
+            commodityInfo.setGroupId(newCid);
+            baseDao.save(commodityInfo, newCid);
+
+            commodityColor.setCid(newCid);
             commodityColor.setCreateTime(timestamp);
             baseDao.save(commodityColor, null);
 
             commodityColor.getCommoditySizes().stream().forEach((commoditySize -> {
                 commoditySize.setCreateTime(timestamp);
                 commoditySize.setLockStock(0);
-                commoditySize.setCid(commodityInfo.getCid());
+                commoditySize.setCid(newCid);
                 commoditySize.setCoid(commodityColor.getCoid());
                 baseDao.save(commoditySize, null);
 
                 //保存库存留痕
-                this.saveStock(new CommodityStock(commoditySize.getSid(), IDBConstant.COMM_STOCK_TYPE_ADD, commoditySize.getStock(), "入库", 0));
+                this.saveStock(new CommodityStock(commoditySize.getSid(), IDBConstant.COMM_STOCK_TYPE_ADD, commoditySize.getStock(), "入库", 0), false);
             }));
 
             cid = commodityInfo.getCid();
@@ -271,25 +275,19 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void updateSizeIn(CommoditySize commoditySize){
+    public void addSizeIn(CommoditySize commoditySize){
         if(StrUtil.isBlank(commoditySize.getSize())) throw new MessageException("请选择尺码!");
         if(commoditySize.getStock() == null) throw new MessageException("请输入库存!");
 
-        int sid = commoditySize.getSid();
         Timestamp nowDate = DateUtil.getNowDate();
-        if(sid > 0) {
-            CommoditySize commoditySizeDB = getCommoditySize(sid);
-            commoditySizeDB.setSize(commoditySize.getSize());
-            commoditySizeDB.setStock(commoditySize.getStock());
-            commoditySizeDB.setUpdateTime(nowDate);
-            baseDao.save(commoditySizeDB, sid);
-        }else{
-            CommodityColor commodityColor = getCommodityColorByCid(commoditySize.getCid());
-            commoditySize.setCoid(commodityColor.getCoid());
-            commoditySize.setLockStock(0);
-            commoditySize.setCreateTime(nowDate);
-            baseDao.save(commoditySize, null);
-        }
+        CommodityColor commodityColor = getCommodityColorByCid(commoditySize.getCid());
+        commoditySize.setCoid(commodityColor.getCoid());
+        commoditySize.setLockStock(0);
+        commoditySize.setCreateTime(nowDate);
+        baseDao.save(commoditySize, null);
+
+        //保存库存留痕
+        this.saveStock(new CommodityStock(commoditySize.getSid(), IDBConstant.COMM_STOCK_TYPE_ADD, commoditySize.getStock(), "入库", 0), false);
     }
 
     @Override
@@ -339,16 +337,17 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void saveStock(CommodityStock commodityStock){
+    public synchronized void saveStock(CommodityStock commodityStock, boolean add){
         CommoditySize commoditySize = getCommoditySize(commodityStock.getSid());
-        if(IDBConstant.COMM_STOCK_TYPE_SUB.equals(commodityStock.getType())) {
-            commoditySize.setStock(commoditySize.getStock() - commodityStock.getNum());
-            if (commoditySize.getStock() < 0) throw new MessageException("库存少于0，不能操作！");
-        }else{
-            commoditySize.setStock(commoditySize.getStock() + commodityStock.getNum());
+        if(add) {
+            if(IDBConstant.COMM_STOCK_TYPE_SUB.equals(commodityStock.getType())) {
+                commoditySize.setStock(commoditySize.getStock() - commodityStock.getNum());
+                if (commoditySize.getStock() < 0) throw new MessageException("库存少于0，不能操作！");
+            }else{
+                commoditySize.setStock(commoditySize.getStock() + commodityStock.getNum());
+            }
+            baseDao.save(commoditySize, commoditySize.getSid());
         }
-        baseDao.save(commoditySize, commoditySize.getSid());
-
         baseDao.save(commodityStock, null);
     }
 

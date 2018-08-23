@@ -326,7 +326,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 
         }
         $form.attr("working", "working");
 
-        $.post("/admin/products/saveEdit", conditions, function (res) {
+        $.post("/commodity/addSize", conditions, function (res) {
             $form.attr("working", "");
 
             if (res.code == 1) {

@@ -64,9 +64,9 @@ public class CommodityController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("updateSize")
-    public ResponseBean updateSize(CommoditySize commoditySize){
-        commodityService.updateSizeIn(commoditySize);
+    @RequestMapping("addSize")
+    public ResponseBean addSize(CommoditySize commoditySize){
+        commodityService.addSizeIn(commoditySize);
         return new ResponseBean(true);
     }
 

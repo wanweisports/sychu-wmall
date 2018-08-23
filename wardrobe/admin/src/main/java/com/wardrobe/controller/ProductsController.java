@@ -210,7 +210,7 @@ public class ProductsController extends BaseController {
     @ResponseBody
     @RequestMapping("saveStock")
     public ResponseBean saveStock(CommodityStock commodityStock){
-        commodityService.saveStock(commodityStock);
+        commodityService.saveStock(commodityStock, true);
         return new ResponseBean(true);
     }
 
