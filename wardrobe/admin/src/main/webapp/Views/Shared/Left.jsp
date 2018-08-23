@@ -33,14 +33,14 @@
                             <i class="icon-arrow-right"></i> 商品添加
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/products/settings">
-                            <i class="icon-arrow-right"></i> 商品标签设置
-                        </a>
-                    </li>
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">active</c:if>" href="/admin/products/sku/list">
                             <i class="icon-arrow-right"></i> 库存变更记录
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/products/settings">
+                            <i class="icon-arrow-right"></i> 商品标签设置
                         </a>
                     </li>
                 </ul>

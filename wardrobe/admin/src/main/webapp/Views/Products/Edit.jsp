@@ -91,7 +91,7 @@
                                                 <option value="${c.dictId}">${c.dictValue}</option>
                                             </c:forEach>
                                         </select>
-                                        <input type="text" class="form-control" id="p_category" placeholder="请输入商品品类" name="category"
+                                        <input type="text" class="form-control" id="p_category" placeholder="请输入商品品类" name="category" value="${commodity.category}"
                                                data-val="true" data-val-required="请至少选择一种商品品类" style="position: absolute; left: -9999px">
                                         <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                                     </div>
@@ -125,7 +125,7 @@
                                             <i class="fa fa-plus"></i>
                                         </button>
                                         <div data-valmsg-for="style" data-valmsg-replace="true"></div>
-                                        <input type="text" class="form-control" id="p_style" placeholder="请选择商品风格" name="style"
+                                        <input type="text" class="form-control" id="p_style" placeholder="请选择商品风格" name="style" value="${commodity.style}"
                                                data-val="true" data-val-required="请至少选择一种商品风格" style="position: absolute; left: -9999px">
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                             <i class="fa fa-plus"></i>
                                         </button>
                                         <div data-valmsg-for="material" data-valmsg-replace="true"></div>
-                                        <input type="text" class="form-control" id="p_material" placeholder="请选择商品材质" name="material"
+                                        <input type="text" class="form-control" id="p_material" placeholder="请选择商品材质" name="material" value="${commodity.material}"
                                                data-val="true" data-val-required="请至少选择一种商品材质" style="position: absolute; left: -9999px">
                                     </div>
                                 </div>

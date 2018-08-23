@@ -31,7 +31,7 @@
                         </label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="pc_category" placeholder="请输入商品品类" name="dictValue"
-                                   data-val="true" data-val-required="商品品类不能为空"
+                                   data-val="true" data-val-required="商品品类不能为空" autocomplete="off"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品品类必须包含 2~5 个字符">
                             <div data-valmsg-for="category" data-valmsg-replace="true"></div>
                         </div>
@@ -61,7 +61,7 @@
                         </label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="ps_style" placeholder="请输入商品风格" name="dictValue"
-                                   data-val="true" data-val-required="商品风格不能为空"
+                                   data-val="true" data-val-required="商品风格不能为空" autocomplete="off"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品风格必须包含 2~5 个字符">
                             <div data-valmsg-for="style" data-valmsg-replace="true"></div>
                         </div>
@@ -91,7 +91,7 @@
                         </label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="pm_material" placeholder="请输入商品风格" name="dictValue"
-                                   data-val="true" data-val-required="商品材质不能为空"
+                                   data-val="true" data-val-required="商品材质不能为空" autocomplete="off"
                                    data-val-length-max="5" data-val-length-min="2" data-val-length="商品材质必须包含 2~5 个字符">
                             <div data-valmsg-for="style" data-valmsg-replace="true"></div>
                         </div>

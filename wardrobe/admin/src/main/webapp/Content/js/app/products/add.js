@@ -55,8 +55,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
     var $materialSelected = $("#p_material");
 
     var $sizeList = $(".size-list");
-    var $sizeAdd = $(".size-add");
-    var $sizeRemove = $(".size-remove");
 
     function __setProductSettingsList(type) {
         $.getJSON("/admin/products/getProductSettingsList", {}, function (res) {
@@ -72,19 +70,19 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
                         categoryOptHtml += '<option value="' + categoryData[i].dictId + '">' + categoryData[i].dictValue + '</option>'
                     }
                     $categorySelect.html(categoryOptHtml);
-                    $categoryAdd.before('<button type="button" class="btn btn-success btn-close category-item" data-id="' + categoryData[categoryData.length - 1].dictId + '">' +
+                    $categoryAdd.before('<button type="button" class="btn btn-success btn-close category-item mr-2" data-id="' + categoryData[categoryData.length - 1].dictId + '">' +
                         categoryData[categoryData.length - 1].dictValue + '<i class="fa fa-remove"></i></button>');
                 }
 
                 if (type === "COMM_STYLE") {
                     var styleData = data.COMM_STYLE;
-                    $styleAdd.before('<button type="button" class="btn btn-success style-item" data-id="' + styleData[styleData.length - 1].dictId + '">' +
+                    $styleAdd.before('<button type="button" class="btn btn-success style-item mr-2" data-id="' + styleData[styleData.length - 1].dictId + '">' +
                         styleData[styleData.length - 1].dictValue + '</button>');
                 }
 
                 if (type === "COMM_MATERIAL") {
                     var materialData = data.COMM_MATERIAL;
-                    $materialAdd.before('<button type="button" class="btn btn-success style-item" data-id="' + materialData[materialData.length - 1].dictId + '">' +
+                    $materialAdd.before('<button type="button" class="btn btn-success material-item mr-2" data-id="' + materialData[materialData.length - 1].dictId + '">' +
                         materialData[materialData.length - 1].dictValue + '</button>');
                 }
             }
@@ -92,20 +90,8 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
     }
 
     /* category *************************************************/
-    new $.ProductsLabelSettings({
+    var $category = new $.ProductsLabelSettings({
         type: "COMM_CATEGORY",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品品类保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            __setProductSettingsList("COMM_CATEGORY");
-        },
         load: function (opts) {
             opts.confirmBtn.on("click", function (e) {
                 e.preventDefault();
@@ -121,11 +107,19 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
                 $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
                     $form.attr("submitting", "");
+                    $category.hide();
 
                     if (res.code == 1) {
-                        opts.success();
+                        __setProductSettingsList("COMM_CATEGORY");
+                        __setCategorySelected();
                     } else {
-                        opts.failure();
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品品类保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
                     }
                 });
             });
@@ -140,7 +134,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $categorySelected.val(values.join(","));
+        $categorySelected.val("," + values.join(",") + ",");
     }
 
     $categorySelect.on("change", function (e) {
@@ -167,20 +161,8 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
     });
 
     /* style *************************************************/
-    new $.ProductsLabelSettings({
+    var $style = new $.ProductsLabelSettings({
         type: "COMM_STYLE",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品风格保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            __setProductSettingsList("COMM_STYLE");
-        },
         load: function (opts) {
             opts.confirmBtn.on("click", function (e) {
                 e.preventDefault();
@@ -196,11 +178,19 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
                 $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
                     $form.attr("submitting", "");
+                    $style.hide();
 
                     if (res.code == 1) {
-                        opts.success();
+                        __setProductSettingsList("COMM_STYLE");
+                        __setStyleSelected();
                     } else {
-                        opts.failure();
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品风格保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
                     }
                 });
             });
@@ -215,7 +205,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $styleSelected.val(values.join(","));
+        $styleSelected.val("," + values.join(",") + ",");
     }
 
     $styleSelectList.on("click", ".style-item", function (e) {
@@ -233,20 +223,8 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
     });
 
     /* material *************************************************/
-    new $.ProductsLabelSettings({
+    var $material = new $.ProductsLabelSettings({
         type: "COMM_MATERIAL",
-        failure: function () {
-            jqueryAlert({
-                'icon'      : '/Content/images/icon-error.png',
-                'content'   : "商品材质保存失败, 请稍后重试",
-                'closeTime' : 2000,
-                'modal'        : true,
-                'isModalClose' : true
-            });
-        },
-        success: function () {
-            __setProductSettingsList("COMM_STYLE");
-        },
         load: function (opts) {
             opts.confirmBtn.on("click", function (e) {
                 e.preventDefault();
@@ -262,11 +240,19 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
                 $.post('/admin/products/' + opts.type + '/save', conditions, function (res) {
                     $form.attr("submitting", "");
+                    $material.hide();
 
                     if (res.code == 1) {
-                        opts.success();
+                        __setProductSettingsList("COMM_MATERIAL");
+                        __setMaterialSelected();
                     } else {
-                        opts.failure();
+                        jqueryAlert({
+                            'icon'      : '/Content/images/icon-error.png',
+                            'content'   : "商品材质保存失败, 请稍后重试",
+                            'closeTime' : 2000,
+                            'modal'        : true,
+                            'isModalClose' : true
+                        });
                     }
                 });
             });
@@ -281,7 +267,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $materialSelected.val(values.join(","));
+        $materialSelected.val("," + values.join(",") + ",");
     }
 
     $materialSelectList.on("click", ".material-item", function (e) {

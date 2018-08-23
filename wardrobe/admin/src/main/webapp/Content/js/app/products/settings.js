@@ -47,9 +47,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
                     $form.attr("submitting", "");
 
                     if (res.code == 1) {
-                        window.setTimeout(function () {
-                            window.location.reload();
-                        }, 1500);
+                        window.location.reload();
                     } else {
                         jqueryAlert({
                             'icon'      : '/Content/images/icon-error.png',
@@ -69,20 +67,39 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
         var $this = $(this);
 
-        $category.delete({dictId: $this.parent().attr("data-id")}, function (status) {
-            if (status) {
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
-            }
-            else {
-                jqueryAlert({
-                    'icon'      : '/Content/images/icon-error.png',
-                    'content'   : "商品品类删除失败, 请稍后重试",
-                    'closeTime' : 2000,
-                    'modal'        : true,
-                    'isModalClose' : true
-                });
+        var $dialog = jqueryAlert({
+            'title'   : '提示',
+            'content' : '您确定要删除此商品品类？',
+            'modal'   : true,
+            'buttons' :{
+                '确定' : function () {
+                    $dialog.close();
+
+                    if ($this.attr("working") == "working") {
+                        return false;
+                    }
+                    $this.attr("working", "working");
+
+                    $category.delete({dictId: $this.parent().attr("data-id")}, function (status) {
+                        $this.attr("working", "");
+
+                        if (status) {
+                            window.location.reload();
+                        }
+                        else {
+                            jqueryAlert({
+                                'icon'      : '/Content/images/icon-error.png',
+                                'content'   : "商品品类删除失败, 请稍后重试",
+                                'closeTime' : 2000,
+                                'modal'        : true,
+                                'isModalClose' : true
+                            });
+                        }
+                    });
+                },
+                '取消' : function(){
+                    $dialog.close();
+                }
             }
         });
     });
@@ -107,9 +124,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
                     $form.attr("submitting", "");
 
                     if (res.code == 1) {
-                        window.setTimeout(function () {
-                            window.location.reload();
-                        }, 1500);
+                        window.location.reload();
                     } else {
                         jqueryAlert({
                             'icon'      : '/Content/images/icon-error.png',
@@ -129,20 +144,39 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
         var $this = $(this);
 
-        $style.delete({dictId: $this.parent().attr("data-id")}, function (status) {
-            if (status) {
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
-            }
-            else {
-                jqueryAlert({
-                    'icon'      : '/Content/images/icon-error.png',
-                    'content'   : "商品风格删除失败, 请稍后重试",
-                    'closeTime' : 2000,
-                    'modal'        : true,
-                    'isModalClose' : true
-                });
+        var $dialog = jqueryAlert({
+            'title'   : '提示',
+            'content' : '您确定要删除此商品风格？',
+            'modal'   : true,
+            'buttons' :{
+                '确定' : function () {
+                    $dialog.close();
+
+                    if ($this.attr("working") == "working") {
+                        return false;
+                    }
+                    $this.attr("working", "working");
+
+                    $style.delete({dictId: $this.parent().attr("data-id")}, function (status) {
+                        $this.attr("working", "");
+
+                        if (status) {
+                            window.location.reload();
+                        }
+                        else {
+                            jqueryAlert({
+                                'icon'      : '/Content/images/icon-error.png',
+                                'content'   : "商品风格删除失败, 请稍后重试",
+                                'closeTime' : 2000,
+                                'modal'        : true,
+                                'isModalClose' : true
+                            });
+                        }
+                    });
+                },
+                '取消' : function(){
+                    $dialog.close();
+                }
             }
         });
     });
@@ -167,9 +201,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
                     $form.attr("submitting", "");
 
                     if (res.code == 1) {
-                        window.setTimeout(function () {
-                            window.location.reload();
-                        }, 1500);
+                        window.location.reload();
                     } else {
                         jqueryAlert({
                             'icon'      : '/Content/images/icon-error.png',
@@ -189,34 +221,41 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'productsLabelSetti
 
         var $this = $(this);
 
-        $material.delete({dictId: $this.parent().attr("data-id")}, function (status) {
-            if (status) {
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
-            }
-            else {
-                jqueryAlert({
-                    'icon'      : '/Content/images/icon-error.png',
-                    'content'   : "商品材质删除失败, 请稍后重试",
-                    'closeTime' : 2000,
-                    'modal'        : true,
-                    'isModalClose' : true
-                });
+        var $dialog = jqueryAlert({
+            'title'   : '提示',
+            'content' : '您确定要删除此商品材质？',
+            'modal'   : true,
+            'buttons' :{
+                '确定' : function () {
+                    $dialog.close();
+
+                    if ($this.attr("working") == "working") {
+                        return false;
+                    }
+                    $this.attr("working", "working");
+
+                    $material.delete({dictId: $this.parent().attr("data-id")}, function (status) {
+                        $this.attr("working", "");
+
+                        if (status) {
+                            window.location.reload();
+                        }
+                        else {
+                            jqueryAlert({
+                                'icon'      : '/Content/images/icon-error.png',
+                                'content'   : "商品材质删除失败, 请稍后重试",
+                                'closeTime' : 2000,
+                                'modal'        : true,
+                                'isModalClose' : true
+                            });
+                        }
+                    });
+                },
+                '取消' : function(){
+                    $dialog.close();
+                }
             }
         });
     });
-
-    // $(".fa-remove").click(function () {
-    //     if(window.confirm("删除后不能恢复，确认删除吗？")) {
-    //         var dictId = $(this).parent().data('id');
-    //         $.post("/dict/delDict", {dictId: dictId}, function (res) {
-    //             alert(res.message);
-    //             if(res.code == 1){
-    //                 window.location.reload();
-    //             }
-    //         });
-    //     }
-    // });
 
 });

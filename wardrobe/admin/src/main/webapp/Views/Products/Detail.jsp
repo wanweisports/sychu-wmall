@@ -18,56 +18,7 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/products/list.js?v=${static_resource_version}"></script>
-    <script type="text/javascript" src="Content/lib/jquery.min.js"></script>
-    <script type="text/javascript">
-        function deleteSize(obj){
-            var $obj = $(obj);
-            var $tr = $obj.parent().parent();
-            var sid = $tr.data('id');
-            if(!sid){
-                $tr.remove();
-                return;
-            }
-            if(window.confirm('删除后不可恢复，确认删除吗？')) {
-                $.post("/commodity/delSize", {sid: sid}, function (res) {
-                    if (res.code == 1) {
-                        window.location.reload();
-                    } else {
-                        alert(res.message);
-                    }
-                });
-            }
-        }
-
-        function showKC(obj, add){
-            $("#stock_div").show();
-
-            var $obj = $(obj);
-            var $tr = $obj.parent().parent();
-            var sid = $tr.data('id');
-
-            $("#tip").html(add ? '增加库存' : "减少库存");
-            $("#sid").val(sid);
-            $("#type").val(add ? '10' : '20');
-        }
-
-        function saveStock(){
-            if(window.confirm("确认保存吗？")){
-                $.post("/admin/products/saveStock", $("#kcForm").serialize(), function (res) {
-                    alert(res.message);
-                    if(res.code == 1){
-                        window.location.reload();
-                    }
-                });
-            }
-        }
-
-        function addSizeTpl(){
-            var index = $("#tbody").find("tr").length+1;
-            $("#tbody").append('<tr><td>'+index+'</td><td></td><td></td><td><a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showEdit(this)"><i class="fa fa-edit"></i> 编辑</a><a href="javascript:;" class="btn btn-sm btn btn-primary" style="display: none" onclick="editSize(this)"><i class="fa fa-check"></i> 保存</a><a href="javascript:;" class="btn btn-sm btn-danger" onclick="deleteSize(this)"><i class="fa fa-remove"></i> 删除</a></td></tr>');
-        }
-    </script>
+            data-main="Content/js/app/products/detail.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -87,7 +38,10 @@
                                     <th>商品名称：</th>
                                     <td>${product.commName}</td>
                                     <th>商品标签：</th>
-                                    <td><c:if test="${product.hot=='1'}"><span class="badge badge-danger">热门</span></c:if><c:if test="${product.newly=='1'}"><span class="badge badge-danger">最新</span></c:if></td>
+                                    <td>
+                                        <c:if test="${product.hot=='1'}"><span class="badge badge-danger mr-1">热门</span></c:if>
+                                        <c:if test="${product.newly=='1'}"><span class="badge badge-danger mr-1">最新</span></c:if>
+                                    </td>
                                     <th>销售数量：</th>
                                     <td>
                                         <a href="/admin/products/sku/list?cid=${product.cid}">${product.saleCount}</a>
@@ -137,12 +91,46 @@
                             </a>
                             <c:if test="${product.groupId != null}">
                                 <a href="/admin/products/add?groupId=${product.groupId}" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> 添加同类商品
+                                </a>
                             </c:if>
                             <c:if test="${product.groupId == null}">
                                 <a href="/admin/products/add?groupId=${product.cid}" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> 添加同类商品
+                                </a>
                             </c:if>
-                                <i class="fa fa-plus"></i> 添加同类商品
-                            </a>
+
+                            <c:if test="${product.status=='1'}">
+                                <a href="javascript:;" class="btn btn-danger js-status-down" title="下架" data-id="${product.cid}">
+                                    <i class="fa fa-level-down"></i> 商品下架
+                                </a>
+                            </c:if>
+                            <c:if test="${product.status!='1'}">
+                                <a href="javascript:;" class="btn btn-primary js-status-top" title="上架" data-id="${product.cid}">
+                                    <i class="fa fa-level-up"></i> 商品上架
+                                </a>
+                            </c:if>
+
+                            <c:if test="${product.hot == '1'}">
+                                <a href="javascript:;" class="btn btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${product.cid}">
+                                    <i class="fa fa-remove"></i> 取消热门
+                                </a>
+                            </c:if>
+                            <c:if test="${product.hot != '1'}">
+                                <a href="javascript:;" class="btn btn-primary js-hot-top" title="添加到热门" data-id="${product.cid}">
+                                    <i class="fa fa-heart"></i> 设置热门
+                                </a>
+                            </c:if>
+                            <c:if test="${product.newly == '1'}">
+                                <a href="javascript:;" class="btn btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${product.cid}">
+                                    <i class="fa fa-remove"></i> 取消最新
+                                </a>
+                            </c:if>
+                            <c:if test="${product.newly != '1'}">
+                                <a href="javascript:;" class="btn btn-primary js-newly-top" title="添加到最新" data-id="${product.cid}">
+                                    <i class="fa fa-bolt"></i> 设置最新
+                                </a>
+                            </c:if>
                         </div>
                     </div>
                     <div class="card">
@@ -167,14 +155,14 @@
                                         <td>${s.size}</td>
                                         <td>${s.stock}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showKC(this, true)">
-                                                <i class="fa fa-edit"></i> 增加库存
+                                            <a href="#product_sku_dialog" class="btn btn-sm btn-primary sku-add" data-toggle="modal">
+                                                <i class="fa fa-plus"></i> 增加库存
                                             </a>
-                                            <a href="javascript:;" class="btn btn-sm btn btn-primary" onclick="showKC(this, false)">
-                                                <i class="fa fa-edit"></i> 减少库存
+                                            <a href="#product_sku_dialog" class="btn btn-sm btn-danger sku-minus" data-toggle="modal">
+                                                <i class="fa fa-minus"></i> 减少库存
                                             </a>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger" onclick="deleteSize(this)">
-                                                <i class="fa fa-remove"></i> 删除
+                                            <a href="javascript:;" class="btn btn-sm btn-danger sku-delete">
+                                                <i class="fa fa-remove"></i> 删除尺码
                                             </a>
                                         </td>
                                     </tr>
@@ -183,7 +171,7 @@
                             </table>
                         </div>
                         <div class="card-footer">
-                            <a href="javascript:;" class="btn btn-primary" onclick="addSizeTpl()">
+                            <a href="#product_size_dialog" class="btn btn-primary size-add" data-toggle="modal">
                                 <i class="fa fa-plus"></i> 增加尺码
                             </a>
                         </div>
@@ -193,28 +181,91 @@
             </div>
             <!--/.row-->
         </div>
-
     </div>
-    <select class="form-control" name="size" style="display: none" id="sizeSed">
-        <c:forEach var="s" items="${sizeList}">
-            <option value="${s.dictValue}">${s.dictValue}</option>
-        </c:forEach>
-    </select>
-    <input type="hidden" id="cid" value="${product.cid}" />
 
+    <div class="modal fade" id="product_size_dialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="product_size_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <input type="hidden" id="product_size_cid" name="cid" value="${product.cid}" />
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="product_size_size">
+                                <span class="text-danger">*</span> 商品尺码
+                            </label>
+                            <div class="col-md-8">
+                                <select class="form-control" name="size" id="product_size_size" data-val="true" data-val-required="请选择尺码大小">
+                                    <c:forEach var="s" items="${sizeList}">
+                                        <option value="${s.dictValue}">${s.dictValue}</option>
+                                    </c:forEach>
+                                </select>
+                                <div data-valmsg-for="size" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="product_size_stock">
+                                <span class="text-danger">*</span> 初始库存
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="product_size_stock" placeholder="请输入初始库存" name="stock"
+                                       data-val="true" data-val-required="初始库存不能为空" autocomplete="off">
+                                <div data-valmsg-for="stock" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        <i class="fa fa-remove"></i> 取消
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" id="product_size_save">
+                        <i class="fa fa-check"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!---增减库存临时弹框-->
-    <div style="display: none;" id="stock_div">
-        <div id="tip"></div>
-        <form id="kcForm" method="post">
-            <input type="hidden" id="sid" name="sid" />
-            <input type="hidden" id="type" name="type" />
-            <input type="text" class="form-control" id="num" name="num" placeholder="库存数量" />
-            <textarea class="form-control" id="remark" name="remark" placeholder="请输入备注"></textarea>
-            <button type="button" class="btn btn-primary save-products" onclick="saveStock()">
-                <i class="fa fa-check"></i> 保 存
-            </button>
-        </form>
+    <div class="modal fade" id="product_sku_dialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="alert alert-warning" id="product_sku_tip"></div>
+                    <form id="product_sku_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <input type="hidden" id="product_sku_sid" name="sid" />
+                        <input type="hidden" id="product_sku_type" name="type" />
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="ps_num">
+                                <span class="text-danger">*</span> 变更数量
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="ps_num" placeholder="请输入库存数量" name="num"
+                                       data-val="true" data-val-required="库存数量不能为空" autocomplete="off">
+                                <div data-valmsg-for="num" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="ps_remark">
+                                <span class="text-danger">*</span> 变更备注
+                            </label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="ps_remark" placeholder="请输入备注" name="remark"
+                                          data-val="true" data-val-required="备注不能为空" autocomplete="off"></textarea>
+                                <div data-valmsg-for="remark" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        <i class="fa fa-remove"></i> 取消
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" id="product_sku_save">
+                        <i class="fa fa-check"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </layout:override>

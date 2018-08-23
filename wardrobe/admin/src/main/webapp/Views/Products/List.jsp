@@ -103,26 +103,26 @@
                                                 <i class="fa fa-level-up"></i> 上架
                                             </a>
                                         </c:if>
-                                            <c:if test="${c.hot == '1'}">
-                                                <a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">
-                                                    <i class="fa fa-remove"></i> 取消热门
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${c.hot != '1'}">
-                                                <a href="javascript:;" class="btn btn-sm btn-primary js-hot-top" title="添加到热门" data-id="${c.cid}">
-                                                    <i class="fa fa-heart"></i> 热门
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${c.newly == '1'}">
-                                                <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">
-                                                    <i class="fa fa-remove"></i> 取消最新
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${c.newly != '1'}">
-                                                <a href="javascript:;" class="btn btn-sm btn-primary js-newly-top" title="添加到最新" data-id="${c.cid}">
-                                                    <i class="fa fa-bolt"></i> 最新
-                                                </a>
-                                            </c:if>
+                                            <%--<c:if test="${c.hot == '1'}">--%>
+                                                <%--<a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">--%>
+                                                    <%--<i class="fa fa-remove"></i> 取消热门--%>
+                                                <%--</a>--%>
+                                            <%--</c:if>--%>
+                                            <%--<c:if test="${c.hot != '1'}">--%>
+                                                <%--<a href="javascript:;" class="btn btn-sm btn-primary js-hot-top" title="添加到热门" data-id="${c.cid}">--%>
+                                                    <%--<i class="fa fa-heart"></i> 热门--%>
+                                                <%--</a>--%>
+                                            <%--</c:if>--%>
+                                            <%--<c:if test="${c.newly == '1'}">--%>
+                                                <%--<a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">--%>
+                                                    <%--<i class="fa fa-remove"></i> 取消最新--%>
+                                                <%--</a>--%>
+                                            <%--</c:if>--%>
+                                            <%--<c:if test="${c.newly != '1'}">--%>
+                                                <%--<a href="javascript:;" class="btn btn-sm btn-primary js-newly-top" title="添加到最新" data-id="${c.cid}">--%>
+                                                    <%--<i class="fa fa-bolt"></i> 最新--%>
+                                                <%--</a>--%>
+                                            <%--</c:if>--%>
                                     </td>
                                 </tr>
                                 </c:forEach>

@@ -17,17 +17,6 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/settings.js?v=${static_resource_version}"></script>
-    <script type="text/javascript">
-        //添加类型
-        function addCommTpye(type, dictValue){
-            $.post('/admin/products/' + type + '/save', {dictValue: dictValue}, function (res) {
-                alert(res.message);
-                if (res.code == 1) {
-                    window.location.reload();
-                }
-            });
-        }
-    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
