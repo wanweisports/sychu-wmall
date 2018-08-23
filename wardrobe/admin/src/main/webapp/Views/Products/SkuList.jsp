@@ -84,11 +84,14 @@
                                     </td>
                                     <td>颜色：${c.colorName}，尺码：${c.size}</td>
                                     <td>${c.typeName}</td>
-                                    <c:if test="${c.type=='10' || c.type=='30'}">
+                                    <c:if test="${c.type=='10'}">
                                         <td class="text-success">+${c.num}</td>
                                     </c:if>
                                     <c:if test="${c.type=='20'}">
                                         <td class="text-danger">-${c.num}</td>
+                                    </c:if>
+                                    <c:if test="${c.type=='30'}">
+                                        <td class="text-success">-${c.num}</td>
                                     </c:if>
                                     <td>${c.operatorId}：${c.remark}</td>
                                     <td>${c.createTime}</td>
