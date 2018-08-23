@@ -380,6 +380,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(StrUtil.isNotBlank(endTime)){
             whereSql.append(" AND ct.createTime <= :endTime");
         }
+        whereSql.append(" ORDER BY ct.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 
