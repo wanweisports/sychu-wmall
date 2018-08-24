@@ -21,6 +21,16 @@ public interface ICommodityService {
 
     Map<String, Object> getCommodityDetail(int cid);
 
+    Map<String, Object> getCommodityDetailSelected(int cid);
+
+    CommodityInfo getCommodityInfo(int cid);
+
+    CommodityColor getCommodityColor(int coid);
+
+    CommoditySize getCommoditySize(int sid);
+
+    CommodityColor getCommodityColorByCid(int cid);
+
     //后台管理
     PageBean getCommodityListIn(CommodityInputView commodityInputView);
 

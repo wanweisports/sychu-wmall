@@ -1,6 +1,7 @@
 package com.wardrobe.common.po;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -15,6 +16,8 @@ public class SysDeviceInfo {
     private String status;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private Time startTime;
+    private Time endTime;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -115,5 +118,25 @@ public class SysDeviceInfo {
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "startTime")
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    @Basic
+    @Column(name = "endTime")
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
 }

@@ -88,19 +88,36 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return data;
     }
 
-    private CommodityInfo getCommodityInfo(int cid){
+    @Override
+    public Map<String, Object> getCommodityDetailSelected(int cid){
+        Map<String, Object> data = new HashMap<>(4, 1);
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        data.put("sizes", getCommoditySizeList(cid));
+        data.put("cid", commodityInfo.getCid());
+        data.put("commName", commodityInfo.getCommName());
+        data.put("price", commodityInfo.getPrice());
+        SysResources sysResources = resourceService.getResourceByParentId(commodityInfo.getCid(), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
+        data.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY); //0表示封面图
+        return data;
+    }
+
+    @Override
+    public CommodityInfo getCommodityInfo(int cid){
         return baseDao.getToEvict(CommodityInfo.class, cid);
     }
 
-    private CommodityColor getCommodityColor(int coid){
+    @Override
+    public CommodityColor getCommodityColor(int coid){
         return baseDao.getToEvict(CommodityColor.class, coid);
     }
 
-    private CommoditySize getCommoditySize(int sid){
+    @Override
+    public CommoditySize getCommoditySize(int sid){
         return baseDao.getToEvict(CommoditySize.class, sid);
     }
 
-    private CommodityColor getCommodityColorByCid(int cid){
+    @Override
+    public CommodityColor getCommodityColorByCid(int cid){
         return baseDao.queryByHqlFirst("FROM CommodityColor WHERE cid = ?1", cid);
     }
 

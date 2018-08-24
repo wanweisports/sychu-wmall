@@ -14,6 +14,7 @@ public class UserShoppingCart {
     private Integer coid;
     private Integer sid;
     private Integer count;
+    private String shoppingType;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -79,6 +80,16 @@ public class UserShoppingCart {
     }
 
     @Basic
+    @Column(name = "shoppingType")
+    public String getShoppingType() {
+        return shoppingType;
+    }
+
+    public void setShoppingType(String shoppingType) {
+        this.shoppingType = shoppingType;
+    }
+
+    @Basic
     @Column(name = "createTime")
     public Timestamp getCreateTime() {
         return createTime;
@@ -129,4 +140,5 @@ public class UserShoppingCart {
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
+
 }

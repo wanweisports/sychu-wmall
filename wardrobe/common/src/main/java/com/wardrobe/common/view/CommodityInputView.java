@@ -18,6 +18,9 @@ public class CommodityInputView extends BaseInputView {
     private String startTime;
     private String endTime;
 
+    private Integer uid;
+    private String shoppingType;
+
     public String getCategory() {
         return category;
     }
@@ -104,5 +107,21 @@ public class CommodityInputView extends BaseInputView {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public String getShoppingType() {
+        return shoppingType;
+    }
+
+    public void setShoppingType(String shoppingType) {
+        this.shoppingType = shoppingType;
     }
 }

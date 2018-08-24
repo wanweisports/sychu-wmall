@@ -51,14 +51,6 @@ public class BaseController {
 		}
 		return false;
 	}
-	
-    protected void setPageInfo(Model model, PageBean pageBean){
-    	model.addAttribute("list", pageBean.getList());
-		model.addAttribute("count", pageBean.getTotalCount());
-		model.addAttribute("lastPage", pageBean.getTotalPage());
-		model.addAttribute("currentPage", pageBean.getCurrentPage());
-		model.addAttribute("pageSize", pageBean.getPageSize());
-    }
 
 	protected Map setPageInfo(PageBean pageBean){
 		Map map = new HashMap<>(5, 1);
