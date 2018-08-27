@@ -46,35 +46,21 @@ swiper-item image {
     opacity: 1;
 }
 
-.type-navbar {
-    white-space: nowrap;
-    height: 88rpx;
-    width: 100%;
-    background-color: #fff;
-}
-
 ::-webkit-scrollbar {
     width: 0;
     height: 0;
     color: transparent;
 }
 
-.type-box {
-    width: 160rpx;
-    box-sizing: content-box;
-    font-size: 24rpx;
-    line-height: 84rpx;
+.newly-container, .hot-container {
+    background-color: #fff;
+    margin-top: 24rpx;
+}
+.newly-container .text, .hot-container .text {
     text-align: center;
-    display: inline-block;
-    overflow: hidden;
-}
-
-.type-navbar-item {
-    border-bottom: 4rpx solid #fff;
-}
-
-.type-item-on {
-    border-bottom: 4rpx solid #e64340;
+    padding: 24rpx;
+    border-bottom: 1px solid #DCDCDC;
+    width: 100%;
 }
 
 .goods-container {
@@ -82,7 +68,7 @@ swiper-item image {
     justify-content: space-between;
     flex-wrap: wrap;
     box-sizing: content-box;
-    padding: 24rpx;
+    padding: 24rpx 10rpx;
 }
 
 .goods-box {
@@ -113,6 +99,7 @@ swiper-item image {
     padding: 24rpx 0 0rpx 0;
     color: #000;
     margin-left: 24rpx;
+    text-align: center;
 }
 
 .goods-box .goods-price {
@@ -122,6 +109,7 @@ swiper-item image {
     padding: 24rpx 0;
     color: #e64340;
     margin-left: 24rpx;
+    text-align: center;
 }
 
 .no-more-goods {
@@ -129,86 +117,4 @@ swiper-item image {
     font-size: 24rpx;
     padding-bottom: 48rpx;
     color: #999;
-}
-
-.type-container {
-    width: 100%;
-    height: 88rpx;
-    background-color: #fff;
-    overflow: hidden;
-}
-
-.notice {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height: 80rpx;
-    line-height: 80rpx;
-    width: 750rpx;
-    margin-top: 10rpx;
-    background-color: #fff;
-}
-
-.notice_swiper {
-    padding-top: 15rpx;
-    padding-bottom: 15rpx;
-    height: 50rpx;
-    line-height: 50rpx;
-    width: 635rpx;
-}
-
-.notice_iteml {
-    padding-left: 25rpx;
-    padding-top: 15rpx;
-    padding-bottom: 15rpx;
-    font-size: 26rpx;
-    width: 80rpx;
-    height: 50rpx;
-    line-height: 50rpx;
-    color: #999;
-}
-
-.notice_itemr {
-    padding-left: 10rpx;
-    font-size: 26rpx;
-    overflow: hidden;
-    color: #e64340;
-    width: 635rpx;
-    height: 50rpx;
-    line-height: 50rpx;
-}
-
-.pos-fiexd {
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-
-.coupons {
-    margin-top: 10rpx;
-    width: 100%;
-    height: 180rpx;
-    overflow: hidden;
-}
-
-.coupons-scroll {
-    white-space: nowrap;
-    height: 180rpx;
-    width: 100%;
-    background-color: #fff;
-}
-
-.coupons-item {
-    width: 300rpx;
-    height: 180rpx;
-    margin: 10rpx;
-    padding-top: 20rpx;
-    padding-left: 15rpx;
-    background-color: #f1a83b;
-    box-sizing: content-box;
-    font-size: 20rpx;
-    line-height: 35rpx;
-    overflow: hidden;
-    color: #fff;
-    display: inline-block;
 }

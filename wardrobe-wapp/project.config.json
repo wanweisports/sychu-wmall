@@ -1,5 +1,5 @@
 {
-	"description": "闪衣橱小程序配置文件",
+	"description": "闪衣橱小程序项目配置文件",
 	"packOptions": {
 		"ignore": []
 	},
@@ -8,10 +8,10 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.9.98",
+	"libVersion": "2.2.4",
 	"appid": "wxe8b22bbf133ca0ae",
 	"projectname": "wardrobe-wapp",
 	"isGameTourist": false,

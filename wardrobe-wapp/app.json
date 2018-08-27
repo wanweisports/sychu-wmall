@@ -1,8 +1,9 @@
 {
     "pages": [
+        "pages/landing/index",
         "pages/index/index",
         "pages/goods-list/index",
-        "pages/goods-details/index",
+        "pages/goods/details/index",
         "pages/fitting-room/index",
         "pages/to-fitting-order/index",
         "pages/shop-cart/index",
@@ -14,13 +15,12 @@
         "pages/wuliu/index",
         "pages/mycoupons/index",
         "pages/my/index",
-        "pages/user-complete/index",
         "pages/check-mobile/index",
         "pages/bind-mobile/index",
         "pages/notice/show",
         "pages/recharge/index",
         "pages/withdraw/index",
-        "pages/auth/index"
+        "pages/user/complete/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
