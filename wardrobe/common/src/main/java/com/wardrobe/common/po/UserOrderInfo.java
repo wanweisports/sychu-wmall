@@ -29,6 +29,9 @@ public class UserOrderInfo {
     private Timestamp updateTime;
     private List<UserOrderDetail> userOrderDetails;
 
+    private String serviceType;
+    private Integer cpid;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "oid")
@@ -207,6 +210,24 @@ public class UserOrderInfo {
 
     public void setUserOrderDetails(List<UserOrderDetail> userOrderDetails) {
         this.userOrderDetails = userOrderDetails;
+    }
+
+    @Transient
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    @Transient
+    public Integer getCpid() {
+        return cpid;
+    }
+
+    public void setCpid(Integer cpid) {
+        this.cpid = cpid;
     }
 
     @Override

@@ -1,13 +1,12 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.constant.IDBConstant;
-import com.wardrobe.common.po.UserOrderDetail;
-import com.wardrobe.common.po.UserOrderInfo;
+import com.wardrobe.common.po.*;
+import com.wardrobe.common.util.Arith;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.OrderInputView;
-import com.wardrobe.platform.service.IOrderService;
-import com.wardrobe.platform.service.IUserAccountService;
-import com.wardrobe.platform.service.IUserTransactionsService;
+import com.wardrobe.platform.service.*;
 import com.wardrobe.wx.WeiXinConnector;
 import com.wardrobe.wx.http.HttpConnect;
 import com.wardrobe.wx.util.ConfigUtil;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -38,6 +38,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Autowired
     private IUserAccountService userAccountService;
 
+    @Autowired
+    private IUserShoppingCartService userShoppingCartService;
+
+    @Autowired
+    private ICommodityService commodityService;
+
     private UserOrderInfo getUserOrderInfo(int oid){
         return baseDao.getToEvict(UserOrderInfo.class, oid);
     }
@@ -50,6 +56,48 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     private List<UserOrderDetail> getUserOrderDetails(int oid){
         return baseDao.queryByHql("FROM UserOrderDetail WHERE oid = ?", oid);
+    }
+
+    @Override
+    public synchronized void saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
+        Timestamp nowDate = DateUtil.getNowDate();
+        userOrderInfo.setUid(uid);
+        userOrderInfo.setCreateTime(nowDate);
+        userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
+        userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        baseDao.save(userOrderInfo, null);
+
+        int oid = userOrderInfo.getOid();
+        String[] scidArr = scids.split(",");
+        double priceSum = 0;
+        for(String scid : scidArr) { //待处理积分与优惠券问题
+            UserShoppingCart userShoppingCart = userShoppingCartService.getUserShoppingCart(StrUtil.objToInt(scid));
+            Integer cid = userShoppingCart.getCid();
+            UserOrderDetail userOrderDetail = new UserOrderDetail();
+            userOrderDetail.setCreateTime(nowDate);
+            userOrderDetail.setCid(cid);
+
+            CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
+            userOrderDetail.setItemCount(userShoppingCart.getCount());
+            userOrderDetail.setItemName(commodityInfo.getCommName());
+            userOrderDetail.setItemPrice(commodityInfo.getPrice());
+
+            CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
+            userOrderDetail.setItemColor(commodityColor.getColorName());
+
+            CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
+            userOrderDetail.setItemSize(commoditySize.getSize());
+
+            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.div(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
+            userOrderDetail.setOid(oid);
+            userOrderDetail.setItemImg(commodityService.getFmImg(cid));
+            baseDao.save(userOrderDetail, null);
+
+            priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
+        }
+
+        userOrderInfo.setPriceSum(Arith.conversion(priceSum));
+        baseDao.save(userOrderInfo, oid);
     }
 
     @Override

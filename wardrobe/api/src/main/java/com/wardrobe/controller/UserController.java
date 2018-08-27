@@ -1,11 +1,13 @@
 package com.wardrobe.controller;
 
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IUserCouponService userCouponService;
 
     /*
      * 用户完善资料
@@ -94,11 +99,19 @@ public class UserController extends BaseController {
         return new ResponseBean(new HashMap(1, 1){{put("isPerfect", isPerfect ? IDBConstant.LOGIC_STATUS_YES  : IDBConstant.LOGIC_STATUS_NO);}});
     }
 
+    @Desc("用户充值")
     @ResponseBody
     @RequestMapping("userRecharge")
     public ResponseBean userRecharge(int dictId){
         userService.saveUserRecharge(dictId, getUserInfo().getUid());
         return new ResponseBean(true);
+    }
+
+    @Desc("用户优惠券列表")
+    @ResponseBody
+    @RequestMapping("userCouponList")
+    public ResponseBean userCouponList(){
+        return new ResponseBean(new HashMap(){{put("coupons", userCouponService.getUserCouponList(getUserInfo().getUid()));}});
     }
 
 }

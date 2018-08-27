@@ -35,8 +35,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getCommoditys(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((commodity) ->{
-            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
-            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
         });
         return pageBean;
     }
@@ -96,9 +95,14 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         data.put("cid", commodityInfo.getCid());
         data.put("commName", commodityInfo.getCommName());
         data.put("price", commodityInfo.getPrice());
-        SysResources sysResources = resourceService.getResourceByParentId(commodityInfo.getCid(), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
-        data.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY); //0表示封面图
+        data.put("resourcePath", getFmImg(commodityInfo.getCid())); //0表示封面图
         return data;
+    }
+
+    @Override
+    public String getFmImg(int cid){
+        SysResources sysResources = resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0);  //0表示封面图
+        return sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY;
     }
 
     @Override
@@ -141,8 +145,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         list.stream().forEach((commodity) -> {
             getType(commodity);
             commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
-            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
-            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
         });
         return pageBean;
     }
@@ -198,7 +201,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             data.put("commodity", getCommodityInfo(cid));
             data.put("commodityColor", getCommodityColorByCid(cid));
             data.put("commoditySizeList", getCommoditySizeList(cid));
-            data.put("coverImg", resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+            data.put("coverImg", getFmImg(cid));
             data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         }
         return data;
@@ -340,7 +343,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
         data.put("productSizeList", getCommoditySizeList(cid));
-        data.put("coverImg", resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+        data.put("coverImg", getFmImg(cid));
         data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         if(groupId != null) {
             data.put("groupCommodityColorList", getCommodityColorByGroupId(groupId));
@@ -373,8 +376,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getStocks(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach(commodity -> {
-            SysResources sysResources = resourceService.getResourceByParentId(StrUtil.objToInt(commodity.get("cid")), IDBConstant.RESOURCE_COMMODITY_IMG, 0);
-            commodity.put("resourcePath", sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY);//0表示封面图
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
             commodity.put("typeName", dictService.getDict(IDBConstant.COMM_STOCK_TYPE, StrUtil.objToStr(commodity.get("type"))).getDictValue());
         });
         return pageBean;
