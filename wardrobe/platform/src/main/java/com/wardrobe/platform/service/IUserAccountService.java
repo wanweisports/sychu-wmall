@@ -3,6 +3,7 @@ package com.wardrobe.platform.service;
 import com.wardrobe.common.po.UserAccount;
 
 import java.sql.Timestamp;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/7/31.
@@ -20,5 +21,7 @@ public interface IUserAccountService {
     double getUserAccountBalance(int uid);
 
     void addRechargePrice(int uid, int dictId);
+
+    Map<String, Object> getScore(int uid);
 
 }

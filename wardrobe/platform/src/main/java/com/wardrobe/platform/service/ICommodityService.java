@@ -23,6 +23,8 @@ public interface ICommodityService {
 
     Map<String, Object> getCommodityDetailSelected(int cid);
 
+    String getFmImg(int cid);
+
     CommodityInfo getCommodityInfo(int cid);
 
     CommodityColor getCommodityColor(int coid);

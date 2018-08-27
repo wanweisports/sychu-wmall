@@ -16,4 +16,6 @@ public interface IUserShoppingCartService {
 
     void deleteUserShoppingCart(int scid, int userId);
 
+    UserShoppingCart getUserShoppingCart(int scid);
+
 }

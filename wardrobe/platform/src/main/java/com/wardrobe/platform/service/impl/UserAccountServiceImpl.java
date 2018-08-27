@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 直接结账：每消费1元送1闪币和1积分
@@ -51,7 +53,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     private synchronized void setUserScore(int uid, double priceSum){
         UserAccount userAccount = getUserAccount(uid);
-        userAccount.setScore(userAccount.getScore() + (int)priceSum * IPlatformConstant.ADD_USER_SCORE);
+        userAccount.setScore(userAccount.getScore() + (int) priceSum * IPlatformConstant.ADD_USER_SCORE);
         baseDao.save(userAccount, uid);
     }
 
@@ -105,6 +107,13 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
         //积分累计
         this.addUserScore(uid, rechargePrice);
+    }
+
+    @Override
+    public synchronized Map<String, Object> getScore(int uid){
+        Map<String, Object> data = new HashMap(1, 1);
+        data.put("score", baseDao.getUniqueResult("SELECT score FROM user_account WHERE uid = ?1", uid).intValue());
+        return data;
     }
 
 }

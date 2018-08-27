@@ -93,7 +93,8 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         }
     }
 
-    private UserShoppingCart getUserShoppingCart(int scid){
+    @Override
+    public UserShoppingCart getUserShoppingCart(int scid){
         return baseDao.getToEvict(UserShoppingCart.class, scid);
     }
 

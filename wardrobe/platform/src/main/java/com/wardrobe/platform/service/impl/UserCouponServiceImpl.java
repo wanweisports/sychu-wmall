@@ -15,7 +15,12 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
 
     @Override
     public List<Map<String, Object>> getUserCoupons(int userId){
-        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ? AND sd.dictName = ?", userId, IDBConstant.USER_COUPON);
+        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ? AND sd.dictName = ? ORDER BY createTime DESC", userId, IDBConstant.USER_COUPON);
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserCouponList(int userId){
+        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ? AND sd.dictName = ? ORDER BY uci.status DESC, uci.dueTime DESC", userId, IDBConstant.USER_COUPON);
     }
 
 }

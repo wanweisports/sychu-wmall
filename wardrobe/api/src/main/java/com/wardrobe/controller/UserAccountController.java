@@ -1,5 +1,6 @@
 package com.wardrobe.controller;
 
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IPlatformConstant;
@@ -23,13 +24,18 @@ public class UserAccountController extends BaseController {
     @Autowired
     private IUserAccountService userAccountService;
 
-    /*
-     * 用户账户余额
-     */
+    @Desc("获取用户账户余额")
     @ResponseBody
     @RequestMapping("userAccountBalance")
     public ResponseBean userAccountBalance(){
         return new ResponseBean(new HashMap(1,1){{put("balance", userAccountService.getUserAccountBalance(getUserInfo().getUid()));}});
+    }
+
+    @Desc("获取用户积分")
+    @ResponseBody
+    @RequestMapping("userScore")
+    public ResponseBean userScore(){
+        return new ResponseBean(userAccountService.getScore(getUserInfo().getUid()));
     }
 
 }
