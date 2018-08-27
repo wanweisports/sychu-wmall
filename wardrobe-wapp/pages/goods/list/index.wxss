@@ -1,4 +1,5 @@
 /**index.wxss**/
+@import "../../../style/weui.wxss";
 
 .container {
     background-color: #F2f2f2;
@@ -71,31 +72,61 @@
     left: 0;
 }
 
-.coupons {
-    margin-top: 10rpx;
-    width: 100%;
-    height: 180rpx;
-    overflow: hidden;
+.good-filter-image {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    background: #0a6d01;
 }
 
-.coupons-scroll {
-    white-space: nowrap;
-    height: 180rpx;
-    width: 100%;
-    background-color: #fff;
+.good-filter-image image {
+    width: 60%;
+    height: 60%;
+    margin: 20% auto;
+    display: block;
 }
 
-.coupons-item {
-    width: 300rpx;
-    height: 180rpx;
-    margin: 10rpx;
-    padding-top: 20rpx;
-    padding-left: 15rpx;
-    background-color: #f1a83b;
-    box-sizing: content-box;
-    font-size: 20rpx;
-    line-height: 35rpx;
-    overflow: hidden;
-    color: #fff;
+.good-filter {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    background: rgba(0,0,0,.4);
+}
+
+.good-filter-container {
+    background: #FFFFFF;
+    width: 82%;
+    min-height: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.button-sp-area {
+    padding: 0 10px;
+}
+
+.mini-btn {
+    margin-right: 5px;
     display: inline-block;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.button-sp-next {
+    padding-top: 15px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.button-sp-next .weui-btn {
+    display: inline-block;
+    margin-right: 10px;
+    width: 40%;
 }

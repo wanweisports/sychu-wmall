@@ -2,7 +2,7 @@
     "pages": [
         "pages/landing/index",
         "pages/index/index",
-        "pages/goods-list/index",
+        "pages/goods/list/index",
         "pages/goods/details/index",
         "pages/fitting-room/index",
         "pages/to-fitting-order/index",
@@ -42,7 +42,7 @@
                 "text": "首页"
             },
             {
-                "pagePath": "pages/goods-list/index",
+                "pagePath": "pages/goods/list/index",
                 "iconPath": "images/nav/list-off.png",
                 "selectedIconPath": "images/nav/list-on.png",
                 "text": "挑衣服"
