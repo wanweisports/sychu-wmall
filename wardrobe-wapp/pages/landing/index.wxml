@@ -1,0 +1,13 @@
+<view class="page">
+    <view class="page__bd bg-landing">
+        <view bindtap="bindViewTap" class="div-user-header">
+            <open-data type="userAvatarUrl" class="img-user-avatar"></open-data>
+        </view>
+
+        <view class="button-sp-area">
+            <button class="weui-btn" type="primary" plain wx:if="{{isSupported}}" open-type="getUserInfo"
+                    bindgetuserinfo="onGetUserInfo">进入闪衣橱</button>
+            <view wx:else>请升级微信版本</view>
+        </view>
+    </view>
+</view>

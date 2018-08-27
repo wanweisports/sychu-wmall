@@ -3,11 +3,13 @@
 App({
     onLaunch: function () {
         wx.setStorageSync('mallName', "闪衣橱");
+    },
 
+    toLogin: function () {
         var sessionId = this.globalData.sessionId;
         if (!!sessionId) {
             return this.checkSession(this.checkUserComplete, this.login);
-        };
+        }
 
         this.login();
     },
@@ -54,7 +56,12 @@ App({
                                     that.globalData.sessionId = res.data.sessionId;
                                     if (res.data.perfect == 2) {
                                         wx.redirectTo({
-                                            url: "/pages/user-complete/index"
+                                            url: "/pages/user/complete/index"
+                                        });
+                                    }
+                                    else {
+                                        wx.switchTab({
+                                            url: "/pages/index/index"
                                         });
                                     }
                                 }
@@ -68,7 +75,7 @@ App({
                     fail: function (err) {
                         console.log("[F][wx.getUserInfo]" + JSON.stringify(err));
                         wx.redirectTo({
-                            url: "/pages/auth/index"
+                            url: "/pages/landing/index"
                         });
                     }
                 });
@@ -85,7 +92,7 @@ App({
             function (res) {
                 if (res.data.isPerfect == 2) {
                     wx.redirectTo({
-                        url: "/pages/user-complete/index"
+                        url: "/pages/user/complete/index"
                     });
                 }
                 else {
@@ -130,8 +137,9 @@ App({
     wxRequest: function (url, data, success, fail, isNotLogin) {
         var that = this;
 
-        success = success || new Function;
-        fail = fail || new Function;
+        success = success || new Function();
+        fail = fail || new Function();
+        isNotLogin = isNotLogin || false;
 
         var header = isNotLogin ? {} : {
             'Cookie': 'JSESSIONID=' + that.globalData.sessionId
@@ -150,6 +158,18 @@ App({
                 fail(err);
             }
         });
+    },
+    onShareAppMessage: function() {
+        return {
+            title: wx.getStorageSync('mallName') + '——' + this.config.shareProfile,
+            path: '/pages/landing/index',
+            success: function(res) {
+                // 转发成功
+            },
+            fail: function(res) {
+                // 转发失败
+            }
+        }
     },
 
     globalData: {

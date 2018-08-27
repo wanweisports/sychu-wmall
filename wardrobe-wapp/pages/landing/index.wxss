@@ -1,0 +1,34 @@
+@import "../../style/weui.wxss";
+
+.page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.bg-landing {
+    background: url("http://y1.ifengimg.com/l/2015/52/7a6a9014b0658e0/page1_bg.jpg") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.div-user-header {
+    margin: 0 auto;
+}
+.img-user-avatar {
+    width: 100%;
+    height: 100%;
+}
+
+.button-sp-area {
+    position: absolute;
+    left: 20%;
+    bottom: 0;
+    padding-bottom: 15px;
+    width: 60%;
+}

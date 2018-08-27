@@ -1038,15 +1038,3 @@ icon {
   color: #09BB07;
   white-space: nowrap;
 }
-.button-sp-area{
-    margin: 0 auto;
-    padding-top: 2px;
-    width: 86%;
-}
-.mini-btn{
-    margin-right:6px;
-    display:inline-block;
-    padding:0 16px;
-    margin-top:0;
-    font-size:14px;
-}
