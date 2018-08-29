@@ -7,6 +7,7 @@ import com.wardrobe.common.po.CommoditySize;
 import com.wardrobe.common.po.UserShoppingCart;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
@@ -96,6 +97,25 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     @Override
     public UserShoppingCart getUserShoppingCart(int scid){
         return baseDao.getToEvict(UserShoppingCart.class, scid);
+    }
+
+    @Override
+    public Map<String, Object> settlement(String scids, int uid){
+        StringBuilder sql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size");
+        sql.append(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
+        sql.append(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
+        sql.append(" AND usc.scid IN(:scids)");
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), new HashMap() {{
+            putAll(SQLUtil.getInToSQL("scids", scids));
+        }});
+        double sumPrice = 0;
+        for(Map<String, Object> map : list){
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+        }
+        Map<String, Object> data = new HashMap();
+        data.put("list", list);
+        data.put("sumPrice", sumPrice);
+        return data;
     }
 
 }

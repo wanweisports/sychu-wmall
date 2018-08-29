@@ -1,6 +1,5 @@
 package com.wardrobe.common.util;
 
-import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -9,7 +8,10 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class DateUtil {
 	public static final String YYYYMMDD_S = "yyyyMMdd";
@@ -23,6 +25,7 @@ public class DateUtil {
     public static final String YYYYMMDDHHMMSS = "yyyy-MM-dd HH:mm:ss";
     public static final String YYYYMMDD_ZH = "yyyy年MM月dd日";
     public static final String YYYYMMDDHHMMSS_ZH = "yyyy年MM月dd日HH:mm:ss";
+	public static final String HHMMSS = "HH:mm:ss";
     public static final int FIRST_DAY_OF_WEEK = Calendar.MONDAY;// 中国周一是一周的第一天
     public static final String[] DAYS = {"一号","二号","三号","四号","五号","六号","七号","八号","九号","十号","十一号","十二号","十三号","十四号","十五号","十六号","十七号","十八号","十九号","二十号","二十一号","二十二号","二十三号","二十四号","二十五号","二十六号","二十七号","二十八号","二十九号","三十号","三十一号"};
 
@@ -139,9 +142,19 @@ public class DateUtil {
 		DateFormat format = new SimpleDateFormat(HHMM);
 		return format.parse(time);
 	}
-	
-	public static String getHHMM(Date time) throws ParseException{
-		DateFormat format = new SimpleDateFormat(HHMM);
+
+	public static Date getHHMMSS(String time) throws ParseException{
+		DateFormat format = new SimpleDateFormat(HHMMSS);
+		return format.parse(time);
+	}
+
+	public static Date getHHMMSS(Timestamp time) throws ParseException{
+		DateFormat format = new SimpleDateFormat(HHMMSS);
+		return format.parse(dateToString(new Date(time.getTime()), HHMMSS));
+	}
+
+	public static String getHHMMSS(Date time) throws ParseException{
+		DateFormat format = new SimpleDateFormat(HHMMSS);
 		return format.format(time);
 	}
 	

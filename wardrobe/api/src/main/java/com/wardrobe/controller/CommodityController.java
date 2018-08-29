@@ -69,4 +69,10 @@ public class CommodityController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @ResponseBody
+    @RequestMapping("settlement")
+    public ResponseBean settlement(String scids){
+        return new ResponseBean(userShoppingCartService.settlement(scids, getUserInfo().getUid()));
+    }
+
 }

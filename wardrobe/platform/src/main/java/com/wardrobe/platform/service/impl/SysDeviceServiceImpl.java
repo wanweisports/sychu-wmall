@@ -1,12 +1,16 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.po.SysDeviceControl;
+import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +50,23 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         }
 
         return super.getPageBean(headSql, bodySql, whereSql, deviceInputView);
+    }
+
+    @Override
+    public SysDeviceInfo getDeviceInfo(int did){
+        return baseDao.getToEvict(SysDeviceInfo.class, did);
+    }
+
+    //查询没有时间交集的设备柜子【因为一个时间段只有一个人进入，那么这里不是所有人都是1号柜子？】
+    @Override
+    public SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime){
+        StringBuilder hql = new StringBuilder("SELECT sdc");
+        hql.append(" FROM SysDeviceInfo sd, SysDeviceControl sdc");
+        hql.append(" WHERE sd.did = sdc.did AND sd.did = ?1");
+        hql.append(" AND NOT EXISTS(SELECT 1 FROM ReserveOrderInfo roi WHERE roi.dcid = sdc.dcid AND NOT(roi.reserveEndTime <= ?2 OR roi.reserveStartTime >= ?3))"); //预约结束时间小于库里数据开始时间 或者 预约开始时间大于库里数据结束时间
+        hql.append(" AND sdc.status = ?4");
+        hql.append(" ORDER BY sdc.dcid");
+        return baseDao.queryByHqlFirst(hql.toString(), did, reserveStartTime, reserveEndTime, IDBConstant.LOGIC_STATUS_YES);
     }
 
 }

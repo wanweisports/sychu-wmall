@@ -1,16 +1,27 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.view.OrderInputView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/8/6.
  */
 public interface IOrderService {
 
-    void saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid);
+    Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid);
+
+    Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException;
+
+    Map<String, Object> getNowReserveOrderInfo(int uid);
+
+    Map<String, Object> getNowReserveOrderDetail(int uid, int roid);
+
+    void saveCancelReserveOrder(int uid, int roid);
 
     String wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 

@@ -1,6 +1,8 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
@@ -18,11 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * Created by cxs on 2018/8/6.
@@ -44,8 +45,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Autowired
     private ICommodityService commodityService;
 
+    @Autowired
+    private ISysDeviceService sysDeviceService;
+
     private UserOrderInfo getUserOrderInfo(int oid){
         return baseDao.getToEvict(UserOrderInfo.class, oid);
+    }
+
+    private ReserveOrderInfo getReserveOrderInfo(int roid){
+        return baseDao.getToEvict(ReserveOrderInfo.class, roid);
     }
 
     private UserOrderInfo getUserOrderInfoAndDetails(int oid){
@@ -59,10 +67,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public synchronized void saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
+    public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
         Timestamp nowDate = DateUtil.getNowDate();
         userOrderInfo.setUid(uid);
         userOrderInfo.setCreateTime(nowDate);
+        userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_YES);
         userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
         userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
         baseDao.save(userOrderInfo, null);
@@ -88,16 +97,145 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
-            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.div(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
+            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
             userOrderDetail.setOid(oid);
             userOrderDetail.setItemImg(commodityService.getFmImg(cid));
             baseDao.save(userOrderDetail, null);
 
             priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
+
+            //删除购物车
+            baseDao.delete(userShoppingCart);
         }
 
-        userOrderInfo.setPriceSum(Arith.conversion(priceSum));
+        userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
+        userOrderInfo.setPayPrice(userOrderInfo.getPriceSum()); //支付价格：之后减去优惠部分
         baseDao.save(userOrderInfo, oid);
+        return oid;
+    }
+
+    @Override
+    public synchronized Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
+
+        Integer did = orderInfo.getDid();
+
+        SysDeviceInfo sysDeviceInfo = sysDeviceService.getDeviceInfo(did);
+        if(sysDeviceInfo == null) throw new MessageException("当前试衣间不存在，请重新选择！");
+
+        ReserveOrderInfo existNowReserve = isExistNowReserve(uid);
+        if(existNowReserve != null) throw new MessageException("您已经预约了" + DateUtil.dateToString(new Date(existNowReserve.getReserveStartTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "到" +  DateUtil.dateToString(new Date(existNowReserve.getReserveEndTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "，不能重复预约");
+
+        if(!IDBConstant.LOGIC_STATUS_YES.equals(sysDeviceInfo.getStatus())) throw new MessageException("当前试衣间未开启，请稍候再试！");
+
+        Timestamp reserveStartTime = orderInfo.getReserveStartTime();
+        Timestamp reserveEndTime = orderInfo.getReserveEndTime();
+
+        Time startTime = sysDeviceInfo.getStartTime();
+        Time endTime = sysDeviceInfo.getEndTime();
+        Date startDTime = DateUtil.getHHMMSS(startTime.toString());
+        Date endDTime = DateUtil.getHHMMSS(endTime.toString());
+        if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime.toString() + "到" + endTime.toString());
+
+        if(isReserveByDate(reserveStartTime, reserveEndTime)) throw new MessageException("当前时间有冲突，请重新选择！");
+
+        SysDeviceControl sysDeviceControl = sysDeviceService.getDistributionDeviceControl(did, reserveStartTime, reserveEndTime);
+        if(sysDeviceControl == null) throw new MessageException("当前预约已满，请稍候再试！");
+
+        Timestamp nowDate = DateUtil.getNowDate();
+        orderInfo.setDcid(sysDeviceControl.getDcid());
+        orderInfo.setUid(uid);
+        orderInfo.setCreateTime(nowDate);
+        orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
+        orderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        baseDao.save(orderInfo, null);
+
+        int oid = orderInfo.getRoid();
+        String[] scidArr = scids.split(",");
+        double priceSum = 0;
+        for(String scid : scidArr) { //待处理积分与优惠券问题
+            UserShoppingCart userShoppingCart = userShoppingCartService.getUserShoppingCart(StrUtil.objToInt(scid));
+            Integer cid = userShoppingCart.getCid();
+            ReserveOrderDetail orderDetail = new ReserveOrderDetail();
+            orderDetail.setCreateTime(nowDate);
+            orderDetail.setCid(cid);
+
+            CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
+            orderDetail.setResItemCount(userShoppingCart.getCount());
+            orderDetail.setResItemName(commodityInfo.getCommName());
+            orderDetail.setResItemPrice(commodityInfo.getPrice());
+
+            CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
+            orderDetail.setResItemColor(commodityColor.getColorName());
+
+            CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
+            orderDetail.setResItemSize(commoditySize.getSize());
+
+            orderDetail.setResItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
+            orderDetail.setRoid(oid);
+            orderDetail.setResItemImg(commodityService.getFmImg(cid));
+            baseDao.save(orderDetail, null);
+
+            priceSum = Arith.add(priceSum, orderDetail.getResItemPriceSum().doubleValue());
+
+            //删除购物车
+            baseDao.delete(userShoppingCart);
+        }
+
+        orderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
+        orderInfo.setPayPrice(orderInfo.getPriceSum()); //支付价格：之后减去优惠部分
+        baseDao.save(orderInfo, oid);
+        return oid;
+    }
+
+    @Desc("预约时间是否有交集")
+    private boolean isReserveByDate(Timestamp startDate, Timestamp endDate){
+        Object obj = baseDao.getUniqueObjectResult("SELECT 1 FROM reserve_order_info r WHERE NOT (r.reserveEndTime <= ?1 OR r.reserveStartTime >= ?2) AND r.status = ?3", startDate, endDate, IDBConstant.LOGIC_STATUS_YES);
+        return obj != null;
+    }
+
+    @Desc("存在当前时间之前的预约，则不能进行预约")
+    private ReserveOrderInfo isExistNowReserve(int uid){
+        return baseDao.queryByHqlFirst("SELECT r FROM ReserveOrderInfo r WHERE r.reserveEndTime >= NOW() AND r.uid = ?1 AND r.status = ?2 ORDER BY r.roid DESC", uid, IDBConstant.LOGIC_STATUS_YES);
+    }
+
+    @Desc("获得未支付并在当前时间之前的最后一个未支付的订单（一个时间段只能预约一次）")
+    @Override
+    public Map<String, Object> getNowReserveOrderInfo(int uid){
+        StringBuilder sql = new StringBuilder("SELECT r.roid, DATE(r.reserveStartTime) resDate, TIME(r.reserveStartTime) resStartTime, TIME(r.reserveEndTime) resEndTime, sd.name sdName, sd.address, a.areaNameFull, sdc.name sdcName FROM reserve_order_info r, sys_device_control sdc, sys_device_info sd, sys_area a");
+        sql.append(" WHERE r.dcid = sdc.dcid AND sdc.did = sd.did AND sd.areaId = a.areaId AND r.reserveEndTime >= NOW() AND r.uid = ?1 AND r.status = ?2 AND r.payStatus = ?3 ORDER BY r.roid DESC");
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), uid, IDBConstant.LOGIC_STATUS_YES, IDBConstant.LOGIC_STATUS_NO);
+        list.parallelStream().forEach(map -> {
+            String startTime = StrUtil.objToStr(map.get("resStartTime"));
+            String endTime = StrUtil.objToStr(map.get("resEndTime"));
+            map.put("resStartTime", startTime.substring(0, startTime.lastIndexOf(":")));
+            map.put("resEndTime", endTime.substring(0, endTime.lastIndexOf(":")));
+            map.put("areaNameFull", StrUtil.objToStr(map.get("areaNameFull")).replace("->", " "));
+        });
+        Map<String, Object> data = new HashMap();
+        data.put("list", list);
+        return data;
+    }
+
+    @Override
+    public Map<String, Object> getNowReserveOrderDetail(int uid, int roid){
+        Map<String, Object> data = new HashMap();
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT rod.* FROM reserve_order_detail rod, reserve_order_info r  WHERE rod.roid = r.roid AND r.uid = ?1 AND rod.roid = ?2", new Integer[]{uid, roid});
+        double sumPrice = 0;
+        for(Map<String, Object> map : list){
+            sumPrice = Arith.add(sumPrice, StrUtil.objToDouble(map.get("resItemPriceSum")));
+        }
+        data.put("sumPrice", sumPrice);
+        data.put("list", list);
+        return data;
+    }
+
+    @Override
+    public void saveCancelReserveOrder(int uid, int roid){
+        ReserveOrderInfo reserveOrderInfo = getReserveOrderInfo(roid);
+        if(reserveOrderInfo.getUid() != uid) throw new MessageException("错误");
+        reserveOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //取消预约
+        reserveOrderInfo.setUpdateTime(DateUtil.getNowDate());
+        baseDao.save(reserveOrderInfo, roid);
     }
 
     @Override

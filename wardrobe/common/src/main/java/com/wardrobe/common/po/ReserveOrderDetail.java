@@ -10,7 +10,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "reserve_order_detail", schema = "")
 public class ReserveOrderDetail {
     private int rdid;
-    private Integer did;
+    private Integer roid;
     private Integer cid;
     private String resItemName;
     private String resItemColor;
@@ -34,13 +34,13 @@ public class ReserveOrderDetail {
     }
 
     @Basic
-    @Column(name = "did")
-    public Integer getDid() {
-        return did;
+    @Column(name = "roid")
+    public Integer getRoid() {
+        return roid;
     }
 
-    public void setDid(Integer did) {
-        this.did = did;
+    public void setRoid(Integer roid) {
+        this.roid = roid;
     }
 
     @Basic
@@ -151,7 +151,7 @@ public class ReserveOrderDetail {
         ReserveOrderDetail that = (ReserveOrderDetail) o;
 
         if (rdid != that.rdid) return false;
-        if (did != null ? !did.equals(that.did) : that.did != null) return false;
+        if (roid != null ? !roid.equals(that.roid) : that.roid != null) return false;
         if (cid != null ? !cid.equals(that.cid) : that.cid != null) return false;
         if (resItemName != null ? !resItemName.equals(that.resItemName) : that.resItemName != null) return false;
         if (resItemColor != null ? !resItemColor.equals(that.resItemColor) : that.resItemColor != null) return false;
@@ -170,7 +170,7 @@ public class ReserveOrderDetail {
     @Override
     public int hashCode() {
         int result = rdid;
-        result = 31 * result + (did != null ? did.hashCode() : 0);
+        result = 31 * result + (roid != null ? roid.hashCode() : 0);
         result = 31 * result + (cid != null ? cid.hashCode() : 0);
         result = 31 * result + (resItemName != null ? resItemName.hashCode() : 0);
         result = 31 * result + (resItemColor != null ? resItemColor.hashCode() : 0);

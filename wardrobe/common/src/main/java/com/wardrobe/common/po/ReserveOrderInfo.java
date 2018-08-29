@@ -9,11 +9,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "reserve_order_info", schema = "")
 public class ReserveOrderInfo {
-    private int rid;
+    private int roid;
     private Integer uid;
     private Integer dcid;
     private BigDecimal priceSum;
-    private Integer payPrice;
+    private BigDecimal payPrice;
     private String payStatus;
     private String status;
     private Timestamp payTime;
@@ -22,15 +22,17 @@ public class ReserveOrderInfo {
     private Timestamp createTime;
     private Timestamp updateTime;
 
+    private Integer did;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "rid")
-    public int getRid() {
-        return rid;
+    @Column(name = "roid")
+    public int getRoid() {
+        return roid;
     }
 
-    public void setRid(int rid) {
-        this.rid = rid;
+    public void setRoid(int roid) {
+        this.roid = roid;
     }
 
     @Basic
@@ -65,11 +67,11 @@ public class ReserveOrderInfo {
 
     @Basic
     @Column(name = "payPrice")
-    public Integer getPayPrice() {
+    public BigDecimal getPayPrice() {
         return payPrice;
     }
 
-    public void setPayPrice(Integer payPrice) {
+    public void setPayPrice(BigDecimal payPrice) {
         this.payPrice = payPrice;
     }
 
@@ -143,6 +145,15 @@ public class ReserveOrderInfo {
         this.updateTime = updateTime;
     }
 
+    @Transient
+    public Integer getDid() {
+        return did;
+    }
+
+    public void setDid(Integer did) {
+        this.did = did;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -150,7 +161,7 @@ public class ReserveOrderInfo {
 
         ReserveOrderInfo that = (ReserveOrderInfo) o;
 
-        if (rid != that.rid) return false;
+        if (roid != that.roid) return false;
         if (uid != null ? !uid.equals(that.uid) : that.uid != null) return false;
         if (dcid != null ? !dcid.equals(that.dcid) : that.dcid != null) return false;
         if (priceSum != null ? !priceSum.equals(that.priceSum) : that.priceSum != null) return false;
@@ -170,7 +181,7 @@ public class ReserveOrderInfo {
 
     @Override
     public int hashCode() {
-        int result = rid;
+        int result = roid;
         result = 31 * result + (uid != null ? uid.hashCode() : 0);
         result = 31 * result + (dcid != null ? dcid.hashCode() : 0);
         result = 31 * result + (priceSum != null ? priceSum.hashCode() : 0);

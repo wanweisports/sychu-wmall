@@ -18,4 +18,6 @@ public interface IUserShoppingCartService {
 
     UserShoppingCart getUserShoppingCart(int scid);
 
+    Map<String, Object> settlement(String scids, int uid);
+
 }
