@@ -80,6 +80,21 @@ swiper-item image {
     float: left;
 }
 
+.goods-colors {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14rpx 120rpx 14rpx 35rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 28rpx;
+    background: #fff;
+}
+
+.goods-colors .weui-btn {
+    margin-right: 28rpx;
+}
+
 .row-arrow {
     width: 100%;
     box-sizing: border-box;
@@ -135,23 +150,22 @@ swiper-item image {
     box-shadow: 0 0 8rpx 0;
 }
 
-.footer-box .contact {
+.footer-box .favorite {
     position: relative;
-    width: 120rpx;
+    width: 130rpx;
     height: 100%;
-    line-height: 100rpx;
     text-align: center;
-    padding-top: 26rpx;
-    font-size: 20rpx;
-    color: #008000;
     box-sizing: border-box;
-    background: url("https://cdn.it120.cc/images/weappshop/kefu.png") no-repeat center 21rpx;
-    background-size: 55rpx auto;
+    background: url("../../../images/icon-star-unselected.png") no-repeat center;
+    background-size: 48rpx auto;
+}
+.footer-box .favorite.selected {
+    background: url("../../../images/icon-star-selected.png") no-repeat center;
 }
 
 .footer-box .shop-cart-btn {
     position: relative;
-    width: 150rpx;
+    width: 140rpx;
     height: 100%;
     line-height: 100rpx;
     text-align: center;
@@ -159,8 +173,8 @@ swiper-item image {
     font-size: 20rpx;
     color: #acacb7;
     box-sizing: border-box;
-    background: url("https://cdn.it120.cc/images/weappshop/cart.png") no-repeat center 21rpx;
-    background-size: 44rpx auto;
+    background: url("https://cdn.it120.cc/images/weappshop/cart.png") no-repeat center;
+    background-size: 48rpx auto;
 }
 
 .footer-box .shop-cart-btn .shop-num {
@@ -185,7 +199,7 @@ swiper-item image {
     height: 100%;
     width: 250rpx;
     line-height: 100rpx;
-    background-color: #e64340;
+    background-color: #0a6d01;
     color: #fff;
     font-size: 34rpx;
 }
