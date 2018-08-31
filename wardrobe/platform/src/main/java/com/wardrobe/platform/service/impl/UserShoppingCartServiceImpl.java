@@ -75,7 +75,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         Integer uid = commodityInputView.getUid();
         String shoppingType = commodityInputView.getShoppingType();
 
-        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size");
+        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size, ci.cid");
         StringBuilder bodySql = new StringBuilder(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
         if(uid != null){
@@ -102,7 +102,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
     @Override
     public Map<String, Object> settlement(String scids, int uid){
-        StringBuilder sql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size");
+        StringBuilder sql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size, ci.cid");
         sql.append(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
         sql.append(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
         sql.append(" AND usc.scid IN(:scids)");
