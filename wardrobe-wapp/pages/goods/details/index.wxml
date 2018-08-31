@@ -72,8 +72,10 @@
                 <view class="label">选择尺码</view>
                 <view class="label-item-box">
                     <block wx:for="{{goodDetailSize.sizes}}">
-                        <view class="label-item active" bindtap="labelItemTap" data-id="{{item.sid}}" wx:if="{{item.selected}}">{{item.size}}</view>
-                        <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}" wx:else>{{item.size}}</view>
+                        <view class="label-item active" bindtap="labelItemTap" data-id="{{item.sid}}"
+                              data-index="{{index}}" wx:if="{{item.selected}}">{{item.size}}</view>
+                        <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}"
+                              data-index="{{index}}" wx:else>{{item.size}}</view>
                     </block>
                 </view>
             </view>
@@ -87,7 +89,7 @@
                     <view class="num-jia {{buyNumber== buyNumMax ? 'hui': ''}}" bindtap="numJiaTap">+</view>
                 </view>
             </view>
-            <view class="popup-join-btn" wx:if="{{shopType =='addShopCar'}}" bindtap="addShopCart">
+            <view class="popup-join-btn" bindtap="addShopCart">
                 加入购物车
             </view>
             <!--<view class="popup-join-btn" wx:if="{{shopType =='tobuy'}}" bindtap="buyNow">-->
@@ -112,7 +114,8 @@
                     <view class="label">选择尺码</view>
                     <view class="label-item-box">
                         <block wx:for="{{goodDetailSize.sizes}}">
-                            <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}">{{item.size}}</view>
+                            <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}"
+                                  data-index="{{index}}">{{item.size}}</view>
                         </block>
                     </view>
                 </view>
@@ -126,12 +129,9 @@
                         <view class="num-jia {{buyNumber== buyNumMax ? 'hui': ''}}" bindtap="numJiaTap">+</view>
                     </view>
                 </view>
-                <view class="popup-join-btn" wx:if="{{shopType =='addShopCar'}}" bindtap="addShopOrderCart">
+                <view class="popup-join-btn" bindtap="addShopOrderCart">
                     加入试衣间
                 </view>
-                <!--<view class="popup-join-btn" wx:if="{{shopType =='tobuy'}}" bindtap="buyNow">-->
-                <!--立即购买-->
-                <!--</view>-->
             </view>
         </view>
     </view>
