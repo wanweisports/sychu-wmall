@@ -29,23 +29,27 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
         }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+
+        Object userInfo = request.getSession().getAttribute(IPlatformConstant.LOGIN_USER);
+
         // 未标记不受保护权限的Controller和方法，在没有登录的情况下跳转至登录页面
         NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
         if (classAnnotation == null && methodAnnotation == null) { //如果受保护
-            Object userInfo = request.getSession().getAttribute(IPlatformConstant.LOGIN_USER);
             if (userInfo == null) {
                 request.getRequestDispatcher("/notLogin").forward(request, response); //未登录---跳到统一接口：返回未登录状态10
                 return false;
             }
         }
-        NotPerfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(NotPerfect.class); //未完善资料
-        NotPerfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(NotPerfect.class);
-        if (classAnnotation2 == null && methodAnnotation2 == null) { //如果受保护
-            Object userInfo = request.getSession().getAttribute(IPlatformConstant.LOGIN_USER);
-            if(!userService.userIsPerfect(((UserInfo)userInfo).getUid())) {
-                request.getRequestDispatcher("/notPerfect").forward(request, response); //未完善资料---跳到统一接口：返回未完善资料状态20
-                return false;
+
+        if(userInfo != null) {
+            NotPerfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(NotPerfect.class); //未完善资料
+            NotPerfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(NotPerfect.class);
+            if (classAnnotation2 == null && methodAnnotation2 == null) { //如果受保护
+                if (!userService.userIsPerfect(((UserInfo) userInfo).getUid())) {
+                    request.getRequestDispatcher("/notPerfect").forward(request, response); //未完善资料---跳到统一接口：返回未完善资料状态20
+                    return false;
+                }
             }
         }
 
