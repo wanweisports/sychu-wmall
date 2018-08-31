@@ -1,4 +1,4 @@
-var wxpay = require('../../utils/pay.js');
+var wxpay = require('../../../utils/pay.js');
 var app = getApp();
 
 Page({

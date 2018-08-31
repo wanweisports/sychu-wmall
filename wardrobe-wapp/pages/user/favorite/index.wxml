@@ -12,36 +12,4 @@
         </view>
     </view>
     <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">没有更多啦</view>
-
-    <view class="good-filter-image" bindtap="bindFilterTap" wx:if="{{!isShowFilter}}">
-        <image src="../../../images/icon-filter.png" class="image"/>
-    </view>
-
-    <view class="good-filter" wx:if="{{isShowFilter}}">
-        <view class="good-filter-container">
-            <view class="weui-cells__title">品类</view>
-            <view class="button-sp-area">
-                <button wx:for="{{categoryList}}" class="weui-btn mini-btn" data-index="{{index}}"
-                        type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindCategoryTap"
-                        data-id="{{item.dictId}}">{{item.dictValue}}</button>
-            </view>
-            <view class="weui-cells__title">风格</view>
-            <view class="button-sp-area">
-                <button wx:for="{{styleList}}" class="weui-btn mini-btn" data-index="{{index}}"
-                        type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindStyleTap"
-                        data-id="{{item.dictId}}">{{item.dictValue}}</button>
-            </view>
-            <view class="weui-cells__title">材质</view>
-            <view class="button-sp-area">
-                <button wx:for="{{materialList}}" class="weui-btn mini-btn" data-index="{{index}}"
-                        type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindMaterialTap"
-                        data-id="{{item.dictId}}">{{item.dictValue}}</button>
-            </view>
-
-            <view class="button-sp-next">
-                <button class="weui-btn" type="default" bindtap="bindResetTap">重置</button>
-                <button class="weui-btn" type="primary" bindtap="bindConfirmTap">确认</button>
-            </view>
-        </view>
-    </view>
 </view>

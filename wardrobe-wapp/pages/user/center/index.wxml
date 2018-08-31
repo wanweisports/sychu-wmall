@@ -20,7 +20,7 @@
     <view style="height:20rpx;background: #eee;width:100%;"></view>
 
     <view class="my-item">
-        <navigator url="/pages/order-list/index" hover-class="navigator-hover">我的收藏</navigator>
+        <navigator url="/pages/user/favorite/index" hover-class="navigator-hover">我的收藏</navigator>
     </view>
     <view class="my-item">
         <navigator url="/pages/order-list/index" hover-class="navigator-hover">我的预约</navigator>
@@ -45,7 +45,7 @@
     <view style="height:20rpx;background: #eee;width:100%;"></view>
 
     <view class="my-item">
-        <navigator url="/pages/check-mobile/index" hover-class="navigator-hover">修改手机号</navigator>
+        <navigator url="/pages/user/mobile-check/index" hover-class="navigator-hover">修改手机号</navigator>
     </view>
     <view class="my-item">
         <navigator url="/pages/select-address/index" hover-class="navigator-hover">我的收货地址</navigator>
