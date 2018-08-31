@@ -62,6 +62,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         List<Map<String, Object>> list = pageBean.getList();
         double sumPrice = 0;
         for(Map<String, Object> map : list){
+            map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
             sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
         }
 
@@ -110,6 +111,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         }});
         double sumPrice = 0;
         for(Map<String, Object> map : list){
+            map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
             sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
         }
         Map<String, Object> data = new HashMap();
