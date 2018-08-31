@@ -3,13 +3,14 @@ var app = getApp();
 
 Page({
     data: {
-        rechargeList: []
+        balance: "",
+        rechargeList  : []
     },
     getUserRechargeList: function () {
         var that = this;
 
         app.wxRequest(
-            "/user/userRecharge",
+            "/dict/getDicts",
             {
                 dictName: "RECHARGE_TYPE"
             },
@@ -20,6 +21,20 @@ Page({
             }
         );
     },
+    bindRechargeTap: function (e) {
+        var that = this;
+        var data = e.currentTarget.dataset;
+
+        this.setData({
+            balance : data.balance,
+            rechargeList  : this.data.rechargeList
+        });
+    },
+    bindBalanceBlur: function (e) {
+        this.setData({
+            balance: e.detail.value
+        });
+    },
     onLoad: function () {},
     onShow: function () {
         this.getUserRechargeList();
@@ -28,16 +43,15 @@ Page({
         wx.navigateBack({});
     },
     bindSave: function (e) {
-        var that = this;
-        var amount = e.detail.value.amount;
+        var amount = this.data.balance;
 
-        if (amount == "" || amount*1 < 0) {
+        if (amount == "" || amount * 1 < 0) {
             wx.showModal({
                 title: '错误',
                 content: '请填写正确的充值金额',
                 showCancel: false
             });
-            return
+            return;
         }
 
         wxpay.wxpay(app, amount, 0, "/pages/my/index");

@@ -80,7 +80,7 @@ Page({
     },
     bindColorTap: function (e) {
         wx.navigateTo({
-            url: '/pages/goods/details/index?id=' + e.target.dataset.id
+            url: '/pages/goods/details/index?id=' + e.currentTarget.dataset.id
         });
     },
 

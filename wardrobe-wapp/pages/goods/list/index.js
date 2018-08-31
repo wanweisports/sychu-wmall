@@ -50,7 +50,7 @@ Page({
     },
     bindStyleTap: function (e) {
         var that = this;
-        var data = e.target.dataset;
+        var data = e.currentTarget.dataset;
 
         var current = that.data.styleList[data.index];
 
@@ -78,7 +78,7 @@ Page({
     },
     bindCategoryTap: function (e) {
         var that = this;
-        var data = e.target.dataset;
+        var data = e.currentTarget.dataset;
 
         var current = that.data.categoryList[data.index];
 
@@ -106,7 +106,7 @@ Page({
     },
     bindMaterialTap: function (e) {
         var that = this;
-        var data = e.target.dataset;
+        var data = e.currentTarget.dataset;
 
         var current = that.data.materialList[data.index];
 

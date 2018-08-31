@@ -1,16 +1,37 @@
-page{
+page {
     height: 100%;
 }
-.container{
+.container {
     background-color: #f5f5f9;
     justify-content: initial;
 }
-.form-box{
+.form-box {
     width:100%;
     background-color: #fff;
     margin-top: 20rpx;
 }
-.row-wrap{
+.form-box .form-box-item {
+    width:300rpx;
+    border-radius:10rpx;
+    border:1rpx solid #DDD;
+    margin:10rpx 34rpx;
+    line-height:70rpx;
+    text-align:center;
+    float:left;
+}
+.form-box .form-box-item text {
+    display: block;
+}
+.form-box .form-box-item.selected {
+    border: 1rpx solid #00a67c;
+}
+.form-box .form-box-item .recharge-balance {
+    font-size: 30rpx;
+}
+.form-box .form-box-item .recharge-addition {
+    font-size: 24rpx;
+}
+.row-wrap {
     width: 720rpx;
     height: 88rpx;
     line-height: 88rpx;

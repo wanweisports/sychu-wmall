@@ -9,7 +9,7 @@
 
     <view class="my-item" style='background:none;display:flex;flex-direction:column;height:auto;'>
         <view>
-            余额 {{userInfo.balance}} 元， 衣橱币 {{freeze}} 元
+            余额 {{userInfo.balance}} 元， 衣橱币 {{userInfo.ycoid}} 元
         </view>
         <view style='display:flex;padding-bottom:20rpx;'>
             <button type='primary' style='width:100%;margin-right:70rpx;' bindtap="recharge">充值</button>
