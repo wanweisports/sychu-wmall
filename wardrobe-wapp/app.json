@@ -5,7 +5,7 @@
         "pages/goods/list/index",
         "pages/goods/details/index",
         "pages/goods/cart/index",
-        "pages/fitting-room/index",
+        "pages/goods/room/index",
         "pages/to-fitting-order/index",
         "pages/to-pay-order/index",
         "pages/select-address/index",
@@ -14,12 +14,12 @@
         "pages/order-details/index",
         "pages/wuliu/index",
         "pages/mycoupons/index",
-        "pages/my/index",
         "pages/check-mobile/index",
         "pages/bind-mobile/index",
         "pages/notice/show",
         "pages/recharge/index",
         "pages/withdraw/index",
+        "pages/user/center/index",
         "pages/user/complete/index"
     ],
     "window": {
@@ -48,7 +48,7 @@
                 "text": "挑衣服"
             },
             {
-                "pagePath": "pages/fitting-room/index",
+                "pagePath": "pages/goods/room/index",
                 "iconPath": "images/nav/fitting-off.png",
                 "selectedIconPath": "images/nav/fitting-on.png",
                 "text": "试衣间"
@@ -60,7 +60,7 @@
                 "text": "购物车"
             },
             {
-                "pagePath": "pages/my/index",
+                "pagePath": "pages/user/center/index",
                 "iconPath": "images/nav/my-off.png",
                 "selectedIconPath": "images/nav/my-on.png",
                 "text": "我的"
