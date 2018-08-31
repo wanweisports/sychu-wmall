@@ -21,7 +21,7 @@ Page({
     getShoppingCart: function () {
         var that = this;
 
-        app.wxRequest("/commodity/userShoppingCarts", {shoppingType: 1}, function (res) {
+        app.wxRequest("/commodity/userShoppingCarts", {shoppingType: 2}, function (res) {
             var data = res.data;
 
             if (res.code == 1) {
@@ -411,7 +411,4 @@ Page({
             url:"/pages/to-pay-order/index"
         })
     }
-
-
-
 })
