@@ -24,7 +24,6 @@
     color: #FFF;
 }
 
-
 .version {
     width:100%;
     height: 40rpx;
@@ -34,7 +33,7 @@
     padding: 40rpx;
 }
 
-.my-item{
+.my-item {
     width: 100%;
     background: url(https://cdn.it120.cc/images/weappshop/arrow-right.png) no-repeat 90% center;
     background-size: 16rpx auto;
@@ -42,4 +41,12 @@
     height: 100rpx;
     line-height: 100rpx;
     padding-left: 40rpx;
+    position: relative;
+}
+
+.my-item .right-text {
+    position: absolute;
+    right: 14%;
+    text-align: right;
+    color: #888;
 }

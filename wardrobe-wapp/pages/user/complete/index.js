@@ -1,3 +1,4 @@
+var util = require("../../../utils/util.js");
 var app = getApp();
 
 Page({
@@ -12,6 +13,9 @@ Page({
         isTimerCount  : 60,
         smsText       : "获取验证码",
         _t            : null,
+
+        today         : util.formatDate(new Date()),
+        today100      : util.formatDate(new Date("1918-01-01 00:00:00")),
 
         mobile        : "",
         code          : "",
@@ -33,7 +37,8 @@ Page({
             },
             function (res) {
                 that.setData({
-                    userSizeList: res.data.dicts
+                    userSizeList : res.data.dicts,
+                    usualSize    : res.data.dicts[0].dictValue
                 });
             }
         );
@@ -100,8 +105,10 @@ Page({
                     return;
                 }
 
+                var nextTimerCount = --that.data.isTimerCount;
                 that.setData({
-                    smsText : --that.data.isTimerCount + 's',
+                    isTimerCount : nextTimerCount,
+                    smsText : nextTimerCount + 's',
                     _t      : setTimeout(that.timer, 1000)
                 });
             }, 1000)
@@ -116,8 +123,10 @@ Page({
         clearTimeout(this.data._t);
     },
     hideTopTips: function () {
+        var that = this;
+
         setTimeout(function () {
-            this.setData({
+            that.setData({
                 showTopTips: ""
             });
         }, 2000);
@@ -165,17 +174,23 @@ Page({
         app.wxRequest(
             "/user/updateUser",
             {
-                birthday   : that.data.birthday,
+                age        : that.data.birthday,
                 usualSize  : that.data.usualSize,
                 mobile     : that.data.mobile,
                 code       : that.data.code,
                 inviteCode : that.data.inviteCode
             },
             function (res) {
-                console.log(res)
+                if (res.code == 1) {
+                    wx.switchTab({
+                        url: "/pages/index/index"
+                    });
+                }
             },
             function (err) {
-                console.log(err)
+                that.setData({
+                    showTopTips: err.message || "保存信息错误"
+                });
             }
         );
     }

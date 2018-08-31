@@ -17,10 +17,11 @@
         "pages/check-mobile/index",
         "pages/bind-mobile/index",
         "pages/notice/show",
-        "pages/recharge/index",
         "pages/withdraw/index",
         "pages/user/center/index",
-        "pages/user/complete/index"
+        "pages/user/complete/index",
+        "pages/user/recharge/index",
+        "pages/user/about/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
