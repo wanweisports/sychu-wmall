@@ -1,6 +1,8 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.annotation.NotPerfect;
+import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
@@ -29,11 +31,12 @@ public class UserController extends BaseController {
     /*
      * 用户完善资料
      */
+    @NotPerfect
     @ResponseBody
     @RequestMapping("updateUser")
     public ResponseBean updateUser(UserPerfectBean userPerfectBean, String code){
         System.out.println(JsonUtils.fromJson(userPerfectBean));
-        //if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, code, userPerfectBean.getMobile())) throw new MessageException("验证码错误");
+        if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, code, userPerfectBean.getMobile())) throw new MessageException("验证码错误");
         userPerfectBean.setUserId(getUserInfo().getUid());
         userService.updateUser(userPerfectBean);
         return new ResponseBean(true);
