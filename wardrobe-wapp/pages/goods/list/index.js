@@ -196,7 +196,7 @@ Page({
         })
     },
     scroll: function(e) {
-        console.log(e)
+        console.log(e);
 
         var that = this;
         var scrollTop = that.data.scrollTop;

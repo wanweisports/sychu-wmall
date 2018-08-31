@@ -4,9 +4,9 @@
         "pages/index/index",
         "pages/goods/list/index",
         "pages/goods/details/index",
+        "pages/goods/cart/index",
         "pages/fitting-room/index",
         "pages/to-fitting-order/index",
-        "pages/shop-cart/index",
         "pages/to-pay-order/index",
         "pages/select-address/index",
         "pages/address-add/index",
@@ -54,7 +54,7 @@
                 "text": "试衣间"
             },
             {
-                "pagePath": "pages/shop-cart/index",
+                "pagePath": "pages/goods/cart/index",
                 "iconPath": "images/nav/cart-off.png",
                 "selectedIconPath": "images/nav/cart-on.png",
                 "text": "购物车"
