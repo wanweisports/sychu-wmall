@@ -40,10 +40,13 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
                 request.getRequestDispatcher("/notLogin").forward(request, response); //未登录---跳到统一接口：返回未登录状态10
                 return false;
             }
+        }else{
+            return true; //有NotProtected注解的都通过
         }
 
+        //未完善资料
         if(userInfo != null) {
-            NotPerfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(NotPerfect.class); //未完善资料
+            NotPerfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(NotPerfect.class);
             NotPerfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(NotPerfect.class);
             if (classAnnotation2 == null && methodAnnotation2 == null) { //如果受保护
                 if (!userService.userIsPerfect(((UserInfo) userInfo).getUid())) {
