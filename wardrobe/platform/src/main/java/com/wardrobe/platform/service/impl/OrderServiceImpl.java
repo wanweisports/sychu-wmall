@@ -67,6 +67,42 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
+    public synchronized Integer saveRechargeOrderInfo(UserOrderInfo userOrderInfo, SysDict sysDict, int uid) {
+        Timestamp nowDate = DateUtil.getNowDate();
+        userOrderInfo.setUid(uid);
+        userOrderInfo.setCreateTime(nowDate);
+        userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_NO); //充值
+        userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
+        userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        baseDao.save(userOrderInfo, null);
+
+        int oid = userOrderInfo.getOid();
+
+        //充值金额
+        UserOrderDetail userOrderDetail = new UserOrderDetail();
+        userOrderDetail.setCreateTime(nowDate);
+        userOrderDetail.setItemCount(1);
+        userOrderDetail.setItemName("充值金额");
+        userOrderDetail.setItemPrice(userOrderInfo.getPriceSum());
+        userOrderDetail.setItemPriceSum(userOrderDetail.getItemPrice());
+        userOrderDetail.setOid(oid);
+        baseDao.save(userOrderDetail, null);
+
+        //赠送金额
+        userOrderDetail = new UserOrderDetail();
+        userOrderDetail.setItemType(IDBConstant.LOGIC_STATUS_NO); //充值赠送类型
+        userOrderDetail.setCreateTime(nowDate);
+        userOrderDetail.setItemCount(1);
+        userOrderDetail.setItemName("赠送金额");
+        userOrderDetail.setItemPrice(Arith.conversion(StrUtil.objToDouble(sysDict.getDictValue())));
+        userOrderDetail.setItemPriceSum(userOrderDetail.getItemPrice());
+        userOrderDetail.setOid(oid);
+        baseDao.save(userOrderDetail, null);
+
+        return oid;
+    }
+
+    @Override
     public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
         Timestamp nowDate = DateUtil.getNowDate();
         userOrderInfo.setUid(uid);
@@ -376,7 +412,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     //充值类型需要处理用户账户金额
                     synchronized (OrderServiceImpl.class) {
                         if (IDBConstant.TRANSACTIONS_TYPE_ZF.equals(userOrderInfo.getOrderType())) {
-                            userAccountService.addRechargePrice(userOrderInfo.getUid(), userOrderInfo.getUserOrderDetails().get(0).getCid());
+                            //userAccountService.addRechargePrice(userOrderInfo.getUid(), userOrderInfo.getPayPrice());
                         }
                         //交易流水
                         userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());

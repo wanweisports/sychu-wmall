@@ -1,11 +1,13 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.*;
@@ -31,6 +33,9 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Autowired
     private IUserTransactionsService userTransactionsService;
+
+    @Autowired
+    private IOrderService orderService;
 
     @Override
     public synchronized void addUserScoreAndYcoid(int uid, double priceSum){
@@ -88,14 +93,26 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         return baseDao.getUniqueResult("SELECT balance FROM user_account WHERE uid = ?1", uid).doubleValue();
     }
 
+    @Desc("充值下单")
     @Override
-    public synchronized void addRechargePrice(int uid, int dictId){
+    public synchronized void addRechargeOrderInfo(int uid, int dictId, double price){
         SysDict sysDict = dictService.getDictById(dictId);
-        if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException();
+        if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException("操作失败，请刷新页面重试！");
 
         UserAccount userAccount = getUserAccount(uid);
         Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
-        Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
+        if(rechargePrice.doubleValue() != price) throw new MessageException("操作失败，请刷新页面重试！");
+
+        UserOrderInfo userOrderInfo = new UserOrderInfo();
+        userOrderInfo.setPriceSum(Arith.conversion(rechargePrice));
+        orderService.saveRechargeOrderInfo(userOrderInfo, sysDict, uid);
+    }
+
+    @Desc("充值成功后，回调累计金额")
+    @Override
+    public synchronized void addRechargePrice(UserOrderInfo userOrderInfo){
+
+        /*Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
 
         //累计用户金额
         BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
@@ -106,7 +123,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         userTransactionsService.addUserTransactions(uid, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
 
         //积分累计
-        this.addUserScore(uid, rechargePrice);
+        this.addUserScore(uid, rechargePrice);*/
     }
 
     @Override

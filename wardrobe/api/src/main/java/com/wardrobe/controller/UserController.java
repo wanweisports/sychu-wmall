@@ -105,8 +105,8 @@ public class UserController extends BaseController {
     @Desc("用户充值")
     @ResponseBody
     @RequestMapping("userRecharge")
-    public ResponseBean userRecharge(int dictId){
-        userService.saveUserRecharge(dictId, getUserInfo().getUid());
+    public ResponseBean userRecharge(int dictId, double price){
+        userService.saveUserRecharge(dictId, getUserInfo().getUid(), price);
         return new ResponseBean(true);
     }
 

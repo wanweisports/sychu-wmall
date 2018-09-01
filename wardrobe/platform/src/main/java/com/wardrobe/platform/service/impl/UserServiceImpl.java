@@ -102,10 +102,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(5, 1);
+        Map<String, Object> data = new HashMap<>(6, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
+        data.put("headImg", userInfo.getHeadImg());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());
@@ -128,7 +129,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public void updateUserMobile(int uid, String newMoblie){
+    public void updateUserMobile(int uid, String newMoblie) {
         UserInfo userInfo = getUserInfo(uid);
         userInfo.setMobile(newMoblie);
         baseDao.save(userInfo, uid);
@@ -140,12 +141,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public synchronized void saveUserRecharge(int dictId, int userId){
-        userAccountService.addRechargePrice(userId, dictId);
+    public synchronized void saveUserRecharge(int dictId, int userId, double price){
+        userAccountService.addRechargeOrderInfo(userId, dictId, price);
     }
 
     @Override
-    public PageBean getUserListIn(UserInputView userInputView){
+    public PageBean getUserListIn(UserInputView userInputView) {
         PageBean pageBean = getUsersIn(userInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((map) -> {

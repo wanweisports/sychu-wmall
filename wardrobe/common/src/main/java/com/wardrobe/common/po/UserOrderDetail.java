@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -19,6 +21,7 @@ public class UserOrderDetail {
     private BigDecimal itemPrice;
     private Integer itemCount;
     private BigDecimal itemPriceSum;
+    private String itemType = IDBConstant.LOGIC_STATUS_YES;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -121,6 +124,16 @@ public class UserOrderDetail {
 
     public void setItemPriceSum(BigDecimal itemPriceSum) {
         this.itemPriceSum = itemPriceSum;
+    }
+
+    @Basic
+    @Column(name = "itemType")
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     @Basic

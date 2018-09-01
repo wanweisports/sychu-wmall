@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.po.UserAccount;
+import com.wardrobe.common.po.UserOrderInfo;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -20,7 +21,9 @@ public interface IUserAccountService {
 
     double getUserAccountBalance(int uid);
 
-    void addRechargePrice(int uid, int dictId);
+    void addRechargeOrderInfo(int uid, int dictId, double price);
+
+    void addRechargePrice(UserOrderInfo userOrderInfo);
 
     Map<String, Object> getScore(int uid);
 
