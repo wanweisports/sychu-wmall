@@ -41,7 +41,6 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
             userShoppingCart.setCoid(commodityColor.getCoid());
             userShoppingCart.setCid(commodityInfo.getCid());
             userShoppingCart.setCreateTime(nowDate);
-            userShoppingCart.setCount(1);
             baseDao.save(userShoppingCart, null);
         }else{
             userShoppingCartDB.setCount(userShoppingCartDB.getCount()+1);
