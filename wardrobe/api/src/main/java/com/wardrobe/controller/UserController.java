@@ -36,7 +36,7 @@ public class UserController extends BaseController {
     @RequestMapping("updateUser")
     public ResponseBean updateUser(UserPerfectBean userPerfectBean, String code){
         System.out.println(JsonUtils.fromJson(userPerfectBean));
-        if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, code, userPerfectBean.getMobile())) throw new MessageException("验证码错误");
+        if(!super.checkMobileMessage(MobileMessageEnum.USER_PERFECT, userPerfectBean.getMobile(), code)) throw new MessageException("验证码错误");
         userPerfectBean.setUserId(getUserInfo().getUid());
         userService.updateUser(userPerfectBean);
         return new ResponseBean(true);
