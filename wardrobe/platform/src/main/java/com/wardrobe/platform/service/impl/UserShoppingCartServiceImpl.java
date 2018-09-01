@@ -43,7 +43,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
             userShoppingCart.setCreateTime(nowDate);
             baseDao.save(userShoppingCart, null);
         }else{
-            userShoppingCartDB.setCount(userShoppingCartDB.getCount()+1);
+            userShoppingCartDB.setCount(userShoppingCartDB.getCount()+userShoppingCart.getCount());
             userShoppingCartDB.setUpdateTime(nowDate);
             baseDao.save(userShoppingCartDB, userShoppingCartDB.getScid());
         }
