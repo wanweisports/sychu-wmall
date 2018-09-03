@@ -22,6 +22,7 @@
         "pages/user/mobile-modify/index",
         "pages/user/favorite/index",
         "pages/user/recharge/index",
+        "pages/user/transactions/index",
         "pages/user/about/index"
     ],
     "window": {

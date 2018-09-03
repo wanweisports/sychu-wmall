@@ -82,7 +82,7 @@ Page({
     saveShopCartAdd: function (sid, num, type) {
         var that = this;
 
-        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, num: num}, function () {}, function () {});
+        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function () {}, function () {});
     },
     bindColorTap: function (e) {
         wx.navigateTo({

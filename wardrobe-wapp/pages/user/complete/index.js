@@ -91,7 +91,7 @@ Page({
 
         that.timer();
 
-        app.wxRequest("/message/getCode", {mobile: that.data.mobile, type: 2}, function () {}, function () {});
+        app.wxRequest("/message/getCode", {mobile: that.data.mobile, type: 1}, function () {}, function () {});
     },
     timer: function () {
         var that = this;

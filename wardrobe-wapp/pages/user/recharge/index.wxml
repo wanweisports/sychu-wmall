@@ -2,7 +2,7 @@
     <form bindsubmit="bindSave">
         <view class="form-box" style="overflow: hidden">
             <view wx:for="{{rechargeList}}" class="form-box-item {{!item.selected ? '' : 'selected'}}"
-                  hover-class="selected" bindtap="bindRechargeTap" data-index="{{index}}"
+                  hover-class="selected" bindtap="bindRechargeTap" data-index="{{index}}" data-id="{{item.dictId}}"
                   data-balance="{{item.dictValue}}" data-giving="{{item.dictAdditional}}">
                 <text class="recharge-balance">{{item.dictValue}}元</text>
                 <text class="recharge-addition">送{{item.dictAdditional}}元</text>
@@ -22,5 +22,7 @@
         </view>
         <button type="warn" class="save-btn" formType="submit">立即支付</button>
         <button type="default" class="cancel-btn" bindtap="bindCancel">取消</button>
+
+        <navigator url="/pages/user/transactions/index" hover-class="navigator-hover">我的交易记录</navigator>
     </form>
 </view>

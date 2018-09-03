@@ -4,6 +4,7 @@ var app = getApp();
 Page({
     data: {
         balance: "",
+        dictId: "",
         rechargeList  : []
     },
     getUserRechargeList: function () {
@@ -27,12 +28,14 @@ Page({
 
         this.setData({
             balance : data.balance,
+            dictId  : data.id,
             rechargeList  : this.data.rechargeList
         });
     },
     bindBalanceBlur: function (e) {
         this.setData({
-            balance: e.detail.value
+            balance : e.detail.value,
+            dictId  : ""
         });
     },
     onLoad: function () {},
