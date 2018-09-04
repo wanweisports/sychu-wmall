@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.aliyun.OssClient;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
@@ -105,6 +106,10 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY;
     }
 
+    private SysResources getFmImgObj(int cid){
+        return resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0);  //0表示封面图
+    }
+
     @Override
     public CommodityInfo getCommodityInfo(int cid){
         return baseDao.getToEvict(CommodityInfo.class, cid);
@@ -201,14 +206,14 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             data.put("commodity", getCommodityInfo(cid));
             data.put("commodityColor", getCommodityColorByCid(cid));
             data.put("commoditySizeList", getCommoditySizeList(cid));
-            data.put("coverImg", getFmImg(cid));
+            data.put("coverImg", getFmImgObj(cid));
             data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         }
         return data;
     }
 
     @Override
-    public void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException{
+    public void addUpdateCommodityIn(CommodityInfo commodityInfo, String resourceIds, MultipartHttpServletRequest request) throws IOException{
         int cid = commodityInfo.getCid();
         int coid = commodityInfo.getCommodityColor().getCoid();
         Timestamp timestamp = DateUtil.getNowDate();
@@ -281,11 +286,21 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
                 }));
             }
         }
+        //删除老图片
+        if(StrUtil.isNotBlank(resourceIds)) {
+            List<SysResources> oldResources = resourceService.getNotExistIds(resourceIds, cid, IDBConstant.RESOURCE_COMMODITY_IMG);
+            for(SysResources sysResource : oldResources){
+                baseDao.delete(sysResource);
+            }
+        }
         //处理图片
-        List<SysResources> sysResources = FileUtil.getSpringUpload(request, StrUtil.EMPTY);
+        List<SysResources> sysResources = FileUtil.getSpringUpload(request, OssClient.OSS_IMG_PATH);
         for(SysResources sysResource : sysResources){
+            //保存到阿里云oss
+            OssClient.putInputStream(sysResource.getInputStream(), sysResource.getResourcePath());
+            //保存到数据库
             String name = sysResource.getName();
-            sysResource.setResourceSeq(StrUtil.objToInt(name.substring(name.lastIndexOf(IPlatformConstant.UNDERLINE)+1)));
+            sysResource.setResourceSeq(StrUtil.objToInt(name.substring(name.lastIndexOf(IPlatformConstant.UNDERLINE) + 1)));
             sysResource.setResourceServiceParentId(cid);
             sysResource.setResourceServiceId(coid);
             sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_IMG);
@@ -343,7 +358,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
         data.put("productSizeList", getCommoditySizeList(cid));
-        data.put("coverImg", getFmImg(cid));
+        data.put("coverImg", getFmImgObj(cid));
         data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         if(groupId != null) {
             data.put("groupCommodityColorList", getCommodityColorByGroupId(groupId));

@@ -50,6 +50,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public void addUser(UserInfo userInfo){
+        String inviteCode = StrUtil.objToStr(StrUtil.initCode(4));
+        while (getUserIdByInviteCode(inviteCode) != null){
+            inviteCode = StrUtil.objToStr(StrUtil.initCode(4));
+        }
+        userInfo.setInviteCode(inviteCode);
         baseDao.save(userInfo.init(), null);
         userAccountService.initUserAccount(userInfo.getUid(), userInfo.getRegisterTime());
     }

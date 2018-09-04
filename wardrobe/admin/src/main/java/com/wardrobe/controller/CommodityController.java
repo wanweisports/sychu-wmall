@@ -38,7 +38,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("addUpdateCommodity")
     public ResponseBean addUpdateCommodity(@CommodityResolver CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException {
-       commodityService.addUpdateCommodityIn(commodityInfo, request);
+       commodityService.addUpdateCommodityIn(commodityInfo, null, request);
         return new ResponseBean(true);
     }
 

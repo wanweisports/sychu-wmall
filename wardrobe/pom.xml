@@ -313,7 +313,7 @@
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>2.0.2</version>
+            <version>2.8.3</version>
         </dependency>
 
         <dependency>
@@ -524,6 +524,20 @@
         </resources>
 
     </build>
+
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>nexus-aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <!-- 连接远程nexus仓库时，可启用该注释。或在setting.xml中配置 -->
     <!-- <repositories>

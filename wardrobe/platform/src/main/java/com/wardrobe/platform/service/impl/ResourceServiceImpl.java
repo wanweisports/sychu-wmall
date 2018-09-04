@@ -1,8 +1,10 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.aliyun.OssClient;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysResources;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IResourceService;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -87,35 +90,51 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public SysResources getResource(int resourceServiceId, String resourceServiceType){
-        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType);
+        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2", resourceServiceId, resourceServiceType));
     }
 
     @Override
     public SysResources getResource(int resourceServiceId, String resourceServiceType, int resourceSeq){
-        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceId, resourceServiceType, resourceSeq);
+        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceId, resourceServiceType, resourceSeq));
     }
 
     @Override
     public SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq){
-        return baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceParentId, resourceServiceType, resourceSeq);
+        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceParentId, resourceServiceType, resourceSeq));
     }
 
     @Override
     public List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType){
-        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2", resourceServiceParentId, resourceServiceType);
+        return parseResourcesPath(baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2", resourceServiceParentId, resourceServiceType));
     }
 
     @Override
     public List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType, int notResourceSeq){
-        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq != ?3", resourceServiceParentId, resourceServiceType, notResourceSeq);
+        return parseResourcesPath(baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq != ?3", resourceServiceParentId, resourceServiceType, notResourceSeq));
+    }
+
+    private List<SysResources> parseResourcesPath(List<SysResources> resources){
+        if(resources != null){
+            resources.stream().forEach(resource ->
+                parseResourcePath(resource)
+            );
+        }
+        return resources;
+    }
+
+    private SysResources parseResourcePath(SysResources resource){
+        if(resource != null){
+            resource.setResourcePath(OssClient.getImgPath(resource.getResourcePath()));
+        }
+        return resource;
     }
 
     @Override
     public List<String> getResourcesPath(List<SysResources> sysResources){
         List<String> resourcesPath = new ArrayList<>();
-        sysResources.stream().forEach((sysResource)->{
-            resourcesPath.add(sysResource.getResourcePath());
-        });
+        sysResources.stream().forEach((sysResource)->
+            resourcesPath.add(sysResource.getResourcePath())
+        );
         return resourcesPath;
     }
 
@@ -135,6 +154,11 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
         resource.setResourcePath(fold + "/" + resourceName);
         baseDao.save(resource, resource.getResourceId());
         return resource;
+    }
+
+    @Override
+    public List<SysResources> getNotExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType){
+        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = :resourceServiceParentId AND resourceServiceType = :resourceServiceType AND resourceId NOT IN(:resourceIds)", new HashMap(){{put("resourceServiceParentId", resourceServiceParentId); put("resourceServiceType", resourceServiceType);  putAll(SQLUtil.getInToSQL("resourceIds", resourceIds));}});
     }
 
 }

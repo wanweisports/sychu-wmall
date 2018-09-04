@@ -1,6 +1,7 @@
 package com.wardrobe.common.po;
 
 import javax.persistence.*;
+import java.io.InputStream;
 import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -23,6 +24,7 @@ public class SysResources {
     private Timestamp updateTime;
 
     private String name; //前端file的name名称，用于业务判断
+    private InputStream inputStream;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -162,6 +164,15 @@ public class SysResources {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Transient
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
     }
 
     @Override

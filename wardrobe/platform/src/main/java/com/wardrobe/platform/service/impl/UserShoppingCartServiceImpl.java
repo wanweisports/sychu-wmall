@@ -87,10 +87,13 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     }
 
     @Override
-    public void deleteUserShoppingCart(int scid, int userId){
-        UserShoppingCart userShoppingCart = getUserShoppingCart(scid);
-        if(userId == userShoppingCart.getUid()){
-            baseDao.delete(userShoppingCart);
+    public void deleteUserShoppingCart(String scids, int userId){
+        String[] scidArr = scids.split(",");
+        for(String scid : scidArr) {
+            UserShoppingCart userShoppingCart = getUserShoppingCart(StrUtil.objToInt(scid));
+            if (userId == userShoppingCart.getUid()) {
+                baseDao.delete(userShoppingCart);
+            }
         }
     }
 

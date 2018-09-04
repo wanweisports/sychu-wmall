@@ -60,6 +60,7 @@
                                 <input type="hidden" name="cid" value="${commodity.cid}">
                                 <input type="hidden" name="groupId" value="${commodity.groupId}">
                                 <input type="hidden" name="coid" value="${commodityColor.coid}">
+
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称
@@ -186,7 +187,7 @@
                                             <p>封面图</p>
                                         </div>
                                         <%--这里可以点击一个加号，添加一个轮播图--%>
-                                        <c:forEach var="i" begin="1" end="4">
+                                        <c:forEach var="i" begin="0" end="3">
                                             <c:if test="${broadImgList[i] != null}">
                                                 <div class="pull-left mr-4">
                                                     <div style="width: 100%; position: relative">
@@ -194,7 +195,7 @@
                                                             <i class="fa fa-remove"></i>
                                                         </button>
                                                         <img class="product-image-show" src="${broadImgList[i].resourcePath}" data-id="${broadImgList[i].resourceId}">
-                                                        <input type="file" class="product-image-file" name="file_${i}"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                                        <input type="file" class="product-image-file" name="file_${i+1}"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
                                                     </div>
                                                     <p>轮播图${i}</p>
                                                 </div>
@@ -206,7 +207,7 @@
                                                             <i class="fa fa-remove"></i>
                                                         </button>
                                                         <img class="product-image-show" src="/Content/images/upload.png">
-                                                        <input type="file" class="product-image-file" name="file__${i}"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                                        <input type="file" class="product-image-file" name="file__${i+1}"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
                                                     </div>
                                                     <p>轮播图${i}</p>
                                                 </div>

@@ -19,7 +19,7 @@ public class SQLUtil {
                 	if(paramValue.toString().matches("\\d*")){
                 		list.add(Integer.valueOf(paramValue.toString()));
                 	}else if(paramValue instanceof Integer){
-                		list.add(com.wardrobe.common.util.StrUtil.trim(paramValue.toString()));
+                		list.add(StrUtil.trim(paramValue.toString()));
                 	}
                 }
             }

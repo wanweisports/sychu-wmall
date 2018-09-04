@@ -198,7 +198,6 @@ public class UserInfo {
         this.isPerfect = IDBConstant.LOGIC_STATUS_NO; //待完善资料
         this.createTime = timestamp;
         this.registerTime = timestamp;
-        this.inviteCode = StrUtil.objToStr(StrUtil.initCode(4));
         return this;
     }
 

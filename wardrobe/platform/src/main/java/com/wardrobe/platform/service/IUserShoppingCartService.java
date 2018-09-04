@@ -14,7 +14,7 @@ public interface IUserShoppingCartService {
 
     Map<String, Object> getUserShoppingCartList(CommodityInputView commodityInputView);
 
-    void deleteUserShoppingCart(int scid, int userId);
+    void deleteUserShoppingCart(String scids, int userId);
 
     UserShoppingCart getUserShoppingCart(int scid);
 

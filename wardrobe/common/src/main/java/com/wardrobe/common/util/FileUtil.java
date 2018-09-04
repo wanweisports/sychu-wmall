@@ -121,12 +121,15 @@ public class FileUtil {
 			String originalFilename = multipartFile.getOriginalFilename();
 			String fileName = getFileName(timestamp, originalFilename);
 			SysResources resource = new SysResources();
+			try{
+				resource.setInputStream(multipartFile.getInputStream());
+			}catch (Exception e){}
 			resource.setResourceName(fileName);
 			resource.setResourceOriginal(originalFilename);
 			resource.setFileSize(multipartFile.getSize());
 			resource.setStatus(IDBConstant.LOGIC_STATUS_YES);
 			resource.setName(multipartFile.getName());
-			resource.setResourcePath(fold + File.separator + fileName);
+			resource.setResourcePath(fold + "/" + fileName);
 			resource.setCreateTime(timestamp);
 			resource.setResourceServiceParentId(null);  //上传之后修改
 			resource.setResourceServiceId(IDBConstant.ZERO); //上传之后修改

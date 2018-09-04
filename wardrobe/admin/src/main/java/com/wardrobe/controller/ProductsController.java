@@ -174,7 +174,7 @@ public class ProductsController extends BaseController {
         commodityColor.setCommoditySizes(commoditySizeList);
         commodityInfo.setCommodityColor(commodityColor);
 
-        commodityService.addUpdateCommodityIn(commodityInfo, multipartHttpServletRequest);
+        commodityService.addUpdateCommodityIn(commodityInfo, null, multipartHttpServletRequest);
 
         return new ResponseBean(true);
     }
@@ -182,7 +182,7 @@ public class ProductsController extends BaseController {
     @Desc("商品提交")
     @ResponseBody
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
-    public ResponseBean saveProductsEdit(ProductRequest productRequest, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public ResponseBean saveProductsEdit(ProductRequest productRequest, String resourceIds, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
 
         CommodityInfo commodityInfo = new CommodityInfo();
         commodityInfo.setCid(productRequest.getCid());
@@ -202,7 +202,7 @@ public class ProductsController extends BaseController {
 
         commodityInfo.setCommodityColor(commodityColor);
 
-        commodityService.addUpdateCommodityIn(commodityInfo, multipartHttpServletRequest);
+        commodityService.addUpdateCommodityIn(commodityInfo, resourceIds, multipartHttpServletRequest);
 
         return new ResponseBean(true);
     }

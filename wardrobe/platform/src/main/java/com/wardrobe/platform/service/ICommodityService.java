@@ -38,7 +38,7 @@ public interface ICommodityService {
 
     Map<String, Object> renderProductsAddIn(Integer cid);
 
-    void addUpdateCommodityIn(CommodityInfo commodityInfo, MultipartHttpServletRequest request) throws IOException;
+    void addUpdateCommodityIn(CommodityInfo commodityInfo, String resourceIds, MultipartHttpServletRequest request) throws IOException;
 
     void addSizeIn(CommoditySize commoditySize);
 

@@ -64,8 +64,8 @@ public class CommodityController extends BaseController {
 
     @ResponseBody
     @RequestMapping("delShoppingCart")
-    public ResponseBean delShoppingCart(int scid){
-        userShoppingCartService.deleteUserShoppingCart(scid, getUserInfo().getUid());
+    public ResponseBean delShoppingCart(String scids){
+        userShoppingCartService.deleteUserShoppingCart(scids, getUserInfo().getUid());
         return new ResponseBean(true);
     }
 
