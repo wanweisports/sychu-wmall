@@ -5,9 +5,9 @@
         "pages/goods/list/index",
         "pages/goods/details/index",
         "pages/goods/cart/index",
+        "pages/goods/settle/index",
         "pages/goods/room/index",
         "pages/to-fitting-order/index",
-        "pages/to-pay-order/index",
         "pages/select-address/index",
         "pages/address-add/index",
         "pages/order-list/index",
@@ -23,6 +23,7 @@
         "pages/user/favorite/index",
         "pages/user/recharge/index",
         "pages/user/transactions/index",
+        "pages/user/coupons/index",
         "pages/user/about/index"
     ],
     "window": {

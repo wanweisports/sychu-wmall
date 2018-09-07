@@ -294,21 +294,28 @@ Page({
         });
         this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
     },
-    toPayOrder:function(){
+    toPayOrder2: function () {
+        wx.redirectTo({
+            url: "/pages/goods/settle/index"
+        });
+    },
+    toPayOrder: function () {
         wx.showLoading();
+
         var that = this;
         if (this.data.goodsList.noSelect) {
             wx.hideLoading();
             return;
         }
+
         // 重新计算价格，判断库存
         var shopList = [];
         var shopCarInfoMem = wx.getStorageSync('shopCarInfo');
         if (shopCarInfoMem && shopCarInfoMem.shopList) {
             // shopList = shopCarInfoMem.shopList
-            shopList = shopCarInfoMem.shopList.filter(entity => {
-                    return entity.active;
-        });
+            shopList = shopCarInfoMem.shopList.filter(function (entity) {
+                return entity.active;
+            });
         }
         if (shopList.length == 0) {
             wx.hideLoading();

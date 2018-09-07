@@ -46,9 +46,9 @@ Page({
         wx.navigateBack({});
     },
     bindSave: function (e) {
-        var amount = this.data.balance;
+        var price = this.data.balance;
 
-        if (amount == "" || amount * 1 < 0) {
+        if (price == "" || price * 1 < 0) {
             wx.showModal({
                 title: '错误',
                 content: '请填写正确的充值金额',
@@ -57,6 +57,6 @@ Page({
             return;
         }
 
-        wxpay.wxpay(app, amount, 0, "/pages/my/index");
+        wxpay.wxpay(app, price, 0, "/pages/my/index");
     }
 });

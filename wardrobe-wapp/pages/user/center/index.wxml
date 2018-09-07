@@ -37,7 +37,7 @@
         </navigator>
     </view>
     <view class="my-item">
-        <navigator url="/pages/mycoupons/index" hover-class="navigator-hover">
+        <navigator url="/pages/user/center/coupons/index" hover-class="navigator-hover">
             我的优惠券<text class="right-text">1张</text>
         </navigator>
     </view>
