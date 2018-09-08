@@ -7,7 +7,7 @@
 	<!-- a rolling file appender -->
 	<!-- ================================================================= -->
 
-	<!-- A time/date based rolling appender -->
+	<!-- time/date based rolling appender -->
 	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="./laiqu.log" />
 		<param name="Append" value="false" />
