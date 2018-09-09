@@ -4,6 +4,7 @@ var app = getApp()
 
 Page({
     data: {
+        goodsListId: [],
         goodsList:[],
         isNeedLogistics:0, // 是否需要物流信息
         allGoodsPrice:0,
@@ -31,9 +32,11 @@ Page({
         console.log(shopList);
 
         var allGoodsPrice = 0;
+        var goodsListId = [];
         for (let i = 0; i < shopList.length; i++) {
             let carShopBean = shopList[i];
             allGoodsPrice += carShopBean.price * carShopBean.number;
+            goodsListId.push(shopList[i].scid);
         }
 
         //立即购买下单
@@ -54,7 +57,8 @@ Page({
         that.setData({
             goodsList: shopList,
             allGoodsPrice: allGoodsPrice,
-            allGoodsAndYunPrice: allGoodsPrice
+            allGoodsAndYunPrice: allGoodsPrice,
+            goodsListId: goodsListId
         });
     },
 
@@ -88,7 +92,7 @@ Page({
             expressMobile: that.data.curAddressData.mobile,
             expressAddress: that.data.curAddressData.address,
             remark: remark,
-            scids: "",
+            scids: that.data.goodsListId.join(","),
             serviceType: "",
             cpid: ""
         };
@@ -102,7 +106,8 @@ Page({
             wx.hideLoading();
 
             // 清空购物车数据
-            wx.removeStorageSync('shopCarInfo');
+            //wx.removeStorageSync('shopCarInfo');
+            console.log(res);
             //
             // // 配置模板消息推送
             // var postJsonString = {};
@@ -122,9 +127,9 @@ Page({
             //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
             //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
             // 下单成功，跳转到订单管理界面
-            wx.redirectTo({
-                url: "/pages/order-list/index"
-            });
+            // wx.redirectTo({
+            //     url: "/pages/order-list/index"
+            // });
         })
     },
     processYunfei: function () {
