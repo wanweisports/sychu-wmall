@@ -43,8 +43,14 @@ public class NettyClient {
                 System.out.println("请输入控制指令：");
                 while (true) {
                     String op = scanner.nextLine();
-                    System.out.println(op);
-                    ClientHandler.channels.get(0).writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
+
+                    System.out.println(op + ":" + ClientChannelUtil.getChannels().size());
+                    Channel fristChannel = ClientChannelUtil.getFristChannel();
+                    if(fristChannel == null){
+                        System.out.println("继电器未连接！");
+                        continue;
+                    }
+                    fristChannel.writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
                 }
 
                 //Thread.sleep(10000000);
@@ -52,13 +58,13 @@ public class NettyClient {
                 throw new Exception("connects to  fails", t);
             }
         }finally {
-            System.out.println(6666666666666666666L);
+            System.out.println(77777777777777777L);
             clientGroup.shutdownGracefully().sync();
         }
     }
 
     public static void main(String[] args) throws Exception{
-        NettyClient nettyClient = new NettyClient("192.168.1.166", 1234);
+        NettyClient nettyClient = new NettyClient("192.168.1.168", 1234);
         nettyClient.clientServer();
     }
 
