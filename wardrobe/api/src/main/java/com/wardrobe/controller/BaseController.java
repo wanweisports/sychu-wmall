@@ -26,22 +26,22 @@ public class BaseController {
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 
-	@Value("gatePort")
-	public int gatePort;
+	@Value("${gatePort}")
+	public Integer gatePort;
 
-	@Value("gateIp")
+	@Value("${gateIp}")
 	public String gateIp;
 
-	@Value("relayPort")
-	public int relayPort;
+	@Value("${relayPort}")
+	public Integer relayPort;
 
-	@Value("relayIp")
+	@Value("${relayIp}")
 	public String relayIp;
 
-	@Value("rfidPort")
-	public int rfidPort;
+	@Value("${rfidPort}")
+	public Integer rfidPort;
 
-	@Value("rfidIp")
+	@Value("${rfidIp}")
 	public String rfidIp;
 
 	protected String redirect(String path) {

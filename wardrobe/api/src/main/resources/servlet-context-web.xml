@@ -84,6 +84,6 @@
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <!-- <beans:bean id="userDao" class="com.osen.app.dao.impl.UserDaoImpl"/>
-    <beans:bean id="userService" class="com.osen.app.service.impl.UserServiceImpl"/> -->
+    <!-- 加载配置文件 -->
+    <context:property-placeholder location="classpath*:systemConfig-web.properties" ignore-unresolvable="true" />
 </beans:beans>

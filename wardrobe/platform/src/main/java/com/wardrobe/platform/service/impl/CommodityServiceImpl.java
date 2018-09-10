@@ -287,12 +287,12 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             }
         }
         //删除老图片
-        if(StrUtil.isNotBlank(resourceIds)) {
-            List<SysResources> oldResources = resourceService.getNotExistIds(resourceIds, cid, IDBConstant.RESOURCE_COMMODITY_IMG);
-            for(SysResources sysResource : oldResources){
-                baseDao.delete(sysResource);
-            }
+        resourceIds = resourceIds != null ? resourceIds : StrUtil.EMPTY; //resourceIds前端未变的图片id
+        List<SysResources> oldResources = resourceService.getNotExistIds(resourceIds, cid, IDBConstant.RESOURCE_COMMODITY_IMG);
+        for(SysResources sysResource : oldResources){
+            baseDao.delete(sysResource);
         }
+
         //处理图片
         List<SysResources> sysResources = FileUtil.getSpringUpload(request, OssClient.OSS_IMG_PATH);
         for(SysResources sysResource : sysResources){
