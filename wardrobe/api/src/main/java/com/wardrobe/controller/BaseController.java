@@ -5,6 +5,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.StrUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,6 +25,12 @@ public class BaseController {
 	public static final String APPLICATION_JSON = "application/json";
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
+
+	@Value("tcpPort")
+	public int tcpPort;
+
+	@Value("tcpIp")
+	public String tcpIp;
 
 	protected String redirect(String path) {
         return new StringBuilder(UrlBasedViewResolver.REDIRECT_URL_PREFIX).append(path).toString();

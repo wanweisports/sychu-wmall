@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 陈小松 on 2018/9/9.
+ * Created by cxs on 2018/9/9.
  */
 public class ClientChannelUtil {
 
@@ -28,6 +28,16 @@ public class ClientChannelUtil {
 
     public static Channel getFristChannel(){
         return channels.size() > 0 ? channels.get(0) : null;
+    }
+
+    public static Channel getRelayChannel(String ip, int port){
+        String remoteAddress = "/" + ip + ":" + port;
+        for(Channel channel : channels){
+            if(remoteAddress.equals(channel.remoteAddress())){
+                return channel;
+            }
+        }
+        return null;
     }
 
 }

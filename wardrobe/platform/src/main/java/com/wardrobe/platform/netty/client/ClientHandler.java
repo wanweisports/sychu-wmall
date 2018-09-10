@@ -13,9 +13,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by 雷达 on 2018/7/12.
- */
 @ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 

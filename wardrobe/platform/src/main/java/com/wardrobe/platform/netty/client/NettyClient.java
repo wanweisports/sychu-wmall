@@ -45,12 +45,13 @@ public class NettyClient {
                     String op = scanner.nextLine();
 
                     System.out.println(op + ":" + ClientChannelUtil.getChannels().size());
-                    Channel fristChannel = ClientChannelUtil.getFristChannel();
-                    if(fristChannel == null){
+                    //Channel relayChannel = ClientChannelUtil.getFristChannel();
+                    Channel relayChannel = ClientChannelUtil.getRelayChannel("192.168.1.168", 1234);
+                    if(relayChannel == null){
                         System.out.println("继电器未连接！");
                         continue;
                     }
-                    fristChannel.writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
+                    relayChannel.writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
                 }
 
                 //Thread.sleep(10000000);

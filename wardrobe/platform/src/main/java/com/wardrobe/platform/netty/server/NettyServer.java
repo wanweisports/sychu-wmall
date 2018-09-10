@@ -11,9 +11,6 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
-/**
- * Created by 雷达 on 2018/7/12.
- */
 public class NettyServer {
 
     private int port = 9900;

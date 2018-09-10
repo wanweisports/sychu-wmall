@@ -13,9 +13,6 @@ import io.netty.util.HashedWheelTimer;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by 雷达 on 2018/7/12.
- */
 public class ClientHandlerInit extends ChannelInitializer<SocketChannel> {
 
     private String host;

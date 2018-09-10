@@ -50,13 +50,14 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
             //if(attempts < 12){ //自动重连次数
                 attempts++;
                 //重连的间隔时间会越来越长
-                int timeout = 1;
+                int timeout = 3;
                 timer.newTimeout(this, timeout, TimeUnit.MILLISECONDS);
             //}
         }
         ctx.fireChannelInactive();
     }
 
+    @Override
     public void run(Timeout timeout) throws Exception {
         System.out.println("bootstrap:" + bootstrap);
         ChannelFuture future;

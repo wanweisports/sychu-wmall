@@ -9,9 +9,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by 雷达 on 2018/7/12.
- */
 public class ServerHandlerInit extends ChannelInitializer<SocketChannel> {
 
     private final AcceptorIdleStateTrigger idleStateTrigger = new AcceptorIdleStateTrigger();
