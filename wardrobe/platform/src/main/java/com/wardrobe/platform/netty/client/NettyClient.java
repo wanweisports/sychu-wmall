@@ -9,6 +9,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -37,36 +39,38 @@ public class NettyClient {
             //进行连接
             try {
                 ChannelFuture future = boot.connect(host, port);
-                // 以下代码在synchronized同步块外面是安全的
-
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("请输入控制指令：");
-                while (true) {
-                    String op = scanner.nextLine();
-
-                    System.out.println(op + ":" + ClientChannelUtil.getChannels().size());
-                    //Channel relayChannel = ClientChannelUtil.getFristChannel();
-                    Channel relayChannel = ClientChannelUtil.getRelayChannel("192.168.1.168", 1234);
-                    if(relayChannel == null){
-                        System.out.println("继电器未连接！");
-                        continue;
-                    }
-                    relayChannel.writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
-                }
-
-                //Thread.sleep(10000000);
+                while (true){}
             }catch (Throwable t){
                 throw new Exception("connects to  fails", t);
             }
-        }finally {
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
             System.out.println(77777777777777777L);
             clientGroup.shutdownGracefully().sync();
         }
     }
 
     public static void main(String[] args) throws Exception{
-        NettyClient nettyClient = new NettyClient("192.168.1.168", 1234);
-        nettyClient.clientServer();
+        new Thread(){
+            @Override
+            public void run() {
+                NettyClient nettyClient = new NettyClient("192.168.207.156", 9900);
+                try {
+                    nettyClient.clientServer();
+                }catch (Exception e){e.printStackTrace();}
+            }
+        }.start();
+
+        new Thread(){
+            @Override
+            public void run() {
+                NettyClient nettyClient = new NettyClient("192.168.207.156", 9901);
+                try {
+                    nettyClient.clientServer();
+                }catch (Exception e){e.printStackTrace();}
+            }
+        }.start();
     }
 
 }

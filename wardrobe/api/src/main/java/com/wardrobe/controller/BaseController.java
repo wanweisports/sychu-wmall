@@ -26,11 +26,23 @@ public class BaseController {
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 
-	@Value("tcpPort")
-	public int tcpPort;
+	@Value("gatePort")
+	public int gatePort;
 
-	@Value("tcpIp")
-	public String tcpIp;
+	@Value("gateIp")
+	public String gateIp;
+
+	@Value("relayPort")
+	public int relayPort;
+
+	@Value("relayIp")
+	public String relayIp;
+
+	@Value("rfidPort")
+	public int rfidPort;
+
+	@Value("rfidIp")
+	public String rfidIp;
 
 	protected String redirect(String path) {
         return new StringBuilder(UrlBasedViewResolver.REDIRECT_URL_PREFIX).append(path).toString();

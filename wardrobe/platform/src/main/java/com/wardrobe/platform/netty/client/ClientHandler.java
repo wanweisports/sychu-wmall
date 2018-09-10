@@ -28,7 +28,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         System.out.println("客户端准备发送的数据包：" + sendInfo);
         channel.writeAndFlush(Unpooled.copiedBuffer(sendInfo, CharsetUtil.UTF_8)); // 必须有flush
         System.out.println("channel===>" + channel);
-        ClientChannelUtil.addChannel(channel);
+        ClientChannelUtil.connectServerChannel(channel);
     }
 
     /**
@@ -37,7 +37,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
      */
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("客户端与服务端通道-关闭：" + ctx.channel().localAddress() + "channelInactive");
-        ClientChannelUtil.removeChannel(ctx.channel());
+        ClientChannelUtil.removeServerChannel(ctx.channel());
     }
 
     /*
@@ -63,7 +63,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         ctx.close();
         Channel channel = ctx.channel();
         System.out.println("channel===>" + channel);
-        ClientChannelUtil.removeChannel(channel);
+        ClientChannelUtil.removeServerChannel(channel);
     }
 
 }

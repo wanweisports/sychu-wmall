@@ -39,7 +39,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
 
         attempts = 0;
         ctx.fireChannelActive();
-        ClientChannelUtil.addChannel(ctx.channel());
+        ClientChannelUtil.connectServerChannel(ctx.channel());
     }
 
     @Override
