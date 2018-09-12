@@ -1,13 +1,10 @@
 .container{
     min-height: 100%;
     overflow: hidden;
-    overflow-y: hidden;
 }
 .userinfo {
     display: flex;
-    flex-direction: column;
-    padding: 50rpx 0;
-    align-items: center;
+    padding: 20rpx 50rpx;
     background: #e85654;
     width: 750rpx;
 }
@@ -19,9 +16,18 @@
     border-radius: 50%;
 }
 
+.userinfo-info {
+    margin-left: 10rpx;
+    text-align: center;
+}
+
 .userinfo-nickname {
-    margin-top: 20rpx;
+    margin-top: 40rpx;
     color: #FFF;
+    display: block;
+}
+.weui-btn {
+    margin-top: 10rpx;
 }
 
 .version {
@@ -35,7 +41,7 @@
 
 .my-item {
     width: 100%;
-    background: url(https://cdn.it120.cc/images/weappshop/arrow-right.png) no-repeat 90% center;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAAXNSR0IArs4c6QAAAj1JREFUOBGVVE1LHEEQ7e4EkRBjiBL9AQqCQmB32d3xEMgxp6CCssEFFUMiBA+e9pKTgeBBBRGChEBCPAghISgiiEhu87Gzq/4Df4Yf292+Wulx2llXbRiq+1W9N9VVNcMYltaau2741fOqU3S+zxIUDOIKzAdIfXPdygRhd10ChCUQPxIBmQjO2XcIFu8sANox51wbAokA++H74VuDNbOcnAieRhnWLslRuORcjOfzqY0IabCpCxBOb1SK/cT2YSxOCsEKuVzmdwyztpEAob5fGdKabSCTllhUjTE+5jjpvzEs2loChLpu9TVjioJbTRQKe45nFJn8M5ixCQFyeF74CjXZRDEfR4EQEYKPZLPpLYORbShADt+vOlqrHVypnc600K0zNGwYmWxfIk0EKCAMw1StxnYh0mEIoJziGXKc1A5hN2ZgCEFw2C+l3Md1nhsM9gQ1eZPPZ3broxxzJLZayy6Qn1xzoNWijbCmAkFQfYmWUtGijmBPA1bEgP0hgfjQ0DlaQXAwKKWiYj0yIIqocOvJ+HQ2zKBcPswqJVGkeBvpe+HvQP5lBMkmiuh5lTTwPaT+1ATSx4aizeRy6TWDGWtlgN6/ABFtuyJTIMizjcjkiwTK5aMBDM4esGfkMAvTNwfyqjlft3UBDEyflOdIm3XaAaIE8rKN2acHnnfQq5T+D3K37RKfMG1fbCx5ErhvD2DrzbjzPMifk+FJpN4FFK8AoXU8Aj+QBXwspWToLQh+Ju/xV1q8JSzhvgCBx9kzUoIj2gAAAABJRU5ErkJggg==") no-repeat 90% center;
     background-size: 16rpx auto;
     border-bottom: 1px solid #eee;
     height: 100rpx;
