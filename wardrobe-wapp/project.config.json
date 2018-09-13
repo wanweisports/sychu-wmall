@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -12,8 +12,8 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.2.4",
-	"appid": "wxe8b22bbf133ca0ae",
-	"projectname": "wardrobe-wapp",
+	"appid": "wx7988cd8a6691f962",
+	"projectname": "wardrobe-wapp-yq",
 	"isGameTourist": false,
 	"condition": {
 		"search": {

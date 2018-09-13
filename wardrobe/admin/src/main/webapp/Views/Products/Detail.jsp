@@ -13,6 +13,9 @@
         .size-list td {
             padding: 0.3rem 0.75rem;
         }
+        .product-info th {
+            width: 9rem;
+        }
     </style>
 </layout:override>
 
@@ -32,7 +35,7 @@
                             <small>Products Information</small>
                         </div>
                         <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered member-info">
+                            <table class="table table-responsive-sm table-bordered product-info">
                                 <tbody>
                                 <tr>
                                     <th>商品名称：</th>

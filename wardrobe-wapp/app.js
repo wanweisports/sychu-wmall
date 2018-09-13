@@ -182,8 +182,8 @@ App({
     config: {
         getApiHost: function () {
             //return "http://127.0.0.1:8070";
-            return "http://192.168.1.105:8070";
-            //return "http://mystore.01time.cn/api";
+            //return "http://192.168.1.105:8070";
+            return "https://mystore.jonham.cn/api";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您'

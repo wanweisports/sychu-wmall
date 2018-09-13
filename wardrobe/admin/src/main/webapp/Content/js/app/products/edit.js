@@ -311,11 +311,15 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         fileReader.readAsDataURL(file);
     });
 
+    var resourceIds = [];
     var $fileImagesRemove = $(".product-image-remove");
     $fileImagesRemove.on("click", function (e) {
         e.preventDefault();
 
         var $this = $(this);
+        if (!!$this.attr("data-id")) {
+            resourceIds.push($this.attr("data-id"));
+        }
         $this.hide();
         $this.nextAll(".product-image-show").attr('src', "/Content/images/upload.png");
         $this.nextAll(".product-image-file").val("");
@@ -370,6 +374,8 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
     $(".save-products").on("click", function (e) {
         e.preventDefault();
+
+        $("[name='resourceIds']").val(resourceIds.join(","));
 
         var $form = $("#product_form");
         var conditions = $form.serializeArray();

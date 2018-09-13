@@ -51,33 +51,23 @@
                     <i class="icon-directions"></i> 试衣间管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'list'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list'}">active</c:if>" href="/admin/settings/wardrobe">
+                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && (param.subMenu == 'list' || param.subMenu == 'settings')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && (param.subMenu == 'list' || param.subMenu == 'settings')}">active</c:if>" href="/admin/wardrobe/list">
                             <i class="icon-arrow-right"></i> 试衣间列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
-                            <i class="icon-arrow-right"></i> 预约面板
+                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'dashboard'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'dashboard'}">active</c:if>" href="/admin/wardrobe/dashboard">
+                            <i class="icon-arrow-right"></i> 运行面板
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
-                            <i class="icon-arrow-right"></i> 预约订单
+                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'log'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'log'}">active</c:if>" href="/admin/wardrobe/running/log">
+                            <i class="icon-arrow-right"></i> 运行日志
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'orders'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'orders'}">active</c:if>" href="/admin/settings/wardrobe">
-                            <i class="icon-arrow-right"></i> 预约订单详情
-                        </a>
-                    </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'log'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'log'}">active</c:if>" href="/admin/settings/log">
-                            <i class="icon-arrow-right"></i> 试衣间设置
-                        </a>
-                    </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'log'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'log'}">active</c:if>" href="/admin/settings/log">
+                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'api'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'api'}">active</c:if>" href="/admin/settings/api">
                             <i class="icon-arrow-right"></i> 接口设置
                         </a>
                     </li>

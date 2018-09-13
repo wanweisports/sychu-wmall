@@ -60,6 +60,7 @@
                                 <input type="hidden" name="cid" value="${commodity.cid}">
                                 <input type="hidden" name="groupId" value="${commodity.groupId}">
                                 <input type="hidden" name="coid" value="${commodityColor.coid}">
+                                <input type="hidden" name="resourceIds">
 
                                 <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
@@ -173,13 +174,16 @@
                                     <div class="col-md-10 text-center">
                                         <div class="pull-left mr-4">
                                             <div style="width: 100%; position: relative">
-                                                <button class="btn btn-danger btn-sm product-image-remove">
-                                                    <i class="fa fa-remove"></i>
-                                                </button>
                                                 <c:if test="${coverImg != null}">
+                                                    <button class="btn btn-danger btn-sm product-image-remove" style="display: block" data-id="${coverImg.resourceId}">
+                                                        <i class="fa fa-remove"></i>
+                                                    </button>
                                                     <img class="product-image-show" src="${coverImg.resourcePath}" data-id="${coverImg.resourceId}">
                                                 </c:if>
                                                 <c:if test="${coverImg == null}">
+                                                    <button class="btn btn-danger btn-sm product-image-remove">
+                                                        <i class="fa fa-remove"></i>
+                                                    </button>
                                                     <img class="product-image-show" src="/Content/images/upload.png">
                                                 </c:if>
                                                 <input type="file" class="product-image-file" name="file_0"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
@@ -191,7 +195,7 @@
                                             <c:if test="${broadImgList[i] != null}">
                                                 <div class="pull-left mr-4">
                                                     <div style="width: 100%; position: relative">
-                                                        <button class="btn btn-danger btn-sm product-image-remove">
+                                                        <button class="btn btn-danger btn-sm product-image-remove" style="display: block" data-id="${broadImgList[i].resourceId}">
                                                             <i class="fa fa-remove"></i>
                                                         </button>
                                                         <img class="product-image-show" src="${broadImgList[i].resourcePath}" data-id="${broadImgList[i].resourceId}">
