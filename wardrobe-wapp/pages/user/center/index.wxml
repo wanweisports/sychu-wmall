@@ -1,8 +1,12 @@
 <view class="container">
     <view class="userinfo">
         <image wx:if="{{userInfo && userInfo.headImg}}" class="userinfo-avatar" src="{{ userInfo.headImg }}" background-size="cover"></image>
-        <text class="userinfo-nickname">{{ userInfo.nickname }}</text>
-        <text class="userinfo-rank">LV{{ userInfo.rank }}</text>
+        <view class="userinfo-info">
+            <text class="userinfo-nickname">{{ userInfo.nickname }}</text>
+            <button class="weui-btn" type="primary" size="mini">
+                <text class="userinfo-rank">LV{{ userInfo.rank }}</text>
+            </button>
+        </view>
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
@@ -13,7 +17,7 @@
         </view>
         <view style='display:flex;padding-bottom:20rpx;'>
             <button type='primary' style='width:100%;margin-right:70rpx;' bindtap="recharge">充值</button>
-            <button type='warn' style='width:100%;margin-right:70rpx;' bindtap="withdraw">提现</button>
+            <!--<button type='warn' style='width:100%;margin-right:70rpx;' bindtap="withdraw">提现</button>-->
         </view>
     </view>
 
@@ -47,11 +51,9 @@
     <view class="my-item">
         <navigator url="/pages/user/mobile-check/index" hover-class="navigator-hover">修改手机号</navigator>
     </view>
-    <view class="my-item">
-        <navigator url="/pages/select-address/index" hover-class="navigator-hover">我的收货地址</navigator>
-    </view>
-
-    <view style="height:20rpx;background: #eee;width:100%;"></view>
+    <!--<view class="my-item">-->
+        <!--<navigator url="/pages/select-address/index" hover-class="navigator-hover">我的收货地址</navigator>-->
+    <!--</view>-->
 
     <view class="my-item">
         联系客服<text class="right-text">010-1234567</text>

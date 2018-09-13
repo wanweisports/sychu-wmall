@@ -74,12 +74,13 @@
 
 .good-filter-image {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
-    background: #0a6d01;
+    right:30rpx;
+    bottom:30rpx;
+    width:100rpx;
+    height:100rpx;
+    border-radius:50rpx;
+    background: rgba(10,109,1, .8);
+    box-shadow:0 0 5rpx #0a6d01;
 }
 
 .good-filter-image image {
@@ -109,24 +110,25 @@
 }
 
 .button-sp-area {
-    padding: 0 10px;
+    padding: 0 20rpx;
 }
 
 .mini-btn {
-    margin-right: 5px;
+    margin-right: 10rpx;
     display: inline-block;
-    font-size: 14px;
-    line-height: 2;
+    font-size: 26rpx;
+    margin-top: 10rpx;
 }
 
 .button-sp-next {
-    padding-top: 15px;
+    padding-top: 30rpx;
     width: 80%;
     margin: 0 auto;
 }
 
 .button-sp-next .weui-btn {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 20rpx;
     width: 40%;
+    font-size: 28rpx;
 }

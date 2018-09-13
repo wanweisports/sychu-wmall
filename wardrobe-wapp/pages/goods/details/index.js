@@ -16,6 +16,8 @@ Page({
         shopNum: 0,
         hideShopPopup: true,
 
+        isFavorite: false,
+
         buyNumber: 0,
         buyNumMin: 1,
         buyNumMax: 0,
@@ -306,6 +308,16 @@ Page({
                 buyNumber: currentNum
             })
         }
+    },
+    addShopFavorite: function () {
+        this.setData({
+            isFavorite: true
+        });
+    },
+    removeShopFavorite: function () {
+        this.setData({
+            isFavorite: false
+        });
     },
     /**
     * 立即购买

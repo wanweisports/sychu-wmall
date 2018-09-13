@@ -159,6 +159,7 @@ App({
             }
         });
     },
+
     onShareAppMessage: function() {
         return {
             title: wx.getStorageSync('mallName') + '——' + this.config.shareProfile,
@@ -180,9 +181,11 @@ App({
 
     config: {
         getApiHost: function () {
-            return "http://127.0.0.1:8070";
+            //return "http://127.0.0.1:8070";
+            return "http://192.168.1.105:8070";
+            //return "http://mystore.01time.cn/api";
         },
         version: "1.0",
-        shareProfile: '百款精品商品，总有一款适合您' // 首页转发的时候话术
+        shareProfile: '百款精品商品，总有一款适合您'
     }
 });

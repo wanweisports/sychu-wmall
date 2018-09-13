@@ -14,15 +14,20 @@ Page({
         newlyGoods: [],
         hotGoods: []
     },
-    onLoad: function() {
-        var that = this;
-
+    onReady: function () {
         wx.setNavigationBarTitle({
             title: wx.getStorageSync('mallName')
         });
+    },
+    onLoad: function() {
+        var that = this;
 
+        that.getBannerGoodsList();
         that.getHotGoodsList();
         that.getNewlyGoodsList();
+    },
+    getBannerGoodsList: function () {
+        var that = this;
 
         that.setData({
             banners: [
@@ -67,16 +72,15 @@ Page({
         );
     },
     //事件处理函数
-    swiperchange: function(e) {
-        //console.log(e.detail.current)
+    swiperchange: function (e) {
         this.setData({
             swiperCurrent: e.detail.current
         })
     },
-    toDetailsTap: function(e) {
+    toDetailsTap: function (e) {
         wx.navigateTo({
             url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-        })
+        });
     },
     tapBanner: function(e) {
         if (e.currentTarget.dataset.id != 0) {
