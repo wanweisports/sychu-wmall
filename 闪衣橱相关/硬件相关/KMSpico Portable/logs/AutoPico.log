@@ -1,0 +1,36 @@
+15:16:22:601 2018.07.14 AutoPico 16.1.0.0
+Official Site: 
+http://forums.mydigitallife.info/forums/51-KMS-tools
+KMSpico v10.2.0
+Time Start: 2018/7/14 15:16:22
+
+15:16:22:601 Checking Internet Connection...
+15:16:22:760 Windows Detected: Windows 10 Home China : CoreCountrySpecific : 6.3 : 17134
+15:16:22:805 Loading SECOH-QAD...
+15:16:22:858 Set Registry : Image File Execution Options\SppExtComObj.exe:Debugger
+15:16:22:858 Using host Forward: 10.147.124.231:1688
+15:16:22:858 Using host Local: 127.199.221.38:1688
+15:16:22:858 Using method: SECOH-QAD
+15:16:22:944 Opening Firewall Port...
+15:16:23:013 Opening Firewall App...
+15:16:23:223 KMSEmulator Port: 1688
+15:16:23:224 Get Registry : SYSTEM\CurrentControlSet\Services\sppsvc:Start
+15:16:23:233 KMSEmulator running port: 1688
+15:16:23:448 Loading OEM Key Dumper...
+15:16:23:449 Key found on MSDM: -33W49
+15:16:23:449 Office 2010 Skipped
+15:16:23:449 Office 2013 Skipped
+15:16:23:450 Office 2016 Skipped
+15:16:23:973 Installing Key: -33W49
+15:16:24:232 No Internet Connection Detected
+15:16:24:841 InstallProductKey -33W49 0
+15:16:25:063 RefreshLicenseStatus 0
+15:16:25:075 OEM Key Found: Version Windows Skipped
+15:16:25:076 OEM Activation needs Internet Connection
+15:16:25:077 Closing Firewall Port...
+15:16:25:175 Closing Firewall App...
+15:16:25:321 Set Registry : HKEY_CURRENT_USER\Control Panel\Desktop:PaintDesktopVersion
+15:16:26:751 Unloading SECOH-QAD...
+15:16:26:755 Del Registry : SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SppExtComObj.exe:
+15:16:26:755 Client listener shut down
+15:16:26:766 Time Finish: 2018/7/14 15:16:26

@@ -1,0 +1,10 @@
+D:\桌面\Socket_tcp_ip\SocketClient\bin\Release\SocketClient.exe.config
+D:\桌面\Socket_tcp_ip\SocketClient\bin\Release\SocketClient.exe
+D:\桌面\Socket_tcp_ip\SocketClient\bin\Release\SocketClient.pdb
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\ResolveAssemblyReference.cache
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\SocketClient.Form1.resources
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\SocketClient.Properties.Resources.resources
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\GenerateResource.read.1.tlog
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\GenerateResource.write.1.tlog
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\SocketClient.exe
+D:\桌面\Socket_tcp_ip\SocketClient\obj\Release\SocketClient.pdb

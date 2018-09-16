@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Socket">
+</Property><Property Name="解决方案文件" Value="D:\嘉祥自来水\Socket\Socket\Socket.sln">
+</Property><Property Name="用户选项文件" Value="D:\嘉祥自来水\Socket\Socket\Socket.suo">
+</Property><Property Name="Date" Value="2014年9月30日">
+</Property><Property Name="Time" Value="9:02">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Socket.sln" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\Socket.sln">
+</Event><Event ErrorLevel="0" Project="" Source="Socket.suo" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\Socket.suo">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\SocketClient.csproj" Description="项目文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\SocketClient.csproj">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Form1.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Form1.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Form1.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Program.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Program.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Properties\AssemblyInfo.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Properties\Resources.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Properties\Settings.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Properties\Settings.settings" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Form1.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Form1.resx">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\Properties\Resources.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketClient\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\SocketClient.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="SocketClient" Source="SocketClient\SocketClient.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\SocketService.csproj" Description="项目文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\SocketService.csproj">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Form1.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Form1.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Form1.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Program.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Program.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Properties\AssemblyInfo.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Properties\Resources.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Properties\Settings.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Properties\Settings.settings" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Form1.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Form1.resx">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\Properties\Resources.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketService\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\SocketService.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="SocketService" Source="SocketService\SocketService.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\SocketTcpClient.csproj" Description="项目文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\SocketTcpClient.csproj">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Form1.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Form1.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Form1.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Program.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Program.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Properties\AssemblyInfo.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Properties\Resources.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Properties\Settings.Designer.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Properties\Settings.settings" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Form1.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Form1.resx">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\Properties\Resources.resx" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\SocketTcpClient\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\SocketTcpClient.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="SocketTcpClient" Source="SocketTcpClient\SocketTcpClient.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TcpService" Source="TcpService\TcpService.csproj" Description="项目文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\TcpService\TcpService.csproj">
+</Event><Event ErrorLevel="0" Project="TcpService" Source="TcpService\Program.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\TcpService\Program.cs">
+</Event><Event ErrorLevel="0" Project="TcpService" Source="TcpService\Properties\AssemblyInfo.cs" Description="文件已成功备份为 D:\嘉祥自来水\Socket\Socket\Backup\TcpService\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="TcpService" Source="TcpService\TcpService.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="TcpService" Source="TcpService\TcpService.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Socket.sln" Description="解决方案文件不需要转换。">
+</Event><Event ErrorLevel="3" Project="" Source="Socket.sln" Description="无需转换">
+</Event><Event ErrorLevel="0" Project="SocketClient" Source="SocketClient\SocketClient.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event><Event ErrorLevel="0" Project="SocketService" Source="SocketService\SocketService.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event><Event ErrorLevel="0" Project="SocketTcpClient" Source="SocketTcpClient\SocketTcpClient.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event><Event ErrorLevel="0" Project="TcpService" Source="TcpService\TcpService.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event></UpgradeLog>
