@@ -5,10 +5,18 @@ package com.wardrobe.platform.service;
  */
 public interface IRelayService {
 
-    void connectServer(String ip, int port) throws Exception;
+    boolean connectServer(String ip, int port) throws Exception;
 
-    void openServerLock(String ip, int port, int lockId);
+    void openServerLock(String ip, int port, int lockId) throws Exception;
 
     void closeServerLock(String ip, int port, int lockId);
+
+    void openServerAllLock(String ip, int port);
+
+    void closeServerAllLock(String ip, int port);
+
+    void openServerDrive(String ip, int port, int driveId);
+
+    void closeServerDrive(String ip, int port, int driveId);
 
 }

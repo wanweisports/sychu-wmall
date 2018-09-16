@@ -1,11 +1,16 @@
 package com.wardrobe.platform.netty.reconnect.client;
 
+import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.platform.netty.client.ClientChannelUtil;
+import com.wardrobe.platform.netty.client.bean.ClientBean;
+import com.wardrobe.platform.netty.client.bean.DeviceBean;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 /**
@@ -21,22 +26,32 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("停止时间是：" + new Date());
+        System.out.println("停止时间是123：" + new Date());
     }
 
     //当前面的通道channelRead后，后面的通道无法获得消息（不会调用后面通道channelRead接口）
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
+        //super.channelRead(ctx, msg); //不能打开，否则ref=0，则报错
         System.out.println("===channelRead===");
-        /*System.out.println("Heartbeat-client:" + msg);
+
+        System.out.println("Heartbeat-client:" + msg);
         String message = getMessage((ByteBuf) msg);
         System.out.println("message-client:" + message);
         if(message.equals("Heartbeat")){
             ctx.write("has read message from server");
             ctx.flush();
+        }else{ //获取设备状态
+            if(message != null && message.contains("Relay")){
+                //0：状态  1：设备号[1-8]
+                String[] statusName = message.split(" ");
+                DeviceBean deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
+                if(deviceBean != null){
+                    deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
+                }
+            }
         }
-        ReferenceCountUtil.release(msg);*/
+        ReferenceCountUtil.release(msg);
     }
 
     /**

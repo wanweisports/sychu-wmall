@@ -1,9 +1,10 @@
 package com.wardrobe.platform.netty.reconnect.client;
 
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
-import com.wardrobe.platform.netty.client.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
+import io.netty.util.CharsetUtil;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
@@ -47,17 +48,16 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
         System.out.println("链路关闭");
         if(reconnect){
             System.out.println("链路关闭，将进行重连" + attempts);
-            //if(attempts < 12){ //自动重连次数
-                attempts++;
-                //重连的间隔时间会越来越长
-                int timeout = 3;
-                timer.newTimeout(this, timeout, TimeUnit.MILLISECONDS);
+            //if(attempts < 12){
+            attempts++;
+            //重连的间隔时间会越来越长
+            int timeout = 2;
+            timer.newTimeout(this, timeout, TimeUnit.SECONDS);
             //}
         }
         ctx.fireChannelInactive();
     }
 
-    @Override
     public void run(Timeout timeout) throws Exception {
         System.out.println("bootstrap:" + bootstrap);
         ChannelFuture future;

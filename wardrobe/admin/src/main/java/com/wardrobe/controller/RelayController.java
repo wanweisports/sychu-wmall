@@ -2,6 +2,7 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.service.IRelayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
@@ -26,11 +28,13 @@ public class RelayController extends BaseController {
     @RequestMapping("connectServer")
     public ResponseBean connectServer(int type) throws Exception{ //1：锁  2：大门
         if(type == 1){
-            relayService.connectServer(relayIp, relayPort);
+            boolean success = relayService.connectServer(relayIp, relayPort);
+            return new ResponseBean(IPlatformConstant.SUCCESS_CODE, success ? "连接中" : "未连接");
         }else if(type == 2){
-            relayService.connectServer(gateIp, gatePort);
+            boolean success = relayService.connectServer(gateIp, gatePort);
+            return new ResponseBean(IPlatformConstant.SUCCESS_CODE, success ? "连接中" : "未连接");
         }
-        return new ResponseBean(true);
+        return null;
     }
 
     @Desc("开启锁")
@@ -46,6 +50,38 @@ public class RelayController extends BaseController {
     @RequestMapping("closeLock")
     public ResponseBean closeLock(int lockId){
         relayService.closeServerLock(relayIp, relayPort, lockId);
+        return new ResponseBean(true);
+    }
+
+    @Desc("开启全部锁")
+    @ResponseBody
+    @RequestMapping("openAllLock")
+    public ResponseBean openAllLock() throws Exception{
+        relayService.openServerAllLock(relayIp, relayPort);
+        return new ResponseBean(true);
+    }
+
+    @Desc("关闭全部锁")
+    @ResponseBody
+    @RequestMapping("closeAllLock")
+    public ResponseBean closeAllLock(){
+        relayService.closeServerAllLock(relayIp, relayPort);
+        return new ResponseBean(true);
+    }
+
+    @Desc("开启门设备")
+    @ResponseBody
+    @RequestMapping("openDrive")
+    public ResponseBean openDrive(int driveId) throws Exception{
+        relayService.openServerDrive(gateIp, gatePort, driveId);
+        return new ResponseBean(true);
+    }
+
+    @Desc("关闭门设备")
+    @ResponseBody
+    @RequestMapping("closeDrive")
+    public ResponseBean closeDrive(int driveId) throws Exception{
+        relayService.closeServerDrive(gateIp, gatePort, driveId);
         return new ResponseBean(true);
     }
 

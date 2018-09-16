@@ -1,6 +1,12 @@
 package com.wardrobe.platform.netty.client.bean;
 
+import com.wardrobe.platform.netty.client.ClientChannelUtil;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.util.CharsetUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cxs on 2018/9/10.
@@ -11,7 +17,15 @@ public class ClientBean {
     private String host;
     private int port;
     private Channel serviceChannel;
+    private List<DeviceBean> deviceBeans = new ArrayList<>();
 
+    public ClientBean(){ //初始化8个设备的状态
+        for(int i = 1; i <= 8; i++){
+            DeviceBean deviceBean = new DeviceBean();
+            deviceBean.setDeviceNo(i);
+            deviceBeans.add(deviceBean);
+        }
+    }
 
     public int getStatus() {
         return status;
@@ -44,4 +58,13 @@ public class ClientBean {
     public void setServiceChannel(Channel serviceChannel) {
         this.serviceChannel = serviceChannel;
     }
+
+    public List<DeviceBean> getDeviceBeans() {
+        return deviceBeans;
+    }
+
+    public void setDeviceBeans(List<DeviceBean> deviceBeans) {
+        this.deviceBeans = deviceBeans;
+    }
+
 }

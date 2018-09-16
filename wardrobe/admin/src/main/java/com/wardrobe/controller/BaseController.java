@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.BaseInputView;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,6 +20,24 @@ public class BaseController {
 	public static final String APPLICATION_JSON = "application/json";
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
+
+	@Value("${gatePort}")
+	public Integer gatePort;
+
+	@Value("${gateIp}")
+	public String gateIp;
+
+	@Value("${relayPort}")
+	public Integer relayPort;
+
+	@Value("${relayIp}")
+	public String relayIp;
+
+	@Value("${rfidPort}")
+	public Integer rfidPort;
+
+	@Value("${rfidIp}")
+	public String rfidIp;
 	
 	protected String redirect(String path) {
         return new StringBuilder(UrlBasedViewResolver.REDIRECT_URL_PREFIX).append(path).toString();

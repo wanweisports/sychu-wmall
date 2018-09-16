@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class BaseService {
 
-    @Autowired
+    //@Autowired
     protected IBaseDao baseDao;
 
     @Autowired

@@ -1,7 +1,6 @@
 package com.wardrobe.platform.netty.client;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -10,8 +9,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 
 @ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
@@ -37,7 +34,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
      */
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("客户端与服务端通道-关闭：" + ctx.channel().localAddress() + "channelInactive");
-        ClientChannelUtil.removeServerChannel(ctx.channel());
+        ClientChannelUtil.clearServerChannel(ctx.channel());
     }
 
     /*
@@ -49,12 +46,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     读取客户端通道信息..
     客户端接收到的服务端信息，数据包为:
     Relayoff 1
+    ！！！重连后，服务端发送消息给客户端，此方法不会在Read消息
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         System.out.println("读取客户端通道信息..");
         ByteBuf buf = msg.readBytes(msg.readableBytes());
-        System.out.println("客户端接收到的服务端信息，数据包为:" + buf.toString(Charset.forName("utf-8")));
+        String msgStr = buf.toString(Charset.forName("utf-8"));
+        System.out.println("客户端接收到的服务端信息，数据包为:" + msgStr);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         ctx.close();
         Channel channel = ctx.channel();
         System.out.println("channel===>" + channel);
-        ClientChannelUtil.removeServerChannel(channel);
+        ClientChannelUtil.clearServerChannel(channel);
     }
 
 }

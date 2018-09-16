@@ -24,7 +24,7 @@
           content="${param.keyword == null ? "闪衣橱管理系统" : "闪衣橱管理系统"}">
     <meta name="description"
           content="${param.desc == null ? "闪衣橱管理系统" : "闪衣橱管理系统"}">
-    <meta name="author" content="北体高科（北京）科技有限公司">
+    <meta name="author" content="闪衣橱（北京）科技有限公司">
 
     <!--[if lt IE 9]><meta http-equiv="refresh" content="0;ie.html" /><![endif]-->
 
