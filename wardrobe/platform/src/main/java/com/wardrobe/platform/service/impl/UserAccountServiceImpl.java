@@ -77,7 +77,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         userAccount.setUid(uid);
         userAccount.setBalance(Arith.conversion(0));
         userAccount.setYcoid(IPlatformConstant.INIT_USER_SCORE);
-        userAccount.setRank(0);
+        userAccount.setRank(1);
         userAccount.setScore(0);
         userAccount.setCreateTime(timestamp);
         baseDao.save(userAccount, null);
