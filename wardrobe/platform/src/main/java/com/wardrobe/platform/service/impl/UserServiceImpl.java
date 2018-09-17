@@ -199,7 +199,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public Map<String, Object> getMembersDetailIn(int userId){
-        Map<String, Object> data = new HashMap(4, 1);
+        Map<String, Object> data = new HashMap(3, 1);
         data.put("user", getUserType(JsonUtils.fromJson(getUserInfo(userId))));
         data.put("userAccount", getUserAccountType(JsonUtils.fromJson(userAccountService.getUserAccount(userId))));
         data.put("userCoupon", userCouponService.getUserCoupons(userId));

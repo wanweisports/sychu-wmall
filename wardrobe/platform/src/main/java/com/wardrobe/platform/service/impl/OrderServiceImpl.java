@@ -463,8 +463,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         StringBuilder bodySql = new StringBuilder(" FROM user_order_info uoi");
         StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
         if(uid != null){
-            whereSql.append(" AND uoi.uid = uid");
+            whereSql.append(" AND uoi.uid = :uid");
         }
+        whereSql.append(" ORDER BY uoi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
 
