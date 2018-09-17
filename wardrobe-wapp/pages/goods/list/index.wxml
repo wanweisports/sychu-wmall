@@ -21,19 +21,19 @@
         <view class="good-filter-container">
             <view class="weui-cells__title">品类</view>
             <view class="button-sp-area">
-                <button wx:for="{{categoryList}}" class="weui-btn mini-btn" data-index="{{index}}"
+                <button wx:for="{{categoryList}}" wx:key="dictId" class="weui-btn mini-btn" data-index="{{index}}"
                         type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindCategoryTap"
                         data-id="{{item.dictId}}">{{item.dictValue}}</button>
             </view>
             <view class="weui-cells__title">风格</view>
             <view class="button-sp-area">
-                <button wx:for="{{styleList}}" class="weui-btn mini-btn" data-index="{{index}}"
+                <button wx:for="{{styleList}}" wx:key="dictId" class="weui-btn mini-btn" data-index="{{index}}"
                         type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindStyleTap"
                         data-id="{{item.dictId}}">{{item.dictValue}}</button>
             </view>
             <view class="weui-cells__title">材质</view>
             <view class="button-sp-area">
-                <button wx:for="{{materialList}}" class="weui-btn mini-btn" data-index="{{index}}"
+                <button wx:for="{{materialList}}" wx:key="dictId" class="weui-btn mini-btn" data-index="{{index}}"
                         type="{{!item.selected ? 'default' : 'primary'}}" size="mini" bindtap="bindMaterialTap"
                         data-id="{{item.dictId}}">{{item.dictValue}}</button>
             </view>

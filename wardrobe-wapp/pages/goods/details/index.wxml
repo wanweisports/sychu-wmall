@@ -1,9 +1,7 @@
-<import src="../../wxParse/wxParse.wxml" />
-
 <view class="container">
     <view class="swiper-container">
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
-            <block wx:for="{{goodsDetail.resources}}">
+            <block wx:for="{{goodsDetail.resources}}" wx:key="*this">
                 <swiper-item>
                     <image src="{{item}}" class="slide-image" width="355" height="150" mode="aspectFit" lazy-load="true"/>
                 </swiper-item>
@@ -21,7 +19,7 @@
     </view>
     <view class="goods-colors">
         <view class="label-title">商品颜色</view>
-        <block wx:for="{{goodsDetail.colors}}">
+        <block wx:for="{{goodsDetail.colors}}" wx:key="cid">
             <button class="weui-btn" plain size="mini" type="primary" data-id="{{item.cid}}" bindtap="bindColorTap" wx:if="{{item.selected}}">{{item.colorName}}</button>
             <button class="weui-btn" plain size="mini" data-id="{{item.cid}}" bindtap="bindColorTap" wx:else>{{item.colorName}}</button>
         </block>
@@ -78,7 +76,7 @@
             <view class="size-label-box">
                 <view class="label">选择尺码</view>
                 <view class="label-item-box">
-                    <block wx:for="{{goodDetailSize.sizes}}">
+                    <block wx:for="{{goodDetailSize.sizes}}" wx:key="sid">
                         <view class="label-item active" bindtap="labelItemTap" data-id="{{item.sid}}"
                               data-index="{{index}}" wx:if="{{item.selected}}">{{item.size}}</view>
                         <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}"
@@ -120,7 +118,7 @@
                 <view class="size-label-box">
                     <view class="label">选择尺码</view>
                     <view class="label-item-box">
-                        <block wx:for="{{goodDetailSize.sizes}}">
+                        <block wx:for="{{goodDetailSize.sizes}}" wx:key="sid">
                             <view class="label-item" bindtap="labelItemTap" data-id="{{item.sid}}"
                                   data-index="{{index}}">{{item.size}}</view>
                         </block>

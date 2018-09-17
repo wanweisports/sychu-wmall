@@ -35,12 +35,12 @@ App({
 
         wx.login({
             success: function (res) {
-                console.log(res);
+                //console.log(res);
                 var code = res.code;
 
                 wx.getUserInfo({
                     success: function (res) {
-                        console.log(res);
+                        //console.log(res);
                         var iv = res.iv;
                         var encryptedData = res.encryptedData;
 
@@ -67,13 +67,13 @@ App({
                                 }
                             },
                             function (err) {
-                                console.log("[F][/login]" + JSON.stringify(err));
-                                console.log(err);
+                                //console.log("[F][/login]" + JSON.stringify(err));
+                                //console.log(err);
                             }
                         );
                     },
                     fail: function (err) {
-                        console.log("[F][wx.getUserInfo]" + JSON.stringify(err));
+                        //console.log("[F][wx.getUserInfo]" + JSON.stringify(err));
                         wx.redirectTo({
                             url: "/pages/landing/index"
                         });
@@ -100,7 +100,7 @@ App({
                 }
             },
             function (err) {
-                console.log("[F][/user/isPerfect]" + JSON.stringify(err));
+                //console.log("[F][/user/isPerfect]" + JSON.stringify(err));
                 fail(err)
             }
         );
@@ -150,11 +150,11 @@ App({
             data: data, 
             header: header,
             success: function (res) {
-                console.log("[R][" + url + "]：" + JSON.stringify(res));
+                //console.log("[R][" + url + "]：" + JSON.stringify(res));
                 success(res.data);
             },
             fail: function (err) {
-                console.log("[F][" + url + "]：" + JSON.stringify(err));
+                //console.log("[F][" + url + "]：" + JSON.stringify(err));
                 fail(err);
             }
         });
