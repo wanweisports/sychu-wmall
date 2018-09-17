@@ -30,35 +30,56 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin/wardrobe")
 public class WardrobeController extends BaseController {
 
-    private ModelAndView setModelAndView(ModelAndView modelAndView) {
-        return modelAndView.addObject("Admin", super.getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER));
-    }
-
     @Desc("试衣间列表")
-    @NotProtected
     @RequestMapping(value = "/list")
-    public String renderWardrobeList(UserInputView userInputView, Model model) {
+    public String renderWardrobeList() {
         return "Wardrobe/List";
     }
 
+    @Desc("获取试衣间信息")
+    @ResponseBody
+    @RequestMapping("/getInfo")
+    public ResponseBean saveWardrobeInfo(int wardrobeId) {
+        return new ResponseBean(true);
+    }
+
+    @Desc("试衣间保存")
+    @ResponseBody
+    @RequestMapping("/saveInfo")
+    public ResponseBean saveWardrobeInfo() {
+        return new ResponseBean(true);
+    }
+
     @Desc("试衣间面板")
-    @NotProtected
     @RequestMapping(value = "/dashboard")
-    public String renderWardrobeDashboard(UserInputView userInputView, Model model) {
+    public String renderWardrobeDashboard() {
         return "Wardrobe/Dashboard";
     }
 
-    @Desc("试衣间配置")
-    @NotProtected
-    @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public String renderWardrobeSettings(int userId, Model model) {
-        return "Wardrobe/Settings";
+    @Desc("试衣间连接")
+    @ResponseBody
+    @RequestMapping("/connect")
+    public ResponseBean connectWardrobe() {
+        return new ResponseBean(true);
+    }
+
+    @Desc("大门开锁关锁")
+    @ResponseBody
+    @RequestMapping("/door/lock")
+    public ResponseBean lockWardrobeDoor() {
+        return new ResponseBean(true);
+    }
+
+    @Desc("柜子开锁关锁")
+    @ResponseBody
+    @RequestMapping("/cabinet/lock")
+    public ResponseBean lockWardrobeCabinet() {
+        return new ResponseBean(true);
     }
 
     @Desc("试衣间运行日志")
-    @NotProtected
-    @RequestMapping(value = "/running/log", method = RequestMethod.GET)
-    public String renderWardrobeRunningLog(int userId, Model model) {
+    @RequestMapping(value = "/running/log")
+    public String renderWardrobeRunningLog() {
         return "Wardrobe/Log";
     }
 }

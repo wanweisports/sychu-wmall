@@ -66,11 +66,6 @@
                             <i class="icon-arrow-right"></i> 运行日志
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'api'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'api'}">active</c:if>" href="/admin/settings/api">
-                            <i class="icon-arrow-right"></i> 接口设置
-                        </a>
-                    </li>
                 </ul>
             </li>
 

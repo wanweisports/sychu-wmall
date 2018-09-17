@@ -49,6 +49,21 @@
             </c:choose>
         </c:when>
 
+        <c:when test="${param.menu == 'wardrobe'}">
+            <li class="breadcrumb-item">试衣间管理</li>
+            <c:choose>
+                <c:when test="${param.subMenu == 'list'}">
+                    <li class="breadcrumb-item active">试衣间列表</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'dashboard'}">
+                    <li class="breadcrumb-item active">运行面板</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'log'}">
+                    <li class="breadcrumb-item active">运行日志</li>
+                </c:when>
+            </c:choose>
+        </c:when>
+
         <c:when test="${param.menu == 'students'}">
             <li class="breadcrumb-item">学员管理</li>
             <c:choose>
