@@ -43,6 +43,12 @@
                                             <small>Users Products</small>
                                         </a>
                                     </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/hot/list?banner=1">
+                                            <strong>banner商品</strong>
+                                            <small>Banner Products</small>
+                                        </a>
+                                    </li>
                                 </c:if>
                                 <c:if test="${newly=='1'}">
                                     <li class="breadcrumb-item">
@@ -54,6 +60,30 @@
                                     <li class="breadcrumb-item">
                                         <strong>最新商品</strong>
                                         <small>Users Products</small>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/hot/list?banner=1">
+                                            <strong>banner商品</strong>
+                                            <small>Banner Products</small>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:if test="${banner=='1'}">
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/hot/list?hot=1">
+                                            <strong>热门商品</strong>
+                                            <small>Hot Products</small>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/hot/list?newly=1">
+                                            <strong>最新商品</strong>
+                                            <small>Users Products</small>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <strong>banner商品</strong>
+                                        <small>Banner Products</small>
                                     </li>
                                 </c:if>
                             </ol>
@@ -101,6 +131,13 @@
                                                 <c:if test="${newly=='1'}">
                                                     <c:if test="${c.newly == '1'}">
                                                         <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">
+                                                            <i class="fa fa-remove"></i> 取消
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
+                                                <c:if test="${banner=='1'}">
+                                                    <c:if test="${c.banner == '1'}">
+                                                        <a href="javascript:;" class="btn btn-sm btn-danger product-banner-cancel js-newly-down" title="取消banner" data-id="${c.cid}">
                                                             <i class="fa fa-remove"></i> 取消
                                                         </a>
                                                     </c:if>

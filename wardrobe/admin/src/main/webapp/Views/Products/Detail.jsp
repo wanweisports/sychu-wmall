@@ -7,6 +7,14 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
+        .product-image-file {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
         .size-list th {
             padding: 0.75rem;
         }
@@ -25,6 +33,37 @@
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
+    <div class="modal fade" id="banner_settings" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-default" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="banner_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <input type="hidden" name="cid">
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label">
+                                <span class="text-danger">*</span> 上传banner
+                            </label>
+                            <div class="col-md-9 col-form-label">
+                                <div style="width: 100%; position: relative">
+                                    <img class="product-image-show" src="/Content/images/upload.png">
+                                    <input type="file" class="product-image-file" name="file">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                        <i class="fa fa-close"></i> 取 消
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary save-upload">
+                        <i class="fa fa-check"></i> 保 存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
@@ -134,6 +173,13 @@
                                     <i class="fa fa-bolt"></i> 设置最新
                                 </a>
                             </c:if>
+
+                            <a href="#banner_settings" class="btn btn-primary" title="设置banner" data-id="${product.cid}" data-toggle="modal">
+                                <i class="fa fa-photo"></i> 设置banner
+                            </a>
+                            <a href="javascript:;" class="btn btn-danger" title="取消banner" data-id="${product.cid}">
+                                <i class="fa fa-photo"></i> 取消banner
+                            </a>
                         </div>
                     </div>
                     <div class="card">

@@ -74,18 +74,18 @@
                     <i class="icon-list"></i> 订单管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">active</c:if>" href="/admin/order/list">
+                    <li class="nav-item <c:if test="${param.menu == 'orders' && (param.subMenu == 'list' || param.subMenu == 'detail')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'orders' && (param.subMenu == 'list' || param.subMenu == 'detail')}">active</c:if>" href="/admin/orders/list">
                             <i class="icon-arrow-right"></i> 商品订单
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'list' || param.subMenu == 'detail'}">active</c:if>" href="/admin/order/list">
-                            <i class="icon-arrow-right"></i> 配送订单
+                    <li class="nav-item <c:if test="${param.menu == 'orders' && (param.subMenu == 'reservation' || param.subMenu == 'reservation_detail')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'orders' && (param.subMenu == 'reservation' || param.subMenu == 'reservation_detail')}">active</c:if>" href="/admin/orders/reservation">
+                            <i class="icon-arrow-right"></i> 商品预约订单
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'refund'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'refund'}">active</c:if>" href="/admin/order/list">
+                    <li class="nav-item <c:if test="${param.menu == 'orders' && param.subMenu == 'refund'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'orders' && param.subMenu == 'refund'}">active</c:if>" href="/admin/order/refund">
                             <i class="icon-arrow-right"></i> 退款订单
                         </a>
                     </li>
@@ -117,16 +117,11 @@
 
             <li class="nav-item nav-dropdown <c:if test="${param.menu == 'active'}">open</c:if>">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;">
-                    <i class="icon-basket"></i> 销售管理
+                    <i class="icon-badge"></i> 促销管理
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item <c:if test="${param.subMenu == 'active'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'active'}">active</c:if>" href="/admin/products/active/settings">
-                            <i class="icon-arrow-right"></i> 促销管理
-                        </a>
-                    </li>
-                    <li class="nav-item <c:if test="${param.subMenu == 'coupon'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.subMenu == 'coupon'}">active</c:if>" href="/admin/products/list">
+                    <li class="nav-item <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">active</c:if>" href="/admin/coupon/list">
                             <i class="icon-arrow-right"></i> 礼券设置
                         </a>
                     </li>

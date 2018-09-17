@@ -68,4 +68,25 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment'], functio
             });
         }
     });
+
+    $(".products-list").on("click", ".product-users-cancel", function () {
+        var productId = $(this).attr("data-id");
+
+        if (window.confirm("您确定要取消此商品的Banner设定吗？")) {
+            $.post('/commodity/updateBanner', {cid: productId, banner: 2}, function (res) {
+                if (res.code == 1) {
+                    window.location.reload();
+                }
+                else {
+                    jqueryAlert({
+                        'icon'      : '/Content/images/icon-error.png',
+                        'content'   : "取消设定Banner失败, 请稍后重试",
+                        'closeTime' : 2000,
+                        'modal'        : true,
+                        'isModalClose' : true
+                    });
+                }
+            });
+        }
+    });
 });
