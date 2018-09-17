@@ -77,14 +77,14 @@
                                     <tr data-id="">
                                         <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                         <td>
-                                            <a href="/admin/products/detail?productId=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
+                                            <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
                                         </td>
                                         <td>${c.styleName}</td>
                                         <td>${c.materialName}</td>
                                         <td>￥${c.price}</td>
                                             <%--<td>￥399</td>--%>
                                         <td>
-                                            <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
+                                            <a href="/admin/products/transaction/records?cid=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
                                         </td>
                                         <td>
                                             <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
