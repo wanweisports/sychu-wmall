@@ -18,6 +18,10 @@ public class SysDeviceInfo {
     private Timestamp updateTime;
     private Time startTime;
     private Time endTime;
+    private String doorIp;
+    private Integer doorPort;
+    private String lockIp;
+    private String lockPort;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -138,5 +142,45 @@ public class SysDeviceInfo {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    @Basic
+    @Column(name = "doorIp")
+    public String getDoorIp() {
+        return doorIp;
+    }
+
+    public void setDoorIp(String doorIp) {
+        this.doorIp = doorIp;
+    }
+
+    @Basic
+    @Column(name = "doorPort")
+    public Integer getDoorPort() {
+        return doorPort;
+    }
+
+    public void setDoorPort(Integer doorPort) {
+        this.doorPort = doorPort;
+    }
+
+    @Basic
+    @Column(name = "lockIp")
+    public String getLockIp() {
+        return lockIp;
+    }
+
+    public void setLockIp(String lockIp) {
+        this.lockIp = lockIp;
+    }
+
+    @Basic
+    @Column(name = "lockPort")
+    public String getLockPort() {
+        return lockPort;
+    }
+
+    public void setLockPort(String lockPort) {
+        this.lockPort = lockPort;
     }
 }
