@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserOrderInfo;
@@ -29,5 +30,9 @@ public interface IOrderService {
     String wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 
     void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception;
+
+    PageBean getUserOrderList(OrderInputView orderInputView);
+
+    Map<String, Object> getUserOrderDetail(int oid, int uid);
 
 }

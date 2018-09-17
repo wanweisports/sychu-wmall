@@ -19,7 +19,7 @@ public interface ICommodityService {
 
     PageBean getCommodityList(CommodityInputView commodityInputView);
 
-    Map<String, Object> getCommodityDetail(int cid);
+    Map<String, Object> getCommodityDetail(int cid, int uid);
 
     Map<String, Object> getCommodityDetailSelected(int cid);
 

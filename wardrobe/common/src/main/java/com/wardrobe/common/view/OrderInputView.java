@@ -7,6 +7,7 @@ public class OrderInputView extends BaseInputView {
 
     private Integer orderId;
     private String orderType; //1：购物  2：充值
+    private Integer uid;
 
     public Integer getOrderId() {
         return orderId;
@@ -23,4 +24,13 @@ public class OrderInputView extends BaseInputView {
     public void setOrderType(String orderType) {
         this.orderType = orderType;
     }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.wardrobe.sms;
 
+import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.constant.SmsUrlConstant;
 import com.wardrobe.common.util.HttpUtil;
 import com.wardrobe.common.util.JsonUtils;
@@ -40,10 +42,15 @@ public class SmsYunPianApi implements SmsUrlConstant {
 
     public static void main(String[] args) throws Exception{
         try{
-            String json = sendCode("32211", "15110275787", TPL_ID_CODE);
-            System.out.println(json);
-            Map<String, Object> map = JsonUtils.fromJsonDF(json, Map.class);
-            System.out.println(map);
+            /*String json = sendCode("1123", "15110275787", TPL_ID_CODE);
+            System.out.println(json);*/
+            Map<String, Object> sendMap = JsonUtils.fromJsonDF("{\"code\":0,\"msg\":\"发送成功\",\"count\":1,\"fee\":0.05,\"unit\":\"RMB\",\"mobile\":\"15110275787\",\"sid\":28243995676}", Map.class);  //解析发送短信json数据
+            if (StrUtil.objToInt(sendMap.get("code")) == 0) {               //发送短信返回成功
+                System.out.println(1);
+            }else{
+                System.out.println(2);
+                StrUtil.objToInt(sendMap.get("code"));
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -35,7 +35,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("detail")
     public ResponseBean index(int cid){
-        return new ResponseBean(commodityService.getCommodityDetail(cid));
+        return new ResponseBean(commodityService.getCommodityDetail(cid, getUserInfo().getUid()));
     }
 
     @ResponseBody

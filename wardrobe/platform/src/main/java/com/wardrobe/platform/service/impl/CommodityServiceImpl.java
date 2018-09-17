@@ -13,6 +13,7 @@ import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IResourceService;
+import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Autowired
     private IResourceService resourceService;
+
+    @Autowired
+    private IUserService userService;
 
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
@@ -76,8 +80,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public Map<String, Object> getCommodityDetail(int cid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+    public Map<String, Object> getCommodityDetail(int cid, int uid){
+        Map<String, Object> data = new HashMap<>(7, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeNames(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
@@ -85,12 +89,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         data.put("price", commodityInfo.getPrice());
         data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
+        data.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
         return data;
     }
 
     @Override
     public Map<String, Object> getCommodityDetailSelected(int cid){
-        Map<String, Object> data = new HashMap<>(4, 1);
+        Map<String, Object> data = new HashMap<>(6, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeList(cid));
         data.put("cid", commodityInfo.getCid());

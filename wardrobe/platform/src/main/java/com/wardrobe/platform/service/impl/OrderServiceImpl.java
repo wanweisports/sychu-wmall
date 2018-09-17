@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
@@ -353,7 +354,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception{
+    public synchronized void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception{
         Map map = XMLUtil.doXMLParse(msgxml);
 
         String result_code=(String) map.get("result_code");
@@ -434,5 +435,41 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
     }
 
+    @Override
+    public PageBean getUserOrderList(OrderInputView orderInputView){
+        PageBean pageBean = getUserOrders(orderInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        for(Map<String, Object> map : list){
+            map.put("orderDetails", getUserOrderDetail(StrUtil.objToInt(map.get("oid"))));
+        }
+        return pageBean;
+    }
+
+    @Override
+    public Map<String, Object> getUserOrderDetail(int oid, int uid){
+        UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
+        if(userOrderInfo.getUid() != uid) throw new MessageException("操作错误!!!");
+        List<Map<String, Object>> userOrderDetail = getUserOrderDetail(oid);
+
+        Map<String, Object> data = new HashMap<>(2, 1);
+        data.put("order", userOrderInfo);
+        data.put("orderDetails", userOrderDetail);
+        return data;
+    }
+
+    private PageBean getUserOrders(OrderInputView orderInputView){
+        Integer uid = orderInputView.getUid();
+        StringBuilder headSql = new StringBuilder("SELECT *");
+        StringBuilder bodySql = new StringBuilder(" FROM user_order_info uoi");
+        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
+        if(uid != null){
+            whereSql.append(" AND uoi.uid = uid");
+        }
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
+    }
+
+    private List<Map<String, Object>> getUserOrderDetail(int oid){
+        return baseDao.queryBySql("SELECT * FROM user_order_detail WHERE oid = ?1", oid);
+    }
 
 }

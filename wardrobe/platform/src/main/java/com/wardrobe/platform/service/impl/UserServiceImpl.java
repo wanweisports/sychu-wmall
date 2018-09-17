@@ -6,6 +6,7 @@ import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserAccount;
+import com.wardrobe.common.po.UserCollection;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
@@ -204,6 +205,27 @@ public class UserServiceImpl extends BaseService implements IUserService {
         data.put("userCoupon", userCouponService.getUserCoupons(userId));
 
         return data;
+    }
+
+    @Override
+    public void saveCollection(UserCollection userCollection){
+        if(getUserCollection(userCollection.getCid(), userCollection.getUid()) == null) {
+            userCollection.setCreateTime(DateUtil.getNowDate());
+            baseDao.save(userCollection, null);
+        }
+    }
+
+    @Override
+    public void deleteCollection(int cid, int uid){
+        UserCollection userCollection = getUserCollection(cid, uid);
+        if(userCollection != null){
+            baseDao.delete(userCollection);
+        }
+    }
+
+    @Override
+    public UserCollection getUserCollection(int cid, int uid){
+        return baseDao.queryByHqlFirst("FROM UserCollection WHERE cid = ?1 AND uid = ?2", cid, uid);
     }
 
 }
