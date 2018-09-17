@@ -74,7 +74,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
         userInfo.setDressStyle(userPerfectBean.getDressStyle());
         userInfo.setUsualSize(userPerfectBean.getUsualSize());
         userInfo.setMobile(userPerfectBean.getMobile());
-        userInfo.setInviteCode(inviteCode);
         userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
 
 
