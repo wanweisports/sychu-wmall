@@ -157,8 +157,8 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
-    public List<SysResources> getNotExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType){
-        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = :resourceServiceParentId AND resourceServiceType = :resourceServiceType AND resourceId NOT IN(:resourceIds)", new HashMap(){{put("resourceServiceParentId", resourceServiceParentId); put("resourceServiceType", resourceServiceType);  putAll(SQLUtil.getInToSQL("resourceIds", resourceIds));}});
+    public List<SysResources> getExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType){
+        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = :resourceServiceParentId AND resourceServiceType = :resourceServiceType AND resourceId IN(:resourceIds)", new HashMap(){{put("resourceServiceParentId", resourceServiceParentId); put("resourceServiceType", resourceServiceType);  putAll(SQLUtil.getInToSQL("resourceIds", resourceIds));}});
     }
 
 }

@@ -40,5 +40,5 @@ public interface IResourceService {
 
     SysResources saveResource(MultipartFile multipartFile, int serviceId, String serviceType, String resourceType, String fold);
 
-    List<SysResources> getNotExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType);
+    List<SysResources> getExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType);
 }
