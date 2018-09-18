@@ -14,7 +14,6 @@ public class SysDeviceControl {
     private String name;
     private String type;
     private String lock;
-    private int no;
     private String status;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -78,16 +77,6 @@ public class SysDeviceControl {
 
     public void setLock(String lock) {
         this.lock = lock;
-    }
-
-    @Basic
-    @Column(name = "no")
-    public int getNo() {
-        return no;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
     }
 
     @Basic

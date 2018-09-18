@@ -21,7 +21,7 @@ public class SysDeviceInfo {
     private String doorIp;
     private Integer doorPort;
     private String lockIp;
-    private String lockPort;
+    private Integer lockPort;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -176,11 +176,11 @@ public class SysDeviceInfo {
 
     @Basic
     @Column(name = "lockPort")
-    public String getLockPort() {
+    public Integer getLockPort() {
         return lockPort;
     }
 
-    public void setLockPort(String lockPort) {
+    public void setLockPort(Integer lockPort) {
         this.lockPort = lockPort;
     }
 }

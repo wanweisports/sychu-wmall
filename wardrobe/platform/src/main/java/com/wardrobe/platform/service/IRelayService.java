@@ -1,5 +1,7 @@
 package com.wardrobe.platform.service;
 
+import java.util.Map;
+
 /**
  * Created by cxs on 2018/9/10.
  */
@@ -18,5 +20,7 @@ public interface IRelayService {
     void openServerDrive(String ip, int port, int driveId);
 
     void closeServerDrive(String ip, int port, int driveId);
+
+    Map<String, Object> getRealyIndexsIn();
 
 }

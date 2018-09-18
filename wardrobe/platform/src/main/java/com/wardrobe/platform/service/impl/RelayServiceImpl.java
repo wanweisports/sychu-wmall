@@ -1,6 +1,8 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.SysDeviceControl;
+import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.NettyClient;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
@@ -10,6 +12,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.CharsetUtil;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
@@ -122,6 +128,29 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
         }
+    }
+
+    @Override
+    public Map<String, Object> getRealyIndexsIn(){
+        Map<String, Object> data = new HashMap<>();
+        SysDeviceInfo sysDeviceInfo = baseDao.queryByHqlFirst("FROM SysDeviceInfo");
+        if(sysDeviceInfo != null) {
+            //获取8个柜子的状态
+            String lockIp = sysDeviceInfo.getLockIp();
+            Integer lockPort = sysDeviceInfo.getLockPort();
+            data.put("deviceInfo", sysDeviceInfo);
+            data.put("doorStatus", ClientChannelUtil.getNowStatus(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort()));
+            data.put("lockStatus", ClientChannelUtil.getNowStatus(lockIp, lockPort));
+
+            if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
+                List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1", sysDeviceInfo.getDid());
+                deviceControls.stream().forEach(deviceControl -> {
+                    DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
+                    deviceControl.setStatus(deviceBean.getStatus());
+                });
+            }
+        }
+        return data;
     }
 
 }
