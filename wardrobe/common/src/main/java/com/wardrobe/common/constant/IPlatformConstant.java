@@ -50,4 +50,8 @@ public interface IPlatformConstant {
 
 	String UNDERLINE = "_";
 
+	String ONO = "NO";
+
+	String RNO = "MK";
+
 }

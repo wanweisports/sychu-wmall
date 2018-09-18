@@ -3,10 +3,12 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.*;
@@ -75,6 +77,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_NO); //充值
         userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
         userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userOrderInfo.setOno(getOno());
         baseDao.save(userOrderInfo, null);
 
         int oid = userOrderInfo.getOid();
@@ -103,14 +106,29 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return oid;
     }
 
+    private boolean existOrderByNo(String ono){
+        return baseDao.queryBySqlFirst("SELECT 1 FROM user_order_info WHERE ono = ?1", ono) != null;
+    }
+
+    @Desc("生成不重复的订单编号")
+    private String getOno(){
+        //生成重复的订单编号
+        String ono = IPlatformConstant.ONO + StrUtil.objToStr(StrUtil.initCode(6));
+        while (existOrderByNo(ono)){
+            ono = IPlatformConstant.ONO + StrUtil.objToStr(StrUtil.initCode(6));
+        }
+        return ono;
+    }
+
     @Override
     public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
         Timestamp nowDate = DateUtil.getNowDate();
         userOrderInfo.setUid(uid);
         userOrderInfo.setCreateTime(nowDate);
         userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_YES);
-        userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
-        userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userOrderInfo.setPayStatus(IDBConstant.ORDER_PAY_STATUS_NO);
+        userOrderInfo.setStatus(IDBConstant.ORDER_STATUS_NORMAL);
+        userOrderInfo.setOno(getOno()); //订单编号
         baseDao.save(userOrderInfo, null);
 
         int oid = userOrderInfo.getOid();
@@ -151,6 +169,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return oid;
     }
 
+    private boolean existReserveOrderByNo(String rno){
+        return baseDao.queryBySqlFirst("SELECT 1 FROM reserve_order_info WHERE rno = ?1", rno) != null;
+    }
+
+    @Desc("生成不重复的预约单编号")
+    private String getRno(){
+        //生成重复的订单编号
+        String rno = IPlatformConstant.RNO + StrUtil.objToStr(StrUtil.initCode(6));
+        while (existReserveOrderByNo(rno)){
+            rno = IPlatformConstant.RNO + StrUtil.objToStr(StrUtil.initCode(6));
+        }
+        return rno;
+    }
+
     @Override
     public synchronized Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
 
@@ -182,8 +214,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         orderInfo.setDcid(sysDeviceControl.getDcid());
         orderInfo.setUid(uid);
         orderInfo.setCreateTime(nowDate);
-        orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
-        orderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        orderInfo.setPayStatus(IDBConstant.ORDER_PAY_STATUS_NO);
+        orderInfo.setStatus(IDBConstant.ORDER_STATUS_NORMAL);
+        orderInfo.setRno(getRno()); //预约单编号
         baseDao.save(orderInfo, null);
 
         int oid = orderInfo.getRoid();
@@ -471,6 +504,56 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     private List<Map<String, Object>> getUserOrderDetail(int oid){
         return baseDao.queryBySql("SELECT * FROM user_order_detail WHERE oid = ?1", oid);
+    }
+
+    @Override
+    public PageBean getUserOrderListIn(OrderInputView orderInputView){
+        PageBean pageBean = getUserOrdersIn(orderInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.parallelStream().forEach(map -> {
+            map.put("payStatusName", dictService.getDictValue(IDBConstant.ORDER_PAY_STATUS, StrUtil.objToStr(map.get("payStatus"))));
+            map.put("statusName", dictService.getDictValue(IDBConstant.ORDER_STATUS, StrUtil.objToStr(map.get("status"))));
+        });
+        return pageBean;
+    }
+
+    private PageBean getUserOrdersIn(OrderInputView orderInputView){
+        String status = orderInputView.getStatus();
+        String ono = orderInputView.getOno();
+        StringBuilder headSql = new StringBuilder("SELECT uoi.*, ui.nickname");
+        StringBuilder bodySql = new StringBuilder(" FROM user_order_info uoi, user_info ui");
+        StringBuilder whereSql = new StringBuilder(" WHERE uoi.uid = ui.uid");
+        Map inMap = new HashMap<>();
+        if(StrUtil.isNotBlank(status)){
+            whereSql.append(" AND uoi.status IN(:statusArr)");
+            inMap.putAll(SQLUtil.getInToSQL("statusArr", status));
+        }
+        if(StrUtil.isNotBlank(ono)){
+            whereSql.append(" AND uoi.ono = :ono");
+        }
+        whereSql.append(" ORDER BY uoi.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView, inMap);
+    }
+
+    @Override
+    public PageBean getReserveOrderInfoList(OrderInputView orderInputView){
+        PageBean pageBean = getReserveOrderInfos(orderInputView);
+        return pageBean;
+    }
+
+    private PageBean getReserveOrderInfos(OrderInputView orderInputView){
+        String ono = orderInputView.getOno();
+        StringBuilder headSql = new StringBuilder("SELECT roi.*, ui.nickname, sdc.name lockName, sdi.name deviceName");
+        StringBuilder bodySql = new StringBuilder(" FROM reserve_order_info roi, user_info ui, sys_device_control sdc, sys_device_info sdi");
+        StringBuilder whereSql = new StringBuilder(" WHERE roi.uid = ui.uid AND roi.dcid = sdc.dcid AND sdc.did = sdi.did");
+
+        if(StrUtil.isNotBlank(ono)){
+            whereSql.append(" AND roi.rno = :ono");
+        }
+
+        whereSql.append(" ORDER BY roi.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
+
     }
 
 }

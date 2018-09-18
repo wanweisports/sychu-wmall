@@ -120,12 +120,11 @@ public class ClientChannelUtil {
         return null;
     }
 
-    public static DeviceBean readDriveStatus(String ip, int port, int deviceNo){
-        DeviceBean deviceBean = getDeviceBean(ip, port, deviceNo);
+    public static DeviceBean readDriveStatus(Channel serverChannel, int deviceNo){
+        DeviceBean deviceBean = getDeviceBean(serverChannel, deviceNo);
         synchronized (deviceBean) {
             deviceBean.setStatus(null); //获取中
 
-            Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
             serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.READ_STATUS + deviceNo, CharsetUtil.UTF_8));
 
             System.out.println("serverChannel：" + serverChannel);

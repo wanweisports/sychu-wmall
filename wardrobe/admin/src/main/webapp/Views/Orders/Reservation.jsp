@@ -32,10 +32,10 @@
                             <small>Orders List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/orders/list" novalidate onsubmit="return false;">
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/orders/reservation" novalidate <%--onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-3">
-                                        <input type="text" name="nickname" class="form-control" placeholder="订单编号">
+                                        <input type="text" name="ono" class="form-control" placeholder="预约单编号" value="${ono}">
                                     </div>
                                     <div class="col-md-9">
                                         <button type="submit" class="btn btn-primary members-query-btn">
@@ -52,17 +52,31 @@
                                 <tr>
                                     <th>预约单编号</th>
                                     <th>预约试衣间</th>
-                                    <th>预约日期</th>
                                     <th>预约时间</th>
-                                    <th>会员编号</th>
+                                    <th>预约开始时间</th>
+                                    <th>预约结束时间</th>
                                     <th>会员姓名</th>
                                     <th>预约单状态</th>
                                     <th></th>
                                 </tr>
                                 </thead>
+                                    <c:forEach var="r" items="${page.list}">
+                                        <tr>
+                                            <td>${r.rno}</td>
+                                            <td>${r.deviceName}（${r.lockName}）</td>
+                                            <td>${r.createTime}</td>
+                                            <td>${r.reserveStartTime}</td>
+                                            <td>${r.reserveEndTime}</td>
+                                            <td>${r.nickname}</td>
+                                            <td>${r.statusName}</td>
+                                        </tr>
+                                    </c:forEach>
                                 <tbody>
                                 </tbody>
                             </table>
+                            <div>
+                                <%@ include file="../Shared/Pagination.jsp" %>
+                            </div>
                         </div>
                     </div>
                 </div>

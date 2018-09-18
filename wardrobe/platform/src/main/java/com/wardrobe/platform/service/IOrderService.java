@@ -35,4 +35,8 @@ public interface IOrderService {
 
     Map<String, Object> getUserOrderDetail(int oid, int uid);
 
+    PageBean getUserOrderListIn(OrderInputView orderInputView);
+
+    PageBean getReserveOrderInfoList(OrderInputView orderInputView);
+
 }

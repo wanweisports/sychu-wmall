@@ -28,14 +28,14 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>订单列表</strong>
-                            <small>Orders List</small>
+                            <strong>退款订单列表</strong>
+                            <small>Refund Orders List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/orders/list" novalidate onsubmit="return false;">
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/orders/refund" novalidate <%--onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-3">
-                                        <input type="text" name="nickname" class="form-control" placeholder="订单编号">
+                                        <input type="text" name="ono" class="form-control" placeholder="订单编号" value="${ono}">
                                     </div>
                                     <div class="col-md-9">
                                         <button type="submit" class="btn btn-primary members-query-btn">
@@ -53,15 +53,26 @@
                                     <th>订单编号</th>
                                     <th>订单时间</th>
                                     <th>订单金额</th>
-                                    <th>会员编号</th>
                                     <th>会员姓名</th>
                                     <th>订单状态</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <c:forEach var="o" items="${page.list}">
+                                        <tr>
+                                            <td>${o.ono}</td>
+                                            <td>${o.createTime}</td>
+                                            <td>${o.priceSum}</td>
+                                            <td>${o.nickname}</td>
+                                            <td>${o.statusName}</td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
+                            <div>
+                                <%@ include file="../Shared/Pagination.jsp" %>
+                            </div>
                         </div>
                     </div>
                 </div>

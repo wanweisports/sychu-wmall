@@ -10,6 +10,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "reserve_order_info", schema = "")
 public class ReserveOrderInfo {
     private int roid;
+    private String rno;
     private Integer uid;
     private Integer dcid;
     private BigDecimal priceSum;
@@ -33,6 +34,16 @@ public class ReserveOrderInfo {
 
     public void setRoid(int roid) {
         this.roid = roid;
+    }
+
+    @Basic
+    @Column(name = "rno")
+    public String getRno() {
+        return rno;
+    }
+
+    public void setRno(String rno) {
+        this.rno = rno;
     }
 
     @Basic

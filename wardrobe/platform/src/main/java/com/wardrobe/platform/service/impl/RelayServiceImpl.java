@@ -1,10 +1,8 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.exception.MessageException;
-import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.NettyClient;
-import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
 import com.wardrobe.platform.service.IRelayService;
 import io.netty.buffer.Unpooled;
@@ -57,7 +55,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
             //判断是否为关闭状态才能打开
-            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(ip, port, lockId);
+            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
             if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
                 serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + lockId, CharsetUtil.UTF_8));
             }
@@ -72,7 +70,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
             //判断是否为打开状态才能关闭
-            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(ip, port, lockId);
+            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
             if(ClientChannelUtil.READ_OPEN.equals(deviceBean.getStatus())) {
                 serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + lockId, CharsetUtil.UTF_8));
             }

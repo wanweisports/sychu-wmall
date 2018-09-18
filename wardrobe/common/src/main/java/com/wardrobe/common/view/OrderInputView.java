@@ -8,6 +8,8 @@ public class OrderInputView extends BaseInputView {
     private Integer orderId;
     private String orderType; //1：购物  2：充值
     private Integer uid;
+    private String status;
+    private String ono;
 
     public Integer getOrderId() {
         return orderId;
@@ -33,4 +35,19 @@ public class OrderInputView extends BaseInputView {
         this.uid = uid;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOno() {
+        return ono;
+    }
+
+    public void setOno(String ono) {
+        this.ono = ono;
+    }
 }

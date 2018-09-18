@@ -30,3 +30,10 @@ syc123456
 ½èµÄÓòÃû£º#http://mystore.01time.cn/
 
 	 http://mystore.jonham.cn/
+
+
+VPN£º
+shanyichu
+syc123456
+
+pptp

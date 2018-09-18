@@ -45,4 +45,15 @@ public interface IDBConstant {
     String COMM_STOCK_TYPE_ADD = "10"; //商品库存增加
     String COMM_STOCK_TYPE_SUB = "20"; //商品库存减少
 
+    String ORDER_PAY_STATUS = "ORDER_PAY_STATUS"; //订单支付状态
+    String ORDER_PAY_STATUS_YES = "1"; //已支付
+    String ORDER_PAY_STATUS_NO = "2";  //未支付
+    String ORDER_PAY_STATUS_CANCEL = "3";  //已取消
+
+    String ORDER_STATUS = "ORDER_STATUS"; //订单状态
+    String ORDER_STATUS_NORMAL = "1";     //正常
+    String ORDER_STATUS_RETURN_ING = "2"; //申请退款
+    String ORDER_STATUS_RETURN = "3";     //退款成功
+    String ORDER_STATUS_REFUSE = "4";     //退款拒绝
+
 }

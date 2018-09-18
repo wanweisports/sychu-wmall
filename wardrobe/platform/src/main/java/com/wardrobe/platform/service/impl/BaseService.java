@@ -32,7 +32,9 @@ public class BaseService {
         Map<String, Object> paramMap = JsonUtils.fromJson(baseInputView); //解析所有参数
         if(otherParamMap != null){
         	for(Map otherMap : otherParamMap){
-        		paramMap.putAll(otherMap);
+                if(otherMap != null) {
+                    paramMap.putAll(otherMap);
+                }
         	}
         }
 
