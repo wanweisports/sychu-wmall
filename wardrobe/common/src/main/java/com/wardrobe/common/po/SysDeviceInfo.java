@@ -9,15 +9,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "sys_device_info", schema = "")
 public class SysDeviceInfo {
-    private int did;
+    private Integer did;
     private String name;
     private String areaId;
     private String address;
     private String status;
     private Timestamp createTime;
     private Timestamp updateTime;
-    private Time startTime;
-    private Time endTime;
+    private String startTime;
+    private String endTime;
     private String doorIp;
     private Integer doorPort;
     private String lockIp;
@@ -26,11 +26,11 @@ public class SysDeviceInfo {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "did")
-    public int getDid() {
+    public Integer getDid() {
         return did;
     }
 
-    public void setDid(int did) {
+    public void setDid(Integer did) {
         this.did = did;
     }
 
@@ -126,21 +126,21 @@ public class SysDeviceInfo {
 
     @Basic
     @Column(name = "startTime")
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
     @Basic
     @Column(name = "endTime")
-    public Time getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

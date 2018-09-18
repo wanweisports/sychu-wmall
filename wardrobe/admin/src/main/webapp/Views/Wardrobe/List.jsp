@@ -25,6 +25,31 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/wardrobe/list.js?v=${static_resource_version}"></script>
+
+    <script type="text/javascript">
+        function wardrobeSettings(did, name, address, doorIp, doorPort, lockIp, lockPort, status){
+            $("#did").val(did ? did : '');
+            $("#wardrobe_name").val(name ? name : '');
+            $("#wardrobe_address").val(address ? address : '');
+            $("#wardrobe_doorIp").val(doorIp ? doorIp : '');
+            $("#wardrobe_doorPort").val(doorPort ? doorPort : '');
+            $("#wardrobe_cabinetIp").val(lockIp ? lockIp : '');
+            $("#wardrobe_cabinetPort").val(lockPort ? lockPort : '');
+            status = status ? status : 1;
+            $("input[name='status'][value='" + status + "']").prop('checked', true);
+        }
+
+        function saveSysDeviceInfo(){
+            if(window.confirm("确认保存吗？")) {
+                $.post("/admin/wardrobe/saveDeviceInfo", $("#wardrobe_form").serialize(), function (res) {
+                    alert(res.message);
+                    if(res.code == 1){
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -33,7 +58,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <form id="wardrobe_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
-                        <input type="hidden" name="id">
+                        <input type="hidden" id="did" name="did">
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="wardrobe_name">
                                 <span class="text-danger">*</span> 试衣间名称
@@ -76,12 +101,12 @@
                                 <span class="text-danger">*</span> 柜子地址
                             </label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="wardrobe_cabinetIp" placeholder="柜子IP地址" name="cabinetIp"
+                                <input type="text" class="form-control" id="wardrobe_cabinetIp" placeholder="柜子IP地址" name="lockIp"
                                        data-val="true" data-val-required="柜子IP地址不能为空" autocomplete="off">
                                 <div data-valmsg-for="cabinetIp" data-valmsg-replace="true"></div>
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control" id="wardrobe_cabinetPort" placeholder="柜子IP端口" name="cabinetPort"
+                                <input type="text" class="form-control" id="wardrobe_cabinetPort" placeholder="柜子IP端口" name="lockPort"
                                        data-val="true" data-val-required="柜子IP端口不能为空" autocomplete="off">
                                 <div data-valmsg-for="cabinetPort" data-valmsg-replace="true"></div>
                             </div>
@@ -107,7 +132,7 @@
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
                         <i class="fa fa-close"></i> 取 消
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary save-wardrobe">
+                    <button type="button" class="btn btn-sm btn-primary save-wardrobe" onclick="saveSysDeviceInfo()">
                         <i class="fa fa-check"></i> 保 存
                     </button>
                 </div>
@@ -125,7 +150,7 @@
                             <small>Wardrobe List</small>
                         </div>
                         <div class="card-block">
-                            <button type="button" class="btn btn-primary wardrobe-add" data-target="#wardrobe_settings"
+                            <button type="button" class="btn btn-primary wardrobe-add" data-target="#wardrobe_settings" onclick="wardrobeSettings()"
                                     data-toggle="modal">
                                 <i class="fa fa-plus"></i> 添加试衣间
                             </button>
@@ -144,42 +169,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-id="123">
-                                    <td>试衣间10001</td>
-                                    <td>海淀大厦一层9号电梯附近</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td class="text-success">已开放</td>
-                                    <td>
-                                        <a href="#wardrobe_settings" class="btn btn-sm btn-primary wardrobe-set" data-toggle="modal">
-                                            <i class="fa fa-cog"></i> 配置
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-id="123">
-                                    <td>试衣间10002</td>
-                                    <td>海淀大厦一层9号电梯附近</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td class="text-success">已开放</td>
-                                    <td>
-                                        <a href="#wardrobe_settings" class="btn btn-sm btn-primary wardrobe-set" data-toggle="modal">
-                                            <i class="fa fa-cog"></i> 配置
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-id="123">
-                                    <td>试衣间10002</td>
-                                    <td>海淀大厦一层9号电梯附近</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td>192.168.134.222:8080</td>
-                                    <td class="text-danger">未开放</td>
-                                    <td>
-                                        <a href="#wardrobe_settings" class="btn btn-sm btn-primary wardrobe-set" data-toggle="modal">
-                                            <i class="fa fa-cog"></i> 配置
-                                        </a>
-                                    </td>
-                                </tr>
+                                <c:forEach var="d" items="${page.list}">
+                                    <tr data-id="123">
+                                        <td>${d.name}</td>
+                                        <td>${d.address}</td>
+                                        <td>${d.doorIp}:${d.doorPort}</td>
+                                        <td>${d.lockIp}:${d.lockPort}</td>
+
+                                        <c:if test="${d.status == '1'}">
+                                            <td class="text-success">已开放</td>
+                                        </c:if>
+                                        <c:if test="${d.status != '1'}">
+                                            <td class="text-danger">未开放</td>
+                                        </c:if>
+
+                                        <td>
+                                            <a href="#wardrobe_settings" class="btn btn-sm btn-primary wardrobe-set" data-toggle="modal" onclick="wardrobeSettings('${d.did}', '${d.name}', '${d.address}', '${d.doorIp}', '${d.doorPort}', '${d.lockIp}', '${d.lockPort}', '${d.status}')">
+                                                <i class="fa fa-cog"></i> 配置
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>

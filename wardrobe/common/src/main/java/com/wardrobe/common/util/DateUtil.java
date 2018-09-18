@@ -327,10 +327,14 @@ public class DateUtil {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		Date date = addDate(new Date(), 2);
+		System.out.println(DateUtil.getHHMM("00:00:"));
+		System.out.println(DateUtil.getHHMM("23:59"));
+		System.out.println(DateUtil.getHHMM("24:00"));
+
+		/*Date date = addDate(new Date(), 2);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		System.out.println( calendar.getActualMaximum(Calendar.DATE));
+		System.out.println( calendar.getActualMaximum(Calendar.DATE));*/
 
 		/*System.out.println(getWeekTimes(addDate(new Date(), -1)));
 		System.out.println(dateToString(addDate(new Date(), -1), YYYYMMDD));

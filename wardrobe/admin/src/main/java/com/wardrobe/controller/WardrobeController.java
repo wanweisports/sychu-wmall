@@ -1,27 +1,16 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
-import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
-import com.wardrobe.common.constant.IDBConstant;
-import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.po.SysDict;
-import com.wardrobe.common.po.UserInfo;
-import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.util.StrUtil;
-import com.wardrobe.common.view.UserInputView;
-import com.wardrobe.common.view.UserTransactionsInputView;
-import com.wardrobe.platform.service.IDictService;
-import com.wardrobe.platform.service.IUserService;
-import com.wardrobe.platform.service.IUserTransactionsService;
+import com.wardrobe.common.po.SysDeviceInfo;
+import com.wardrobe.common.view.DeviceInputView;
+import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 试衣间管理
@@ -30,9 +19,21 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin/wardrobe")
 public class WardrobeController extends BaseController {
 
+    @Autowired
+    private ISysDeviceService deviceService;
+
+    @ResponseBody
+    @RequestMapping("saveDeviceInfo")
+    public ResponseBean saveDeviceInfo(SysDeviceInfo sysDeviceInfo){
+        deviceService.saveSysDeviceInfo(sysDeviceInfo);
+        return new ResponseBean(true);
+    }
+
     @Desc("试衣间列表")
     @RequestMapping(value = "/list")
-    public String renderWardrobeList() {
+    public String renderWardrobeList(DeviceInputView deviceInputView, Model model) {
+        PageBean pageBean = deviceService.getSysDeviceInfoList(deviceInputView);
+        setPageInfo(model, pageBean, "/admin/wardrobe/list", deviceInputView);
         return "Wardrobe/List";
     }
 

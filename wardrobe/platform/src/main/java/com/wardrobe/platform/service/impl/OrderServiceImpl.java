@@ -199,11 +199,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Timestamp reserveStartTime = orderInfo.getReserveStartTime();
         Timestamp reserveEndTime = orderInfo.getReserveEndTime();
 
-        Time startTime = sysDeviceInfo.getStartTime();
-        Time endTime = sysDeviceInfo.getEndTime();
-        Date startDTime = DateUtil.getHHMMSS(startTime.toString());
-        Date endDTime = DateUtil.getHHMMSS(endTime.toString());
-        if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime.toString() + "到" + endTime.toString());
+        String startTime = sysDeviceInfo.getStartTime();
+        String endTime = sysDeviceInfo.getEndTime();
+        Date startDTime = DateUtil.getHHMM(startTime);
+        Date endDTime = DateUtil.getHHMM(endTime);
+        if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime + "到" + endTime);
 
         if(isReserveByDate(reserveStartTime, reserveEndTime)) throw new MessageException("当前时间有冲突，请重新选择！");
 

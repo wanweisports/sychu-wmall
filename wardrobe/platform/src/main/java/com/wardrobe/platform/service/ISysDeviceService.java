@@ -21,4 +21,8 @@ public interface ISysDeviceService {
 
     SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime);
 
+    PageBean getSysDeviceInfoList(DeviceInputView deviceInputView);
+
+    void saveSysDeviceInfo(SysDeviceInfo sysDeviceInfo);
+
 }
