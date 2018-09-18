@@ -1,5 +1,6 @@
 package com.wardrobe.platform.netty.client;
 
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
@@ -90,13 +91,18 @@ public class ClientChannelUtil {
         return getClientBean(socketAddress.getHostString(), socketAddress.getPort());
     }
 
-    public static String getNowStatus(String ip, int port){
+    public static String getNowStatusName(String ip, int port){
         ClientBean clientBean = getClientBean(ip, port);
         if(clientBean != null){
             if(STATUS_CONNECT_ING == clientBean.getStatus()) return "连接中";
             if(STATUS_RECONNECT == clientBean.getStatus()) return "正在重连";
         }
         return "未连接";
+    }
+
+    public static String getNowStatus(String ip, int port){
+        ClientBean clientBean = getClientBean(ip, port);
+        return STATUS_CONNECT_ING == clientBean.getStatus() ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO;
     }
 
     public static boolean isOpen(String ip, int port){

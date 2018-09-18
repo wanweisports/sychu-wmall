@@ -2,7 +2,9 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.service.IRelayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,10 @@ public class RelayController extends BaseController {
     public ResponseBean connectServer(int type) throws Exception{ //1：锁  2：大门
         if(type == 1){
             boolean success = relayService.connectServer(relayIp, relayPort);
-            return new ResponseBean(IPlatformConstant.SUCCESS_CODE, success ? "连接中" : "未连接");
+            return new ResponseBean(success);
         }else if(type == 2){
             boolean success = relayService.connectServer(gateIp, gatePort);
-            return new ResponseBean(IPlatformConstant.SUCCESS_CODE, success ? "连接中" : "未连接");
+            return new ResponseBean(success);
         }
         return null;
     }

@@ -12,6 +12,21 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/wardrobe/dashboard.js?v=${static_resource_version}"></script>
+    <script type="text/javascript">
+        function connectTcp(type, btn){
+            if(window.confirm("确认连接吗？")){
+                $(btn).prop("disabled", true).text("正在尝试连接...");
+                $.post("/relay/connectServer", {type: type}, function(res) {
+                    alert(res.message);
+                    if (res.code == 1) {
+                        $("#connectTcp2").hide();
+                        $("#closeTcp2").show();
+                    }
+                    $(btn).prop("disabled", false).text("连接");
+                });
+            }
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -22,10 +37,37 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>试衣间10001</strong>
-                            <a href="javascript:;" class="btn btn-sm btn-primary pull-right">
+                            <%--<a href="javascript:;" class="btn btn-sm btn-primary pull-right">
                                 <i class="fa fa-refresh"></i> 重新连接
                             </a>
-                            <span class="badge badge-success">已连接</span>
+                            <span class="badge badge-success">已连接</span>--%>
+                            <div class="card-block row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body p-3 d-flex align-items-center">
+                                            <div id="connectTcp2">
+                                                <button type="button" class="btn btn-success" onclick="connectTcp(2, this)">连接大门</button>
+                                            </div>
+                                            <div style="display: none;" id="closeTcp2">
+                                                <button type="button" class="btn btn-success" onclick="closeTcp(2, this)">断开大门</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body p-3 d-flex align-items-center">
+                                            <div id="connectTcp1">
+                                                <button type="button" class="btn btn-success" onclick="connectTcp(1, this)">连接柜子</button>
+                                            </div>
+                                            <div style="display: none;" id="closeTcp1">
+                                                <button type="button" class="btn btn-success" onclick="closeTcp(1, this)">断开柜子</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-block row">
                             <div class="col-md-6">
@@ -39,7 +81,7 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <button class="btn btn-danger">开 锁</button>
+                                            <button type="button" class="btn btn-danger">开 门</button>
                                         </div>
                                     </div>
                                     <div class="card-footer px-3 py-2">

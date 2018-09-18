@@ -36,6 +36,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
                                 try{
                                     System.out.println(77777777777777777L);
                                     nettyClient.clientGroup.shutdownGracefully().sync();
+                                    ClientChannelUtil.clearServerChannel(serverChannel);
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }

@@ -28,7 +28,7 @@ public class NettyClient {
     }
 
     public ChannelFuture clientServer() throws Exception{
-        try {
+        //try {
             Bootstrap boot = new Bootstrap();
             boot.group(clientGroup);
             boot.channel(NioSocketChannel.class); //使用NioSocketChannel来作为连接用的channel类
@@ -37,7 +37,10 @@ public class NettyClient {
             boot.handler(new ClientHandlerInit(host, port, boot));
 
             //进行连接
-            try {
+            ChannelFuture future = boot.connect(host, port).sync();
+            return future;
+
+            /*try {
                 ChannelFuture future = boot.connect(host, port).sync();
                 //future.channel().closeFuture().sync(); // 异步等待关闭连接channel（服务器断开，则不会阻塞了，代码往下走，线程结束则次客户端结束）
                 return future;
@@ -48,9 +51,9 @@ public class NettyClient {
             e.printStackTrace();
             return null;
         } finally {
-            /*System.out.println(77777777777777777L);
-            clientGroup.shutdownGracefully().sync();*/
-        }
+            *//*System.out.println(77777777777777777L);
+            clientGroup.shutdownGracefully().sync();*//*
+        }*/
     }
 
     public static void main(String[] args) throws Exception{
