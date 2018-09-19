@@ -42,10 +42,10 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
                                 try{
                                     System.out.println(77777777777777777L);
                                     nettyClient.clientGroup.shutdownGracefully().sync();
-                                    ClientChannelUtil.clearServerChannel(serverChannel);
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
+                                ClientChannelUtil.clearServerChannel(serverChannel);
                             }
                         }
                     }.start();
@@ -62,7 +62,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
             //判断是否为关闭状态才能打开
-            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
+            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
             if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
                 serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + lockId, CharsetUtil.UTF_8));
             }
@@ -77,7 +77,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
             //判断是否为打开状态才能关闭
-            DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
+            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
             if(ClientChannelUtil.READ_OPEN.equals(deviceBean.getStatus())) {
                 serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + lockId, CharsetUtil.UTF_8));
             }
@@ -132,22 +132,32 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
     @Override
     public Map<String, Object> getRealyIndexsIn(){
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>(5, 1);
         SysDeviceInfo sysDeviceInfo = baseDao.queryByHqlFirst("FROM SysDeviceInfo");
         if(sysDeviceInfo != null) {
             //获取8个柜子的状态
+            String doorIp = sysDeviceInfo.getDoorIp();
+            Integer doorPort = sysDeviceInfo.getDoorPort();
             String lockIp = sysDeviceInfo.getLockIp();
             Integer lockPort = sysDeviceInfo.getLockPort();
             data.put("deviceInfo", sysDeviceInfo);
-            data.put("doorStatus", ClientChannelUtil.getNowStatus(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort()));
-            data.put("lockStatus", ClientChannelUtil.getNowStatus(lockIp, lockPort));
+            data.put("doorStatus", ClientChannelUtil.getNowStatus(doorIp, doorPort)); //门连接状态
+            data.put("lockStatus", ClientChannelUtil.getNowStatus(lockIp, lockPort)); //锁连接状态
 
+            //获取门的状态
+            if(ClientChannelUtil.isOpen(doorIp, doorPort)) {
+                SysDeviceControl doorDeviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), 1);
+                data.put("doorDeviceBean", doorDeviceBean);
+            }
+
+            //获取锁的状态
             if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
                 List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1", sysDeviceInfo.getDid());
                 deviceControls.stream().forEach(deviceControl -> {
-                    DeviceBean deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
+                    SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
                     deviceControl.setStatus(deviceBean.getStatus());
                 });
+                data.put("deviceControls", deviceControls);
             }
         }
         return data;

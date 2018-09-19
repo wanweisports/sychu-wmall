@@ -6,6 +6,7 @@ import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.view.DeviceInputView;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,5 +25,7 @@ public interface ISysDeviceService {
     PageBean getSysDeviceInfoList(DeviceInputView deviceInputView);
 
     void saveSysDeviceInfo(SysDeviceInfo sysDeviceInfo);
+
+    List<SysDeviceControl> getDeviceControl(String ip, int port);
 
 }

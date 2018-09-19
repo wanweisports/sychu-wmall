@@ -1,5 +1,7 @@
 package com.wardrobe.platform.netty.client;
 
+import com.wardrobe.platform.netty.client.bean.ClientBean;
+import com.wardrobe.platform.service.ISysDeviceService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -7,11 +9,17 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 
+@Component
 @ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+
+    @Autowired
+    private ISysDeviceService deviceService;
 
     /**
      * 向服务端发送数据
@@ -25,7 +33,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         System.out.println("客户端准备发送的数据包：" + sendInfo);
         channel.writeAndFlush(Unpooled.copiedBuffer(sendInfo, CharsetUtil.UTF_8)); // 必须有flush
         System.out.println("channel===>" + channel);
-        ClientChannelUtil.connectServerChannel(channel);
+        ClientBean clientBean = ClientChannelUtil.getClientBean(channel);
+        ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(clientBean.getHost(), clientBean.getPort()));
     }
 
     /**

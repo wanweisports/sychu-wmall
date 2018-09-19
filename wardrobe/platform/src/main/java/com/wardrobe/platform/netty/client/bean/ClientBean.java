@@ -1,11 +1,8 @@
 package com.wardrobe.platform.netty.client.bean;
 
-import com.wardrobe.platform.netty.client.ClientChannelUtil;
-import io.netty.buffer.Unpooled;
+import com.wardrobe.common.po.SysDeviceControl;
 import io.netty.channel.Channel;
-import io.netty.util.CharsetUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,14 +14,24 @@ public class ClientBean {
     private String host;
     private int port;
     private Channel serviceChannel;
-    private List<DeviceBean> deviceBeans = new ArrayList<>();
+    private List<SysDeviceControl> sysDeviceControls;
 
-    public ClientBean(){ //初始化8个设备的状态
-        for(int i = 1; i <= 8; i++){
+    public ClientBean(List<SysDeviceControl> sysDeviceControls){ //初始化8个设备的状态
+        /*for(int i = 1; i <= 8; i++){
             DeviceBean deviceBean = new DeviceBean();
             deviceBean.setDeviceNo(i);
             deviceBeans.add(deviceBean);
+        }*/
+        this.sysDeviceControls = sysDeviceControls;
+    }
+
+    public SysDeviceControl getDeviceControl(int lockId){
+        for(SysDeviceControl deviceControl : sysDeviceControls){
+            if(lockId == deviceControl.getLockId()){
+                return deviceControl;
+            }
         }
+        return null;
     }
 
     public int getStatus() {
@@ -59,12 +66,11 @@ public class ClientBean {
         this.serviceChannel = serviceChannel;
     }
 
-    public List<DeviceBean> getDeviceBeans() {
-        return deviceBeans;
+    public List<SysDeviceControl> getSysDeviceControls() {
+        return sysDeviceControls;
     }
 
-    public void setDeviceBeans(List<DeviceBean> deviceBeans) {
-        this.deviceBeans = deviceBeans;
+    public void setSysDeviceControls(List<SysDeviceControl> sysDeviceControls) {
+        this.sysDeviceControls = sysDeviceControls;
     }
-
 }
