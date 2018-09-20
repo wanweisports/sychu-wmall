@@ -59,4 +59,6 @@ public interface ICommodityService {
 
     Map<String, Object> getCommodityBanners();
 
+    PageBean getBannerCommodityListIn(CommodityInputView commodityInputView);
+
 }

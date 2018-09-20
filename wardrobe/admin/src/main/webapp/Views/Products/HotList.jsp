@@ -62,28 +62,10 @@
                                         <small>Users Products</small>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="/admin/products/hot/list?banner=1">
+                                        <a href="/admin/products/banner/list">
                                             <strong>banner商品</strong>
                                             <small>Banner Products</small>
                                         </a>
-                                    </li>
-                                </c:if>
-                                <c:if test="${banner=='1'}">
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/hot/list?hot=1">
-                                            <strong>热门商品</strong>
-                                            <small>Hot Products</small>
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/hot/list?newly=1">
-                                            <strong>最新商品</strong>
-                                            <small>Users Products</small>
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <strong>banner商品</strong>
-                                        <small>Banner Products</small>
                                     </li>
                                 </c:if>
                             </ol>
@@ -145,7 +127,7 @@
                                             </c:if>
                                         </td>
                                     </tr>
-                                </c:forEach>；
+                                </c:forEach>
                             </table>
                             <div>
                                 <%@ include file="../Shared/Pagination.jsp" %>

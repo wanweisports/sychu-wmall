@@ -476,6 +476,48 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return data;
     }
 
+    @Override
+    public PageBean getBannerCommodityListIn(CommodityInputView commodityInputView){
+        PageBean pageBean = getBannerCommoditysIn(commodityInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach((commodity) -> {
+            getType(commodity);
+            commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+        });
+        return pageBean;
+    }
+
+    private PageBean getBannerCommoditysIn(CommodityInputView commodityInputView){
+        String newly = commodityInputView.getNewly();
+        String hot = commodityInputView.getHot();
+        String commName = commodityInputView.getCommName();
+        String status = commodityInputView.getStatus();
+        Integer groupId = commodityInputView.getGroupId();
+
+        StringBuilder headSql = new StringBuilder("SELECT ci.*");
+        StringBuilder bodySql = new StringBuilder(" FROM commodity_banner cb, commodity_info ci");
+        StringBuilder whereSql = new StringBuilder(" WHERE cb.cid = ci.cid");
+        if(IDBConstant.LOGIC_STATUS_YES.equals(newly)){
+            whereSql.append(" AND ci.newly = :newly");
+        }
+        if(IDBConstant.LOGIC_STATUS_YES.equals(hot)){
+            whereSql.append(" AND ci.hot = :hot");
+        }
+        if(StrUtil.isNotBlank(commName)){
+            whereSql.append(" AND ci.commName = :commName");
+        }
+        if(StrUtil.isNotBlank(status)){
+            whereSql.append(" AND ci.status = :status");
+        }
+        if(groupId != null){
+            whereSql.append(" AND ci.groupId = :groupId");
+        }
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
+
+        return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
+    }
+
 }
 
 
