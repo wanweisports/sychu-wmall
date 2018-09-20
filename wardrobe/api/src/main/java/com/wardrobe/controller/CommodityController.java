@@ -75,4 +75,10 @@ public class CommodityController extends BaseController {
         return new ResponseBean(userShoppingCartService.settlement(scids, getUserInfo().getUid()));
     }
 
+    @ResponseBody
+    @RequestMapping("commodityBanners")
+    public ResponseBean commodityBanners(){
+        return new ResponseBean(commodityService.getCommodityBanners());
+    }
+
 }

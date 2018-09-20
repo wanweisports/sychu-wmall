@@ -1,10 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.PageBean;
-import com.wardrobe.common.po.CommodityColor;
-import com.wardrobe.common.po.CommodityInfo;
-import com.wardrobe.common.po.CommoditySize;
-import com.wardrobe.common.po.CommodityStock;
+import com.wardrobe.common.po.*;
 import com.wardrobe.common.view.CommodityInputView;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -55,5 +52,11 @@ public interface ICommodityService {
     void saveStock(CommodityStock commodityStock, boolean add);
 
     PageBean getStockListIn(CommodityInputView commodityInputView);
+
+    void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException;
+
+    void deleteCommodityBanner(int cid);
+
+    Map<String, Object> getCommodityBanners();
 
 }

@@ -27,6 +27,7 @@
     <mapping class="com.wardrobe.common.po.SysRankInfo"/>
     <mapping class="com.wardrobe.common.po.CommodityStock"/>
     <mapping class="com.wardrobe.common.po.UserCollection"/>
+    <mapping class="com.wardrobe.common.po.CommodityBanner"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

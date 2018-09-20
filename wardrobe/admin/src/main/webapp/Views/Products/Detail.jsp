@@ -30,15 +30,42 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/detail.js?v=${static_resource_version}"></script>
+    <script type="text/javascript">
+        function saveCommodityBanner(){
+            $("#js-banner").ajaxSubmit({
+                type: "post",
+                dataType: "json",
+                data: {seqNo: $("#seqNo").val()},
+                url: "/commodity/saveCommodityBanner",
+                success: function (res) {
+                    if(res.code == 1){
+                        window.location.reload();
+                    }else{
+                        alert(res.message);
+                    }
+                }
+            });
+        }
+
+        function delCommodityBanner(cid){
+            $.post("/commodity/delCommodityBanner", {cid: cid}, function(res){
+                if(res.code == 1){
+                    window.location.reload();
+                }else{
+                    alert(res.message);
+                }
+            });
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
     <div class="modal fade" id="banner_settings" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-default" role="document">
-            <div class="modal-content">
+            <form class="modal-content" id="js-banner">
                 <div class="modal-body">
                     <form id="banner_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
-                        <input type="hidden" name="cid">
+                        <input type="hidden" name="cid" value="${product.cid}">
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label">
                                 <span class="text-danger">*</span> 上传banner
@@ -50,17 +77,27 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label">
+                                <span class="text-danger">*</span> 排序值
+                            </label>
+                            <div class="col-md-9 col-form-label">
+                                <div style="width: 100%; position: relative">
+                                    <input type="text" class="form-control" id="seqNo" name="seqNo" placeholder="值越大，越靠前">
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
                         <i class="fa fa-close"></i> 取 消
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary save-upload">
+                    <button type="button" class="btn btn-sm btn-primary save-upload" onclick="saveCommodityBanner()">
                         <i class="fa fa-check"></i> 保 存
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -124,6 +161,16 @@
                                         </c:forEach>
                                     </td>
                                 </tr>
+                                <c:if test="${commodityBanner != null}">
+                                    <tr>
+                                        <th>banner图片：</th>
+                                        <td>
+                                            <img src="${bannerImg.resourcePath}" style="width: 100px; height: 100px;" alt="banner图">
+                                        </td>
+                                        <th>banner排序：</th>
+                                        <td colspan="3">${commodityBanner.seqNo}</td>
+                                    </tr>
+                                </c:if>
                                 </tbody>
                             </table>
                         </div>
@@ -174,12 +221,16 @@
                                 </a>
                             </c:if>
 
-                            <a href="#banner_settings" class="btn btn-primary" title="设置banner" data-id="${product.cid}" data-toggle="modal">
-                                <i class="fa fa-photo"></i> 设置banner
-                            </a>
-                            <a href="javascript:;" class="btn btn-danger" title="取消banner" data-id="${product.cid}">
-                                <i class="fa fa-photo"></i> 取消banner
-                            </a>
+                            <c:if test="${commodityBanner == null}">
+                                <a href="#banner_settings" class="btn btn-primary" title="设置banner" data-id="${product.cid}" data-toggle="modal">
+                                    <i class="fa fa-photo"></i> 设置banner
+                                </a>
+                            </c:if>
+                            <c:if test="${commodityBanner != null}">
+                                <a href="javascript:;" class="btn btn-danger" title="取消banner" data-id="${product.cid}" onclick="delCommodityBanner('${product.cid}')">
+                                    <i class="fa fa-photo"></i> 取消banner
+                                </a>
+                            </c:if>
                         </div>
                     </div>
                     <div class="card">

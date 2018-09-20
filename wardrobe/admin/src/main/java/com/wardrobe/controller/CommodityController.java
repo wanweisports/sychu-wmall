@@ -2,6 +2,7 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.po.CommodityBanner;
 import com.wardrobe.common.po.CommodityColor;
 import com.wardrobe.common.po.CommodityInfo;
 import com.wardrobe.common.po.CommoditySize;
@@ -74,6 +75,20 @@ public class CommodityController extends BaseController {
     @RequestMapping("delSize")
     public ResponseBean deleteSize(int sid){
         commodityService.deleteSizeIn(sid);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("saveCommodityBanner")
+    public ResponseBean saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest)throws IOException{
+        commodityService.saveCommodityBanner(commodityBanner, multipartRequest);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("delCommodityBanner")
+    public ResponseBean delCommodityBanner(int cid){
+        commodityService.deleteCommodityBanner(cid);
         return new ResponseBean(true);
     }
 

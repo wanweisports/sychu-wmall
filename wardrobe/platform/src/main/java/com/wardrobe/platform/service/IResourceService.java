@@ -36,6 +36,8 @@ public interface IResourceService {
 
     List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType, int notResourceSeq);
 
+    String getResourcePath(int resourceServiceId, String resourceServiceType);
+
     List<String> getResourcesPath(List<SysResources> sysResources);
 
     SysResources saveResource(MultipartFile multipartFile, int serviceId, String serviceType, String resourceType, String fold);

@@ -130,6 +130,18 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
+    public String getResourcePath(int resourceServiceId, String resourceServiceType){
+        return getResourcePath(getResource(resourceServiceId, resourceServiceType));
+    }
+
+    private String getResourcePath(SysResources resource){
+        if(resource != null){
+            return OssClient.getImgPath(resource.getResourcePath());
+        }
+        return null;
+    }
+
+    @Override
     public List<String> getResourcesPath(List<SysResources> sysResources){
         List<String> resourcesPath = new ArrayList<>();
         sysResources.stream().forEach((sysResource)->

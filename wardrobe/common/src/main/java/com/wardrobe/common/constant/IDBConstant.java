@@ -16,6 +16,7 @@ public interface IDBConstant {
     String RESOURCE_TYPE_FILE = "20"; //文件
 
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
+    String RESOURCE_COMMODITY_BANNER_IMG = "20"; //商品Banner图
 
     String USER_SEX = "USER_SEX";//性别
     String USER_SEX_MALE = "10";//性别男
