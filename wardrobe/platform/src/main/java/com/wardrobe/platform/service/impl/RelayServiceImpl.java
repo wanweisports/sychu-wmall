@@ -39,27 +39,6 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(serverChannel == null) {
             NettyClient nettyClient = new NettyClient(ip, port);
             ChannelFuture future = nettyClient.clientServer();
-            if(future != null && future.isSuccess()) {
-                new Thread(){
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(999999999999999999L);
-                                //future.channel().closeFuture().sync();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }finally {
-                                try{
-                                    System.out.println(77777777777777777L);
-                                    nettyClient.clientGroup.shutdownGracefully().sync();
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                                ClientChannelUtil.clearServerChannel(serverChannel);
-                            }
-                        }
-                    }.start();
-                }
             return future != null && future.isSuccess();
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));

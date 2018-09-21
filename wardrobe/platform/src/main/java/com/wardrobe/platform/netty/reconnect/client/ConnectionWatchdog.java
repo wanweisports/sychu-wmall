@@ -66,6 +66,8 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
             //}
         }
         ctx.fireChannelInactive();
+
+        ClientChannelUtil.clearServerChannel(ctx.channel());
     }
 
     public void run(Timeout timeout) throws Exception {

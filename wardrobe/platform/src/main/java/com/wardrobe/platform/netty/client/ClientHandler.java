@@ -1,3 +1,4 @@
+/*
 package com.wardrobe.platform.netty.client;
 
 import com.wardrobe.platform.netty.client.bean.ClientBean;
@@ -21,9 +22,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Autowired
     private ISysDeviceService deviceService;
 
-    /**
+    */
+/**
      * 向服务端发送数据
-     */
+     *//*
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
@@ -37,16 +40,19 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(clientBean.getHost(), clientBean.getPort()));
     }
 
-    /**
+    */
+/**
      * channel 通道 Inactive 不活跃的
      * 当客户端主动断开服务端的链接后，这个通道就是不活跃的。也就是说客户端与服务端的关闭了通信通道并且不可以传输数据
-     */
+     *//*
+
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("客户端与服务端通道-关闭：" + ctx.channel().localAddress() + "channelInactive");
         ClientChannelUtil.clearServerChannel(ctx.channel());
     }
 
-    /*
+    */
+/*
     L1：
     读取客户端通道信息..
     客户端接收到的服务端信息，数据包为:
@@ -56,7 +62,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     客户端接收到的服务端信息，数据包为:
     Relayoff 1
     ！！！重连后，服务端发送消息给客户端，此方法不会在Read消息
-     */
+     *//*
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         System.out.println("读取客户端通道信息..");
@@ -75,3 +82,4 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
 }
+*/

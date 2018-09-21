@@ -26,7 +26,7 @@ public class ServerHandlerInit extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(idleStateTrigger);
         pipeline.addLast(new HeartBeatServerHandler());
         //自己的逻辑
-        pipeline.addLast(new ServerHandler());
+        //pipeline.addLast(new ServerHandler()); 多余
     }
 
 }
