@@ -300,6 +300,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
+    public ReserveOrderInfo getLastReserveOrderInfo(int uid){
+        return baseDao.queryByHqlFirst("FROM ReserveOrderInfo r WHERE r.uid = ?1 ORDER BY r.roid DESC LIMIT 1", uid);
+    }
+
+    @Override
     public void saveCancelReserveOrder(int uid, int roid){
         ReserveOrderInfo reserveOrderInfo = getReserveOrderInfo(roid);
         if(reserveOrderInfo.getUid() != uid) throw new MessageException("错误");
@@ -324,12 +329,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         // 订单生成的机器 IP
         String spbill_create_ip = "127.0.0.1";
         // 这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
-        String notify_url = "http://47.94.196.103/order/asynNotify";
+        String notify_url = ConfigUtil.NOTIFY_URL;
         String trade_type = "JSAPI";
 
         // ---必须参数
-        // 商户号
-        String mch_id = WeiXinConnector.MCH_ID;
         // 随机字符串
         String nonce_str = StrUtil.getNonceStr();
 
@@ -340,8 +343,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         String out_trade_no = orderId;
 
         SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-        packageParams.put("appid", WeiXinConnector.APP_ID);
-        packageParams.put("mch_id", mch_id);
+        packageParams.put("appid", ConfigUtil.APPID);
+        packageParams.put("mch_id", ConfigUtil.MCH_ID);  //商户号
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
         packageParams.put("attach", attach);
@@ -369,15 +372,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         SortedMap<Object, Object> finalpackage = new TreeMap<Object, Object>();
         String timestamp = SignUtil.getTimeStamp();
         String packages = "prepay_id="+prepay_id;
-        finalpackage.put("appId", WeiXinConnector.APP_ID);
+        finalpackage.put("appId", ConfigUtil.APPID);
         finalpackage.put("timeStamp", timestamp);
         finalpackage.put("nonceStr", nonce_str);
         finalpackage.put("package", packages);
-        finalpackage.put("signType", "MD5");
+        finalpackage.put("signType", ConfigUtil.SIGN_TYPE);
         //要签名
         String finalsign = PayCommonUtil.createSign("UTF-8", finalpackage);
 
-        String finaPackage = "\"appId\":\"" + WeiXinConnector.APP_ID + "\",\"timeStamp\":\"" + timestamp
+        String finaPackage = "\"appId\":\"" + ConfigUtil.APPID + "\",\"timeStamp\":\"" + timestamp
                 + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""
                 + packages + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
                 + finalsign + "\"";
@@ -414,12 +417,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             //需要对以下字段进行签名
             SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-            packageParams.put("appid", WeiXinConnector.APP_ID);
+            packageParams.put("appid", ConfigUtil.APPID);
             packageParams.put("bank_type", bank_type);
             packageParams.put("cash_fee", cash_fee);
             packageParams.put("fee_type", fee_type);
             packageParams.put("is_subscribe", is_subscribe);
-            packageParams.put("mch_id", WeiXinConnector.MCH_ID);
+            packageParams.put("mch_id", ConfigUtil.MCH_ID);
             packageParams.put("nonce_str", nonce_str);
             packageParams.put("openid", openid);
             packageParams.put("out_trade_no", out_trade_no);

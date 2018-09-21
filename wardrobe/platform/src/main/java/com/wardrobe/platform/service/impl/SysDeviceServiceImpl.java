@@ -106,8 +106,14 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         }
     }
 
-    private SysDeviceInfo getSysDeviceInfo(int did){
+    @Override
+    public SysDeviceInfo getSysDeviceInfo(int did){
         return baseDao.getToEvict(SysDeviceInfo.class, did);
+    }
+
+    @Override
+    public SysDeviceControl getSysDeviceControl(int dcid){
+        return baseDao.getToEvict(SysDeviceControl.class, dcid);
     }
 
     @Override

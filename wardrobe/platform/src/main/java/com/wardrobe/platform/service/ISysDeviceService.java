@@ -26,6 +26,10 @@ public interface ISysDeviceService {
 
     void saveSysDeviceInfo(SysDeviceInfo sysDeviceInfo);
 
+    SysDeviceInfo getSysDeviceInfo(int did);
+
+    SysDeviceControl getSysDeviceControl(int dcid);
+
     List<SysDeviceControl> getDeviceControl(String ip, int port);
 
 }

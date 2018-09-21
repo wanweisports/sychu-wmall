@@ -146,8 +146,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public synchronized void saveUserRecharge(int dictId, int userId, double price){
-        userAccountService.addRechargeOrderInfo(userId, dictId, price);
+    public synchronized int saveUserRecharge(int dictId, int userId, double price){
+        return userAccountService.addRechargeOrderInfo(userId, dictId, price);
     }
 
     @Override

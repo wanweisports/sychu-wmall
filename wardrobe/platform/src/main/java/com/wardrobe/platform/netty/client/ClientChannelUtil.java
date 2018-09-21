@@ -127,6 +127,10 @@ public class ClientChannelUtil {
         return null;
     }
 
+    public static SysDeviceControl readDriveStatus(String ip, int port, int deviceNo){
+        return readDriveStatus(getServerChannel(ip, port), deviceNo);
+    }
+
     public static SysDeviceControl readDriveStatus(Channel serverChannel, int deviceNo){
         SysDeviceControl deviceBean = getDeviceBean(serverChannel, deviceNo);
         synchronized (deviceBean) {

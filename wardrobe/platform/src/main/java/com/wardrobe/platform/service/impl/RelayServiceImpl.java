@@ -1,16 +1,20 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.NettyClient;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
+import com.wardrobe.platform.service.IOrderService;
 import com.wardrobe.platform.service.IRelayService;
+import com.wardrobe.platform.service.ISysDeviceService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.CharsetUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,6 +26,12 @@ import java.util.Map;
  */
 @Service
 public class RelayServiceImpl extends BaseService implements IRelayService {
+
+    @Autowired
+    private ISysDeviceService deviceService;
+
+    @Autowired
+    private IOrderService orderService;
 
     @Override
     public synchronized boolean connectServer(String ip, int port) throws Exception{
@@ -113,7 +123,11 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         //判断是否连接中
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + driveId, CharsetUtil.UTF_8));
+            //判断是否为关闭状态才能打开
+            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, driveId);
+            if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
+                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + driveId, CharsetUtil.UTF_8));
+            }
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
         }
@@ -124,7 +138,11 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         //判断是否连接中
         if(ClientChannelUtil.isOpen(ip, port)) {
             Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + driveId, CharsetUtil.UTF_8));
+            //判断是否为打开状态才能关闭
+            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, driveId);
+            if(ClientChannelUtil.READ_OPEN.equals(deviceBean.getStatus())) {
+                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + driveId, CharsetUtil.UTF_8));
+            }
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
         }
@@ -161,6 +179,57 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             }
         }
         return data;
+    }
+
+    @Override
+    public void openDoor(int did, int uid){
+        SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
+        ReserveOrderInfo reserveOrderInfo = orderService.getLastReserveOrderInfo(uid);
+        //1.判断射频（除了已支付的衣服标签，是否都检查到了，再开门）
+        if(1==1){}
+        //2.判断自己的柜子已经关闭
+        //  A.查询当前预约的订单
+        SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), reserveOrderInfo.getDcid());
+        if(!ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) throw new MessageException("出门前请您关闭柜子");
+        if(1==1) {
+            try {
+                openServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), 1);
+            } catch (MessageException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void closeDoor(int did, int uid){
+        SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
+        try {
+            closeServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), 1);
+        } catch (MessageException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void openLock(int dcid) throws Exception{
+        SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(dcid);
+        SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(sysDeviceControl.getDid());
+        try {
+            openServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), dcid);
+        } catch (MessageException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void closeLock(int dcid) throws Exception{
+        SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(dcid);
+        SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(sysDeviceControl.getDid());
+        try {
+            closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), dcid);
+        } catch (MessageException e) {
+            e.printStackTrace();
+        }
     }
 
 }

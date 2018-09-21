@@ -1,3 +1,4 @@
+/*
 package com.wardrobe.controller;
 
 import com.wardrobe.common.view.PayInputView;
@@ -34,33 +35,41 @@ public class WXPayController extends BaseController {
 		//微信支付成功后通知地址 必须要求80端口并且地址不能带参数
 		private static String notifyurl = "http://tuhao.viphk.ngrok.org/front/asynNotify.action";																 // Key
 
-	/**
+	*/
+/**
 	 * @param args
-	 */
+	 *//*
+
 	public static void main(String[] args) {
 		
 		//微信支付jsApi
-		/*WxPayDto tpWxPay = new WxPayDto();
+		*/
+/*WxPayDto tpWxPay = new WxPayDto();
 		tpWxPay.setOpenId(openId);
 		tpWxPay.setBody("商品信息");
 		tpWxPay.setOrderId(getNonceStr());
 		tpWxPay.setSpbillCreateIp("127.0.0.1");
 		tpWxPay.setTotalFee("0.01");
-	    getPackage(tpWxPay);*/
+	    getPackage(tpWxPay);*//*
+
 	    
 	    //扫码支付
-	    /*WxPayDto tpWxPay1 = new WxPayDto();
+	    */
+/*WxPayDto tpWxPay1 = new WxPayDto();
 	    tpWxPay1.setBody("商品信息");
 	    tpWxPay1.setOrderId(getNonceStr());
 	    tpWxPay1.setSpbillCreateIp("127.0.0.1");
 	    tpWxPay1.setTotalFee("0.01");
-		getCodeurl(tpWxPay1);*/
+		getCodeurl(tpWxPay1);*//*
+
 
 	}
 	
-	/**
+	*/
+/**
 	 * 获取微信扫码支付二维码连接
-	 */
+	 *//*
+
 	@RequestMapping("payQrUrl")
 	public void payQrUrl(PayInputView payInputView, Model model, HttpServletResponse response){
 		
@@ -84,8 +93,8 @@ public class WXPayController extends BaseController {
 	         parameters.put("out_trade_no", out_trade_no);
 	         parameters.put("total_fee", price);                             
 	         parameters.put("spbill_create_ip", "182.92.102.209");
-	         parameters.put("notify_url", "https://www.baidu.com");//支付成功后回调的action，与JSAPI相同
-	         parameters.put("trade_type", "NATIVE");
+	         parameters.put("notify_url", notifyurl);//支付成功后回调的action，与JSAPI相同
+	         parameters.put("trade_type", "JSAPI");
 	         parameters.put("product_id", out_trade_no);//商品号要唯一
 	         String sign = PayCommonUtil.createSign("UTF-8", parameters);
 	         parameters.put("sign", sign);
@@ -113,9 +122,11 @@ public class WXPayController extends BaseController {
 	}
 	
 	
-	/**
+	*/
+/**
 	 * 获取请求预支付id报文
-	 */
+	 *//*
+
 	@RequestMapping("wxPayPackage")
 	public String wxPayPackage(PayInputView payInputView, Model model) throws JDOMException, IOException {
 		
@@ -266,3 +277,4 @@ public class WXPayController extends BaseController {
     }
 
 }
+*/

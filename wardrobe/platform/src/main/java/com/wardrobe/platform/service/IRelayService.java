@@ -23,4 +23,12 @@ public interface IRelayService {
 
     Map<String, Object> getRealyIndexsIn();
 
+    void openDoor(int did, int uid);
+
+    void closeDoor(int did, int uid);
+
+    void openLock(int dcid) throws Exception;
+
+    void closeLock(int dcid) throws Exception;
+
 }
