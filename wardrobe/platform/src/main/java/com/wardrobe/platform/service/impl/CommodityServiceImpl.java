@@ -13,6 +13,7 @@ import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IResourceService;
+import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Autowired
     private IResourceService resourceService;
+
+    @Autowired
+    private IUserService userService;
 
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
@@ -76,8 +80,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public Map<String, Object> getCommodityDetail(int cid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+    public Map<String, Object> getCommodityDetail(int cid, int uid){
+        Map<String, Object> data = new HashMap<>(7, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeNames(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
@@ -85,12 +89,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         data.put("price", commodityInfo.getPrice());
         data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
+        data.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
         return data;
     }
 
     @Override
     public Map<String, Object> getCommodityDetailSelected(int cid){
-        Map<String, Object> data = new HashMap<>(4, 1);
+        Map<String, Object> data = new HashMap<>(6, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeList(cid));
         data.put("cid", commodityInfo.getCid());
@@ -288,8 +293,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         //删除老图片
         if (resourceIds != null && !resourceIds.isEmpty()) {
-            resourceIds = resourceIds != null ? resourceIds : StrUtil.EMPTY; //resourceIds前端未变的图片id
-            List<SysResources> oldResources = resourceService.getNotExistIds(resourceIds, cid, IDBConstant.RESOURCE_COMMODITY_IMG);
+            resourceIds = resourceIds != null ? resourceIds : StrUtil.EMPTY; //resourceIds前端删除的图片id
+            List<SysResources> oldResources = resourceService.getExistIds(resourceIds, cid, IDBConstant.RESOURCE_COMMODITY_IMG);
             for(SysResources sysResource : oldResources){
                 baseDao.delete(sysResource);
             }
@@ -355,7 +360,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> renderCommodityDetailIn(int cid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+        Map<String, Object> data = new HashMap<>(7, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
@@ -366,6 +371,12 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             data.put("groupCommodityColorList", getCommodityColorByGroupId(groupId));
         }
         data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
+
+        CommodityBanner commodityBanner = getCommodityBanner(cid);
+        if(commodityBanner != null) {
+            data.put("commodityBanner", commodityBanner);
+            data.put("bannerImg", resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+        }
         return data;
     }
 
@@ -417,6 +428,93 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             whereSql.append(" AND ct.createTime <= :endTime");
         }
         whereSql.append(" ORDER BY ct.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
+    }
+
+    @Override
+    public void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException{
+        commodityBanner.setCreateTime(DateUtil.getNowDate());
+        baseDao.save(commodityBanner, null);
+
+        //处理图片
+        List<SysResources> sysResources = FileUtil.getSpringUpload(multipartRequest, OssClient.OSS_IMG_PATH);
+        for(SysResources sysResource : sysResources){
+            //保存到阿里云oss
+            OssClient.putInputStream(sysResource.getInputStream(), sysResource.getResourcePath());
+            //保存到数据库
+            sysResource.setResourceSeq(commodityBanner.getSeqNo());
+            sysResource.setResourceServiceParentId(commodityBanner.getCid());
+            sysResource.setResourceServiceId(commodityBanner.getCid());
+            sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
+            sysResource.setResourceType(IDBConstant.RESOURCE_COMMODITY_IMG);
+            baseDao.save(sysResource, null);
+        }
+
+    }
+
+    @Override
+    public void deleteCommodityBanner(int cid){
+        baseDao.delete(getCommodityBanner(cid));
+        SysResources resource = resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
+        if(resource != null){
+            baseDao.delete(resource);
+        }
+    }
+
+    private CommodityBanner getCommodityBanner(int cid){
+        return baseDao.queryByHqlFirst("FROM CommodityBanner WHERE cid = ?1", cid);
+    }
+
+    @Override
+    public Map<String, Object> getCommodityBanners(){
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT ci.cid, ci.commName FROM commodity_banner cb, commodity_info ci WHERE cb.cid = ci.cid ORDER BY cb.seqNo DESC, cb.createTime DESC");
+        list.parallelStream().forEach(map -> {
+            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+        });
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("list", list);
+        return data;
+    }
+
+    @Override
+    public PageBean getBannerCommodityListIn(CommodityInputView commodityInputView){
+        PageBean pageBean = getBannerCommoditysIn(commodityInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach((commodity) -> {
+            getType(commodity);
+            commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+        });
+        return pageBean;
+    }
+
+    private PageBean getBannerCommoditysIn(CommodityInputView commodityInputView){
+        String newly = commodityInputView.getNewly();
+        String hot = commodityInputView.getHot();
+        String commName = commodityInputView.getCommName();
+        String status = commodityInputView.getStatus();
+        Integer groupId = commodityInputView.getGroupId();
+
+        StringBuilder headSql = new StringBuilder("SELECT ci.*");
+        StringBuilder bodySql = new StringBuilder(" FROM commodity_banner cb, commodity_info ci");
+        StringBuilder whereSql = new StringBuilder(" WHERE cb.cid = ci.cid");
+        if(IDBConstant.LOGIC_STATUS_YES.equals(newly)){
+            whereSql.append(" AND ci.newly = :newly");
+        }
+        if(IDBConstant.LOGIC_STATUS_YES.equals(hot)){
+            whereSql.append(" AND ci.hot = :hot");
+        }
+        if(StrUtil.isNotBlank(commName)){
+            whereSql.append(" AND ci.commName = :commName");
+        }
+        if(StrUtil.isNotBlank(status)){
+            whereSql.append(" AND ci.status = :status");
+        }
+        if(groupId != null){
+            whereSql.append(" AND ci.groupId = :groupId");
+        }
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
+
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 

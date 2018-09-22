@@ -2,7 +2,9 @@ package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
+import com.wardrobe.common.po.UserCollection;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.view.UserInputView;
 
 import java.util.Map;
@@ -30,10 +32,16 @@ public interface IUserService {
 
     boolean userIsPerfect(int uid);
 
-    void saveUserRecharge(int dictId, int userId, double price);
+    int saveUserRecharge(int dictId, int userId, double price);
 
     PageBean getUserListIn(UserInputView userInputView);
 
     Map<String, Object> getMembersDetailIn(int userId);
+
+    void saveCollection(UserCollection userCollection);
+
+    void deleteCollection(int cnid, int uid);
+
+    UserCollection getUserCollection(int cid, int uid);
 
 }

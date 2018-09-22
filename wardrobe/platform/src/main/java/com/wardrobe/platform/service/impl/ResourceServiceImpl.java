@@ -130,6 +130,18 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
+    public String getResourcePath(int resourceServiceId, String resourceServiceType){
+        return getResourcePath(getResource(resourceServiceId, resourceServiceType));
+    }
+
+    private String getResourcePath(SysResources resource){
+        if(resource != null){
+            return OssClient.getImgPath(resource.getResourcePath());
+        }
+        return null;
+    }
+
+    @Override
     public List<String> getResourcesPath(List<SysResources> sysResources){
         List<String> resourcesPath = new ArrayList<>();
         sysResources.stream().forEach((sysResource)->
@@ -157,8 +169,8 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     }
 
     @Override
-    public List<SysResources> getNotExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType){
-        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = :resourceServiceParentId AND resourceServiceType = :resourceServiceType AND resourceId NOT IN(:resourceIds)", new HashMap(){{put("resourceServiceParentId", resourceServiceParentId); put("resourceServiceType", resourceServiceType);  putAll(SQLUtil.getInToSQL("resourceIds", resourceIds));}});
+    public List<SysResources> getExistIds(String resourceIds, int resourceServiceParentId, String resourceServiceType){
+        return baseDao.queryByHql("FROM SysResources WHERE resourceServiceParentId = :resourceServiceParentId AND resourceServiceType = :resourceServiceType AND resourceId IN(:resourceIds)", new HashMap(){{put("resourceServiceParentId", resourceServiceParentId); put("resourceServiceType", resourceServiceType);  putAll(SQLUtil.getInToSQL("resourceIds", resourceIds));}});
     }
 
 }

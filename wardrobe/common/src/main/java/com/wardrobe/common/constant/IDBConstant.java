@@ -16,6 +16,7 @@ public interface IDBConstant {
     String RESOURCE_TYPE_FILE = "20"; //文件
 
     String RESOURCE_COMMODITY_IMG = "10"; //商品图
+    String RESOURCE_COMMODITY_BANNER_IMG = "20"; //商品Banner图
 
     String USER_SEX = "USER_SEX";//性别
     String USER_SEX_MALE = "10";//性别男
@@ -44,5 +45,16 @@ public interface IDBConstant {
     String COMM_STOCK_TYPE = "COMM_STOCK_TYPE"; //商品库存变更类型
     String COMM_STOCK_TYPE_ADD = "10"; //商品库存增加
     String COMM_STOCK_TYPE_SUB = "20"; //商品库存减少
+
+    String ORDER_PAY_STATUS = "ORDER_PAY_STATUS"; //订单支付状态
+    String ORDER_PAY_STATUS_YES = "1"; //已支付
+    String ORDER_PAY_STATUS_NO = "2";  //未支付
+    String ORDER_PAY_STATUS_CANCEL = "3";  //已取消
+
+    String ORDER_STATUS = "ORDER_STATUS"; //订单状态
+    String ORDER_STATUS_NORMAL = "1";     //正常
+    String ORDER_STATUS_RETURN_ING = "2"; //申请退款
+    String ORDER_STATUS_RETURN = "3";     //退款成功
+    String ORDER_STATUS_REFUSE = "4";     //退款拒绝
 
 }

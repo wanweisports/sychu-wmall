@@ -8,6 +8,7 @@ import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.UserCollection;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
@@ -106,8 +107,8 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("userRecharge")
     public ResponseBean userRecharge(int dictId, double price){
-        userService.saveUserRecharge(dictId, getUserInfo().getUid(), price);
-        return new ResponseBean(true);
+        int oid = userService.saveUserRecharge(dictId, getUserInfo().getUid(), price);
+        return new ResponseBean(new HashMap(){{put("oid", oid);}});
     }
 
     @Desc("用户优惠券列表")
@@ -115,6 +116,23 @@ public class UserController extends BaseController {
     @RequestMapping("userCouponList")
     public ResponseBean userCouponList(){
         return new ResponseBean(new HashMap(){{put("coupons", userCouponService.getUserCouponList(getUserInfo().getUid()));}});
+    }
+
+    @Desc("用户添加收藏")
+    @ResponseBody
+    @RequestMapping("saveCollection")
+    public ResponseBean saveCollection(UserCollection userCollection){
+        userCollection.setUid(getUserInfo().getUid());
+        userService.saveCollection(userCollection);
+        return new ResponseBean(true);
+    }
+
+    @Desc("用户删除收藏")
+    @ResponseBody
+    @RequestMapping("cancelCollection")
+    public ResponseBean cancelCollection(int cid){
+        userService.deleteCollection(cid, getUserInfo().getUid());
+        return new ResponseBean(true);
     }
 
 }

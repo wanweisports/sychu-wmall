@@ -37,37 +37,35 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base'], function ($, jquer
         });
     };
 
-    $(".members-list").on("click", ".member-stop", function () {
-        var memberId = $(this).parents("tr").attr("data-id");
-
-        var confirmAlert = jqueryAlert({
-            'title'   : '警 告',
-            'content' : '您确定要停用此用户！',
-            'modal'   : true,
-            'buttons' : {
-                '取消' : function () {
-                    confirmAlert.close();
-                },
-                '确定' : function () {
-                    confirmAlert.close();
-
-                    $.postJSON('/admin/members/setCloseStatus', {memberId: memberId}, function (res) {
-                        if (res.code == 1) {
-                            window.location.reload();
-                        }
-                    });
-                }
-            }
-        })
+    $(".wardrobe-add").on("click", function (e) {
     });
 
-    // 检索
-    $(".members-query-btn").on("click", function (e) {
+    $(".wardrobe-list").on("click", ".wardrobe-set", function () {
+        var wardrobeId = $(this).parents("tr").attr("data-id");
+
+        $.getJSON('/admin/wardrobe/getInfo', {wardrobeId: wardrobeId}, function (res) {
+        });
+    });
+
+    $(".save-wardrobe").on("click", function (e) {
         e.preventDefault();
 
-        var $form = $("#members_query_form");
-        var conditions = $form.serialize();
-
-        window.location.assign("/admin/members/list?" + conditions);
+        $.post('/admin/wardrobe/saveInfo', {}, function (res) {
+            if (res.code == 1) {
+                window.location.reload();
+            }
+            else {
+                var $error = jqueryAlert({
+                    'title'   : '警 告',
+                    'content' : '保存信息失败！！',
+                    'modal'   : true,
+                    'buttons' : {
+                        '知道了' : function () {
+                            $error.close();
+                        }
+                    }
+                })
+            }
+        });
     });
 });

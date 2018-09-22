@@ -10,7 +10,9 @@ import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +69,60 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         hql.append(" AND sdc.status = ?4");
         hql.append(" ORDER BY sdc.dcid");
         return baseDao.queryByHqlFirst(hql.toString(), did, reserveStartTime, reserveEndTime, IDBConstant.LOGIC_STATUS_YES);
+    }
+
+    @Override
+    public PageBean getSysDeviceInfoList(DeviceInputView deviceInputView){
+        return getSysDeviceInfos(deviceInputView);
+    }
+
+    private PageBean getSysDeviceInfos(DeviceInputView deviceInputView){
+        StringBuilder headSql = new StringBuilder("SELECT *");
+        StringBuilder bodySql = new StringBuilder(" FROM sys_device_info sdi");
+        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
+        return super.getPageBean(headSql, bodySql, whereSql, deviceInputView);
+    }
+
+    @Override
+    public void saveSysDeviceInfo(SysDeviceInfo sysDeviceInfo){
+        Timestamp nowDate = DateUtil.getNowDate();
+        Integer did = sysDeviceInfo.getDid();
+        if(did == null) {
+            sysDeviceInfo.setCreateTime(nowDate);
+            sysDeviceInfo.setStartTime("00:00");
+            sysDeviceInfo.setEndTime("24:00");
+            baseDao.save(sysDeviceInfo, null);
+        }else{
+            SysDeviceInfo sysDeviceInfoDB = getSysDeviceInfo(did);
+            sysDeviceInfoDB.setUpdateTime(nowDate);
+            sysDeviceInfoDB.setStatus(sysDeviceInfo.getStatus());
+            sysDeviceInfoDB.setName(sysDeviceInfo.getName());
+            sysDeviceInfoDB.setAddress(sysDeviceInfo.getAddress());
+            sysDeviceInfoDB.setDoorIp(sysDeviceInfo.getDoorIp());
+            sysDeviceInfoDB.setDoorPort(sysDeviceInfo.getDoorPort());
+            sysDeviceInfoDB.setLockIp(sysDeviceInfo.getLockIp());
+            sysDeviceInfoDB.setLockPort(sysDeviceInfo.getLockPort());
+            baseDao.save(sysDeviceInfoDB, did);
+        }
+    }
+
+    @Override
+    public SysDeviceInfo getSysDeviceInfo(int did){
+        return baseDao.getToEvict(SysDeviceInfo.class, did);
+    }
+
+    @Override
+    public SysDeviceControl getSysDeviceControl(int dcid){
+        return baseDao.getToEvict(SysDeviceControl.class, dcid);
+    }
+
+    @Override
+    public List<SysDeviceControl> getDeviceControl(String ip, int port){
+        List<SysDeviceControl> deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.doorIp = ?1 AND sdc.doorPort = ?2", ip, port);
+        if(deviceControls == null || deviceControls.size() == 0){
+            deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.lockIp = ?1 AND sdc.lockPort = ?2", ip, port);
+        }
+        return deviceControls;
     }
 
 }

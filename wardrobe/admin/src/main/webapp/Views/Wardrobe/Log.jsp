@@ -11,17 +11,14 @@
             padding: 0.75rem;
         }
         .wardrobe-list td {
-            padding: 0.3rem 0.75rem;
-        }
-        .img-rounded {
-            width: 2rem;
+            padding: 0.75rem 0.75rem;
         }
     </style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-            data-main="Content/js/app/wardrobe/list.js?v=${static_resource_version}"></script>
+            data-main="Content/js/app/wardrobe/log.js?v=${static_resource_version}"></script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -37,17 +34,21 @@
                         <div class="card-block">
                             <form id="wardrobe_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                                 <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <input type="text" name="nickname" class="form-control" placeholder="选择试衣间">
+                                    <div class="col-md-2">
+                                        <select class="form-control">
+                                            <option value="">全部试衣间</option>
+                                            <option value="">试衣间10001</option>
+                                            <option value="">试衣间10002</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="nickname" class="form-control" placeholder="起始时间">
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="起始时间" autocomplete="off">
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="mobile" class="form-control" placeholder="截止时间">
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" placeholder="截止时间" autocomplete="off">
                                     </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary members-query-btn">
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary wardrobe-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
                                     </div>
@@ -70,22 +71,43 @@
                                 <tr>
                                     <td>2018-09-14 11:12:13</td>
                                     <td>开锁</td>
-                                    <td>锁具1</td>
-                                    <td>试衣间AA</td>
+                                    <td>大门</td>
+                                    <td>试衣间10001</td>
                                     <td>王军</td>
                                 </tr>
                                 <tr>
                                     <td>2018-09-14 11:12:13</td>
                                     <td>开锁</td>
-                                    <td>锁具1</td>
-                                    <td>试衣间AA</td>
+                                    <td>柜子A</td>
+                                    <td>试衣间10001</td>
                                     <td>王军</td>
                                 </tr>
                                 <tr>
                                     <td>2018-09-14 11:12:13</td>
                                     <td>开锁</td>
-                                    <td>锁具1</td>
-                                    <td>试衣间AA</td>
+                                    <td>大门</td>
+                                    <td>试衣间10001</td>
+                                    <td>王军</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-09-14 11:12:13</td>
+                                    <td>开锁</td>
+                                    <td>柜子A</td>
+                                    <td>试衣间10001</td>
+                                    <td>王军</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-09-14 11:12:13</td>
+                                    <td>开锁</td>
+                                    <td>大门</td>
+                                    <td>试衣间10001</td>
+                                    <td>王军</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-09-14 11:12:13</td>
+                                    <td>开锁</td>
+                                    <td>柜子A</td>
+                                    <td>试衣间10001</td>
                                     <td>王军</td>
                                 </tr>
                                 </tbody>

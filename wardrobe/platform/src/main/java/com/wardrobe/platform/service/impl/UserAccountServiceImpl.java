@@ -77,7 +77,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         userAccount.setUid(uid);
         userAccount.setBalance(Arith.conversion(0));
         userAccount.setYcoid(IPlatformConstant.INIT_USER_SCORE);
-        userAccount.setRank(0);
+        userAccount.setRank(1);
         userAccount.setScore(0);
         userAccount.setCreateTime(timestamp);
         baseDao.save(userAccount, null);
@@ -95,7 +95,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Desc("充值下单")
     @Override
-    public synchronized void addRechargeOrderInfo(int uid, int dictId, double price){
+    public synchronized int addRechargeOrderInfo(int uid, int dictId, double price){
         SysDict sysDict = dictService.getDictById(dictId);
         if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException("操作失败，请刷新页面重试！");
 
@@ -105,7 +105,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
         UserOrderInfo userOrderInfo = new UserOrderInfo();
         userOrderInfo.setPriceSum(Arith.conversion(rechargePrice));
-        orderService.saveRechargeOrderInfo(userOrderInfo, sysDict, uid);
+        return orderService.saveRechargeOrderInfo(userOrderInfo, sysDict, uid);
     }
 
     @Desc("充值成功后，回调累计金额")

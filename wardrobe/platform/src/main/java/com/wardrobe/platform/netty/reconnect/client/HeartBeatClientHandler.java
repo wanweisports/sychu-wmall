@@ -1,5 +1,6 @@
 package com.wardrobe.platform.netty.reconnect.client;
 
+import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
@@ -32,7 +33,7 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
     //当前面的通道channelRead后，后面的通道无法获得消息（不会调用后面通道channelRead接口）
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        //super.channelRead(ctx, msg); //不能打开，否则ref=0，则报错
+        //super.channelRead(ctx, msg); //不能打开，否则ref=0（被此方法读取过），则报错
         System.out.println("===channelRead===");
 
         System.out.println("Heartbeat-client:" + msg);
@@ -45,7 +46,7 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
             if(message != null && message.contains("Relay")){
                 //0：状态  1：设备号[1-8]
                 String[] statusName = message.split(" ");
-                DeviceBean deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
+                SysDeviceControl deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
                 if(deviceBean != null){
                     deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
                 }

@@ -1,11 +1,14 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.*;
@@ -74,6 +77,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_NO); //充值
         userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
         userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userOrderInfo.setOno(getOno());
         baseDao.save(userOrderInfo, null);
 
         int oid = userOrderInfo.getOid();
@@ -102,14 +106,29 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return oid;
     }
 
+    private boolean existOrderByNo(String ono){
+        return baseDao.queryBySqlFirst("SELECT 1 FROM user_order_info WHERE ono = ?1", ono) != null;
+    }
+
+    @Desc("生成不重复的订单编号")
+    private String getOno(){
+        //生成重复的订单编号
+        String ono = IPlatformConstant.ONO + StrUtil.objToStr(StrUtil.initCode(6));
+        while (existOrderByNo(ono)){
+            ono = IPlatformConstant.ONO + StrUtil.objToStr(StrUtil.initCode(6));
+        }
+        return ono;
+    }
+
     @Override
     public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
         Timestamp nowDate = DateUtil.getNowDate();
         userOrderInfo.setUid(uid);
         userOrderInfo.setCreateTime(nowDate);
         userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_YES);
-        userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
-        userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userOrderInfo.setPayStatus(IDBConstant.ORDER_PAY_STATUS_NO);
+        userOrderInfo.setStatus(IDBConstant.ORDER_STATUS_NORMAL);
+        userOrderInfo.setOno(getOno()); //订单编号
         baseDao.save(userOrderInfo, null);
 
         int oid = userOrderInfo.getOid();
@@ -150,6 +169,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return oid;
     }
 
+    private boolean existReserveOrderByNo(String rno){
+        return baseDao.queryBySqlFirst("SELECT 1 FROM reserve_order_info WHERE rno = ?1", rno) != null;
+    }
+
+    @Desc("生成不重复的预约单编号")
+    private String getRno(){
+        //生成重复的订单编号
+        String rno = IPlatformConstant.RNO + StrUtil.objToStr(StrUtil.initCode(6));
+        while (existReserveOrderByNo(rno)){
+            rno = IPlatformConstant.RNO + StrUtil.objToStr(StrUtil.initCode(6));
+        }
+        return rno;
+    }
+
     @Override
     public synchronized Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
 
@@ -166,11 +199,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Timestamp reserveStartTime = orderInfo.getReserveStartTime();
         Timestamp reserveEndTime = orderInfo.getReserveEndTime();
 
-        Time startTime = sysDeviceInfo.getStartTime();
-        Time endTime = sysDeviceInfo.getEndTime();
-        Date startDTime = DateUtil.getHHMMSS(startTime.toString());
-        Date endDTime = DateUtil.getHHMMSS(endTime.toString());
-        if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime.toString() + "到" + endTime.toString());
+        String startTime = sysDeviceInfo.getStartTime();
+        String endTime = sysDeviceInfo.getEndTime();
+        Date startDTime = DateUtil.getHHMM(startTime);
+        Date endDTime = DateUtil.getHHMM(endTime);
+        if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime + "到" + endTime);
 
         if(isReserveByDate(reserveStartTime, reserveEndTime)) throw new MessageException("当前时间有冲突，请重新选择！");
 
@@ -181,8 +214,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         orderInfo.setDcid(sysDeviceControl.getDcid());
         orderInfo.setUid(uid);
         orderInfo.setCreateTime(nowDate);
-        orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_NO);
-        orderInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        orderInfo.setPayStatus(IDBConstant.ORDER_PAY_STATUS_NO);
+        orderInfo.setStatus(IDBConstant.ORDER_STATUS_NORMAL);
+        orderInfo.setRno(getRno()); //预约单编号
         baseDao.save(orderInfo, null);
 
         int oid = orderInfo.getRoid();
@@ -266,6 +300,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
+    public ReserveOrderInfo getLastReserveOrderInfo(int uid){
+        return baseDao.queryByHqlFirst("FROM ReserveOrderInfo r WHERE r.uid = ?1 ORDER BY r.roid DESC LIMIT 1", uid);
+    }
+
+    @Override
     public void saveCancelReserveOrder(int uid, int roid){
         ReserveOrderInfo reserveOrderInfo = getReserveOrderInfo(roid);
         if(reserveOrderInfo.getUid() != uid) throw new MessageException("错误");
@@ -290,12 +329,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         // 订单生成的机器 IP
         String spbill_create_ip = "127.0.0.1";
         // 这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
-        String notify_url = "http://47.94.196.103/order/asynNotify";
+        String notify_url = ConfigUtil.NOTIFY_URL;
         String trade_type = "JSAPI";
 
         // ---必须参数
-        // 商户号
-        String mch_id = WeiXinConnector.MCH_ID;
         // 随机字符串
         String nonce_str = StrUtil.getNonceStr();
 
@@ -306,8 +343,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         String out_trade_no = orderId;
 
         SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-        packageParams.put("appid", WeiXinConnector.APP_ID);
-        packageParams.put("mch_id", mch_id);
+        packageParams.put("appid", ConfigUtil.APPID);
+        packageParams.put("mch_id", ConfigUtil.MCH_ID);  //商户号
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
         packageParams.put("attach", attach);
@@ -335,15 +372,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         SortedMap<Object, Object> finalpackage = new TreeMap<Object, Object>();
         String timestamp = SignUtil.getTimeStamp();
         String packages = "prepay_id="+prepay_id;
-        finalpackage.put("appId", WeiXinConnector.APP_ID);
+        finalpackage.put("appId", ConfigUtil.APPID);
         finalpackage.put("timeStamp", timestamp);
         finalpackage.put("nonceStr", nonce_str);
         finalpackage.put("package", packages);
-        finalpackage.put("signType", "MD5");
+        finalpackage.put("signType", ConfigUtil.SIGN_TYPE);
         //要签名
         String finalsign = PayCommonUtil.createSign("UTF-8", finalpackage);
 
-        String finaPackage = "\"appId\":\"" + WeiXinConnector.APP_ID + "\",\"timeStamp\":\"" + timestamp
+        String finaPackage = "\"appId\":\"" + ConfigUtil.APPID + "\",\"timeStamp\":\"" + timestamp
                 + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""
                 + packages + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
                 + finalsign + "\"";
@@ -353,7 +390,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception{
+    public synchronized void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception{
         Map map = XMLUtil.doXMLParse(msgxml);
 
         String result_code=(String) map.get("result_code");
@@ -380,12 +417,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             //需要对以下字段进行签名
             SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-            packageParams.put("appid", WeiXinConnector.APP_ID);
+            packageParams.put("appid", ConfigUtil.APPID);
             packageParams.put("bank_type", bank_type);
             packageParams.put("cash_fee", cash_fee);
             packageParams.put("fee_type", fee_type);
             packageParams.put("is_subscribe", is_subscribe);
-            packageParams.put("mch_id", WeiXinConnector.MCH_ID);
+            packageParams.put("mch_id", ConfigUtil.MCH_ID);
             packageParams.put("nonce_str", nonce_str);
             packageParams.put("openid", openid);
             packageParams.put("out_trade_no", out_trade_no);
@@ -434,5 +471,92 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
     }
 
+    @Override
+    public PageBean getUserOrderList(OrderInputView orderInputView){
+        PageBean pageBean = getUserOrders(orderInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        for(Map<String, Object> map : list){
+            map.put("orderDetails", getUserOrderDetail(StrUtil.objToInt(map.get("oid"))));
+        }
+        return pageBean;
+    }
+
+    @Override
+    public Map<String, Object> getUserOrderDetail(int oid, int uid){
+        UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
+        if(userOrderInfo.getUid() != uid) throw new MessageException("操作错误!!!");
+        List<Map<String, Object>> userOrderDetail = getUserOrderDetail(oid);
+
+        Map<String, Object> data = new HashMap<>(2, 1);
+        data.put("order", userOrderInfo);
+        data.put("orderDetails", userOrderDetail);
+        return data;
+    }
+
+    private PageBean getUserOrders(OrderInputView orderInputView){
+        Integer uid = orderInputView.getUid();
+        StringBuilder headSql = new StringBuilder("SELECT *");
+        StringBuilder bodySql = new StringBuilder(" FROM user_order_info uoi");
+        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
+        if(uid != null){
+            whereSql.append(" AND uoi.uid = :uid");
+        }
+        whereSql.append(" ORDER BY uoi.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
+    }
+
+    private List<Map<String, Object>> getUserOrderDetail(int oid){
+        return baseDao.queryBySql("SELECT * FROM user_order_detail WHERE oid = ?1", oid);
+    }
+
+    @Override
+    public PageBean getUserOrderListIn(OrderInputView orderInputView){
+        PageBean pageBean = getUserOrdersIn(orderInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.parallelStream().forEach(map -> {
+            map.put("payStatusName", dictService.getDictValue(IDBConstant.ORDER_PAY_STATUS, StrUtil.objToStr(map.get("payStatus"))));
+            map.put("statusName", dictService.getDictValue(IDBConstant.ORDER_STATUS, StrUtil.objToStr(map.get("status"))));
+        });
+        return pageBean;
+    }
+
+    private PageBean getUserOrdersIn(OrderInputView orderInputView){
+        String status = orderInputView.getStatus();
+        String ono = orderInputView.getOno();
+        StringBuilder headSql = new StringBuilder("SELECT uoi.*, ui.nickname");
+        StringBuilder bodySql = new StringBuilder(" FROM user_order_info uoi, user_info ui");
+        StringBuilder whereSql = new StringBuilder(" WHERE uoi.uid = ui.uid");
+        Map inMap = new HashMap<>();
+        if(StrUtil.isNotBlank(status)){
+            whereSql.append(" AND uoi.status IN(:statusArr)");
+            inMap.putAll(SQLUtil.getInToSQL("statusArr", status));
+        }
+        if(StrUtil.isNotBlank(ono)){
+            whereSql.append(" AND uoi.ono = :ono");
+        }
+        whereSql.append(" ORDER BY uoi.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView, inMap);
+    }
+
+    @Override
+    public PageBean getReserveOrderInfoList(OrderInputView orderInputView){
+        PageBean pageBean = getReserveOrderInfos(orderInputView);
+        return pageBean;
+    }
+
+    private PageBean getReserveOrderInfos(OrderInputView orderInputView){
+        String ono = orderInputView.getOno();
+        StringBuilder headSql = new StringBuilder("SELECT roi.*, ui.nickname, sdc.name lockName, sdi.name deviceName");
+        StringBuilder bodySql = new StringBuilder(" FROM reserve_order_info roi, user_info ui, sys_device_control sdc, sys_device_info sdi");
+        StringBuilder whereSql = new StringBuilder(" WHERE roi.uid = ui.uid AND roi.dcid = sdc.dcid AND sdc.did = sdi.did");
+
+        if(StrUtil.isNotBlank(ono)){
+            whereSql.append(" AND roi.rno = :ono");
+        }
+
+        whereSql.append(" ORDER BY roi.createTime DESC");
+        return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
+
+    }
 
 }

@@ -11,6 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "user_order_info", schema = "")
 public class UserOrderInfo {
     private int oid;
+    private String ono;
     private Integer uid;
     private Integer rid;
     private String orderType;
@@ -41,6 +42,16 @@ public class UserOrderInfo {
 
     public void setOid(int oid) {
         this.oid = oid;
+    }
+
+    @Basic
+    @Column(name = "ono")
+    public String getOno() {
+        return ono;
+    }
+
+    public void setOno(String ono) {
+        this.ono = ono;
     }
 
     @Basic

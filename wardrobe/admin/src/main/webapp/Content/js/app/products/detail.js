@@ -13,7 +13,8 @@ requirejs.config({
 
         "base"      : 'js/widgets/base',
         "override"  : 'js/widgets/override',
-        "payment"   : 'js/widgets/payment'
+        "payment"   : 'js/widgets/payment',
+        "jquery.form": 'lib/jquery-form'
     },
     shim: {
         "bootstrap": {
@@ -33,7 +34,7 @@ requirejs.config({
     urlArgs: '_=' + new Date().getTime()
 });
 
-require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 'jquery.validate.unobtrusive'], function ($, jqueryAlert) {
+require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate', 'jquery.validate.unobtrusive', 'jquery.form'], function ($, jqueryAlert) {
     'use strict';
 
     // 表单校验配置

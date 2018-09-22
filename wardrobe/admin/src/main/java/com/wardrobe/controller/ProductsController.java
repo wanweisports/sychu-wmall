@@ -100,7 +100,7 @@ public class ProductsController extends BaseController {
     public String renderProductsHotList(CommodityInputView commodityInputView, Model model) {
         commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/hot/list", commodityInputView);
         model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
         return "Products/HotList";
     }
@@ -235,5 +235,16 @@ public class ProductsController extends BaseController {
     public ModelAndView renderProductsOrdersDetail() {
         return new ModelAndView("/Products/OrdersDetail");
     }
+
+    @Desc("商品管理列表 -- banner")
+    @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
+    public String renderProductsBannerList(CommodityInputView commodityInputView, Model model) {
+        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        PageBean pageBean = commodityService.getBannerCommodityListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/banner/list", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        return "Products/BannerList";
+    }
+
 }
 

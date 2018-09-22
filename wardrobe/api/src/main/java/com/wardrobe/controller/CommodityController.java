@@ -35,7 +35,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("detail")
     public ResponseBean index(int cid){
-        return new ResponseBean(commodityService.getCommodityDetail(cid));
+        return new ResponseBean(commodityService.getCommodityDetail(cid, getUserInfo().getUid()));
     }
 
     @ResponseBody
@@ -73,6 +73,12 @@ public class CommodityController extends BaseController {
     @RequestMapping("settlement")
     public ResponseBean settlement(String scids){
         return new ResponseBean(userShoppingCartService.settlement(scids, getUserInfo().getUid()));
+    }
+
+    @ResponseBody
+    @RequestMapping("commodityBanners")
+    public ResponseBean commodityBanners(){
+        return new ResponseBean(commodityService.getCommodityBanners());
     }
 
 }

@@ -48,7 +48,7 @@ public class ClientHandlerInit extends ChannelInitializer<SocketChannel> {
             }
         }.handlers());
         //自己的逻辑
-        pipeline.addLast(new ClientHandler());
+        //pipeline.addLast(new ClientHandler()); 多余
     }
 
 }

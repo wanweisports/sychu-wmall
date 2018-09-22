@@ -50,7 +50,7 @@ public class PayCommonUtil {
 				sb.append(k + "=" + v + "&");
 			}
 		}
-		sb.append("key=" + WeiXinConnector.getKey());
+		sb.append("key=" + ConfigUtil.API_KEY);
 		String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
 		return sign;
 	}

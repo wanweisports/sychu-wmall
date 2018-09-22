@@ -49,21 +49,32 @@
             </c:choose>
         </c:when>
 
-        <c:when test="${param.menu == 'students'}">
-            <li class="breadcrumb-item">学员管理</li>
+        <c:when test="${param.menu == 'wardrobe'}">
+            <li class="breadcrumb-item">试衣间管理</li>
             <c:choose>
                 <c:when test="${param.subMenu == 'list'}">
-                    <li class="breadcrumb-item active">学员列表</li>
+                    <li class="breadcrumb-item active">试衣间列表</li>
                 </c:when>
-                <c:when test="${param.subMenu == 'edit'}">
-                    <li class="breadcrumb-item"><a href="/admin/students/list">学员列表</a></li>
-                    <li class="breadcrumb-item active">学员编辑</li>
+                <c:when test="${param.subMenu == 'dashboard'}">
+                    <li class="breadcrumb-item active">运行面板</li>
                 </c:when>
-                <c:when test="${param.subMenu == 'add'}">
-                    <li class="breadcrumb-item active">添加学员</li>
+                <c:when test="${param.subMenu == 'log'}">
+                    <li class="breadcrumb-item active">运行日志</li>
                 </c:when>
-                <c:when test="${param.subMenu == 'batch'}">
-                    <li class="breadcrumb-item active">批量导入学员</li>
+            </c:choose>
+        </c:when>
+
+        <c:when test="${param.menu == 'orders'}">
+            <li class="breadcrumb-item">订单管理</li>
+            <c:choose>
+                <c:when test="${param.subMenu == 'list'}">
+                    <li class="breadcrumb-item active">订单列表</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'reservation'}">
+                    <li class="breadcrumb-item active">预约单列表</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'refund'}">
+                    <li class="breadcrumb-item active">退款订单</li>
                 </c:when>
             </c:choose>
         </c:when>

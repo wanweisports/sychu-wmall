@@ -43,6 +43,12 @@
                                             <small>Users Products</small>
                                         </a>
                                     </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/hot/list?banner=1">
+                                            <strong>banner商品</strong>
+                                            <small>Banner Products</small>
+                                        </a>
+                                    </li>
                                 </c:if>
                                 <c:if test="${newly=='1'}">
                                     <li class="breadcrumb-item">
@@ -54,6 +60,12 @@
                                     <li class="breadcrumb-item">
                                         <strong>最新商品</strong>
                                         <small>Users Products</small>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin/products/banner/list">
+                                            <strong>banner商品</strong>
+                                            <small>Banner Products</small>
+                                        </a>
                                     </li>
                                 </c:if>
                             </ol>
@@ -77,14 +89,14 @@
                                     <tr data-id="">
                                         <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                         <td>
-                                            <a href="/admin/products/detail?productId=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
+                                            <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
                                         </td>
                                         <td>${c.styleName}</td>
                                         <td>${c.materialName}</td>
                                         <td>￥${c.price}</td>
                                             <%--<td>￥399</td>--%>
                                         <td>
-                                            <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
+                                            <a href="/admin/products/transaction/records?cid=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
                                         </td>
                                         <td>
                                             <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
@@ -105,10 +117,17 @@
                                                         </a>
                                                     </c:if>
                                                 </c:if>
+                                                <c:if test="${banner=='1'}">
+                                                    <c:if test="${c.banner == '1'}">
+                                                        <a href="javascript:;" class="btn btn-sm btn-danger product-banner-cancel js-newly-down" title="取消banner" data-id="${c.cid}">
+                                                            <i class="fa fa-remove"></i> 取消
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
                                             </c:if>
                                         </td>
                                     </tr>
-                                </c:forEach>；
+                                </c:forEach>
                             </table>
                             <div>
                                 <%@ include file="../Shared/Pagination.jsp" %>

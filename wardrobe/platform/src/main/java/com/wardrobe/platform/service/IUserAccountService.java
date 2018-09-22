@@ -21,7 +21,7 @@ public interface IUserAccountService {
 
     double getUserAccountBalance(int uid);
 
-    void addRechargeOrderInfo(int uid, int dictId, double price);
+    int addRechargeOrderInfo(int uid, int dictId, double price);
 
     void addRechargePrice(UserOrderInfo userOrderInfo);
 

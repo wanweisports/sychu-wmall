@@ -1,3 +1,4 @@
+/*
 package com.wardrobe.platform.netty.server;
 
 import io.netty.buffer.ByteBuf;
@@ -14,6 +15,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 
+*/
 /**
  * 执行顺序
  * 服务端执行initChannel#############################
@@ -23,27 +25,32 @@ import java.net.InetAddress;
  * 服务端接收数据完毕..
  * /127.0.0.1:60269 inactive!
  * 服务端handlerRemoved
- */
+ *//*
+
 @ChannelHandler.Sharable
 public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    /**
+    */
+/**
      * 覆盖 channelActive 方法 在channel被启用的时候触发 (在建立连接的时候)
      * channel 通道 action 活跃的
      * 当客户端主动链接服务端的链接后，这个通道就是活跃的了。也就是客户端与服务端建立了通信通道并且可以传输数据
-     */
+     *//*
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println(ctx.channel().remoteAddress() + " active!");
         super.channelActive(ctx);
     }
 
-    /**
+    */
+/**
      * channel 通道 Inactive 不活跃的
      * 当客户端主动断开服务端的链接后，这个通道就是不活跃的。也就是说客户端与服务端的关闭了通信通道并且不可以传输数据
-     */
+     *//*
+
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println(ctx.channel().remoteAddress() + " inactive!");
@@ -51,9 +58,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
         super.channelInactive(ctx);
     }
 
-    /**
+    */
+/**
      * 功能：读取服务器发送过来的信息
-     */
+     *//*
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf o) throws Exception {
         System.out.println(o);
@@ -88,9 +97,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
         }
     }
 
-    /**
+    */
+/**
      * 功能：读取完毕客户端发送过来的数据之后的操作
-     */
+     *//*
+
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         System.out.println("服务端接收数据完毕..");
@@ -102,9 +113,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
         // ctx.flush().close().sync(); // 第三种：改成这种写法也可以，但是这中写法，没有第一种方法的好。
     }
 
-    /**
+    */
+/**
      * 功能：服务端发生异常的操作
-     */
+     *//*
+
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         //ctx.close();
@@ -113,9 +126,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
         ctx.close();
     }
 
-    /**
+    */
+/**
      * TODO  此处用来处理收到的数据中含有中文的时  出现乱码的问题
-     */
+     *//*
+
     private String getMessage(ByteBuf buf) {
         byte[] con = new byte[buf.readableBytes()];
         buf.readBytes(con);
@@ -132,3 +147,4 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
 }
+*/
