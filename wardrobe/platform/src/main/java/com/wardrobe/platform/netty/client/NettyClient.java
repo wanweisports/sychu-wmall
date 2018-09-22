@@ -54,7 +54,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) throws Exception{
-        new Thread(){
+        /*new Thread(){
             @Override
             public void run() {
                 NettyClient nettyClient = new NettyClient("192.168.1.166", 1234);
@@ -72,7 +72,12 @@ public class NettyClient {
                     nettyClient.clientServer();
                 }catch (Exception e){e.printStackTrace();}
             }
-        }.start();
+        }.start();*/
+
+        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001);
+        try {
+            nettyClient.clientServer();
+        }catch (Exception e){e.printStackTrace();}
     }
 
 }

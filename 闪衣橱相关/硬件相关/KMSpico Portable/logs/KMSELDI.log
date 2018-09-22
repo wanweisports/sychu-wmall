@@ -1,43 +1,43 @@
-15:17:01:456 2018.07.14 KMS GUI ELDI 37.1.0.0
+08:45:53:761 2018.09.18 KMS GUI ELDI 37.1.0.0
 Official Site: 
 http://forums.mydigitallife.info/forums/51-KMS-tools
 KMSpico v10.2.0
 Windows Detected: Windows 10 Home China : CoreCountrySpecific : 6.3 : 17134
 
-15:17:01:490 Loading SECOH-QAD...
-15:17:07:304 Set Registry : Image File Execution Options\SppExtComObj.exe:Debugger
-15:17:07:304 Using host Forward: 10.222.135.242:1688
-15:17:07:304 Using method: SECOH-QAD
-15:17:07:304 Using host Local: 127.181.32.116:1688
-15:17:07:328 Time Start: 2018/7/14 15:17:01
-15:17:07:331 Checking Internet Connection...
-15:17:07:494 Windows Detected: Windows 10 Home China : CoreCountrySpecific : 6.3 : 17134
-15:17:07:500 Using host Forward: 10.222.135.242:1688
-15:17:07:500 Using host Local: 127.181.32.116:1688
-15:17:07:501 Using method: SECOH-QAD
-15:17:07:519 Internet Connection Detected
-15:17:07:523 Synchronizing Time...
-15:17:07:592 Opening Firewall Port...
-15:17:07:710 Opening Firewall App...
-15:17:08:171 Time synchronized
-15:17:08:326 KMSEmulator Port: 1688
-15:17:08:327 Get Registry : SYSTEM\CurrentControlSet\Services\sppsvc:Start
-15:17:08:337 KMSEmulator running port: 1688
-15:17:08:622 Loading OEM Key Dumper...
-15:17:08:622 Office 2010 Skipped
-15:17:08:622 Office 2016 Skipped
-15:17:08:622 Office 2013 Skipped
-15:17:08:623 Key found on MSDM: -33W49
-15:17:08:639 Installing Key: -33W49
-15:17:09:436 InstallProductKey -33W49 0
-15:17:09:612 RefreshLicenseStatus 0
-15:17:09:660 OEM Key Found: Version Windows Skipped
-15:17:09:660 OEM Activation needs Internet Connection
-15:17:09:688 Closing Firewall Port...
-15:17:09:811 Closing Firewall App...
-15:17:09:947 Set Registry : HKEY_CURRENT_USER\Control Panel\Desktop:PaintDesktopVersion
-15:17:11:375 Unloading SECOH-QAD...
-15:17:11:378 Del Registry : SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SppExtComObj.exe:
-15:17:11:379 Client listener shut down
-15:17:11:389 Time Finish: 2018/7/14 15:17:11
-15:17:11:390 Total Time: 9 seconds
+08:45:53:789 Loading SECOH-QAD...
+08:45:58:495 Set Registry : Image File Execution Options\SppExtComObj.exe:Debugger
+08:45:58:495 Using host Forward: 10.62.219.119:1688
+08:45:58:495 Using host Local: 127.244.154.150:1688
+08:45:58:495 Using method: SECOH-QAD
+08:45:58:529 Time Start: 2018/9/18 8:45:53
+08:45:58:531 Checking Internet Connection...
+08:45:58:781 Windows Detected: Windows 10 Home China : CoreCountrySpecific : 6.3 : 17134
+08:45:58:783 Using host Forward: 10.62.219.119:1688
+08:45:58:783 Using host Local: 127.244.154.150:1688
+08:45:58:784 Using method: SECOH-QAD
+08:45:58:813 Opening Firewall Port...
+08:45:58:910 Opening Firewall App...
+08:45:59:038 Internet Connection Detected
+08:45:59:039 Synchronizing Time...
+08:45:59:137 KMSEmulator Port: 1688
+08:45:59:138 Get Registry : SYSTEM\CurrentControlSet\Services\sppsvc:Start
+08:45:59:155 KMSEmulator running port: 1688
+08:45:59:395 Office 2010 Skipped
+08:45:59:395 Office 2016 Skipped
+08:45:59:395 Office 2013 Skipped
+08:45:59:395 Loading OEM Key Dumper...
+08:45:59:397 Key found on MSDM: -33W49
+08:45:58:852 Time synchronized
+08:45:58:893 Installing Key: -33W49
+08:45:59:644 InstallProductKey -33W49 0
+08:45:59:799 RefreshLicenseStatus 0
+08:45:59:814 OEM Key Found: Version Windows Skipped
+08:45:59:818 OEM Activation needs Internet Connection
+08:45:59:844 Closing Firewall Port...
+08:45:59:936 Closing Firewall App...
+08:46:00:017 Set Registry : HKEY_CURRENT_USER\Control Panel\Desktop:PaintDesktopVersion
+08:46:01:443 Unloading SECOH-QAD...
+08:46:01:445 Del Registry : SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SppExtComObj.exe:
+08:46:01:448 Client listener shut down
+08:46:01:453 Time Finish: 2018/9/18 8:46:01
+08:46:01:453 Total Time: 7 seconds

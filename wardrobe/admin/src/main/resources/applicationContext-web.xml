@@ -27,7 +27,7 @@
 	    </property> 
 	 </bean>
 	 
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${driverClassName}" />
 		<property name="jdbcUrl" value="${jdbc_url}" />
 		<property name="user" value="${jdbc_username}" />
@@ -42,11 +42,11 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="mappingLocations">
+		&lt;!&ndash; <property name="mappingLocations">
 		     <list>
 		         <value>classpath*:com/laiqu/common/hibernate/*.hbm.xml</value>
 		     </list>
-		</property> -->
+		</property> &ndash;&gt;
 		<property name="packagesToScan">  
                  <list>
 					<value>com.wardrobe.common.po</value>
@@ -91,5 +91,5 @@
 	<bean id="baseDao" class="com.wardrobe.platform.dao.hibernate.BaseDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
+	</bean>-->
 </beans>

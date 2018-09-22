@@ -29,6 +29,7 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println(1);
         //super.channelRead(ctx, msg); //接收消息后，其他Read方法则不能获取同一个消息[调用某个Read方法后，refCn=0]，否则报错
+        //PooledUnsafeDirectByteBuf
         System.out.println("Heartbeat-client:" + msg);
         String message = getMessage((ByteBuf) msg);
         System.out.println("message-client:" + message);

@@ -46,7 +46,9 @@ public class NettyClient {
                 while (true) {
                     String op = scanner.nextLine();
                     System.out.println(op);
-                    ClientHandler.channels.get(0).writeAndFlush(Unpooled.copiedBuffer(op, CharsetUtil.UTF_8));
+                    if("1".equals(op)) {
+                        ClientHandler.channels.get(0).writeAndFlush(0xEE); //Unpooled.copiedBuffer(op, CharsetUtil.UTF_8)
+                    }
                 }
                 //future.channel().closeFuture().sync(); // 异步等待关闭连接channel（服务器断开，则不会阻塞了，代码往下走，线程结束则次客户端结束）
                 //Thread.sleep(10000000);
@@ -59,8 +61,8 @@ public class NettyClient {
         }
     }
 
-    public static void main(String[] args) throws Exception{
-        NettyClient nettyClient = new NettyClient("127.0.0.1", 9900);
+    public static void main(String[] args) throws Exception{ //串口波特率：115200 ，LengthFieldBasedFrameDecoder解码器
+        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001); //"192.168.1.198", 4001
         nettyClient.clientServer();
     }
 
