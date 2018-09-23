@@ -460,15 +460,16 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oId);
                 if(!IDBConstant.LOGIC_STATUS_YES.equals(userOrderInfo.getPayStatus())){ //未支付状态
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
-                    userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
+                    baseDao.save(userOrderInfo, userOrderInfo.getOid());
+                    //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额
-                    synchronized (OrderServiceImpl.class) {
+                    /*synchronized (OrderServiceImpl.class) {
                         if (IDBConstant.TRANSACTIONS_TYPE_ZF.equals(userOrderInfo.getOrderType())) {
                             //userAccountService.addRechargePrice(userOrderInfo.getUid(), userOrderInfo.getPayPrice());
                         }
                         //交易流水
                         userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
-                    }
+                    }*/
                 }
             }else{
                 System.out.println("qianming_1_fail");
