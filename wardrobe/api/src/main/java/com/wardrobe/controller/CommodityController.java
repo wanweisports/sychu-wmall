@@ -4,6 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.po.UserShoppingCart;
 import com.wardrobe.common.view.CommodityInputView;
+import com.wardrobe.common.view.UserCouponInputView;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IUserShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -73,6 +75,12 @@ public class CommodityController extends BaseController {
     @RequestMapping("settlement")
     public ResponseBean settlement(String scids){
         return new ResponseBean(userShoppingCartService.settlement(scids, getUserInfo().getUid()));
+    }
+
+    @ResponseBody
+    @RequestMapping("settlementCount")
+    public ResponseBean settlementCount(UserCouponInputView userCouponInputView) throws ParseException {
+        return new ResponseBean(userShoppingCartService.settlementCount(userCouponInputView, getUserInfo().getUid()));
     }
 
     @ResponseBody

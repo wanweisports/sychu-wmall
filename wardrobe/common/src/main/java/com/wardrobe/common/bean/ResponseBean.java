@@ -9,9 +9,9 @@ public class ResponseBean {
 	
 	private String code;
 	private String message;
-	private Map<String, Object> data = new HashMap<>();
+	private Map data = new HashMap<>();
 	
-	public ResponseBean(Map<String, Object> data) {
+	public ResponseBean(Map data) {
 		this.code = IPlatformConstant.SUCCESS_CODE;
 		this.message = IPlatformConstant.SUCCESS_MESSAGE;
 		this.data.putAll(data != null ? data : new HashMap());
@@ -49,11 +49,11 @@ public class ResponseBean {
 		this.message = message;
 	}
 
-	public Map<String, Object> getData() {
+	public Map getData() {
 		return data;
 	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(Map data) {
 		this.data = data;
 	}
 	

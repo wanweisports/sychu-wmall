@@ -1,6 +1,7 @@
 package com.wardrobe.platform.netty.client;
 
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
@@ -62,20 +63,25 @@ public class ClientChannelUtil {
     }
 
     public synchronized static void connectServerChannel(Channel channel, List<SysDeviceControl> deviceControls) {
-        ClientBean clientBean = getClientBean(channel);
-        if(clientBean == null){
-            InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
-            clientBean = new ClientBean(deviceControls);
-            clientBean.setHost(socketAddress.getHostString());
-            clientBean.setPort(socketAddress.getPort());
-            clientBean.setServiceChannel(channel);
-            clientBean.setStatus(STATUS_CONNECT_ING);
-            clientBeans.add(clientBean);
-        }else {
-            clientBean.setServiceChannel(channel);
-            clientBean.setStatus(STATUS_CONNECT_ING);
+        try{
+            ClientBean clientBean = getClientBean(channel);
+            if(clientBean == null){
+                InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
+                clientBean = new ClientBean(deviceControls);
+                clientBean.setHost(socketAddress.getHostString());
+                clientBean.setPort(socketAddress.getPort());
+                clientBean.setServiceChannel(channel);
+                clientBean.setStatus(STATUS_CONNECT_ING);
+                clientBeans.add(clientBean);
+            }else {
+                clientBean.setServiceChannel(channel);
+                clientBean.setStatus(STATUS_CONNECT_ING);
+            }
+            System.out.println("c:" + clientBeans.size() + ":" + clientBean.getPort()  + ":" + clientBean.getStatus());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new MessageException();
         }
-        System.out.println("c:" + clientBeans.size() + ":" + clientBean.getPort()  + ":" + clientBean.getStatus());
     }
 
     public static ClientBean getClientBean(String ip, int port){

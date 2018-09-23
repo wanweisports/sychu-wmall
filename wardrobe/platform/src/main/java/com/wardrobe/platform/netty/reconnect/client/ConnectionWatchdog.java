@@ -3,6 +3,7 @@ package com.wardrobe.platform.netty.reconnect.client;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.service.ISysDeviceService;
+import com.wardrobe.platform.service.impl.SysDeviceServiceImpl;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -12,18 +13,16 @@ import io.netty.util.Timer;
 import io.netty.util.TimerTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoader;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 自动重连处理类
  */
-@Component
 @ChannelHandler.Sharable
 public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter implements TimerTask, ChannelHandlerHolder {
-
-    @Autowired
-    private ISysDeviceService deviceService;
 
     private final Bootstrap bootstrap;
     private final Timer timer;
@@ -33,13 +32,15 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
 
     private volatile boolean reconnect = true;
     private int attempts; //重连次数
+    private ISysDeviceService deviceService;
 
-    public ConnectionWatchdog(Bootstrap bootstrap, Timer timer, int port, String host, boolean reconnect) {
+    public ConnectionWatchdog(Bootstrap bootstrap, Timer timer, int port, String host, boolean reconnect, ISysDeviceService deviceService) {
         this.bootstrap = bootstrap;
         this.timer = timer;
         this.port = port;
         this.host = host;
         this.reconnect = reconnect;
+        this.deviceService = deviceService;
     }
 
     @Override
@@ -48,9 +49,13 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
 
         attempts = 0;
         ctx.fireChannelActive();
-        Channel channel = ctx.channel();
-        ClientBean clientBean = ClientChannelUtil.getClientBean(channel);
-        ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(clientBean.getHost(), clientBean.getPort()));
+        try{
+            Channel channel = ctx.channel();
+            InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
+            ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(socketAddress.getHostString(), socketAddress.getPort()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

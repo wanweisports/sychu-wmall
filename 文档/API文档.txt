@@ -1,0 +1,139 @@
+家里的办公软件没有破解，没有编辑模式，所以API文档暂时写成txt格式。
+=======================================================================
+
+16. 普通订单结算---加字段了（请看word第16个接口）【修改接口】
+URL：/commodity/settlement?scids=22,23,25
+      请求参数：不变
+      返回JSON：{
+	"code": "1",
+	"message": "操作成功",
+	"data": {
+		"discount": 0.95,        #用户当前折扣【新增】
+		"sumPrice": 2202.22,
+                                "ycoid": 500,             #用户当前衣橱币【新增】
+		"list": [{
+				"colorName": "黄色",
+				"size": "M",
+				"price": 100.99,
+				"resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs.com/img/94a4d496b90c430496c571d36774b2fa.jpg",
+				"count": 2,
+				"commName": "商品3",
+				"scid": 22
+			},
+			{
+				"colorName": "红色",
+				"size": "M",
+				"price": 1000.12,
+				"resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs.com/img/94a4d496b90c430496c571d36774b2fa.jpg",
+				"count": 2,
+				"commName": "商品1",
+				"scid": 23
+			}
+		],
+		"coupons": [{     #可用优惠券列表【新增】
+				"dictValue": "满减优惠",
+				"cpid": 1,
+				"couponPrice": 300,
+				"dueTime": "2018-09-22 00:00:00"
+			},
+			{
+				"dictValue": "满减优惠",
+				"cpid": 2,
+				"couponPrice": 500,
+				"dueTime": "2018-09-22 00:00:00"
+			}
+		]
+	}
+}
+
+
+
+29. 普通订单结算---计算金额【新增接口】
+URL：/commodity/commodity/settlementCount?scids=22,23,25&serviceType=1&cpid=1
+      请求参数：
+	1. scids：  购物车列表（和上面一样）
+	2. serviceType：1：使用优惠券（必传优惠券id）  2：使用衣橱币	
+	3. cpid：优惠券id（非必填，使用优惠券传此id）
+      返回JSON：
+	{
+		"code": "1",
+		"message": "操作成功",
+		"data": {
+			"sumPrice": 1807.11
+		}
+	}
+
+17. 第17个接口有修改：保存普通订单【修改接口】
+	URL：/order/saveOrder
+	请求参数：1. expressName    【不变】
+		 2. expressMobile  【不变】
+		 3. expressAddress【不变】
+		 4. scids	             【不变】
+		 5.serviceType: 1：使用优惠券（必传优惠券id）  2：使用衣橱币 【修改】
+	                 6. cpid：优惠券id（非必填，使用优惠券传此id） 【不变】
+	返回JSON：【不变】
+		{
+			code: 1
+			message: "操作成功"
+			data:{
+				oid: 1
+			}
+		}
+	
+
+
+30. 订单支付接口【新增接口】
+URL：/order/wxPayPackage
+	参数：orderId：订单id
+	返回JSON：
+	{
+		"code": "1",   【返回1是正常调支付窗口流程，返回2则说明不用支付，直接变成了已支付状态（说明抵扣够总支付金额）】
+		"message": "操作成功",
+		"data": {
+			"timeStamp": "xxxx",
+			"nonceStr":"xxxx",
+			"package": "xxxx",
+			"signType": "MD5",
+			"paySign": "xxxx",
+			"finaPackage": "xxxx"
+		}
+	}
+	
+======================================================================
+打开与关闭大门与锁接口
+1. 开门：  URL：/relay/openDoor
+	参数：无
+		{
+			code: 1
+			message: "操作成功"
+			data:{}
+		}
+
+
+
+2. 关门： URL：/relay/closeDoor
+              参数：无
+		{
+			code: 1
+			message: "操作成功"
+			data:{}
+		}
+
+
+1. 开锁： URL：/relay/openLock?lockId=1
+              参数：lockId：锁id
+		{
+			code: 1
+			message: "操作成功"
+			data:{}
+		}
+
+
+
+2. 关锁： URL：/relay/closeLock?lockId=1
+              参数：lockId：锁id
+		{
+			code: 1
+			message: "操作成功"
+			data:{}
+		}

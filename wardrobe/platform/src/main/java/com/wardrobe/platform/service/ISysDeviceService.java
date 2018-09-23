@@ -6,6 +6,7 @@ import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.view.DeviceInputView;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public interface ISysDeviceService {
 
     SysDeviceInfo getDeviceInfo(int did);
 
-    SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime);
+    SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime) throws ParseException;
 
     PageBean getSysDeviceInfoList(DeviceInputView deviceInputView);
 

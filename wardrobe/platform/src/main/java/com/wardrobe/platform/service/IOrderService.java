@@ -17,7 +17,7 @@ public interface IOrderService {
 
     Integer saveRechargeOrderInfo(UserOrderInfo userOrderInfo, SysDict sysDict, int uid);
 
-    Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid);
+    Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException;
 
     Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException;
 
@@ -29,7 +29,7 @@ public interface IOrderService {
 
     void saveCancelReserveOrder(int uid, int roid);
 
-    String wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
+    Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 
     void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception;
 

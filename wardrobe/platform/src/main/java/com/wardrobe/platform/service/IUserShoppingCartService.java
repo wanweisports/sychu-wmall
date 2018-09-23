@@ -2,7 +2,9 @@ package com.wardrobe.platform.service;
 
 import com.wardrobe.common.po.UserShoppingCart;
 import com.wardrobe.common.view.CommodityInputView;
+import com.wardrobe.common.view.UserCouponInputView;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -19,5 +21,9 @@ public interface IUserShoppingCartService {
     UserShoppingCart getUserShoppingCart(int scid);
 
     Map<String, Object> settlement(String scids, int uid);
+
+    Map<String, Object> settlementCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
+
+    double countDiscount(double sumPrice, String serviceType, Integer cpid, int uid) throws ParseException;
 
 }

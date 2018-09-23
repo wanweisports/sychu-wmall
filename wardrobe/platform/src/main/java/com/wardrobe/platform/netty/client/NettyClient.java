@@ -1,5 +1,6 @@
 package com.wardrobe.platform.netty.client;
 
+import com.wardrobe.platform.service.ISysDeviceService;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -20,11 +21,13 @@ public class NettyClient {
 
     private String host;
     private int port;
+    private ISysDeviceService deviceService;
     public EventLoopGroup clientGroup = new NioEventLoopGroup();
 
-    public NettyClient(String host, int port) {
+    public NettyClient(String host, int port, ISysDeviceService deviceService) {
         this.host = host;
         this.port = port;
+        this.deviceService = deviceService;
     }
 
     public ChannelFuture clientServer() throws Exception{
@@ -34,7 +37,7 @@ public class NettyClient {
             boot.channel(NioSocketChannel.class); //使用NioSocketChannel来作为连接用的channel类
             boot.handler(new LoggingHandler(LogLevel.INFO));
             //boot.remoteAddress(new InetSocketAddress(this.host, this.port)); //绑定连接端口和host信息
-            boot.handler(new ClientHandlerInit(host, port, boot));
+            boot.handler(new ClientHandlerInit(host, port, boot, deviceService));
 
             //进行连接
             ChannelFuture future = boot.connect(host, port).sync();
@@ -77,7 +80,7 @@ public class NettyClient {
             }
         }.start();*/
 
-        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001);
+        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001, null);
         try {
             nettyClient.clientServer();
         }catch (Exception e){e.printStackTrace();}

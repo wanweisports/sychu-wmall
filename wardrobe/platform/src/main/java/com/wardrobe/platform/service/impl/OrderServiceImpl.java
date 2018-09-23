@@ -121,7 +121,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid){ //购物车ids，多个逗号分隔
+    public synchronized Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
         Timestamp nowDate = DateUtil.getNowDate();
         userOrderInfo.setUid(uid);
         userOrderInfo.setCreateTime(nowDate);
@@ -164,7 +164,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         }
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
-        userOrderInfo.setPayPrice(userOrderInfo.getPriceSum()); //支付价格：之后减去优惠部分
+        //支付价格：之后减去优惠部分
+        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(userOrderInfo.getPriceSum().doubleValue(), userOrderInfo.getServiceType(), userOrderInfo.getCpid(), uid)));
         baseDao.save(userOrderInfo, oid);
         return oid;
     }
@@ -185,7 +186,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     @Override
     public synchronized Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
-
+        if(StrUtil.isBlank(scids)) throw new MessageException("操作错误!");
         Integer did = orderInfo.getDid();
 
         SysDeviceInfo sysDeviceInfo = sysDeviceService.getDeviceInfo(did);
@@ -247,8 +248,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             priceSum = Arith.add(priceSum, orderDetail.getResItemPriceSum().doubleValue());
 
-            //删除购物车
-            baseDao.delete(userShoppingCart);
+            //预约购物车商品变为普通购物车商品
+            userShoppingCart.setShoppingType(IDBConstant.LOGIC_STATUS_YES);
+            baseDao.save(userShoppingCart, userShoppingCart.getScid());
         }
 
         orderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
@@ -314,7 +316,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public String wxPayPackage(OrderInputView orderInputView, String openId) throws Exception {
+    public Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception {
         Integer oId = orderInputView.getOrderId();
 
         UserOrderInfo orderInfo = getUserOrderInfo(oId); //openId = "oTK5utzXi_A2q8aus80Y60__LzY0";
@@ -324,7 +326,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         // 附加数据 原样返回
         String attach = "cxs";
         // 总金额以分为单位，不带小数点
-        String totalFee = StrUtil.getMoney(StrUtil.objToStr(orderInfo.getPriceSum().doubleValue()));
+        if(orderInfo.getPayPrice().doubleValue() <= 0) { //无需支付
+            orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
+            orderInfo.setPayTime(DateUtil.getNowDate());
+            baseDao.save(orderInfo, oId);
+            return new HashMap(){{put("ok", IDBConstant.LOGIC_STATUS_YES);}};
+        }
+        String totalFee = StrUtil.getMoney(StrUtil.objToStr(orderInfo.getPayPrice().doubleValue())); //这里是支付金额
 
         // 订单生成的机器 IP
         String spbill_create_ip = "127.0.0.1";
@@ -384,9 +392,16 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""
                 + packages + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
                 + finalsign + "\"";
-
-        logger.info("V3 jsApi package:"+finaPackage);
-        return finaPackage;
+       /* timeStamp: param.data.timeStamp,//记住，这边的timeStamp一定要是字符串类型的，不然会报错，我这边在java后端包装成了字符串类型了
+                nonceStr: param.data.nonceStr,
+        package: param.data.package,
+        signType: 'MD5',
+                paySign: param.data.paySign,*/
+        logger.info("V3 jsApi package:" + finaPackage);
+        finalpackage.put("finaPackage", finaPackage);
+        return finalpackage;
+        //logger.info("V3 jsApi package:"+finaPackage);
+        //return finaPackage;
     }
 
     @Override
@@ -398,7 +413,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         String total_fee  = (String) map.get("total_fee");
         String sign  = (String) map.get("sign");
         Double amount = new Double(total_fee) / 100;//获取订单金额
-        System.out.println("qianming");
+        System.out.println("saveAsynNotify===>" + result_code);
         if(result_code.equals("SUCCESS")){
             System.out.println("qianming_success");
             //验证签名
@@ -434,7 +449,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             packageParams.put("trade_type", trade_type);
             packageParams.put("transaction_id", transaction_id);
             packageParams.put("attach", attach);
-
+            System.out.println("packageParams===>" + packageParams);
             String endsign = PayCommonUtil.createSign("UTF-8", packageParams);
             System.out.println("qianming_1");
             if(sign.equals(endsign)){//验证签名是否正确  官方签名工具地址：https://pay.weixin.qq.com/wiki/tools/signverify/

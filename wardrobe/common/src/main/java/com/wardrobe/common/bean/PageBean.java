@@ -1,11 +1,21 @@
 package com.wardrobe.common.bean;
 
 import com.wardrobe.common.annotation.GsonExclude;
+import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.wx.util.ConfigUtil;
 
 import java.util.List;
 import java.util.Map;
 
 public class PageBean {
+
+	public static void main(String[] args) {
+		String finaPackage = "\"appId\":\"" + "xxxx" + "\",\"timeStamp\":\"" + 9543543534L
+				+ "\",\"nonceStr\":\"" + "xxxxx" + "\",\"package\":\""
+				+ "xxxx" + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
+				+ "xxxx" + "\"";
+		System.out.println(JsonUtils.fromJson(finaPackage, Map.class));
+	}
 
 	/**
 	 * 要返回的某一页的记录列表

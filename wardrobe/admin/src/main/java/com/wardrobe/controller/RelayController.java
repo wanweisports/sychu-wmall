@@ -4,6 +4,7 @@ import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.service.IRelayService;
@@ -26,15 +27,18 @@ public class RelayController extends BaseController {
     @Autowired
     private IRelayService relayService;
 
+    int did = 1;
+
     @Desc("连接Tcp服务器")
     @ResponseBody
     @RequestMapping("connectServer")
-    public ResponseBean connectServer(int type) throws Exception{ //1：锁  2：大门
+    public ResponseBean connectServer(int type) throws Exception{ //1：大门  2：锁
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
         if(type == 1){
-            boolean success = relayService.connectServer(relayIp, relayPort);
+            boolean success = relayService.connectServer(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort());
             return new ResponseBean(success);
         }else if(type == 2){
-            boolean success = relayService.connectServer(gateIp, gatePort);
+            boolean success = relayService.connectServer(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
             return new ResponseBean(success);
         }
         return null;
@@ -44,7 +48,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("openLock")
     public ResponseBean openLock(int lockId) throws Exception{
-        relayService.openServerLock(relayIp, relayPort, lockId);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.openServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), lockId);
         return new ResponseBean(true);
     }
 
@@ -52,7 +57,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("closeLock")
     public ResponseBean closeLock(int lockId){
-        relayService.closeServerLock(relayIp, relayPort, lockId);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), lockId);
         return new ResponseBean(true);
     }
 
@@ -60,7 +66,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("openAllLock")
     public ResponseBean openAllLock() throws Exception{
-        relayService.openServerAllLock(relayIp, relayPort);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.openServerAllLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
         return new ResponseBean(true);
     }
 
@@ -68,7 +75,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("closeAllLock")
     public ResponseBean closeAllLock(){
-        relayService.closeServerAllLock(relayIp, relayPort);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.closeServerAllLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
         return new ResponseBean(true);
     }
 
@@ -76,7 +84,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("openDrive")
     public ResponseBean openDrive(int driveId) throws Exception{
-        relayService.openServerDrive(gateIp, gatePort, driveId);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.openServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), driveId);
         return new ResponseBean(true);
     }
 
@@ -84,22 +93,43 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("closeDrive")
     public ResponseBean closeDrive(int driveId) throws Exception{
-        relayService.closeServerDrive(gateIp, gatePort, driveId);
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.closeServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), driveId);
         return new ResponseBean(true);
     }
 
-    @Desc("获取锁连接状态")
+    @Desc("断开大门")
     @ResponseBody
-    @RequestMapping("getLockConnectStatus")
-    public ResponseBean getLockConnectStatus(){
-        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(relayIp, relayPort));}});
+    @RequestMapping("downlineDoor")
+    public ResponseBean downlineDoor(){
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.downlineRelay(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort());
+        return new ResponseBean(true);
+    }
+
+    @Desc("断开柜子")
+    @ResponseBody
+    @RequestMapping("downlineLock")
+    public ResponseBean downlineLock(){
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        relayService.downlineRelay(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
+        return new ResponseBean(true);
     }
 
     @Desc("获取门连接状态")
     @ResponseBody
     @RequestMapping("getGateConnectStatus")
     public ResponseBean getGateConnectStatus(){
-        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(gateIp, gatePort));}});
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort()));}});
+    }
+
+    @Desc("获取锁连接状态")
+    @ResponseBody
+    @RequestMapping("getLockConnectStatus")
+    public ResponseBean getLockConnectStatus(){
+        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
+        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort()));}});
     }
 
 }

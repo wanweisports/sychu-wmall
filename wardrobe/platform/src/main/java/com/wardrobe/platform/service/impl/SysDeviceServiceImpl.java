@@ -2,6 +2,7 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.DateUtil;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,7 @@ import java.util.Map;
 /**
  * Created by cxs on 2018/8/24.
  */
-@Service
+@Service()
 public class SysDeviceServiceImpl extends BaseService implements ISysDeviceService {
 
     @Override
@@ -61,14 +63,16 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
 
     //查询没有时间交集的设备柜子【因为一个时间段只有一个人进入，那么这里不是所有人都是1号柜子？】
     @Override
-    public SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime){
-        StringBuilder hql = new StringBuilder("SELECT sdc");
-        hql.append(" FROM SysDeviceInfo sd, SysDeviceControl sdc");
-        hql.append(" WHERE sd.did = sdc.did AND sd.did = ?1");
-        hql.append(" AND NOT EXISTS(SELECT 1 FROM ReserveOrderInfo roi WHERE roi.dcid = sdc.dcid AND NOT(roi.reserveEndTime <= ?2 OR roi.reserveStartTime >= ?3))"); //预约结束时间小于库里数据开始时间 或者 预约开始时间大于库里数据结束时间
-        hql.append(" AND sdc.status = ?4");
-        hql.append(" ORDER BY sdc.dcid");
-        return baseDao.queryByHqlFirst(hql.toString(), did, reserveStartTime, reserveEndTime, IDBConstant.LOGIC_STATUS_YES);
+    public SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime) throws ParseException{
+        StringBuilder sql = new StringBuilder("SELECT COUNT(roi.dcid) count, sdc.dcid FROM sys_device_control sdc");
+        sql.append(" LEFT JOIN reserve_order_info roi ON(sdc.dcid = roi.dcid AND roi.reserveStartTime BETWEEN ?1 AND ?2)");
+        sql.append(" WHERE sdc.type = ?3 AND sdc.status = ?4 GROUP BY sdc.dcid ORDER BY count, sdc.dcid");
+
+        String startDate = DateUtil.dateToString(new Date(reserveEndTime.getTime()), DateUtil.YYYYMMDD) + IPlatformConstant.time00;
+        String endDate = DateUtil.dateToString(new Date(reserveEndTime.getTime()), DateUtil.YYYYMMDD) + IPlatformConstant.time24;
+        Map<String, Object> deviceControlMap = baseDao.queryBySqlFirst(sql.toString(), startDate, endDate, IDBConstant.LOGIC_STATUS_NO, IDBConstant.LOGIC_STATUS_YES);
+        if(deviceControlMap == null) return null;
+        return getSysDeviceControl(StrUtil.objToInt(deviceControlMap.get("dcid")));
     }
 
     @Override
@@ -118,9 +122,9 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
 
     @Override
     public List<SysDeviceControl> getDeviceControl(String ip, int port){
-        List<SysDeviceControl> deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.doorIp = ?1 AND sdc.doorPort = ?2", ip, port);
+        List<SysDeviceControl> deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.doorIp = ?1 AND sdi.doorPort = ?2 AND sdc.type = ?3", ip, port, IDBConstant.LOGIC_STATUS_YES);
         if(deviceControls == null || deviceControls.size() == 0){
-            deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.lockIp = ?1 AND sdc.lockPort = ?2", ip, port);
+            deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.lockIp = ?1 AND sdi.lockPort = ?2 AND sdc.type = ?3", ip, port, IDBConstant.LOGIC_STATUS_NO);
         }
         return deviceControls;
     }

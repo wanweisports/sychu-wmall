@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.po.UserOrderInfo;
@@ -74,8 +75,12 @@ public class OrderController extends BaseController {
     @ResponseBody
     @RequestMapping("wxPayPackage")
     public ResponseBean wxPayPackage(OrderInputView orderInputView) throws Exception{
-        String finaPackage = orderService.wxPayPackage(orderInputView, getUserInfo().getOpenId());
-        return new ResponseBean(new HashMap(){{put("finaPackage", finaPackage);}});
+        Map<Object, Object> payPackage = orderService.wxPayPackage(orderInputView, getUserInfo().getOpenId());
+        if(IDBConstant.LOGIC_STATUS_YES.equals(payPackage.get("ok"))){
+            return new ResponseBean(IDBConstant.LOGIC_STATUS_NO);
+        }else {
+            return new ResponseBean(payPackage);
+        }
     }
 
     /*

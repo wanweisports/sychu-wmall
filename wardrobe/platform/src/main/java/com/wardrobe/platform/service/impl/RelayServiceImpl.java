@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDeviceControl;
@@ -34,10 +35,15 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     private IOrderService orderService;
 
     @Override
+    public SysDeviceInfo getSysDeviceInfo(int did){
+        return deviceService.getSysDeviceInfo(did);
+    }
+
+    @Override
     public synchronized boolean connectServer(String ip, int port) throws Exception{
         Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
         if(serverChannel == null) {
-            NettyClient nettyClient = new NettyClient(ip, port);
+            NettyClient nettyClient = new NettyClient(ip, port, deviceService);
             ChannelFuture future = nettyClient.clientServer();
             return future != null && future.isSuccess();
         }else{
@@ -143,13 +149,17 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
             //获取门的状态
             if(ClientChannelUtil.isOpen(doorIp, doorPort)) {
-                SysDeviceControl doorDeviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), 1);
-                data.put("doorDeviceBean", doorDeviceBean);
+                List<SysDeviceControl> deviceDoorControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", sysDeviceInfo.getDid(), IDBConstant.LOGIC_STATUS_YES);
+                deviceDoorControls.stream().forEach(deviceControl -> {
+                    SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(doorIp, doorPort), deviceControl.getLockId());
+                    deviceControl.setStatus(deviceBean.getStatus());
+                });
+                data.put("deviceDoorControls", deviceDoorControls);
             }
 
             //获取锁的状态
             if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
-                List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1", sysDeviceInfo.getDid());
+                List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", sysDeviceInfo.getDid(), IDBConstant.LOGIC_STATUS_NO);
                 deviceControls.stream().forEach(deviceControl -> {
                     SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
                     deviceControl.setStatus(deviceBean.getStatus());
@@ -208,6 +218,14 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), dcid);
         } catch (MessageException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void downlineRelay(String ip, int port){
+        Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
+        if(serverChannel != null){
+            serverChannel.eventLoop().parent().shutdownGracefully();
         }
     }
 

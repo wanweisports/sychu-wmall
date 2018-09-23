@@ -1,11 +1,15 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.po.SysDeviceInfo;
+
 import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
  */
 public interface IRelayService {
+
+    SysDeviceInfo getSysDeviceInfo(int did);
 
     boolean connectServer(String ip, int port) throws Exception;
 
@@ -30,5 +34,7 @@ public interface IRelayService {
     void openLock(int dcid) throws Exception;
 
     void closeLock(int dcid) throws Exception;
+
+    void downlineRelay(String ip, int port);
 
 }
