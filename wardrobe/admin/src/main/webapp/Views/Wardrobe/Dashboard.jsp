@@ -82,12 +82,12 @@
             if(window.confirm("确认断开大门吗？")){
                 $(btn).prop("disabled", true).text("正在尝试断开大门...");
                 $.post("/relay/downlineDoor", function(res) {
-                    alert(res.message);
                     if (res.code == 1) {
                         window.location.reload();
                         $(btn).prop("disabled", true);
                     }else {
                         $(btn).prop("disabled", false).text("断开大门");
+                        alert(res.message);
                     }
                 });
             }
@@ -97,12 +97,12 @@
             if(window.confirm("确认断开柜子吗？")){
                 $(btn).prop("disabled", true).text("正在尝试断开柜子...");
                 $.post("/relay/downlineLock", function(res) {
-                    alert(res.message);
                     if (res.code == 1) {
                         window.location.reload();
                         $(btn).prop("disabled", true);
                     }else {
                         $(btn).prop("disabled", false).text("断开柜子");
+                        alert(res.message);
                     }
                 });
             }
