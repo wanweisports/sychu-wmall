@@ -8,14 +8,15 @@ import com.sun.jna.win32.StdCallLibrary;
  */
 public interface ReaderMethod extends StdCallLibrary {
 
-    ReaderMethod reader = (ReaderMethod) Native.loadLibrary("Reader", ReaderMethod.class);
+    ReaderMethod reader = (ReaderMethod) Native.loadLibrary("RePackLib", ReaderMethod.class);
 
-    void CloseCom();
+    void Reset(String a);
 
     public static void main(String[] args) {
         System.setProperty("jna.debug_load", "true");
         //ReaderMethod reader = new ReaderMethod();
-        reader.CloseCom();
+        byte[] b = new  byte[1];
+        reader.Reset("");
     }
 
 }

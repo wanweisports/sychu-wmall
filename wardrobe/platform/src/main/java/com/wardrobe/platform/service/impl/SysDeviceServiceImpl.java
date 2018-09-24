@@ -98,7 +98,6 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
             baseDao.save(sysDeviceInfo, null);
         }else{
             SysDeviceInfo sysDeviceInfoDB = getSysDeviceInfo(did);
-            sysDeviceInfoDB.setUpdateTime(nowDate);
             sysDeviceInfoDB.setStatus(sysDeviceInfo.getStatus());
             sysDeviceInfoDB.setName(sysDeviceInfo.getName());
             sysDeviceInfoDB.setAddress(sysDeviceInfo.getAddress());

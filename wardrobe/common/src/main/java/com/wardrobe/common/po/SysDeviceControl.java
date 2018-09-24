@@ -17,6 +17,8 @@ public class SysDeviceControl {
     private String status;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private Timestamp openTime;
+    private Timestamp closeTime;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -70,7 +72,7 @@ public class SysDeviceControl {
     }
 
     @Basic
-    @Column(name = "lock")
+    @Column(name = "`lock`")
     public String getLock() {
         return lock;
     }
@@ -142,4 +144,25 @@ public class SysDeviceControl {
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
+
+    @Basic
+    @Column(name = "openTime")
+    public Timestamp getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Timestamp openTime) {
+        this.openTime = openTime;
+    }
+
+    @Basic
+    @Column(name = "closeTime")
+    public Timestamp getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(Timestamp closeTime) {
+        this.closeTime = closeTime;
+    }
+
 }

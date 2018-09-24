@@ -15,13 +15,15 @@ public class SysDeviceInfo {
     private String address;
     private String status;
     private Timestamp createTime;
-    private Timestamp updateTime;
     private String startTime;
     private String endTime;
     private String doorIp;
     private Integer doorPort;
     private String lockIp;
     private Integer lockPort;
+    private Timestamp openTime;
+    private Timestamp closeTime;
+    private Timestamp openLockTime;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -84,16 +86,6 @@ public class SysDeviceInfo {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "updateTime")
-    public Timestamp getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Timestamp updateTime) {
-        this.updateTime = updateTime;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,7 +99,6 @@ public class SysDeviceInfo {
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
 
         return true;
     }
@@ -120,7 +111,6 @@ public class SysDeviceInfo {
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
 
@@ -182,5 +172,35 @@ public class SysDeviceInfo {
 
     public void setLockPort(Integer lockPort) {
         this.lockPort = lockPort;
+    }
+
+    @Basic
+    @Column(name = "openTime")
+    public Timestamp getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Timestamp openTime) {
+        this.openTime = openTime;
+    }
+
+    @Basic
+    @Column(name = "closeTime")
+    public Timestamp getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(Timestamp closeTime) {
+        this.closeTime = closeTime;
+    }
+
+    @Basic
+    @Column(name = "openLockTime")
+    public Timestamp getOpenLockTime() {
+        return openLockTime;
+    }
+
+    public void setOpenLockTime(Timestamp openLockTime) {
+        this.openLockTime = openLockTime;
     }
 }

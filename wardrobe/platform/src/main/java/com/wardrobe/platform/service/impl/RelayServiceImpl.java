@@ -1,10 +1,13 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.UserDriveBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.NettyClient;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
@@ -18,9 +21,8 @@ import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created by cxs on 2018/9/10.
@@ -158,16 +160,21 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             }
 
             //获取锁的状态
-            if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
-                List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", sysDeviceInfo.getDid(), IDBConstant.LOGIC_STATUS_NO);
-                deviceControls.stream().forEach(deviceControl -> {
-                    SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
-                    deviceControl.setStatus(deviceBean.getStatus());
-                });
-                data.put("deviceControls", deviceControls);
-            }
+            data.put("deviceControls", getAllDeviceControls(lockIp, lockPort, sysDeviceInfo.getDid()));
         }
         return data;
+    }
+
+    private List<SysDeviceControl> getAllDeviceControls(String lockIp, int lockPort, int did){
+        if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
+            List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", did, IDBConstant.LOGIC_STATUS_NO);
+            deviceControls.stream().forEach(deviceControl -> {
+                SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
+                deviceControl.setStatus(deviceBean.getStatus());
+            });
+            return deviceControls;
+        }
+        return null;
     }
 
     @Override
@@ -227,6 +234,120 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if(serverChannel != null){
             serverChannel.eventLoop().parent().shutdownGracefully();
         }
+    }
+
+    @Desc("扫码开门==进门")
+    @Override
+    public synchronized void saveUserOpenServerDrive(UserDriveBean userDriveBean) throws Exception{
+        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        //2. 试衣间可用？
+        if(!IDBConstant.LOGIC_STATUS_YES.equals(sysDeviceInfo.getStatus())){ //N: 提示 试衣间当前不可用，请稍后再试
+            Date datePrev15 = DateUtil.addHHMMTime(new Date(), Calendar.MINUTE, -16);
+            Timestamp openLockTime = sysDeviceInfo.getOpenLockTime();
+            if(openLockTime != null && openLockTime.after(datePrev15)) { //开门十五分钟内是否扫码开柜门？N：试衣间状态更新为启用【以当前时间，15分钟以后未开柜子，则算没有人使用】
+                throw new MessageException("试衣间当前不可用，请稍后再试！");
+            }
+        }
+        //3. 服务端下发（进）大门开门指令
+        try{
+            openServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), userDriveBean.getDriveId());
+        }catch (MessageException e){
+            e.printStackTrace();
+        }
+        //4. 调用RIDF记录当前库存状态
+
+        //5.试衣间状态更新为占用
+        Timestamp nowDate = DateUtil.getNowDate();
+        sysDeviceInfo.setOpenTime(nowDate);
+        sysDeviceInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //占用
+        sysDeviceInfo.setOpenLockTime(nowDate);
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
+
+
+    }
+
+    @Desc("扫码开柜门")
+    @Override
+    public synchronized void saveUserOpenServerLock(UserDriveBean userDriveBean) throws Exception {
+        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        //7.下发柜门开门指令
+        try{
+            openServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
+        }catch (MessageException e){
+            e.printStackTrace();
+        }
+        Timestamp nowDate = DateUtil.getNowDate();
+        SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
+        sysDeviceControl.setOpenTime(nowDate);
+        sysDeviceControl.setLock(IDBConstant.LOGIC_STATUS_YES); //开启
+        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
+
+        sysDeviceInfo.setOpenLockTime(nowDate);
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
+        //8.用户试衣
+
+
+    }
+
+    @Desc("扫码关柜门")
+    @Override
+    public synchronized void saveUserCloseServerLock(UserDriveBean userDriveBean) throws Exception {
+        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        //7.下发柜门开门指令
+        try{
+            closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
+        }catch (MessageException e){
+            e.printStackTrace();
+        }
+        SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
+        sysDeviceControl.setCloseTime(DateUtil.getNowDate());
+        sysDeviceControl.setLock(IDBConstant.LOGIC_STATUS_NO); //锁住
+        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
+    }
+
+    @Desc("扫码开门==出门")
+    @Override
+    public synchronized void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception{
+        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+
+        //9.出门与支付
+        //判断是否所有锁关闭状态才能打开（出）大门
+        List<SysDeviceControl> allDeviceControls = getAllDeviceControls(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), sysDeviceInfo.getDid());
+        StringBuilder msg = new StringBuilder();
+        if(allDeviceControls != null){
+            allDeviceControls.stream().forEach(deviceControl -> {
+                if (ClientChannelUtil.READ_OPEN.equals(deviceControl.getStatus())) {
+                    if(msg.length() > 0) msg.append("、");
+                    msg.append(deviceControl.getName());
+                }
+            });
+        }
+        if(msg.length() > 0){ //检查柜门关闭状态已全部关闭？N： 提示 请关好柜门再出门
+            //检测所有柜子是否已经关闭
+            throw new MessageException("出门前请关好柜子：" + msg.toString());
+        }
+
+        //10.调用RIDF检查商品库存变化
+
+        if(1==1){ //库存有变化？N：下发大门开门指令，提示感谢使用
+
+        }else{
+            //11.创建试衣结算订单【这里需要检测拿走了哪些衣服，必须和标签做对应】
+
+        }
+
+        //服务端下发（出）大门开门指令
+        try{
+            openServerDrive(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort(), userDriveBean.getDriveId());
+        }catch (MessageException e){
+            e.printStackTrace();
+        }
+
+        //试衣间状态更新为解除占用
+        sysDeviceInfo.setCloseTime(DateUtil.getNowDate());
+        sysDeviceInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //解除占用
+        sysDeviceInfo.setOpenLockTime(null);
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
     }
 
 }

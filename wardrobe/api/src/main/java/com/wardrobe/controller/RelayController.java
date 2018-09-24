@@ -26,39 +26,42 @@ public class RelayController extends BaseController {
     @Autowired
     private IRelayService relayService;
 
-    private String relayUrl = "http://localhost:8082/relay";
-
-    @Desc("开启锁")
-    @ResponseBody
-    @RequestMapping("openLock")
-    public ResponseBean openLock(int lockId) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/openLock?lockId="+lockId);
-        return new ResponseBean(IDBConstant.LOGIC_STATUS_YES.equals(JsonUtils.fromJson(response, Map.class).get("code")));
-    }
+    private String relayUrl = "http://localhost/relay";
 
     @Desc("开启门")
     @ResponseBody
     @RequestMapping("openDoor")
     public ResponseBean openDoor() throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/relay/openDrive?driveId=1");
-        System.out.println(response);
-        return new ResponseBean(IDBConstant.LOGIC_STATUS_YES.equals(JsonUtils.fromJson(response, Map.class).get("code")));
+        String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId=1");
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
+    }
+
+    @Desc("开启锁")
+    @ResponseBody
+    @RequestMapping("openLock")
+    public ResponseBean openLock(int lockId) throws Exception{
+        String response = HttpUtil.sendGet(relayUrl + "/userOpenLock?driveId="+lockId);
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
 
     @Desc("关锁")
     @ResponseBody
     @RequestMapping("closeLock")
     public ResponseBean closeLock(int lockId) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/relay/closeLock?lockId="+lockId);
-        return new ResponseBean(IDBConstant.LOGIC_STATUS_YES.equals(JsonUtils.fromJson(response, Map.class).get("code")));
+        String response = HttpUtil.sendGet(relayUrl + "/userCloseLock?driveId="+lockId);
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
 
     @Desc("关门")
     @ResponseBody
     @RequestMapping("closeDoor")
     public ResponseBean closeDoor() throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/relay/closeDrive?driveId=1");
-        return new ResponseBean(IDBConstant.LOGIC_STATUS_YES.equals(JsonUtils.fromJson(response, Map.class).get("code")));
+        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId=1");
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
 
 }
