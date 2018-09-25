@@ -67,5 +67,9 @@ public class BaseInputView implements Serializable {
 	public void setOperatorId(String operatorId) {
 		this.operatorId = operatorId;
 	}
+
+    public static void main(String[] args) {
+        System.out.println(StrUtil.getUUID());
+    }
     
 }

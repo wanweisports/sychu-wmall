@@ -25,6 +25,8 @@ Mysql5.7
 yifoutech@qq.com
 syc123456
 
+小程序商户号操作密码：
+syc*123456
 
 
 借的域名：#http://mystore.01time.cn/

@@ -8,9 +8,9 @@ public class ConfigUtil {
 	 */
 	 public final static String APPID = IPlatformConstant.APP_ID;//服务号的应用号
 	 public final static String APP_SECRECT = IPlatformConstant.APP_SECRET;//服务号的应用密码
-	 public final static String TOKEN = "";//服务号的配置token
-	 public final static String MCH_ID = "";//商户号
-	 public final static String API_KEY = "";//API密钥
+	 //public final static String TOKEN = "";//服务号的配置token
+	 public final static String MCH_ID = "1512663641";//商户号
+	 public final static String API_KEY = "577ba188109046d188cab8f4b4620ae1";//API密钥
 	 public final static String SIGN_TYPE = "MD5";//签名加密方式
 	 //public final static String CERT_PATH = "D:/weixin/apiclient_cert.p12";//微信支付证书存放路径地址
 	//微信支付统一接口的回调action
