@@ -58,6 +58,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
         userInfo.setInviteCode(inviteCode);
         baseDao.save(userInfo.init(), null);
         userAccountService.initUserAccount(userInfo.getUid(), userInfo.getRegisterTime());
+
+        //送优惠券
+
+
     }
 
     /*

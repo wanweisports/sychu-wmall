@@ -6,14 +6,17 @@ import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Created by cxs on 2018/9/25.
+ */
 @Entity
 @Table(name = "user_coupon_info", schema = "")
 public class UserCouponInfo {
     private int cpid;
     private Integer uid;
-    private String serviceType;
-    private Integer serviceId;
+    private Integer serviceType;
     private BigDecimal couponPrice;
+    private BigDecimal fullPrice;
     private String status;
     private Timestamp dueTime;
     private Timestamp createTime;
@@ -42,22 +45,12 @@ public class UserCouponInfo {
 
     @Basic
     @Column(name = "serviceType")
-    public String getServiceType() {
+    public Integer getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(String serviceType) {
+    public void setServiceType(Integer serviceType) {
         this.serviceType = serviceType;
-    }
-
-    @Basic
-    @Column(name = "serviceId")
-    public Integer getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(Integer serviceId) {
-        this.serviceId = serviceId;
     }
 
     @Basic
@@ -68,6 +61,16 @@ public class UserCouponInfo {
 
     public void setCouponPrice(BigDecimal couponPrice) {
         this.couponPrice = couponPrice;
+    }
+
+    @Basic
+    @Column(name = "fullPrice")
+    public BigDecimal getFullPrice() {
+        return fullPrice;
+    }
+
+    public void setFullPrice(BigDecimal fullPrice) {
+        this.fullPrice = fullPrice;
     }
 
     @Basic
@@ -120,8 +123,8 @@ public class UserCouponInfo {
         if (cpid != that.cpid) return false;
         if (uid != null ? !uid.equals(that.uid) : that.uid != null) return false;
         if (serviceType != null ? !serviceType.equals(that.serviceType) : that.serviceType != null) return false;
-        if (serviceId != null ? !serviceId.equals(that.serviceId) : that.serviceId != null) return false;
         if (couponPrice != null ? !couponPrice.equals(that.couponPrice) : that.couponPrice != null) return false;
+        if (fullPrice != null ? !fullPrice.equals(that.fullPrice) : that.fullPrice != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (dueTime != null ? !dueTime.equals(that.dueTime) : that.dueTime != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
@@ -135,8 +138,8 @@ public class UserCouponInfo {
         int result = cpid;
         result = 31 * result + (uid != null ? uid.hashCode() : 0);
         result = 31 * result + (serviceType != null ? serviceType.hashCode() : 0);
-        result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
         result = 31 * result + (couponPrice != null ? couponPrice.hashCode() : 0);
+        result = 31 * result + (fullPrice != null ? fullPrice.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (dueTime != null ? dueTime.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
