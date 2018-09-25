@@ -462,6 +462,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
                     baseDao.save(userOrderInfo, userOrderInfo.getOid());
                     userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
+                    //累加积分与衣橱币(衣米)
+                    //每消费或充值1元，获得1积分。消费金额按照商品订单实际支付金额（仅微信支付）计算，舍弃订单金额小数位。
+                    //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
+                    //1衣米 = 1元。使用衣米支付时，订单元以下金额 = 1衣米。
+                    userAccountService.addUserScoreAndYcoid(userOrderInfo.getUid(), userOrderInfo.getPayPrice().doubleValue());
+
                     //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额
                     /*synchronized (OrderServiceImpl.class) {
