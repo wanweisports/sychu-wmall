@@ -18,6 +18,8 @@ public class SysCouponRule {
     private Integer dueNum;
     private String rule;
     private Integer serviceType;
+    private Timestamp crType;
+    private Timestamp crTime;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -80,6 +82,22 @@ public class SysCouponRule {
 
     public void setServiceType(Integer serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public Timestamp getCrType() {
+        return crType;
+    }
+
+    public void setCrType(Timestamp crType) {
+        this.crType = crType;
+    }
+
+    public Timestamp getCrTime() {
+        return crTime;
+    }
+
+    public void setCrTime(Timestamp crTime) {
+        this.crTime = crTime;
     }
 
     @Basic

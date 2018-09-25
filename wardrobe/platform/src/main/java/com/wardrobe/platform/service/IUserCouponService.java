@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.po.SysCouponRule;
 import com.wardrobe.common.po.UserCouponInfo;
 
 import java.text.ParseException;
@@ -18,5 +19,11 @@ public interface IUserCouponService {
     List<Map<String, Object>> getUserEffectiveCoupons(int userId);
 
     UserCouponInfo getUserCouponInfo(int cpid, int uid) throws ParseException;
+
+    List<SysCouponRule> getSysCouponRules(String crType);
+
+    void addUserCoupons(List<SysCouponRule> sysCouponRules, int uid);
+
+    void addUserCoupon(SysCouponRule sysCouponRule, int uid);
 
 }

@@ -2,11 +2,14 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.SysCouponRule;
 import com.wardrobe.common.po.UserCouponInfo;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.platform.service.IUserCouponService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,35 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     @Override
     public UserCouponInfo getUserCouponInfo(int cpid, int uid) throws ParseException{
         return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4", cpid, uid, IDBConstant.LOGIC_STATUS_YES, DateUtil.dateToDate(new Date()));
+    }
+
+    @Override
+    public List<SysCouponRule> getSysCouponRules(String crType){
+        return baseDao.queryByHql("FROM SysCouponRule WHERE crType = ?1 AND (crTime IS NULL OR crTime >= NOW())", crType);
+    }
+
+    @Override
+    public void addUserCoupons(List<SysCouponRule> sysCouponRules, int uid){
+        if(!CollectionUtils.isEmpty(sysCouponRules)){
+            sysCouponRules.stream().forEach(couponRule -> {
+                addUserCoupon(couponRule, uid);
+            });
+        }
+    }
+
+    @Override
+    public void addUserCoupon(SysCouponRule sysCouponRule, int uid){
+        Date date = new Date();
+        Timestamp nowDate = new Timestamp(date.getTime());
+        UserCouponInfo userCouponInfo = new UserCouponInfo();
+        userCouponInfo.setCreateTime(nowDate);
+        userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userCouponInfo.setCouponPrice(sysCouponRule.getCouponPrice());
+        userCouponInfo.setFullPrice(sysCouponRule.getFullPrice());
+        userCouponInfo.setServiceType(sysCouponRule.getServiceType());
+        userCouponInfo.setUid(uid);
+        userCouponInfo.setDueTime(new Timestamp(DateUtil.addDate(date, sysCouponRule.getDueNum()).getTime()));
+        baseDao.save(userCouponInfo, null);
     }
 
 }

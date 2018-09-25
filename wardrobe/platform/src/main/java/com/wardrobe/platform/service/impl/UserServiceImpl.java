@@ -4,10 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
-import com.wardrobe.common.po.SysDict;
-import com.wardrobe.common.po.UserAccount;
-import com.wardrobe.common.po.UserCollection;
-import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.JsonUtils;
@@ -16,6 +13,7 @@ import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -60,8 +58,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
         userAccountService.initUserAccount(userInfo.getUid(), userInfo.getRegisterTime());
 
         //送优惠券
-
-
+        //平台新注册用户，均获赠一张满1000-100优惠券。有效期2个月。
+        //平台试运营期间（截至11月30日），新注册用户额外赠送2张优惠券：一张满1000-100，一张满2500-300。有效期2个月。
+        List<SysCouponRule> couponRules = userCouponService.getSysCouponRules(IDBConstant.LOGIC_STATUS_YES);//1：注册赠送优惠券类型
+        userCouponService.addUserCoupons(couponRules, userInfo.getUid());
     }
 
     /*
