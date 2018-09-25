@@ -461,6 +461,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 if(!IDBConstant.LOGIC_STATUS_YES.equals(userOrderInfo.getPayStatus())){ //未支付状态
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
                     baseDao.save(userOrderInfo, userOrderInfo.getOid());
+                    userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
                     //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额
                     /*synchronized (OrderServiceImpl.class) {
