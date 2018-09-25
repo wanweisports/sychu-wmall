@@ -124,7 +124,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         data.put("list", settlement);
         data.put("sumPrice", sumPrice);
         //用户优惠券列表
-        data.put("coupons", userCouponService.getUserEffectiveCoupons(uid));
+        data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, sumPrice));
         //用户衣橱币
         data.put("ycoid", userAccount.getYcoid());
         //用户折扣

@@ -33,12 +33,14 @@ URL：/commodity/settlement?scids=22,23,25
 		"coupons": [{     #可用优惠券列表【新增】
 				"dictValue": "满减优惠",
 				"cpid": 1,
+				"status": "1",  #1：可以使用（满减够了）  2：不能使用（金额不够满减）
 				"couponPrice": 300,
 				"dueTime": "2018-09-22 00:00:00"
 			},
 			{
 				"dictValue": "满减优惠",
 				"cpid": 2,
+				"status": "1",
 				"couponPrice": 500,
 				"dueTime": "2018-09-22 00:00:00"
 			}

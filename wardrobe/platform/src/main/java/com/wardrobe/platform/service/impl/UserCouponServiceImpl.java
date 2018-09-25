@@ -5,6 +5,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.SysCouponRule;
 import com.wardrobe.common.po.UserCouponInfo;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IUserCouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -32,8 +33,18 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     }
 
     @Override
-    public List<Map<String, Object>> getUserEffectiveCoupons(int userId){
-        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND uci.dueTime >= ?4 ORDER BY uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_YES, DateUtil.dateToString(new Date(), null) + IPlatformConstant.time00);
+    public List<Map<String, Object>> getUserEffectiveCoupons(int userId, double priceSum){
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND uci.dueTime >= ?4 ORDER BY uci.fullPrice, uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_YES, DateUtil.dateToString(new Date(), null) + IPlatformConstant.time00);
+        if(!CollectionUtils.isEmpty(list)){
+            list.stream().forEach(map -> { //计算满减优惠是否能使用
+                if(StrUtil.objToDouble(map.get("fullPrice")) <= priceSum){ //金额大于满减优惠，则可以使用
+                    map.put("status", IDBConstant.LOGIC_STATUS_YES);
+                }else{
+                    map.put("status", IDBConstant.LOGIC_STATUS_NO);
+                }
+            });
+        }
+        return list;
     }
 
     @Override
@@ -66,7 +77,9 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
         userCouponInfo.setFullPrice(sysCouponRule.getFullPrice());
         userCouponInfo.setServiceType(sysCouponRule.getServiceType());
         userCouponInfo.setUid(uid);
-        userCouponInfo.setDueTime(new Timestamp(DateUtil.addDate(date, sysCouponRule.getDueNum()).getTime()));
+        if(IDBConstant.LOGIC_STATUS_YES.equals(sysCouponRule.getRule())) { //这里需要处理以后的优惠券到期规则，目前都是按到期时间算
+            userCouponInfo.setDueTime(new Timestamp(DateUtil.addDate(date, sysCouponRule.getDueNum()).getTime()));
+        }
         baseDao.save(userCouponInfo, null);
     }
 

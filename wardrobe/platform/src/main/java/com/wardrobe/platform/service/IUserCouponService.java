@@ -16,7 +16,7 @@ public interface IUserCouponService {
 
     List<Map<String, Object>> getUserCouponList(int userId);
 
-    List<Map<String, Object>> getUserEffectiveCoupons(int userId);
+    List<Map<String, Object>> getUserEffectiveCoupons(int userId, double priceSum);
 
     UserCouponInfo getUserCouponInfo(int cpid, int uid) throws ParseException;
 
