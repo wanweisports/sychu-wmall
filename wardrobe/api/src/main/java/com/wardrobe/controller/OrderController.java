@@ -77,7 +77,7 @@ public class OrderController extends BaseController {
     public ResponseBean wxPayPackage(OrderInputView orderInputView) throws Exception{
         Map<Object, Object> payPackage = orderService.wxPayPackage(orderInputView, getUserInfo().getOpenId());
         if(IDBConstant.LOGIC_STATUS_YES.equals(payPackage.get("ok"))){
-            return new ResponseBean(IDBConstant.LOGIC_STATUS_NO);
+            return new ResponseBean(IDBConstant.LOGIC_STATUS_NO, null);
         }else {
             return new ResponseBean(payPackage);
         }
