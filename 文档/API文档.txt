@@ -104,7 +104,7 @@ URL：/order/wxPayPackage
 22.用户预约列表：加一个字段：dcid 柜子号id,开门参数
 ======================================================================
 打开与关闭大门与锁接口
-1. 开门：  URL：/relay/openDoor
+1. 开门（进大门）：  URL：/relay/openDoor
 	参数：无
 		{
 			code: 1
@@ -114,7 +114,7 @@ URL：/order/wxPayPackage
 
 
 
-2. 关门： URL：/relay/closeDoor
+2. 开门（出大门）： URL：/relay/closeDoor
               参数：无
 		{
 			code: 1
