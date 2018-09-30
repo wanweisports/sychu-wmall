@@ -1,0 +1,40 @@
+------阿里云------
+
+User: 闪衣橱slivery
+
+Pass: syc123456
+
+==================================
+root@47.94.196.103
+账号：root
+密码：.ppk文件私钥
+
+==================================
+Mysql5.7
+账号：root
+密码：sycSYC2018!
+端口：3306
+
+
+域名：store.yifoutech.com
+
+VPN：shanyichu
+          syc123456
+
+
+小程序
+yifoutech@qq.com
+syc123456
+
+
+
+借的域名：#http://mystore.01time.cn/
+
+	 http://mystore.jonham.cn/
+
+
+VPN：
+shanyichu
+syc123456
+
+pptp
