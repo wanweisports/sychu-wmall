@@ -385,8 +385,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         finalpackage.put("nonceStr", nonce_str);
         finalpackage.put("package", packages);
         finalpackage.put("signType", ConfigUtil.SIGN_TYPE);
+
         //要签名
         String finalsign = PayCommonUtil.createSign("UTF-8", finalpackage);
+        finalpackage.put("paySign", finalsign);
 
         String finaPackage = "\"appId\":\"" + ConfigUtil.APPID + "\",\"timeStamp\":\"" + timestamp
                 + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""

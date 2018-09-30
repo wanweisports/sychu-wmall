@@ -80,14 +80,15 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
     }
 
     @Override
-    public synchronized void initUserAccount(int uid, Timestamp timestamp){
+    public synchronized void initUserAccount(UserInfo userInfo){
         UserAccount userAccount = new UserAccount();
-        userAccount.setUid(uid);
+        userAccount.setUid(userInfo.getUid());
         userAccount.setBalance(Arith.conversion(0));
         userAccount.setYcoid(IPlatformConstant.INIT_USER_SCORE);
         userAccount.setRank(1);
+
         userAccount.setScore(0);
-        userAccount.setCreateTime(timestamp);
+        userAccount.setCreateTime(userInfo.getRegisterTime());
         baseDao.save(userAccount, null);
     }
 

@@ -29,6 +29,7 @@
     <mapping class="com.wardrobe.common.po.UserCollection"/>
     <mapping class="com.wardrobe.common.po.CommodityBanner"/>
     <mapping class="com.wardrobe.common.po.SysCouponRule"/>
+    <mapping class="com.wardrobe.common.po.UserOldInfo"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

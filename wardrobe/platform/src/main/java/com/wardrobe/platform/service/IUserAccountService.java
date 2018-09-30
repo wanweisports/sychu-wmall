@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.po.UserAccount;
+import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.po.UserOrderInfo;
 
 import java.sql.Timestamp;
@@ -15,7 +16,7 @@ public interface IUserAccountService {
 
     void addUserScore(int uid, double priceSum);
 
-    void initUserAccount(int uid, Timestamp timestamp);
+    void initUserAccount(UserInfo userInfo);
 
     UserAccount getUserAccount(int uid);
 

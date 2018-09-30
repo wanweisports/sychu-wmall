@@ -55,7 +55,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         userInfo.setInviteCode(inviteCode);
         baseDao.save(userInfo.init(), null);
-        userAccountService.initUserAccount(userInfo.getUid(), userInfo.getRegisterTime());
+        userAccountService.initUserAccount(userInfo);
 
         //送优惠券
         //平台新注册用户，均获赠一张满1000-100优惠券。有效期2个月。
@@ -86,8 +86,15 @@ public class UserServiceImpl extends BaseService implements IUserService {
             userInfo.setInvitedBy(inviteCodeUserId);
             //其他操作：如邀请人增加积分..等等
 
-
         }
+        //根据手机号查询是否是老用户
+        UserOldInfo userOldInfo = baseDao.queryByHqlFirst("FROM UserOldInfo WHERE mobile = ?1", userInfo.getMobile());
+        if(userOldInfo != null){
+            UserAccount userAccount = userAccountService.getUserAccount(userId);
+            userAccount.setScore(userAccount.getScore() + userOldInfo.getScore());
+            baseDao.save(userAccount, userAccount.getUid());
+        }
+
         baseDao.save(userInfo, userInfo.getUid());
     }
 
