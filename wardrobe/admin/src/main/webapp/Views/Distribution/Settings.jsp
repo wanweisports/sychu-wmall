@@ -23,10 +23,10 @@
     <script type="text/javascript">
         function showCommoditys(dcid){
             $.post("/admin/distribution/lockCommoditys", {dcid: dcid}, function (res) {
-                var list = res.list;
+                var list = res.data.list;
                 var commoditys = '';
                 $.each(list, function (index, item) {
-                    commoditys += '<tr data-id=""><td>'+item.name+'</td><td>'+item.size+'</td><td>'+item.count+'件</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
+                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.count+'件</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
                 });
                 $("#commoditys").html(commoditys);
             });
