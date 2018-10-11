@@ -108,6 +108,7 @@ Page({
             // 清空购物车数据
             //wx.removeStorageSync('shopCarInfo');
             console.log(res);
+            app.wxPay(res.data.oid, "/pages/order-list/index");
             //
             // // 配置模板消息推送
             // var postJsonString = {};

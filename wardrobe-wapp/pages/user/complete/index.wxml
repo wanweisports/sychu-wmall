@@ -37,7 +37,7 @@
                 </view>
                 <view class="weui-cell__bd">
                     <input type="number" class="weui-input" placeholder="请输入手机号" value="{{mobile}}"
-                           bindblur="bindMobileBlur" />
+                           bindinput="bindMobileBlur" />
                 </view>
                 <view class="weui-cell__ft">
                     <view class="weui-vcode-btn" bindtap="sendSMSCode">{{smsText}}</view>
@@ -49,7 +49,7 @@
                 </view>
                 <view class="weui-cell__bd">
                     <input type="text" class="weui-input" placeholder="请输入验证码" value="{{code}}"
-                           bindblur="bindCodeBlur"/>
+                           bindinput="bindCodeBlur"/>
                 </view>
             </view>
         </view>
@@ -62,7 +62,7 @@
                 </view>
                 <view class="weui-cell__bd">
                     <input type="text" class="weui-input" placeholder="请输入邀请码(选填)" value="{{inviteCode}}"
-                           bindblur="bindInviteCodeBlur"/>
+                           bindinput="bindInviteCodeBlur"/>
                 </view>
             </view>
         </view>
