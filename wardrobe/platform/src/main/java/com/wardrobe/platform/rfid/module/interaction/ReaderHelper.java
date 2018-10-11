@@ -326,7 +326,7 @@ public abstract class ReaderHelper {
         }
 
         /**
-         * Rewritable function£¬This function will be called after sending data.
+         * Rewritable functionï¼ŒThis function will be called after sending data.
          *
          * @param btArySendData Transmitted Data
          */
@@ -334,7 +334,7 @@ public abstract class ReaderHelper {
         }
 
         /**
-         * Send data£¬Use synchronized() to prevent concurrent operation.
+         * Send dataï¼ŒUse synchronized() to prevent concurrent operation.
          *
          * @param btArySenderData To send data
          * @return Succeeded :0, Failed:-1

@@ -72,7 +72,7 @@ public class CMD {
                 strCmd = "Get firmware version.";
                 break;
             case SET_READER_ADDRESS:
-                strCmd = "Set reader¡¯s address.";
+                strCmd = "Set readerâ€™s address.";
                 break;
             case SET_WORK_ANTENNA:
                 strCmd = "Set working antenna.";
@@ -93,10 +93,10 @@ public class CMD {
                 strCmd = "Query RF frequency spectrum.";
                 break;
             case SET_BEEPER_MODE:
-                strCmd = "Set reader¡¯s buzzer hehavior.";
+                strCmd = "Set readerâ€™s buzzer hehavior.";
                 break;
             case GET_READER_TEMPERATURE:
-                strCmd = "Check reader¡¯s internal temperature.";
+                strCmd = "Check readerâ€™s internal temperature.";
                 break;
             case READ_GPIO_VALUE:
                 strCmd = "Get GPIO1, GPIO2 status.";
@@ -114,10 +114,10 @@ public class CMD {
                 strCmd = "Set RF power without saving to flash.";
                 break;
             case SET_READER_IDENTIFIER:
-                strCmd = "Set reader¡¯s identification bytes.";
+                strCmd = "Set readerâ€™s identification bytes.";
                 break;
             case GET_READER_IDENTIFIER:
-                strCmd = "Get reader¡¯s identification bytes.";
+                strCmd = "Get readerâ€™s identification bytes.";
                 break;
             case SET_RF_LINK_PROFILE:
                 strCmd = "Set RF link profile.";
@@ -126,7 +126,7 @@ public class CMD {
                 strCmd = "Get RF link profile.";
                 break;
             case GET_RF_PORT_RETURN_LOSS:
-                strCmd = "Get current antenna port¡¯s return loss.";
+                strCmd = "Get current antenna portâ€™s return loss.";
                 break;
             case INVENTORY:
                 strCmd = "Inventory EPC C1G2 tags to buffer.";

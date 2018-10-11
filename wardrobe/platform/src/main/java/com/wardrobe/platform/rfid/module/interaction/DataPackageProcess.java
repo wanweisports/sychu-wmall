@@ -10,7 +10,7 @@ import java.util.Observable;
  * (RFID Reader) #TDScannerDataPackageProcess(2D Scanner)}
  */
 
-public abstract class DataPackageProcess extends Observable {
+public abstract class DataPackageProcess extends Observable{
     /**
      * The data return method,you can receive the return data
      * if you implements this method.

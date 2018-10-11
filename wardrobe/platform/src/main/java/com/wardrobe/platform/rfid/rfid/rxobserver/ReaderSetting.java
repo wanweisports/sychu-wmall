@@ -122,7 +122,7 @@ public class ReaderSetting {
 		 	0x04	SL
 		 */
 		public byte mTarget;
-		/** 	  Tag Matches Mask 	           |     Tag Doesn¡¯t Match Mask
+		/** 	  Tag Matches Mask 	           |     Tag Doesnâ€™t Match Mask
 		 0x00	Assert SL or inventoried ->A   |	Deassert SL or inventoried ->B
 		 0x01	Assert SL or inventoried ->A   |	Do nothing
 		 0x02	Do nothing	                   |    Deassert SL or inventoried->B
@@ -156,7 +156,7 @@ public class ReaderSetting {
 			this.mStartMaskAdd = data[5];
 			this.mMaskBitLen = data[6];
 			this.mMaskValue = new byte[data.length - 8];
-			System.arraycopy(data, 7, this.mMaskValue, 0, mMaskValue.length);
+			System.arraycopy(data,7,this.mMaskValue,0,mMaskValue.length);
 			this.mTruncate = data[data.length - 1];
 		}
 		

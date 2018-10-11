@@ -139,8 +139,8 @@ public class StringTool {
      */
 	@Deprecated
 	public static char[] getChars (byte[] bytes,String encoding) {
-		Charset cs = Charset.forName(encoding);
-		ByteBuffer bb = ByteBuffer.allocate(bytes.length);
+		Charset cs = Charset.forName (encoding);
+		ByteBuffer bb = ByteBuffer.allocate (bytes.length);
 		bb.put (bytes);
 		bb.flip ();
 		CharBuffer cb = cs.decode (bb);
@@ -157,7 +157,7 @@ public class StringTool {
 		StringBuilder stringBuilder = new StringBuilder();
 		int i = 0;
 		while (i < hexString.length()){
-			stringBuilder.append((char) Integer.parseInt(hexString.substring(i, i + 2), 16));
+			stringBuilder.append((char)Integer.parseInt(hexString.substring(i,i + 2),16));
 			i = i +2;
 		}
 		return stringBuilder.toString();
@@ -206,7 +206,7 @@ public class StringTool {
      */
 	public static byte[] subBytes(byte[] bytes, int start, int end){
         byte[] subBytes = new byte[end - start];
-		System.arraycopy(bytes, start, subBytes, 0, end - start);
+		System.arraycopy(bytes,start,subBytes,0,end - start);
 		return subBytes;
 	}
 

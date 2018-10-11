@@ -17,7 +17,7 @@ import java.util.Observer;
  * Created by Administrator on 8/24/2017.
  */
 
-public class RXObserver implements Observer {
+public class RXObserver implements Observer{
     private ReaderSetting m_curReaderSetting = ReaderSetting.newInstance();
     @Override
     public final void update(Observable o, Object arg) {
@@ -982,7 +982,7 @@ public class RXObserver implements Observer {
     /**
      * This method will callback when lock 6B tag.
      * @param nAntID  current antenna id.
-     * @param nStatus Lock 6B return status (0x00:The byte is successfully locked. 0xFE:The byte is already locked. 0xFF:The byte can¡¯t be locked)
+     * @param nStatus Lock 6B return status (0x00:The byte is successfully locked. 0xFE:The byte is already locked. 0xFF:The byte canâ€™t be locked)
      */
     protected void onLock6BTag(byte nAntID, byte nStatus) {
     }

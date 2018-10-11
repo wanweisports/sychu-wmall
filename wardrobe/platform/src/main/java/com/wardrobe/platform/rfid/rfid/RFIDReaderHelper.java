@@ -6,7 +6,7 @@ import com.wardrobe.platform.rfid.rfid.config.CMD;
 import com.wardrobe.platform.rfid.util.Converter;
 
 /**
- * The core class to operate RFID¡¡reader.You can send command to RFID reader via the methods.
+ * The core class to operate RFIDã€€reader.You can send command to RFID reader via the methods.
  * And you can receive the return data via register {@link #Observer} or if you want show the
  * return data in UI ,you can register {@link #HandlerObserver}.
  */

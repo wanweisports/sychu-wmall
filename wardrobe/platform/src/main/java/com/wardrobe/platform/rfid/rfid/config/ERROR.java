@@ -167,10 +167,10 @@ public class ERROR {
 				strErrorCode = "No response from RF chip.";
 				break;
 			case FAIL_TO_ACHIEVE_DESIRED_OUTPUT_POWER:
-				strErrorCode = "Can¡¯t achieve desired output power level.";
+				strErrorCode = "Canâ€™t achieve desired output power level.";
 				break;
 			case COPYRIGHT_AUTHENTICATION_FAIL:
-				strErrorCode = "Can¡¯t authenticate firmware copyright.";
+				strErrorCode = "Canâ€™t authenticate firmware copyright.";
 				break;
 			case SPECTRUM_REGULATION_ERROR:
 				strErrorCode = "Spectrum regulation wrong.";
