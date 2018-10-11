@@ -33,4 +33,8 @@ public interface ISysDeviceService {
 
     List<SysDeviceControl> getDeviceControl(String ip, int port);
 
+    List<Map<String, Object>> getSysDeviceControlList(DeviceInputView deviceInputView);
+
+    List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid);
+
 }

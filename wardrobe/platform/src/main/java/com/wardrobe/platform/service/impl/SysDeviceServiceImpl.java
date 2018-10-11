@@ -6,6 +6,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.platform.service.ISysDeviceService;
@@ -61,7 +62,7 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         return baseDao.getToEvict(SysDeviceInfo.class, did);
     }
 
-    //查询没有时间交集的设备柜子【因为一个时间段只有一个人进入，那么这里不是所有人都是1号柜子？】
+    //查询没有时间交集的设备柜子【因为一个时间段只有一个人进入，那么这里不是所有人都是1号柜子？【已解决，需求是只能预约第二天的柜子】】
     @Override
     public SysDeviceControl getDistributionDeviceControl(int did, Timestamp reserveStartTime, Timestamp reserveEndTime) throws ParseException{
         StringBuilder sql = new StringBuilder("SELECT COUNT(roi.dcid) count, sdc.dcid FROM sys_device_control sdc");
@@ -126,6 +127,27 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
             deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.lockIp = ?1 AND sdi.lockPort = ?2 AND sdc.type = ?3", ip, port, IDBConstant.LOGIC_STATUS_NO);
         }
         return deviceControls;
+    }
+
+    @Override
+    public List<Map<String, Object>> getSysDeviceControlList(DeviceInputView deviceInputView){
+        Integer did = deviceInputView.getDid();
+        String type = deviceInputView.getType();
+        StringBuilder sql = new StringBuilder("SELECT sdc.*, sdi.name deviceName");
+        sql.append(" ,(SELECT COUNT(cd.count) FROM sys_commodity_distribution cd WHERE cd.dcid = sdc.dcid) cdCount");
+        sql.append(" FROM sys_device_control sdc, sys_device_info sdi WHERE sdc.did = sdi.did");
+        if(did != null) {
+            sql.append(" AND sdc.did = :did");
+        }
+        if(StrUtil.isNotBlank(type)){
+            sql.append(" AND sdc.type = :type");
+        }
+        return baseDao.queryBySql(sql.toString(), JsonUtils.fromJsonDF(deviceInputView));
+    }
+
+    @Override
+    public List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid){
+        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.count FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1", dcid);
     }
 
 }

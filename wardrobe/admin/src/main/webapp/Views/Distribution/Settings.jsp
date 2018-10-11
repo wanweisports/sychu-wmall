@@ -19,6 +19,19 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/distribution/settings.js?v=${static_resource_version}"></script>
+
+    <script type="text/javascript">
+        function showCommoditys(dcid){
+            $.post("/admin/distribution/lockCommoditys", {dcid: dcid}, function (res) {
+                var list = res.list;
+                var commoditys = '';
+                $.each(list, function (index, item) {
+                    commoditys += '<tr data-id=""><td>'+item.name+'</td><td>'+item.size+'</td><td>'+item.count+'件</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
+                });
+                $("#commoditys").html(commoditys);
+            });
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -75,27 +88,8 @@
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr data-id="">
-                            <td>女装女装女装女装女装</td>
-                            <td>XL</td>
-                            <td>1件</td>
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-remove"></i> 移除
-                                </a>
-                            </td>
-                        </tr>
-                        <tr data-id="">
-                            <td>女装女装女装女装女装</td>
-                            <td>XL</td>
-                            <td>1件</td>
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-remove"></i> 移除
-                                </a>
-                            </td>
-                        </tr>
+                        <tbody id="commoditys">
+                            <%--<tr data-id=""><td>女装女装女装女装女装</td><td>XL</td><td>1件</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>--%>
                         </tbody>
                     </table>
                 </div>
@@ -118,14 +112,17 @@
                             <small>Distribution Settings</small>
                         </div>
                         <div class="card-block">
-                            <form id="distribution_query_form" method="post" class="form-horizontal" action="/admin/distribution/settings" novalidate onsubmit="return false;">
+                            <form id="distribution_query_form" method="post" class="form-horizontal" action="/admin/distribution/settings" novalidate <%--onsubmit="return false;"--%>>
                                 <div class="form-group row">
-                                    <div class="col-md-2">
+                                    <%--<div class="col-md-2">
                                         <input type="text" class="form-control" placeholder="配送日期" value="2018-10-11">
-                                    </div>
+                                    </div>--%>
                                     <div class="col-md-3">
-                                        <select class="form-control" name="">
-                                            <option>新中关购物中心</option>
+                                        <select class="form-control" name="did">
+                                            <option value="">全部</option>
+                                            <c:forEach var="device" items="${deviceList}">
+                                                <option value="${device.did}" <c:if test="${device.did == did}">selected</c:if>>${device.name}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                     <div class="col-md-7">
@@ -148,18 +145,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-id="">
-                                    <td>新中关购物中心</td>
-                                    <td>柜子A</td>
-                                    <td>
-                                        <a href="#distribution_list" class="btn btn-link" data-toggle="modal">2件</a>
-                                    </td>
-                                    <td>
-                                        <a href="#distribution_enter" class="btn btn-primary btn-sm distribution-enter" data-toggle="modal">
-                                            <i class="fa fa-crosshairs"></i> 放入
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <c:forEach var="deviceControl" items="${deviceControlList}">
+                                        <tr data-id="">
+                                            <td>${deviceControl.deviceName}</td>
+                                            <td>${deviceControl.name}</td>
+                                            <td>
+                                                <a href="#distribution_list" class="btn btn-link" data-toggle="modal" onclick="showCommoditys('${deviceControl.dcid}')">${deviceControl.cdCount}件</a>
+                                            </td>
+                                            <td>
+                                                <a href="#distribution_enter" class="btn btn-primary btn-sm distribution-enter" data-toggle="modal">
+                                                    <i class="fa fa-crosshairs"></i> 放入
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
