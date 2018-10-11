@@ -79,6 +79,18 @@
             </c:choose>
         </c:when>
 
+        <c:when test="${param.menu == 'distribution'}">
+            <li class="breadcrumb-item">配送管理</li>
+            <c:choose>
+                <c:when test="${param.subMenu == 'settings'}">
+                    <li class="breadcrumb-item active">配送设置</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'log'}">
+                    <li class="breadcrumb-item active">配送日志</li>
+                </c:when>
+            </c:choose>
+        </c:when>
+
         <c:when test="${param.menu == 'data'}">
             <li class="breadcrumb-item">数据统计</li>
             <c:choose>

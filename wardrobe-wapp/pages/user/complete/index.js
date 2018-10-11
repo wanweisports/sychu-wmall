@@ -1,5 +1,5 @@
-var util = require("../../../utils/util.js");
-var app = getApp();
+const util = require("../../../utils/util.js");
+const app = getApp();
 
 Page({
     data: {
@@ -24,92 +24,80 @@ Page({
         birthday      : "选择生日"
 
     },
+    getUserSizeDicts: function () {
+        let content = this;
+
+        app.wxRequest("/dict/getDicts", {
+            dictName: "USER_SIZE"
+        }, function (res) {
+            let data = res.data;
+
+            if (res.code == 1) {
+                content.setData({
+                    userSizeList : data.dicts,
+                    usualSize    : data.dicts[0].dictValue
+                });
+            }
+            else {
+                app.showToast("获取尺码偏好字典失败", "none");
+            }
+        }, function () {
+            app.showToast("获取尺码偏好字典错误", "none");
+        });
+    },
     onLoad: function () {
         this.getUserSizeDicts();
     },
-    getUserSizeDicts: function () {
-        var that = this;
 
-        app.wxRequest(
-            "/dict/getDicts",
-            {
-                dictName: "USER_SIZE"
-            },
-            function (res) {
-                that.setData({
-                    userSizeList : res.data.dicts,
-                    usualSize    : res.data.dicts[0].dictValue
-                });
-            }
-        );
-    },
     bindSizeChange: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value);
         this.setData({
             sizeIndex: e.detail.value,
             usualSize: this.data.userSizeList[e.detail.value].dictValue
         });
     },
     bindDateChange: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value);
         this.setData({
             birthday: e.detail.value
         });
     },
     bindMobileBlur: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value);
         this.setData({
             mobile: e.detail.value
         });
     },
     bindCodeBlur: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value);
         this.setData({
             code: e.detail.value
         });
     },
     bindInviteCodeBlur: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value);
         this.setData({
             inviteCode: e.detail.value
         });
     },
-    sendSMSCode: function () {
-        var that = this;
 
-        if (!that.validate("sms")) {
-            that.hideTopTips();
-            return;
-        }
-
-        that.setData({
-            isGetSMSCode: true
-        });
-        if (that.data.isTimer) {
-            return;
-        }
-
-        that.timer();
-
-        app.wxRequest("/message/getCode", {mobile: that.data.mobile, type: 1}, function () {}, function () {});
-    },
     timer: function () {
-        var that = this;
+        let content = this;
 
-        that.setData({
+        let isTimerCount = content.getData("isTimerCount");
+        isTimerCount--;
+
+        content.setData({
             isTimer : true,
-            smsText : --that.data.isTimerCount + 's',
+            smsText : isTimerCount + 's',
             _t      : setTimeout(function () {
-                if (that.data.isTimerCount == 0) {
-                    that.clearTimer();
+                let isTimerCount = content.getData("isTimerCount");
+                if (isTimerCount <= 0) {
+                    content.clearTimer();
                     return;
                 }
 
-                var nextTimerCount = --that.data.isTimerCount;
-                that.setData({
+                var nextTimerCount = --isTimerCount;
+
+                content.setData({
                     isTimerCount : nextTimerCount,
                     smsText : nextTimerCount + 's',
-                    _t      : setTimeout(that.timer, 1000)
+                    _t      : setTimeout(content.timer, 1000)
                 });
             }, 1000)
         });
@@ -120,19 +108,30 @@ Page({
             isTimerCount: 60,
             smsText: '重新获取'
         });
-        clearTimeout(this.data._t);
+        clearTimeout(this.getData("_t"));
     },
-    hideTopTips: function () {
-        var that = this;
+    sendSMSCode: function () {
+        let content = this;
 
-        setTimeout(function () {
-            that.setData({
-                showTopTips: ""
-            });
-        }, 2000);
+        if (!content.validate("sms")) {
+            return;
+        }
+
+        content.setData({
+            isGetSMSCode: true
+        });
+
+        if (content.getData("isTimer")) {
+            return;
+        }
+
+        content.timer();
+
+        app.wxRequest("/message/getCode", {mobile: content.data.mobile, type: 1}, function () {}, function () {});
     },
+
     validate: function (type) {
-        var message = "";
+        let message = "";
 
         if (type == "submit") {
             if (this.data.birthday == "选择生日") {
@@ -155,42 +154,36 @@ Page({
         }
 
         if (message) {
-            this.setData({
-                showTopTips: message
-            });
+            app.showToast(message, "none");
             return false;
         }
 
         return true;
     },
-    userComplete: function () {
-        var that = this;
 
-        if (!that.validate("submit")) {
-            that.hideTopTips();
+    userComplete: function () {
+        var content = this;
+
+        if (!content.validate("submit")) {
             return;
         }
 
         app.wxRequest(
             "/user/updateUser",
             {
-                age        : that.data.birthday,
-                usualSize  : that.data.usualSize,
-                mobile     : that.data.mobile,
-                code       : that.data.code,
-                inviteCode : that.data.inviteCode
+                age        : content.data.birthday,
+                usualSize  : content.data.usualSize,
+                mobile     : content.data.mobile,
+                code       : content.data.code,
+                inviteCode : content.data.inviteCode
             },
             function (res) {
                 if (res.code == 1) {
-                    wx.switchTab({
-                        url: "/pages/index/index"
-                    });
+                    app.redirect("/pages/index/index", "switchTab");
                 }
             },
             function (err) {
-                that.setData({
-                    showTopTips: err.message || "保存信息错误"
-                });
+                app.showToast(err.message || "保存完善信息错误");
             }
         );
     }

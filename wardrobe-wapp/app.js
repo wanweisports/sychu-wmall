@@ -135,31 +135,71 @@ App({
     },
 
     wxRequest: function (url, data, success, fail, isNotLogin) {
-        var that = this;
+        let content = this;
 
         success = success || new Function();
         fail = fail || new Function();
         isNotLogin = isNotLogin || false;
 
         var header = isNotLogin ? {} : {
-            'Cookie': 'JSESSIONID=' + that.globalData.sessionId
+            'Cookie': 'JSESSIONID=' + content.globalData.sessionId
         };
 
         wx.request({
-            url: that.config.getApiHost() + url,
-            data: data, 
-            header: header,
+            url    : content.config.getApiHost() + url,
+            data   : data,
+            header : header,
             success: function (res) {
-                //console.log("[R][" + url + "]：" + JSON.stringify(res));
+                content.showLog(("[R][" + url + "]：" + JSON.stringify(res));
                 success(res.data);
             },
             fail: function (err) {
-                //console.log("[F][" + url + "]：" + JSON.stringify(err));
+                content.showLog("[F][" + url + "]：" + JSON.stringify(err));
                 fail(err);
             }
         });
     },
+    // 微信支付
+    wxPay: function (orderId, redirectUrl) {
+        this.wxRequest('/order/wxPayPackage', {
+                orderId: orderId
+            },
+            function (res) {
+                if (res.code == 1) {
+                    var data = res.data;
 
+                    wx.requestPayment({
+                        timeStamp: data.timeStamp,
+                        nonceStr: data.nonceStr,
+                        package: data.package,
+                        signType: data.signType,
+                        paySign: data.paySign,
+                        fail: function (err) {
+                            wx.showToast({title: '支付失败:' + err})
+                        },
+                        success: function () {
+                            wx.showToast({title: '支付成功'});
+
+                            wx.reLaunch({
+                                url: redirectUrl
+                            });
+                        }
+                    });
+                }
+                else if (res.code == 2) {
+                    wx.reLaunch({
+                        url: redirectUrl
+                    });
+                }
+                else {
+                    wx.showToast({title: '调起支付失败:' + res.message})
+                }
+            },
+            function (err) {
+                wx.showToast({title: '调起支付错误:' + err})
+            }
+        );
+    },
     onShareAppMessage: function() {
         return {
             title: wx.getStorageSync('mallName') + '——' + this.config.shareProfile,
@@ -170,6 +210,34 @@ App({
             fail: function(res) {
                 // 转发失败
             }
+        }
+    },
+    // 页面跳转
+    redirect: function (url, type) {
+
+        if (type == "switchTab") {
+            return wx.switchTab({
+                url: url
+            });
+        }
+
+        return wx.redirectTo({
+            url: url
+        });
+    },
+    // 显示提示
+    showToast: function (message, type) {
+        wx.showToast({
+            title: message,
+            mask: true,
+            icon: type || "none"
+        });
+    },
+    // 调试日志
+    showLog: function (message) {
+        let now = (new Date()).getTime();
+        if (this.isDebug) {
+            console.log(`[${now}]：${message}`);
         }
     },
 
@@ -186,6 +254,7 @@ App({
             return "https://mystore.jonham.cn/api";
         },
         version: "1.0",
-        shareProfile: '百款精品商品，总有一款适合您'
+        shareProfile: '百款精品商品，总有一款适合您',
+        isDebug: false
     }
 });

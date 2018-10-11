@@ -92,6 +92,19 @@
                 </ul>
             </li>
 
+            <li class="nav-item nav-dropdown <c:if test="${param.menu == 'distribution'}">open</c:if>">
+                <a class="nav-link nav-dropdown-toggle" href="javascript:;">
+                    <i class="icon-screen-tablet"></i> 配送管理
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item <c:if test="${param.menu == 'distribution' && (param.subMenu == 'settings')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'distribution' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/distribution/settings">
+                            <i class="icon-arrow-right"></i> 配送设置
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-item nav-dropdown <c:if test="${param.menu == 'members'}">open</c:if>">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;">
                     <i class="icon-user"></i> 客户管理
