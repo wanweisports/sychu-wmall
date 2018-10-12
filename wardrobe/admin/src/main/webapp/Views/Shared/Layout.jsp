@@ -36,9 +36,11 @@
           rel="stylesheet">
     <link href="Content/bower_components/simple-line-icons/css/simple-line-icons.css?v=${static_resource_version}"
           rel="stylesheet">
+    <link href="Content/utils/jqueryAlert/alert/alert.css?v=${static_resource_version}" rel="stylesheet">
 
     <!-- css -->
     <link href="Content/css/base.css?v=${static_resource_version}" rel="stylesheet">
+    <link href="Content/css/style.css?v=${static_resource_version}" rel="stylesheet">
     <layout:block name="<%=Blocks.BLOCK_HEADER_CSS%>"/>
 </head>
 <body>
@@ -47,10 +49,6 @@
     <!-- main -->
     <layout:block name="<%=Blocks.BLOCK_BODY%>"/>
 </div>
-
-<!-- js -->
-<script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
-        data-main="Content/js/app.js?v=${static_resource_version}"></script>
 
 <layout:block name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>"/>
 <layout:block name="<%=Blocks.BLOCK_TRACE_SCRIPTS%>"/>

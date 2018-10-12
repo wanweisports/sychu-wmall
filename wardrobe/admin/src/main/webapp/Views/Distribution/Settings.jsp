@@ -27,25 +27,41 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <form id="distribution_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <input type="hidden" class="form-control" id="distribution_cid" name="cid">
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="wardrobe_address">
-                                <span class="text-danger">*</span> 选择衣服
+                            <label class="col-md-3 form-control-label" for="distribution_product">
+                                <span class="text-danger">*</span> 选择商品
                             </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="wardrobe_address" placeholder="请输入所在地址" name="address"
-                                       data-val="true" data-val-required="所在地址不能为空" autocomplete="off"
-                                       data-val-length-max="30" data-val-length-min="2" data-val-length="所在地址必须包含 2~30 个字符">
-                                <div data-valmsg-for="address" data-valmsg-replace="true"></div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="distribution_product" placeholder="输入商品名称" name="commName"
+                                       data-val="true" data-val-required="请输入商品名称" autocomplete="off" readonly>
+                                <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#distribution_query_list">
+                                    <i class="fa fa-search"></i> 检 索
+                                </button>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="wardrobe_doorIp">
+                            <label class="col-md-3 form-control-label" for="distribution_size">
+                                <span class="text-danger">*</span> 选择尺码
+                            </label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="distribution_size" name="size" data-val="true" data-val-required="请选择尺码">
+                                    <option value="">选择尺码</option>
+                                </select>
+                                <div data-valmsg-for="size" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="distribution_code">
                                 <span class="text-danger">*</span> 射频编码
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="wardrobe_doorIp" placeholder="大门IP地址" name="doorIp"
-                                       data-val="true" data-val-required="大门IP地址不能为空" autocomplete="off">
-                                <div data-valmsg-for="doorIp" data-valmsg-replace="true"></div>
+                                <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="code"
+                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off">
+                                <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
                         </div>
                     </form>
@@ -62,42 +78,11 @@
         </div>
     </div>
 
-    <div class="modal fade" id="distribution_list" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-default" role="document">
+    <div class="modal fade" id="distribution_query_list" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-default modal-lg" role="document" style="max-width: 1024px !important;">
             <div class="modal-content">
                 <div class="modal-body">
-                    <table class="table table-striped table-sm distribution-list">
-                        <thead>
-                        <tr>
-                            <th>衣服</th>
-                            <th>尺码</th>
-                            <th>数量</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr data-id="">
-                            <td>女装女装女装女装女装</td>
-                            <td>XL</td>
-                            <td>1件</td>
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-remove"></i> 移除
-                                </a>
-                            </td>
-                        </tr>
-                        <tr data-id="">
-                            <td>女装女装女装女装女装</td>
-                            <td>XL</td>
-                            <td>1件</td>
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-remove"></i> 移除
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <iframe src="/admin/distribution/products" style="width: 100%; height: 500px" id="distribution_iframe"></iframe>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
@@ -137,31 +122,54 @@
                             </form>
                         </div>
                         <div class="card-footer text-right"></div>
-                        <div class="card-block">
-                            <table class="table table-striped table-sm distribution-list">
-                                <thead>
-                                <tr>
-                                    <th>衣橱名称</th>
-                                    <th>柜子编号</th>
-                                    <th>衣服数量</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr data-id="">
-                                    <td>新中关购物中心</td>
-                                    <td>柜子A</td>
-                                    <td>
-                                        <a href="#distribution_list" class="btn btn-link" data-toggle="modal">2件</a>
-                                    </td>
-                                    <td>
-                                        <a href="#distribution_enter" class="btn btn-primary btn-sm distribution-enter" data-toggle="modal">
-                                            <i class="fa fa-crosshairs"></i> 放入
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="card-block row">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        柜子A
+                                        <span class="badge badge-success float-right">已放入2件</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-striped table-sm distribution-list">
+                                            <thead>
+                                            <tr>
+                                                <th>衣服</th>
+                                                <th>尺码</th>
+                                                <th>数量</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-id="">
+                                                <td>女装女装女装女装女装</td>
+                                                <td>XL</td>
+                                                <td>1件</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-remove"></i> 移 除
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr data-id="">
+                                                <td>女装女装女装女装女装</td>
+                                                <td>XL</td>
+                                                <td>1件</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-remove"></i> 移 除
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-sm btn-primary" data-target="#distribution_enter" data-toggle="modal">
+                                            <i class="fa fa-plus"></i> 放入衣服
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
