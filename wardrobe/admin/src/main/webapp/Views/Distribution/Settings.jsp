@@ -26,10 +26,22 @@
                 var list = res.data.list;
                 var commoditys = '';
                 $.each(list, function (index, item) {
-                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.count+'件</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
+                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.rfidEpc+'</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
                 });
                 $("#commoditys").html(commoditys);
             });
+        }
+
+        function delDistributionCommodity(dbid){
+            if(window.confirm("确认移除吗？")) {
+                $.post("/admin/distribution/delLockCommodity", {dbid: dbid}, function (res) {
+                    if(res.code == 1){
+
+                    }else{
+                        alert(res.message);
+                    }
+                });
+            }
         }
     </script>
 </layout:override>
@@ -84,7 +96,7 @@
                         <tr>
                             <th>衣服</th>
                             <th>尺码</th>
-                            <th>数量</th>
+                            <th>EPC标签码</th>
                             <th></th>
                         </tr>
                         </thead>

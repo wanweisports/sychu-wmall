@@ -37,4 +37,6 @@ public interface ISysDeviceService {
 
     List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid);
 
+    void deleteSysDeviceControlCommodity(int dbid);
+
 }

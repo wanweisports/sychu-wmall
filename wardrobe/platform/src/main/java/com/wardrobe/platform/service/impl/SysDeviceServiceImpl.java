@@ -3,6 +3,7 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.po.SysCommodityDistribution;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.DateUtil;
@@ -134,7 +135,7 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         Integer did = deviceInputView.getDid();
         String type = deviceInputView.getType();
         StringBuilder sql = new StringBuilder("SELECT sdc.*, sdi.name deviceName");
-        sql.append(" ,(SELECT COUNT(cd.count) FROM sys_commodity_distribution cd WHERE cd.dcid = sdc.dcid) cdCount");
+        sql.append(" ,(SELECT COUNT(1) FROM sys_commodity_distribution cd WHERE cd.dcid = sdc.dcid) cdCount");
         sql.append(" FROM sys_device_control sdc, sys_device_info sdi WHERE sdc.did = sdi.did");
         if(did != null) {
             sql.append(" AND sdc.did = :did");
@@ -147,7 +148,15 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
 
     @Override
     public List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid){
-        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.count FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1", dcid);
+        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.dbid, cd.rfidEpc, cd.dbTime FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1", dcid);
+    }
+
+    @Override
+    public void deleteSysDeviceControlCommodity(int dbid){
+        SysCommodityDistribution commodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, dbid);
+        if(commodityDistribution != null){
+            baseDao.delete(commodityDistribution);
+        }
     }
 
 }

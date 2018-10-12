@@ -50,4 +50,12 @@ public class DistributionController extends BaseController {
         return new ResponseBean(map);
     }
 
+    @Desc("移除某个衣柜下的衣服")
+    @ResponseBody
+    @RequestMapping(value = "/delLockCommodity")
+    public ResponseBean delLockCommodity(int dbid){
+        deviceService.deleteSysDeviceControlCommodity(dbid);
+        return new ResponseBean(true);
+    }
+
 }
