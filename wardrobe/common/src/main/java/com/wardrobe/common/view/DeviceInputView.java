@@ -6,6 +6,8 @@ package com.wardrobe.common.view;
 public class DeviceInputView extends BaseInputView {
 
     private Integer did;
+    private String type;
+    private Integer dbid;
 
     public DeviceInputView() {
     }
@@ -20,5 +22,21 @@ public class DeviceInputView extends BaseInputView {
 
     public void setDid(Integer did) {
         this.did = did;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getDbid() {
+        return dbid;
+    }
+
+    public void setDbid(Integer dbid) {
+        this.dbid = dbid;
     }
 }

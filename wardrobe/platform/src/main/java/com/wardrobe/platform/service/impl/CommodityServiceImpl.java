@@ -518,6 +518,11 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 
+    @Override
+    public List<Map<String, Object>> getOnCommmoditys(){
+        return baseDao.queryBySql("");
+    }
+
 }
 
 

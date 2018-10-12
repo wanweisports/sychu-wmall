@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,5 +61,7 @@ public interface ICommodityService {
     Map<String, Object> getCommodityBanners();
 
     PageBean getBannerCommodityListIn(CommodityInputView commodityInputView);
+
+    List<Map<String, Object>> getOnCommmoditys();
 
 }
