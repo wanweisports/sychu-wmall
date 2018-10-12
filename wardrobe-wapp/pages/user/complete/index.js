@@ -35,7 +35,7 @@ Page({
             if (res.code == 1) {
                 content.setData({
                     userSizeList : data.dicts,
-                    usualSize    : data.dicts[0].dictValue
+                    usualSize    : data.dicts[0].dictId
                 });
             }
             else {
@@ -52,7 +52,7 @@ Page({
     bindSizeChange: function (e) {
         this.setData({
             sizeIndex: e.detail.value,
-            usualSize: this.data.userSizeList[e.detail.value].dictValue
+            usualSize: this.data.userSizeList[e.detail.value].dictId
         });
     },
     bindDateChange: function (e) {
@@ -79,15 +79,15 @@ Page({
     timer: function () {
         let content = this;
 
-        let isTimerCount = content.getData("isTimerCount");
+        let isTimerCount = content.data.isTimerCount;
         isTimerCount--;
 
         content.setData({
             isTimer : true,
             smsText : isTimerCount + 's',
             _t      : setTimeout(function () {
-                let isTimerCount = content.getData("isTimerCount");
-                if (isTimerCount <= 0) {
+                let isTimerCount = content.data.isTimerCount;
+                if (isTimerCount <= 1) {
                     content.clearTimer();
                     return;
                 }
@@ -108,7 +108,7 @@ Page({
             isTimerCount: 60,
             smsText: '重新获取'
         });
-        clearTimeout(this.getData("_t"));
+        clearTimeout(this.data._t);
     },
     sendSMSCode: function () {
         let content = this;
@@ -121,7 +121,7 @@ Page({
             isGetSMSCode: true
         });
 
-        if (content.getData("isTimer")) {
+        if (content.data.isTimer) {
             return;
         }
 
@@ -164,6 +164,10 @@ Page({
     userComplete: function () {
         var content = this;
 
+        if (!content.data.isGetSMSCode) {
+            return app.showToast("请先获取验证码", "none");
+        }
+
         if (!content.validate("submit")) {
             return;
         }
@@ -172,7 +176,7 @@ Page({
             "/user/updateUser",
             {
                 age        : content.data.birthday,
-                usualSize  : content.data.usualSize,
+                usualSize  : "," + content.data.usualSize + ",",
                 mobile     : content.data.mobile,
                 code       : content.data.code,
                 inviteCode : content.data.inviteCode
@@ -180,6 +184,9 @@ Page({
             function (res) {
                 if (res.code == 1) {
                     app.redirect("/pages/index/index", "switchTab");
+                }
+                else {
+                    app.showToast(res.message || "保存完善信息失败");
                 }
             },
             function (err) {

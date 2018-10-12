@@ -2,11 +2,11 @@
 
 App({
     onLaunch: function () {
-        wx.setStorageSync('mallName', "闪衣橱");
+        this.setCookie('syc_appName', "闪衣橱");
     },
 
     toLogin: function () {
-        var sessionId = this.globalData.sessionId;
+        let sessionId = this.globalData.sessionId;
         if (!!sessionId) {
             return this.checkSession(this.checkUserComplete, this.login);
         }
@@ -15,8 +15,6 @@ App({
     },
 
     checkSession: function (success, fail) {
-        var that = this;
-
         success = success || new Function;
         fail = fail || new Function;
 
@@ -31,52 +29,45 @@ App({
     },
 
     login: function () {
-        var that = this;
+        let content = this;
 
         wx.login({
             success: function (res) {
-                //console.log(res);
-                var code = res.code;
+                let code = res.code;
 
                 wx.getUserInfo({
                     success: function (res) {
-                        //console.log(res);
-                        var iv = res.iv;
-                        var encryptedData = res.encryptedData;
+                        let iv = res.iv;
+                        let encryptedData = res.encryptedData;
 
-                        that.wxRequest(
-                            '/login',
-                            {
-                                code: code,
-                                encryptedData: encryptedData,
-                                iv: iv
-                            },
-                            function (res) {
-                                if (res.code == 1) {
-                                    that.globalData.sessionId = res.data.sessionId;
-                                    if (res.data.perfect == 2) {
-                                        wx.redirectTo({
-                                            url: "/pages/user/complete/index"
-                                        });
-                                    }
-                                    else {
-                                        wx.switchTab({
-                                            url: "/pages/index/index"
-                                        });
-                                    }
+                        content.wxRequest('/login', {
+                            code: code,
+                            encryptedData: encryptedData,
+                            iv: iv
+                        }, function (res) {
+                            if (res.code == 1) {
+                                content.globalData.sessionId = res.data.sessionId;
+                                if (res.data.perfect == 2) {
+                                    wx.redirectTo({
+                                        url: "/pages/user/complete/index"
+                                    });
                                 }
-                            },
-                            function (err) {
-                                //console.log("[F][/login]" + JSON.stringify(err));
-                                //console.log(err);
+                                else {
+                                    wx.switchTab({
+                                        url: "/pages/index/index"
+                                    });
+                                }
+                            } else {
+                                content.showToast("授权登录失败", "none");
                             }
-                        );
+                        }, function (err) {
+                            content.showLog("[F][/login]：" + JSON.stringify(err));
+                            content.showToast("授权登录错误", "none");
+                        });
                     },
                     fail: function (err) {
-                        //console.log("[F][wx.getUserInfo]" + JSON.stringify(err));
-                        wx.redirectTo({
-                            url: "/pages/landing/index"
-                        });
+                        content.showLog("[F][wx.getUserInfo]：" + JSON.stringify(err));
+                        content.showToast("用户授权失败", "none");
                     }
                 });
             }
@@ -84,26 +75,21 @@ App({
     },
 
     checkUserComplete: function (success, fail) {
-        var that = this;
+        let content = this;
 
-        that.wxRequest(
-            that.config.getApiHost() + '/user/isPerfect',
-            {},
-            function (res) {
-                if (res.data.isPerfect == 2) {
-                    wx.redirectTo({
-                        url: "/pages/user/complete/index"
-                    });
-                }
-                else {
-                    success(res);
-                }
-            },
-            function (err) {
-                //console.log("[F][/user/isPerfect]" + JSON.stringify(err));
-                fail(err)
+        content.wxRequest(content.config.getApiHost() + '/user/isPerfect', {}, function (res) {
+            if (res.data.isPerfect == 2) {
+                wx.redirectTo({
+                    url: "/pages/user/complete/index"
+                });
             }
-        );
+            else {
+                success(res);
+            }
+        }, function (err) {
+            content.showLog("[F][/user/isPerfect]：" + JSON.stringify(err));
+            fail(err)
+        });
     },
 
     sendTempleMsg: function (orderId, trigger, template_id, form_id, page, postJsonString){
@@ -137,6 +123,11 @@ App({
     wxRequest: function (url, data, success, fail, isNotLogin) {
         let content = this;
 
+        wx.showLoading({
+            title: "加载中",
+            mask: true
+        });
+
         success = success || new Function();
         fail = fail || new Function();
         isNotLogin = isNotLogin || false;
@@ -150,12 +141,15 @@ App({
             data   : data,
             header : header,
             success: function (res) {
-                content.showLog("[R][" + url + "]：" + JSON.stringify(res));
                 success(res.data);
+
+                wx.hideLoading();
             },
             fail: function (err) {
                 content.showLog("[F][" + url + "]：" + JSON.stringify(err));
                 fail(err);
+
+                wx.hideLoading();
             }
         });
     },
@@ -239,6 +233,23 @@ App({
         if (this.isDebug) {
             console.log(`[${now}]：${message}`);
         }
+    },
+
+    // 获取store
+    getCookie: function (key) {
+        return wx.getStorageSync(key);
+    },
+    // 写入store
+    setCookie: function (key, value) {
+        wx.setStorageSync(key, value);
+    },
+    // 清除store
+    clearCookie: function (key) {
+        wx.removeStorageSync(key);
+    },
+    // 清除所有store
+    clearCookieAll: function () {
+        wx.clearStorageSync();
     },
 
     globalData: {
