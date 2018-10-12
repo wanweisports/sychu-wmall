@@ -34,6 +34,27 @@
         }
 
         function saveDistributionCommodity(){
+            if(!$('#distribution_cid').val()){
+                alert("请选择衣服");
+                return;
+            }
+            if(!$('#distribution_dcid').val()){
+                alert("请选择柜子");
+                return;
+            }
+            if(!$('#distribution_size').val()){
+                alert("请选择尺码");
+                return;
+            }
+            if(!$('#distribution_code').val()){
+                alert("请扫描标签");
+                return;
+            }
+            $("#distribution_dbTime").val($("#dbTime").val());
+            if(!$("#distribution_dbTime").val()){
+                alert("请选择日期");
+                return;
+            }
             if(window.confirm("确认保存吗？")) {
                 $.post("/admin/distribution/saveLockCommodity", $("#distribution_form").serialize(), function (res) {
                     if(res.code == 1){
@@ -59,6 +80,7 @@
                     <form id="distribution_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                         <input type="hidden" class="form-control" id="distribution_cid" name="cid">
                         <input type="hidden" class="form-control" id="distribution_dcid" name="dcid">
+                        <input type="hidden" class="form-control" id="distribution_dbTime" name="dbTime">
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="distribution_product">
                                 <span class="text-danger">*</span> 选择商品
@@ -91,11 +113,11 @@
                             </label>
                             <div class="col-md-6">
                                 <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="rfidEpc"
-                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off">
+                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off" readonly>
                                 <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn" type="button">读取标签</button>
+                                <button class="btn" type="button">扫描标签</button>
                             </div>
                         </div>
                     </form>
@@ -140,7 +162,7 @@
                             <form id="distribution_query_form" method="post" class="form-horizontal" action="/admin/distribution/settings" novalidate <%--onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" class="form-control" placeholder="配送日期" value="2018-10-11">
+                                        <input type="text" class="form-control" placeholder="配送日期" value="${dbTime}" id="dbTime" name="dbTime">
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control" name="did">
@@ -171,9 +193,9 @@
                                         <table class="table table-striped table-sm distribution-list">
                                             <thead>
                                             <tr>
-                                                <th>衣服</th>
-                                                <th>尺码</th>
-                                                <th>EPC标签码</th>
+                                                <th nowrap>衣服</th>
+                                                <th nowrap>尺码</th>
+                                                <th nowrap>射频编码</th>
                                                 <th></th>
                                             </tr>
                                             </thead>

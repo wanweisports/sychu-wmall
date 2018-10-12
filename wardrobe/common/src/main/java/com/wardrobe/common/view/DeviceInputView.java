@@ -8,6 +8,7 @@ public class DeviceInputView extends BaseInputView {
     private Integer did;
     private String type;
     private Integer dbid;
+    private String dbTime;
 
     public DeviceInputView() {
     }
@@ -39,4 +40,13 @@ public class DeviceInputView extends BaseInputView {
     public void setDbid(Integer dbid) {
         this.dbid = dbid;
     }
+
+    public String getDbTime() {
+        return dbTime;
+    }
+
+    public void setDbTime(String dbTime) {
+        this.dbTime = dbTime;
+    }
+
 }

@@ -136,7 +136,7 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
     public Map<String, Object> getDistributionSetting(DeviceInputView deviceInputView){
         List<Map<String, Object>> deviceControlList = getSysDeviceControlList(deviceInputView);
         deviceControlList.stream().forEach(map -> {
-            map.put("commoditys", getSysDeviceControlCommoditys(StrUtil.objToInt(map.get("dcid"))));
+            map.put("commoditys", getSysDeviceControlCommoditys(StrUtil.objToInt(map.get("dcid")), deviceInputView));
         });
 
         Map<String, Object> data = new HashMap<>();
@@ -147,8 +147,9 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
     private List<Map<String, Object>> getSysDeviceControlList(DeviceInputView deviceInputView){
         Integer did = deviceInputView.getDid();
         String type = deviceInputView.getType();
+        String dbTime = deviceInputView.getDbTime();
         StringBuilder sql = new StringBuilder("SELECT sdc.*, sdi.name deviceName");
-        sql.append(" ,(SELECT COUNT(1) FROM sys_commodity_distribution cd WHERE cd.dcid = sdc.dcid) cdCount");
+        sql.append(" ,(SELECT COUNT(1) FROM sys_commodity_distribution cd WHERE cd.dcid = sdc.dcid AND cd.dbTime = :dbTime) cdCount");
         sql.append(" FROM sys_device_control sdc, sys_device_info sdi WHERE sdc.did = sdi.did");
         if(did != null) {
             sql.append(" AND sdc.did = :did");
@@ -159,9 +160,9 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         return baseDao.queryBySql(sql.toString(), JsonUtils.fromJsonDF(deviceInputView));
     }
 
-    @Override
-    public List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid){
-        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.dbid, cd.rfidEpc, cd.dbTime FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1", dcid);
+    private List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid, DeviceInputView deviceInputView){
+        String dbTime = deviceInputView.getDbTime();
+        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.dbid, cd.rfidEpc, cd.dbTime FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1 AND cd.dbTime = ?2", dcid, dbTime);
     }
 
     @Override
