@@ -31,6 +31,8 @@ public interface ICommodityService {
 
     CommodityColor getCommodityColorByCid(int cid);
 
+    List<CommoditySize> getCommoditySizeList(int cid);
+
     //后台管理
     PageBean getCommodityListIn(CommodityInputView commodityInputView);
 

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/7/30.
@@ -78,6 +81,15 @@ public class CommodityController extends BaseController {
     public ResponseBean delCommodityBanner(int cid){
         commodityService.deleteCommodityBanner(cid);
         return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("getCommoditySizes")
+    public ResponseBean getCommoditySizes(int cid){
+        List<CommoditySize> commoditySizeList = commodityService.getCommoditySizeList(cid);
+        Map data = new HashMap<>();
+        data.put("sizes", commoditySizeList);
+        return new ResponseBean(data);
     }
 
 }

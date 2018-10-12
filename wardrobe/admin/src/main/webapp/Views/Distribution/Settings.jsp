@@ -21,22 +21,11 @@
             data-main="Content/js/app/distribution/settings.js?v=${static_resource_version}"></script>
 
     <script type="text/javascript">
-        function showCommoditys(dcid){
-            $.post("/admin/distribution/lockCommoditys", {dcid: dcid}, function (res) {
-                var list = res.data.list;
-                var commoditys = '';
-                $.each(list, function (index, item) {
-                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.rfidEpc+'</td><td><a href="javascript:;" class="btn btn-danger btn-sm" onclick="delDistributionCommodity('+item.dbid+', this)"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
-                });
-                $("#commoditys").html(commoditys);
-            });
-        }
-
-        function delDistributionCommodity(dbid, btn){
+        function delDistributionCommodity(dbid){
             if(window.confirm("确认移除吗？")) {
                 $.post("/admin/distribution/delLockCommodity", {dbid: dbid}, function (res) {
                     if(res.code == 1){
-                        $(btn).parent().parent().remove();
+                        window.location.reload();
                     }else{
                         alert(res.message);
                     }
@@ -54,6 +43,10 @@
                     }
                 });
             }
+        }
+
+        function showPushCommodity(dcid){
+            $("#distribution_dcid").val(dcid);
         }
     </script>
 </layout:override>
@@ -86,7 +79,7 @@
                                 <span class="text-danger">*</span> 选择尺码
                             </label>
                             <div class="col-md-9">
-                                <select class="form-control" id="distribution_size" name="size" data-val="true" data-val-required="请选择尺码">
+                                <select class="form-control" id="distribution_size" name="sid" data-val="true" data-val-required="请选择尺码">
                                     <option value="">选择尺码</option>
                                 </select>
                                 <div data-valmsg-for="size" data-valmsg-replace="true"></div>
@@ -97,7 +90,7 @@
                                 <span class="text-danger">*</span> 射频编码
                             </label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="code"
+                                <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="rfidEpc"
                                        data-val="true" data-val-required="射频编码不能为空" autocomplete="off">
                                 <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
@@ -191,7 +184,7 @@
                                                     <td>${comm.size}</td>
                                                     <td>${comm.rfidEpc}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">
+                                                        <a href="javascript:;" class="btn btn-sm btn-danger" onclick="delDistributionCommodity('${comm.dbid}')">
                                                             <i class="fa fa-remove"></i> 移 除
                                                         </a>
                                                     </td>
@@ -201,7 +194,7 @@
                                         </table>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-sm btn-primary" data-target="#distribution_enter" data-toggle="modal">
+                                        <button type="button" class="btn btn-sm btn-primary" data-target="#distribution_enter" data-toggle="modal" onclick="showPushCommodity('${deviceControl.dcid}')">
                                             <i class="fa fa-plus"></i> 放入衣服
                                         </button>
                                     </div>

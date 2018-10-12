@@ -54,8 +54,9 @@ public class DistributionController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/products")
     public String renderDistributionProducts(CommodityInputView commodityInputView, Model model) {
+        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/distribution/products", commodityInputView);
         model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
 
         return "Distribution/ProductList";

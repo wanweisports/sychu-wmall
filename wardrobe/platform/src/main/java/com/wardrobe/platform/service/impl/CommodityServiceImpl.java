@@ -144,7 +144,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         return sizes.split(",");
     }
 
-    private List<CommoditySize> getCommoditySizeList(int cid){
+    @Override
+    public List<CommoditySize> getCommoditySizeList(int cid){
         return baseDao.queryByHql("FROM CommoditySize WHERE cid = ?1", cid);
     }
 
