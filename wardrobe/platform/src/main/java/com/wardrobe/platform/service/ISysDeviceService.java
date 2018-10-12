@@ -36,8 +36,6 @@ public interface ISysDeviceService {
 
     Map<String, Object> getDistributionSetting(DeviceInputView deviceInputView);
 
-    List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid);
-
     void deleteSysDeviceControlCommodity(int dbid);
 
     void saveSysDeviceControlCommodity(SysCommodityDistribution commodityDistribution);

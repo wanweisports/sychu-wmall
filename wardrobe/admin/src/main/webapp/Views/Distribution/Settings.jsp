@@ -21,22 +21,11 @@
             data-main="Content/js/app/distribution/settings.js?v=${static_resource_version}"></script>
 
     <script type="text/javascript">
-        function showCommoditys(dcid){
-            $.post("/admin/distribution/lockCommoditys", {dcid: dcid}, function (res) {
-                var list = res.data.list;
-                var commoditys = '';
-                $.each(list, function (index, item) {
-                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.rfidEpc+'</td><td><a href="javascript:;" class="btn btn-danger btn-sm" onclick="delDistributionCommodity('+item.dbid+', this)"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
-                });
-                $("#commoditys").html(commoditys);
-            });
-        }
-
-        function delDistributionCommodity(dbid, btn){
+        function delDistributionCommodity(dbid){
             if(window.confirm("确认移除吗？")) {
                 $.post("/admin/distribution/delLockCommodity", {dbid: dbid}, function (res) {
                     if(res.code == 1){
-                        $(btn).parent().parent().remove();
+                        window.location.reload();
                     }else{
                         alert(res.message);
                     }
@@ -45,6 +34,27 @@
         }
 
         function saveDistributionCommodity(){
+            if(!$('#distribution_cid').val()){
+                alert("请选择衣服");
+                return;
+            }
+            if(!$('#distribution_dcid').val()){
+                alert("请选择柜子");
+                return;
+            }
+            if(!$('#distribution_size').val()){
+                alert("请选择尺码");
+                return;
+            }
+            if(!$('#distribution_code').val()){
+                alert("请扫描标签");
+                return;
+            }
+            $("#distribution_dbTime").val($("#dbTime").val());
+            if(!$("#distribution_dbTime").val()){
+                alert("请选择日期");
+                return;
+            }
             if(window.confirm("确认保存吗？")) {
                 $.post("/admin/distribution/saveLockCommodity", $("#distribution_form").serialize(), function (res) {
                     if(res.code == 1){
@@ -54,6 +64,10 @@
                     }
                 });
             }
+        }
+
+        function showPushCommodity(dcid){
+            $("#distribution_dcid").val(dcid);
         }
     </script>
 </layout:override>
@@ -66,6 +80,7 @@
                     <form id="distribution_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                         <input type="hidden" class="form-control" id="distribution_cid" name="cid">
                         <input type="hidden" class="form-control" id="distribution_dcid" name="dcid">
+                        <input type="hidden" class="form-control" id="distribution_dbTime" name="dbTime">
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="distribution_product">
                                 <span class="text-danger">*</span> 选择商品
@@ -86,7 +101,7 @@
                                 <span class="text-danger">*</span> 选择尺码
                             </label>
                             <div class="col-md-9">
-                                <select class="form-control" id="distribution_size" name="size" data-val="true" data-val-required="请选择尺码">
+                                <select class="form-control" id="distribution_size" name="sid" data-val="true" data-val-required="请选择尺码">
                                     <option value="">选择尺码</option>
                                 </select>
                                 <div data-valmsg-for="size" data-valmsg-replace="true"></div>
@@ -97,12 +112,12 @@
                                 <span class="text-danger">*</span> 射频编码
                             </label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="code"
-                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off">
+                                <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="rfidEpc"
+                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off" readonly>
                                 <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn" type="button">读取标签</button>
+                                <button class="btn" type="button">扫描标签</button>
                             </div>
                         </div>
                     </form>
@@ -147,7 +162,7 @@
                             <form id="distribution_query_form" method="post" class="form-horizontal" action="/admin/distribution/settings" novalidate <%--onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" class="form-control" placeholder="配送日期" value="2018-10-11">
+                                        <input type="text" class="form-control" placeholder="配送日期" value="${dbTime}" id="dbTime" name="dbTime">
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control" name="did">
@@ -178,9 +193,9 @@
                                         <table class="table table-striped table-sm distribution-list">
                                             <thead>
                                             <tr>
-                                                <th>衣服</th>
-                                                <th>尺码</th>
-                                                <th>EPC标签码</th>
+                                                <th nowrap>衣服</th>
+                                                <th nowrap>尺码</th>
+                                                <th nowrap>射频编码</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
@@ -191,7 +206,7 @@
                                                     <td>${comm.size}</td>
                                                     <td>${comm.rfidEpc}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">
+                                                        <a href="javascript:;" class="btn btn-sm btn-danger" onclick="delDistributionCommodity('${comm.dbid}')">
                                                             <i class="fa fa-remove"></i> 移 除
                                                         </a>
                                                     </td>
@@ -201,7 +216,7 @@
                                         </table>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-sm btn-primary" data-target="#distribution_enter" data-toggle="modal">
+                                        <button type="button" class="btn btn-sm btn-primary" data-target="#distribution_enter" data-toggle="modal" onclick="showPushCommodity('${deviceControl.dcid}')">
                                             <i class="fa fa-plus"></i> 放入衣服
                                         </button>
                                     </div>

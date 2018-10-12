@@ -7,7 +7,9 @@ import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysCommodityDistribution;
 import com.wardrobe.common.po.SysCouponRule;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.common.view.OrderInputView;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,9 @@ public class DistributionController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/settings")
     public String renderDistributionSettings(Model model, DeviceInputView deviceInputView) {
+        if(StrUtil.isBlank(deviceInputView.getDbTime())){ //默认当天
+            deviceInputView.setDbTime(DateUtil.dateToString(new Date(), DateUtil.YYYYMMDD));
+        }
         model.addAllAttributes(JsonUtils.fromJson(deviceInputView));
         deviceInputView.setPageSize(null);
         deviceInputView.setType(IDBConstant.LOGIC_STATUS_NO);
@@ -54,8 +60,9 @@ public class DistributionController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/products")
     public String renderDistributionProducts(CommodityInputView commodityInputView, Model model) {
+        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/distribution/products", commodityInputView);
         model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
 
         return "Distribution/ProductList";

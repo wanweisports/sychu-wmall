@@ -27,15 +27,27 @@ requirejs.config({
 require(['jquery', 'alert', 'bootstrap', 'pace', 'base', 'override'], function ($, jqueryAlert) {
     'use strict';
 
+    $("#distribution_iframe").on("load", function(event) {//判断 iframe是否加载完成
+        $("#distribution_iframe").contents().find(".product-enter").on("click", function (e) {
+            e.preventDefault();
 
-    $("#distribution_iframe").contents().find(".product-enter").on("click", function (e) {
-        e.preventDefault();
+            var cid = $(this).attr("data-id");
+            console.log(cid);
+            $("#distribution_query_list").modal("hide");
 
-        console.log($(this).attr("data-id"));
-        $("#distribution_query_list").modal("hide");
+            $("#distribution_cid").val(cid);
+            $("#distribution_product").val($(this).attr("data-name"));
 
-        $("#distribution_cid").val($(this).attr("data-id"));
-        $("#distribution_product").val($(this).attr("data-name"));
+            //加载商品尺码
+            $("#distribution_size").html("");
+            $.post("/commodity/getCommoditySizes", {cid: cid}, function (res) {
+                if (res.code == 1) {
+                    $.each(res.data.sizes, function (index, item) {
+                        $("#distribution_size").append('<option value="' + item.sid + '">' + item.size + '</option>');
+                    });
+                }
+            });
+        });
     });
 
 });
