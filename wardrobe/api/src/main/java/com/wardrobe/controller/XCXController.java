@@ -52,7 +52,7 @@ public class XCXController extends BaseController {
         System.out.println("encryptedData===>" + encryptedData);
         Map<String, Object> data = new HashMap<>(2, 1);
         System.out.println("session.getAttribute(sessionId)===>" + session.getAttribute("sessionId"));
-        JSONObject jsonObject = xcxService.xcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, IPlatformConstant.APP_ID, IPlatformConstant.APP_SECRET, iv, encryptedData);
+        JSONObject jsonObject = xcxService.saveXcxLogn(StrUtil.objToStr(session.getAttribute("sessionId")), code, IPlatformConstant.APP_ID, IPlatformConstant.APP_SECRET, iv, encryptedData);
         System.out.println(jsonObject);
         //String unionId = jsonObject.getString("unionId");
         data.put("sessionId", sessionId); //前端使用

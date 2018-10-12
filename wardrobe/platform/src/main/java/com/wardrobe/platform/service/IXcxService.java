@@ -7,6 +7,6 @@ import net.sf.json.JSONObject;
  */
 public interface IXcxService {
 
-    JSONObject xcxLogn(String session_key, String code, String xcxAppId, String xcxAppsecret, String iv, String encryptedData);
+    JSONObject saveXcxLogn(String session_key, String code, String xcxAppId, String xcxAppsecret, String iv, String encryptedData);
 
 }

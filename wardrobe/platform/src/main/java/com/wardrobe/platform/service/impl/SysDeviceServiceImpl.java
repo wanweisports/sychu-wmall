@@ -18,6 +18,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -132,7 +133,18 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
     }
 
     @Override
-    public List<Map<String, Object>> getSysDeviceControlList(DeviceInputView deviceInputView){
+    public Map<String, Object> getDistributionSetting(DeviceInputView deviceInputView){
+        List<Map<String, Object>> deviceControlList = getSysDeviceControlList(deviceInputView);
+        deviceControlList.stream().forEach(map -> {
+            map.put("commoditys", getSysDeviceControlCommoditys(StrUtil.objToInt(map.get("dcid"))));
+        });
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("deviceControlList", deviceControlList);
+        return data;
+    }
+
+    private List<Map<String, Object>> getSysDeviceControlList(DeviceInputView deviceInputView){
         Integer did = deviceInputView.getDid();
         String type = deviceInputView.getType();
         StringBuilder sql = new StringBuilder("SELECT sdc.*, sdi.name deviceName");

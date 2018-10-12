@@ -54,7 +54,7 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
 
     @Override
     public List<SysCouponRule> getSysCouponRules(String crType){
-        return baseDao.queryByHql("FROM SysCouponRule WHERE crType = ?1 AND (crTime IS NULL OR crTime >= NOW())", crType);
+        return baseDao.queryByHql("FROM SysCouponRule WHERE crType = ?1 AND (crTime IS NULL OR crTime >= ?2)", crType, new Timestamp(System.currentTimeMillis()));
     }
 
     @Override

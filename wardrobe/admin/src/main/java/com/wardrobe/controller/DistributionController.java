@@ -2,23 +2,16 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.annotation.NotProtected;
-<<<<<<< HEAD
 import com.wardrobe.common.bean.PageBean;
-import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.view.CommodityInputView;
-import com.wardrobe.common.view.OrderInputView;
-import com.wardrobe.platform.service.ICommodityService;
-import com.wardrobe.platform.service.IOrderService;
-=======
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysCommodityDistribution;
+import com.wardrobe.common.po.SysCouponRule;
 import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.DeviceInputView;
-import com.wardrobe.platform.service.ICommodityService;
-import com.wardrobe.platform.service.ISysDeviceService;
->>>>>>> 65902d6798f46f4c5a6156d3902fda3d43a54db0
+import com.wardrobe.common.view.OrderInputView;
+import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,17 +30,13 @@ import java.util.Map;
 public class DistributionController extends BaseController {
 
     @Autowired
-<<<<<<< HEAD
-    private ICommodityService commodityService;
+    private IOrderService orderService;
 
     @Autowired
-    private IOrderService orderService;
-=======
     private ISysDeviceService deviceService;
 
     @Autowired
     private ICommodityService commodityService;
->>>>>>> 65902d6798f46f4c5a6156d3902fda3d43a54db0
 
     @Desc("柜子列表")
     @NotProtected
@@ -57,11 +46,10 @@ public class DistributionController extends BaseController {
         deviceInputView.setPageSize(null);
         deviceInputView.setType(IDBConstant.LOGIC_STATUS_NO);
         model.addAttribute("deviceList", deviceService.getSysDeviceInfoList(deviceInputView).getList());
-        model.addAttribute("deviceControlList", deviceService.getSysDeviceControlList(deviceInputView));
+        model.addAllAttributes(deviceService.getDistributionSetting(deviceInputView));
         return "Distribution/Settings";
     }
 
-<<<<<<< HEAD
     @Desc("衣服列表")
     @NotProtected
     @RequestMapping(value = "/products")
@@ -81,8 +69,9 @@ public class DistributionController extends BaseController {
         setPageInfo(model, orderService.getReserveOrderInfoList(orderInputView), "/admin/orders/reservation", orderInputView);
 
         return "Distribution/OrderList";
-=======
-    @Desc("获取某个衣柜的所有衣服")
+    }
+
+/*    @Desc("获取某个衣柜的所有衣服")
     @ResponseBody
     @RequestMapping(value = "/lockCommoditys")
     public ResponseBean lockCommoditys(int dcid){
@@ -90,7 +79,7 @@ public class DistributionController extends BaseController {
         Map map = new HashMap<>(1, 1);
         map.put("list", list);
         return new ResponseBean(map);
-    }
+    }*/
 
     @Desc("移除某个衣柜下的衣服")
     @ResponseBody
@@ -106,7 +95,6 @@ public class DistributionController extends BaseController {
     public ResponseBean saveLockCommodity(SysCommodityDistribution commodityDistribution){
         deviceService.saveSysDeviceControlCommodity(commodityDistribution);
         return new ResponseBean(true);
->>>>>>> 65902d6798f46f4c5a6156d3902fda3d43a54db0
     }
 
 }

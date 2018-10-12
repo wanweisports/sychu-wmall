@@ -20,7 +20,7 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
     private IUserService userService;
 
     @Override
-    public JSONObject xcxLogn(String session_key, String code, String xcxAppId, String xcxAppsecret, String iv, String encryptedData){
+    public JSONObject saveXcxLogn(String session_key, String code, String xcxAppId, String xcxAppsecret, String iv, String encryptedData){
 
         JSONObject userInfo = null;
         System.out.println(session_key);
