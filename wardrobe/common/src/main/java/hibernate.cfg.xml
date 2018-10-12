@@ -31,6 +31,7 @@
     <mapping class="com.wardrobe.common.po.SysCouponRule"/>
     <mapping class="com.wardrobe.common.po.UserOldInfo"/>
     <mapping class="com.wardrobe.common.po.SysCommodityDistribution"/>
+    <mapping class="com.wardrobe.common.po.SysRfidInfo"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
