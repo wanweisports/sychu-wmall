@@ -150,7 +150,7 @@ App({
             data   : data,
             header : header,
             success: function (res) {
-                content.showLog(("[R][" + url + "]：" + JSON.stringify(res));
+                content.showLog("[R][" + url + "]：" + JSON.stringify(res));
                 success(res.data);
             },
             fail: function (err) {
