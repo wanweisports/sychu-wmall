@@ -3,6 +3,7 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysCommodityDistribution;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
@@ -157,6 +158,15 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         if(commodityDistribution != null){
             baseDao.delete(commodityDistribution);
         }
+    }
+
+    @Override
+    public void saveSysDeviceControlCommodity(SysCommodityDistribution commodityDistribution){
+        Map<String, Object> map = baseDao.queryBySqlFirst("SELECT ci.commName FROM sys_commodity_distribution cd, commodity_info ci WHERE cd.cid = cd.cid AND cd.rfidEpc = ?1", commodityDistribution.getRfidEpc());
+        if(map != null) throw new MessageException("标签码与【" + map.get("commName") + "】重复，请检查后再试！");
+
+        commodityDistribution.setCreateTime(DateUtil.getNowDate());
+        baseDao.save(commodityDistribution, null);
     }
 
 }

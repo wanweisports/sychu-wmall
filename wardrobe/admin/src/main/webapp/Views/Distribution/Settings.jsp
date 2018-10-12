@@ -26,17 +26,29 @@
                 var list = res.data.list;
                 var commoditys = '';
                 $.each(list, function (index, item) {
-                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.rfidEpc+'</td><td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
+                    commoditys += '<tr data-id=""><td>'+item.commName+'</td><td>'+item.size+'</td><td>'+item.rfidEpc+'</td><td><a href="javascript:;" class="btn btn-danger btn-sm" onclick="delDistributionCommodity('+item.dbid+', this)"><i class="fa fa-remove"></i> 移除 </a></td></tr>';
                 });
                 $("#commoditys").html(commoditys);
             });
         }
 
-        function delDistributionCommodity(dbid){
+        function delDistributionCommodity(dbid, btn){
             if(window.confirm("确认移除吗？")) {
                 $.post("/admin/distribution/delLockCommodity", {dbid: dbid}, function (res) {
                     if(res.code == 1){
+                        $(btn).parent().parent().remove();
+                    }else{
+                        alert(res.message);
+                    }
+                });
+            }
+        }
 
+        function saveDistributionCommodity(){
+            if(window.confirm("确认保存吗？")) {
+                $.post("/admin/distribution/saveLockCommodity", $("#distribution_form").serialize(), function (res) {
+                    if(res.code == 1){
+                        window.location.reload();
                     }else{
                         alert(res.message);
                     }
@@ -53,24 +65,42 @@
                 <div class="modal-body">
                     <form id="distribution_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="wardrobe_address">
+                            <label class="col-md-3 form-control-label" <%--for="wardrobe_address"--%>>
                                 <span class="text-danger">*</span> 选择衣服
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="wardrobe_address" placeholder="请输入所在地址" name="address"
-                                       data-val="true" data-val-required="所在地址不能为空" autocomplete="off"
+                                <select class="form-control" name="cid">
+                                    <option value="">请选择衣服</option>
+
+                                </select>
+                                <%--<input type="text" class="form-control" id="wardrobe_address" placeholder="选择衣服" name="address"
+                                       data-val="true" data-val-required="衣服不能为空" autocomplete="off"
                                        data-val-length-max="30" data-val-length-min="2" data-val-length="所在地址必须包含 2~30 个字符">
-                                <div data-valmsg-for="address" data-valmsg-replace="true"></div>
+                                <div data-valmsg-for="wardrobe_address" data-valmsg-replace="true"></div>--%>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="wardrobe_doorIp">
-                                <span class="text-danger">*</span> 射频编码
+                            <label class="col-md-3 form-control-label">
+                                <span class="text-danger">*</span> 选择尺码
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="wardrobe_doorIp" placeholder="大门IP地址" name="doorIp"
-                                       data-val="true" data-val-required="大门IP地址不能为空" autocomplete="off">
-                                <div data-valmsg-for="doorIp" data-valmsg-replace="true"></div>
+                                <select class="form-control" name="sid">
+                                    <option value="">请选择尺码</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="rfidEpc">
+                                <span class="text-danger">*</span> 射频编码
+                            </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="rfidEpc" placeholder="射频编码" name="rfidEpc"
+                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off">
+                                <div data-valmsg-for="rfidEpc" data-valmsg-replace="true"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn" type="button">读取标签</button>
                             </div>
                         </div>
                     </form>
@@ -79,7 +109,7 @@
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
                         <i class="fa fa-close"></i> 取 消
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary save-wardrobe">
+                    <button type="button" class="btn btn-sm btn-primary save-wardrobe" onclick="saveDistributionCommodity()">
                         <i class="fa fa-check"></i> 保 存
                     </button>
                 </div>

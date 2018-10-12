@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.po.SysCommodityDistribution;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.view.DeviceInputView;
@@ -38,5 +39,7 @@ public interface ISysDeviceService {
     List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid);
 
     void deleteSysDeviceControlCommodity(int dbid);
+
+    void saveSysDeviceControlCommodity(SysCommodityDistribution commodityDistribution);
 
 }

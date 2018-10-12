@@ -4,9 +4,11 @@ import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.po.SysCommodityDistribution;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.DeviceInputView;
+import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ public class DistributionController extends BaseController {
 
     @Autowired
     private ISysDeviceService deviceService;
+
+    @Autowired
+    private ICommodityService commodityService;
 
     @Desc("柜子列表")
     @NotProtected
@@ -55,6 +60,14 @@ public class DistributionController extends BaseController {
     @RequestMapping(value = "/delLockCommodity")
     public ResponseBean delLockCommodity(int dbid){
         deviceService.deleteSysDeviceControlCommodity(dbid);
+        return new ResponseBean(true);
+    }
+
+    @Desc("添加衣服到某个衣柜")
+    @ResponseBody
+    @RequestMapping(value = "/saveLockCommodity")
+    public ResponseBean saveLockCommodity(SysCommodityDistribution commodityDistribution){
+        deviceService.saveSysDeviceControlCommodity(commodityDistribution);
         return new ResponseBean(true);
     }
 
