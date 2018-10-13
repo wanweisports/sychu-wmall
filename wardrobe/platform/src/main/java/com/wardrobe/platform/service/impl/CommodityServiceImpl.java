@@ -229,14 +229,15 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
             commodityInfo.setHot(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setNewly(IDBConstant.LOGIC_STATUS_NO);
-            commodityInfo.setGroupId(commodityInfo.getGroupId());
             commodityInfo.setSaleCount(0);
             commodityInfo.setSeqNo(0);
             baseDao.save(commodityInfo, null);
 
             int newCid = commodityInfo.getCid();
-            commodityInfo.setGroupId(newCid);
-            baseDao.save(commodityInfo, newCid);
+            if(commodityInfo.getGroupId() == null) {
+                commodityInfo.setGroupId(newCid);
+                baseDao.save(commodityInfo, newCid);
+            }
 
             commodityColor.setCid(newCid);
             commodityColor.setCreateTime(timestamp);
