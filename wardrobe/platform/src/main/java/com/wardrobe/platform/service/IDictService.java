@@ -20,4 +20,6 @@ public interface IDictService {
 
     void deleteDict(int dictId);
 
+    Number getDictIdByValue(String dictValue, String dictName);
+
 }

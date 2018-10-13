@@ -64,6 +64,6 @@ public interface ICommodityService {
 
     PageBean getBannerCommodityListIn(CommodityInputView commodityInputView);
 
-    List<Map<String, Object>> getOnCommmoditys();
+    void saveExcelCommoditys(MultipartHttpServletRequest multipartRequest) throws IOException;
 
 }

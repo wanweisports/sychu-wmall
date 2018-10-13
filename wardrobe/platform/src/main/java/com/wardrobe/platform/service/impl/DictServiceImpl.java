@@ -47,4 +47,9 @@ public class DictServiceImpl extends BaseService implements IDictService {
         baseDao.delete(getDictById(dictId));
     }
 
+    @Override
+    public Number getDictIdByValue(String dictValue, String dictName){
+        return baseDao.getUniqueResult("SELECT dictId FROM sys_dict d WHERE dictName = ?1 AND dictValue = ?2", dictName, dictValue);
+    }
+
 }

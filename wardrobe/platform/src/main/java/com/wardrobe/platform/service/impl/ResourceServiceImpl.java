@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -116,7 +115,7 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     private List<SysResources> parseResourcesPath(List<SysResources> resources){
         if(resources != null){
             resources.stream().forEach(resource ->
-                parseResourcePath(resource)
+                            parseResourcePath(resource)
             );
         }
         return resources;
@@ -131,14 +130,8 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public String getResourcePath(int resourceServiceId, String resourceServiceType){
-        return getResourcePath(getResource(resourceServiceId, resourceServiceType));
-    }
-
-    private String getResourcePath(SysResources resource){
-        if(resource != null){
-            return OssClient.getImgPath(resource.getResourcePath());
-        }
-        return null;
+        SysResources resource = getResource(resourceServiceId, resourceServiceType);
+        return resource != null ? resource.getResourcePath() : StrUtil.EMPTY;
     }
 
     @Override

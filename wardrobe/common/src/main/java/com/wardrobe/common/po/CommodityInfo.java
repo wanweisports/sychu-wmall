@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -18,16 +20,20 @@ public class CommodityInfo {
     private String productDesc;
     private BigDecimal price;
     private BigDecimal couPrice;
-    private Integer saleCount;
-    private String status;
-    private Integer seqNo;
-    private String hot;
-    private String newly;
+    private Integer saleCount = 0;
+    private String status = IDBConstant.LOGIC_STATUS_YES;
+    private Integer seqNo = 0;
+    private String hot = IDBConstant.LOGIC_STATUS_NO;
+    private String newly = IDBConstant.LOGIC_STATUS_NO;
     private Integer groupId;
+    private String commNo;
+    private String brandName;
     private Timestamp createTime;
     private Timestamp updateTime;
 
     private CommodityColor commodityColor;
+    private String color;
+    private Integer cidMapping;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -160,12 +166,34 @@ public class CommodityInfo {
         this.newly = newly;
     }
 
+    @Basic
+    @Column(name = "groupId")
     public Integer getGroupId() {
         return groupId;
     }
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    @Basic
+    @Column(name = "commNo")
+    public String getCommNo() {
+        return commNo;
+    }
+
+    public void setCommNo(String commNo) {
+        this.commNo = commNo;
+    }
+
+    @Basic
+    @Column(name = "brandName")
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     @Basic
@@ -195,5 +223,23 @@ public class CommodityInfo {
 
     public void setCommodityColor(CommodityColor commodityColor) {
         this.commodityColor = commodityColor;
+    }
+
+    @Transient
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    @Transient
+    public Integer getCidMapping() {
+        return cidMapping;
+    }
+
+    public void setCidMapping(Integer cidMapping) {
+        this.cidMapping = cidMapping;
     }
 }

@@ -14,9 +14,15 @@ import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IResourceService;
 import com.wardrobe.platform.service.IUserService;
+import com.wardrobe.platform.service.IXlsExportImportService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
@@ -34,6 +40,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IXlsExportImportService xlsExportImportService;
 
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
@@ -521,8 +530,68 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public List<Map<String, Object>> getOnCommmoditys(){
-        return baseDao.queryBySql("");
+    public void saveExcelCommoditys(MultipartHttpServletRequest multipartRequest) throws IOException{
+        List<MultipartFile> fileList = FileUtil.springUpload(multipartRequest);
+        if(fileList.size() == 0) throw new MessageException("请上传Excel文件!");
+        Workbook workBook = xlsExportImportService.getWorkbook(fileList.get(0).getInputStream(), IPlatformConstant.excelExtensionX);
+        List<Map<String, Object>> list0 = xlsExportImportService.readExcelData(workBook.getSheetAt(0));
+        List<Map<String, Object>> list1 = xlsExportImportService.readExcelData(workBook.getSheetAt(1));
+
+        Timestamp nowDate = DateUtil.getNowDate();
+
+        Number number = baseDao.getUniqueResult("SELECT MAX(cid) FROM commodity_info");
+        int maxCid = 10;
+        if(number != null){
+            maxCid = number.intValue()+10; //预留10个id位
+        }
+        for(Map<String, Object> map : list0){
+            CommodityInfo commodityInfo = JsonUtils.fromJson(map, CommodityInfo.class);
+
+            Number categoryId = dictService.getDictIdByValue(StrUtil.trim(commodityInfo.getCategory()), IDBConstant.COMM_CATEGORY);
+            if(categoryId == null) throw new MessageException(commodityInfo.getCommName()+"，品类错误：" + commodityInfo.getCidMapping());
+
+            commodityInfo.setCategory(IPlatformConstant.DOU_HAO + categoryId.toString() + IPlatformConstant.DOU_HAO);
+
+            Number styleId = dictService.getDictIdByValue(StrUtil.trim(commodityInfo.getStyle()), IDBConstant.COMM_STYLE);
+            if(styleId == null) throw new MessageException(commodityInfo.getCommName()+"，风格错误：" + commodityInfo.getCidMapping());
+            commodityInfo.setStyle(IPlatformConstant.DOU_HAO + styleId.toString() + IPlatformConstant.DOU_HAO);
+
+            Number materialId = dictService.getDictIdByValue(StrUtil.trim(commodityInfo.getMaterial()), IDBConstant.COMM_MATERIAL);
+            if(materialId == null) throw new MessageException(commodityInfo.getCommName()+"，材质错误：" + commodityInfo.getCidMapping());
+            commodityInfo.setMaterial(IPlatformConstant.DOU_HAO + materialId.toString() + IPlatformConstant.DOU_HAO);
+
+            int autoCid = commodityInfo.getCidMapping() + maxCid;
+            commodityInfo.setCouPrice(commodityInfo.getPrice());
+            commodityInfo.setCreateTime(nowDate);
+            commodityInfo.setGroupId(commodityInfo.getGroupId() + maxCid);
+            //baseDao.save(commodityInfo, autoCid);
+            baseDao.updateByJdbc("INSERT INTO `commodity_info` (`cid`, `commName`, `category`, `style`, `material`, `productDesc`, `price`, `couPrice`, `saleCount`, `status`, `seqNo`, `newly`, `hot`, `groupId`, `commNo`, `brandName`, `createTime`, `updateTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", autoCid, commodityInfo.getCommName(), commodityInfo.getCategory(), commodityInfo.getStyle(), commodityInfo.getMaterial(), commodityInfo.getProductDesc(), commodityInfo.getPrice(), commodityInfo.getCouPrice(), commodityInfo.getSaleCount(), commodityInfo.getStatus(), commodityInfo.getSeqNo(), commodityInfo.getNewly(), commodityInfo.getHot(), commodityInfo.getGroupId(), commodityInfo.getCommNo(), commodityInfo.getBrandName(), commodityInfo.getCreateTime(), null);
+
+            CommodityColor commodityColor = new CommodityColor();
+            commodityColor.setCid(autoCid);
+            commodityColor.setColorName(commodityInfo.getColor());
+            commodityColor.setCreateTime(nowDate);
+            baseDao.save(commodityColor, null);
+            List<Map<String, Object>> sizes = getcommoditySizes(commodityInfo.getCidMapping(), list1);
+            sizes.stream().forEach(sizeMap -> {
+                CommoditySize commoditySize = JsonUtils.fromJson(sizeMap, CommoditySize.class);
+                commoditySize.setCreateTime(nowDate);
+                commoditySize.setCoid(commodityColor.getCoid());
+                commoditySize.setCid(autoCid);
+                baseDao.save(commoditySize, null);
+            });
+        }
+
+    }
+
+    private List<Map<String, Object>> getcommoditySizes(int cidMapping, List<Map<String, Object>> list1){
+        List<Map<String, Object>> sizes = new ArrayList<>();
+        for(Map<String, Object> map : list1){
+            if(StrUtil.objToInt(map.get("cidMapping")) == cidMapping){
+                sizes.add(map);
+            }
+        }
+        return sizes;
     }
 
 }
