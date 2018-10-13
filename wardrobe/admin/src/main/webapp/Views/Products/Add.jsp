@@ -59,6 +59,16 @@
                                   enctype="multipart/form-data" novalidat target="product_form_result">
                                 <input type="hidden" name="groupId" value="${groupId}" />
                                 <div class="form-group row">
+                                    <label class="col-md-2 form-control-label" for="p_commNo">
+                                        <span class="text-danger">*</span> 商品编号
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="p_commNo" placeholder="请输入商品编号" name="commNo"
+                                               data-val="true" data-val-required="商品编号不能为空" autocomplete="off">
+                                        <div data-valmsg-for="commNo" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-2 form-control-label" for="p_commName">
                                         <span class="text-danger">*</span> 商品名称
                                     </label>
@@ -77,6 +87,16 @@
                                         <textarea class="form-control" id="p_productDesc" placeholder="请输入商品描述" name="productDesc"
                                                data-val="true" data-val-required="商品描述不能为空" autocomplete="off"></textarea>
                                         <div data-valmsg-for="productDesc" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label" for="p_brandName">
+                                        <span class="text-danger">*</span> 商品品牌
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="p_brandName" placeholder="请输入商品品牌" name="brandName"
+                                               data-val="true" data-val-required="商品品牌不能为空" autocomplete="off">
+                                        <div data-valmsg-for="brandName" data-valmsg-replace="true"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
