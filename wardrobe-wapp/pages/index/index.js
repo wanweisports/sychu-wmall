@@ -1,6 +1,6 @@
 //index.js
 //获取应用实例
-var app = getApp();
+const app = getApp();
 
 Page({
     data: {
@@ -11,65 +11,48 @@ Page({
         loadingHidden: false,
         swiperCurrent: 0,
         goods: [],
+
+        banners: [],
         newlyGoods: [],
         hotGoods: []
     },
-    onReady: function () {
-        wx.setNavigationBarTitle({
-            title: wx.getStorageSync('mallName')
-        });
-    },
     onLoad: function() {
-        var that = this;
-
-        that.getBannerGoodsList();
-        that.getHotGoodsList();
-        that.getNewlyGoodsList();
+        this.getBannerGoodsList();
+        this.getHotGoodsList();
+        this.getNewlyGoodsList();
     },
     getBannerGoodsList: function () {
-        var that = this;
+        let content = this;
 
-        that.setData({
-            banners: [
-                {businessId: 121, picUrl: "http://images2.moonbasa.com/ProductImg/1/1602/huge/033016222-010-01-H.jpg"},
-                {businessId: 121, picUrl: "http://img005.hc360.cn/hb/MTQ2MzI1NjA4NzI3NTM4MDA1Mjg3Mg==.jpg"},
-                {businessId: 121, picUrl: "http://pic.qiantucdn.com/58pic/18/48/86/562887145916b_1024.jpg"}
-            ]
+        app.wxRequest("/commodity/commodityBanners", {}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    banners: res.data.list
+                });
+            }
         });
     },
     getNewlyGoodsList: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest(
-            "/commodity/index",
-            {
-                newly : "1"
-            },
-            function (res) {
-                if (res.code == 1) {
-                    that.setData({
-                        newlyGoods: res.data.list
-                    });
-                }
+        app.wxRequest("/commodity/index", {newly : "1"}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    newlyGoods: res.data.list
+                });
             }
-        );
+        });
     },
     getHotGoodsList: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest(
-            "/commodity/index",
-            {
-                hot : "1"
-            },
-            function (res) {
-                if (res.code == 1) {
-                    that.setData({
-                        hotGoods: res.data.list
-                    });
-                }
+        app.wxRequest("/commodity/index", {hot : "1"}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    hotGoods: res.data.list
+                });
             }
-        );
+        });
     },
     //事件处理函数
     swiperchange: function (e) {
@@ -78,15 +61,11 @@ Page({
         })
     },
     toDetailsTap: function (e) {
-        wx.navigateTo({
-            url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-        });
+        app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
     },
     tapBanner: function(e) {
         if (e.currentTarget.dataset.id != 0) {
-            wx.navigateTo({
-                url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-            })
+            app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
         }
     }
 });

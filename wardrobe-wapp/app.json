@@ -10,8 +10,6 @@
         "pages/to-fitting-order/index",
         "pages/select-address/index",
         "pages/address-add/index",
-        "pages/order-list/index",
-        "pages/order-details/index",
         "pages/wuliu/index",
         "pages/mycoupons/index",
         "pages/notice/show",
@@ -24,7 +22,9 @@
         "pages/user/recharge/index",
         "pages/user/transactions/index",
         "pages/user/coupons/index",
-        "pages/user/about/index"
+        "pages/user/about/index",
+        "pages/user/order-list/index",
+        "pages/user/order-details/index"
     ],
     "window": {
         "backgroundTextStyle": "light",

@@ -4,7 +4,7 @@
         <view class="userinfo-info">
             <text class="userinfo-nickname">{{ userInfo.nickname }}</text>
             <button class="weui-btn" type="primary" size="mini">
-                <text class="userinfo-rank">LV{{ userInfo.rank }}</text>
+                <text class="userinfo-rank">Lv{{ userInfo.rank }} 会员 ></text>
             </button>
         </view>
     </view>
@@ -15,10 +15,9 @@
         <view>
             余额 {{userInfo.balance}} 元， 衣橱币 {{userInfo.ycoid}} 元
         </view>
-        <view style='display:flex;padding-bottom:20rpx;'>
-            <button type='primary' style='width:100%;margin-right:70rpx;' bindtap="recharge">充值</button>
-            <!--<button type='warn' style='width:100%;margin-right:70rpx;' bindtap="withdraw">提现</button>-->
-        </view>
+        <!--<view style='display:flex;padding-bottom:20rpx;'>-->
+            <!--<button type='primary' style='width:100%;margin-right:70rpx;' bindtap="recharge">充值</button>-->
+        <!--</view>-->
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
@@ -26,22 +25,22 @@
     <view class="my-item">
         <navigator url="/pages/user/favorite/index" hover-class="navigator-hover">我的收藏</navigator>
     </view>
+    <!--<view class="my-item">-->
+        <!--<navigator url="/pages/order-list/index" hover-class="navigator-hover">我的预约</navigator>-->
+    <!--</view>-->
     <view class="my-item">
-        <navigator url="/pages/order-list/index" hover-class="navigator-hover">我的预约</navigator>
-    </view>
-    <view class="my-item">
-        <navigator url="/pages/order-list/index" hover-class="navigator-hover">我的订单</navigator>
+        <navigator url="/pages/user/order-list/index" hover-class="navigator-hover">我的订单</navigator>
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
 
     <view class="my-item">
         <navigator url="/pages/mycoupons/index" hover-class="navigator-hover">
-            我的积分<text class="right-text">{{userInfo.point}}</text>
+            我的积分<text class="right-text">{{userInfo.point}}分</text>
         </navigator>
     </view>
     <view class="my-item">
-        <navigator url="/pages/user/center/coupons/index" hover-class="navigator-hover">
+        <navigator url="/pages/user/coupons/index" hover-class="navigator-hover">
             我的优惠券<text class="right-text">1张</text>
         </navigator>
     </view>
@@ -58,9 +57,10 @@
     <view class="my-item">
         联系客服<text class="right-text">010-1234567</text>
     </view>
-    <view class="my-item" bindtap="inviteFriends">
-        邀请好友<text class="right-text">已得奖励9999元</text>
-    </view>
+    <view class="my-item" bindtap="inviteFriends">邀请好友</view>
+    <!--<view class="my-item" bindtap="inviteFriends">-->
+        <!--邀请好友<text class="right-text">已得奖励9999元</text>-->
+    <!--</view>-->
     <view class="my-item">
         <navigator url="/pages/user/about/index" hover-class="navigator-hover">关于我们</navigator>
     </view>

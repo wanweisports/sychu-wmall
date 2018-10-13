@@ -136,7 +136,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $categorySelected.val(values.join(","));
+        $categorySelected.val("," + values.join(",") + ",");
     }
 
     $categorySelect.on("change", function (e) {
@@ -211,7 +211,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $styleSelected.val(values.join(","));
+        $styleSelected.val("," + values.join(",") + ",");
     }
 
     $styleSelectList.on("click", ".style-item", function (e) {
@@ -277,7 +277,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             values.push(selected.eq(i).attr("data-id"));
         }
 
-        $materialSelected.val(values.join(","));
+        $materialSelected.val("," + values.join(",") + ",");
     }
 
     $materialSelectList.on("click", ".material-item", function (e) {
