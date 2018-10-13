@@ -209,6 +209,12 @@ App({
     // 页面跳转
     redirect: function (url, type) {
 
+        if (type == "navigateTo") {
+            return wx.navigateTo({
+                url: url
+            });
+        }
+
         if (type == "switchTab") {
             return wx.switchTab({
                 url: url

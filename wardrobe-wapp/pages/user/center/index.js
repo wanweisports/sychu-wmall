@@ -10,37 +10,24 @@ Page({
         userInfo: {}
     },
     getUserInfo: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest(
-            "/user/userCenter",
-            {},
-            function (res) {
-                that.setData({
-                    userInfo : res.data
-                });
-            }
-        );
+        app.wxRequest("/user/userCenter", {}, function (res) {
+            content.setData({
+                userInfo : res.data
+            });
+        });
     },
-    onLoad: function () {},
-    onShow: function () {
+    onLoad: function () {
         this.getUserInfo();
     },
     inviteFriends : function () {
         wx.showModal({
-            title: '邀请好友',
-            content: '本系统基于开源小程序商城系统 https://github.com/EastWorld/wechat-app-mall 搭建，祝大家使用愉快！',
+            content: '您的邀请码：' + this.data.userInfo.inviteCode || "66666",
             showCancel: false
-        })
-    },
-    recharge: function () {
-        wx.navigateTo({
-            url: "/pages/user/recharge/index"
         });
     },
-    withdraw: function () {
-        wx.navigateTo({
-            url: "/pages/withdraw/index"
-        })
+    recharge: function () {
+        app.redirect("/pages/user/recharge/index", "navigateTo");
     }
 });

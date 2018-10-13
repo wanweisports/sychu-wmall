@@ -1,6 +1,6 @@
 //index.js
 //获取应用实例
-var app = getApp();
+const app = getApp();
 
 Page({
     data: {
@@ -15,11 +15,6 @@ Page({
         banners: [],
         newlyGoods: [],
         hotGoods: []
-    },
-    onReady: function () {
-        wx.setNavigationBarTitle({
-            title: wx.getStorageSync('mallName')
-        });
     },
     onLoad: function() {
         this.getBannerGoodsList();
@@ -66,15 +61,11 @@ Page({
         })
     },
     toDetailsTap: function (e) {
-        wx.navigateTo({
-            url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-        });
+        app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
     },
     tapBanner: function(e) {
         if (e.currentTarget.dataset.id != 0) {
-            wx.navigateTo({
-                url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-            });
+            app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
         }
     }
 });
