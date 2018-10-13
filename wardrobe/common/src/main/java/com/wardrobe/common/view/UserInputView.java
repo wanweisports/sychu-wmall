@@ -7,6 +7,7 @@ public class UserInputView extends BaseInputView {
 
     private String nickname;
     private String mobile;
+    private Integer uid;
 
     public String getNickname() {
         return nickname;
@@ -22,5 +23,13 @@ public class UserInputView extends BaseInputView {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 }
