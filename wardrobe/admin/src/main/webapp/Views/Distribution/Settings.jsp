@@ -69,6 +69,24 @@
         function showPushCommodity(dcid){
             $("#distribution_dcid").val(dcid);
         }
+
+        function readEpcLabel(btn){
+            if(!'${did}'){
+                alert("请选择商场");
+                return;
+            }
+            $(btn).prop("disabled", true).text("正在读取..");
+            $("#distribution_code").val("");
+            $("#rfidEpc_error").html("");
+            $.post("/rfid/readEpcLabelCK", {did: '${did}'}, function(res){
+                if(res.code == 1){
+                    $("#distribution_code").val(res.data.epcs);
+                }else{
+                    $("#rfidEpc_error").html(res.message);
+                }
+                $(btn).prop("disabled", false).text("扫描标签");
+            });
+        }
     </script>
 </layout:override>
 
@@ -117,7 +135,15 @@
                                 <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
                             <div class="col-md-3">
-                                <button class="btn" type="button">扫描标签</button>
+                                <button class="btn" type="button" onclick="readEpcLabel(this)">扫描标签</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="distribution_code"></label>
+                            <div class="col-md-6">
+                                <div data-valmsg-for="code" data-valmsg-replace="true">
+                                    <font color="red" id="rfidEpc_error"></font>
+                                </div>
                             </div>
                         </div>
                     </form>

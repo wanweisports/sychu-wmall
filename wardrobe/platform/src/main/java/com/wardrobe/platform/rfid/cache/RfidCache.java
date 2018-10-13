@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class RfidCache {
 
+    public static byte BA = (byte) 0xFF; //广播地址
     private static List<RfidBean> rfidBeans = new ArrayList<>();
 
     public static synchronized void connectRfid(RfidBean rfidBean){
@@ -38,6 +39,11 @@ public class RfidCache {
             }
         }
         return null;
+    }
+
+    public static RfidBean isConnect(RfidBean rfidBean){
+        RfidBean rb = getRfidBean(rfidBean);
+        return rb != null && rb.getmConnector().isConnected() ? rb : null;
     }
 
 }

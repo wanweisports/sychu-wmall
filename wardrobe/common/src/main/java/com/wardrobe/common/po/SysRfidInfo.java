@@ -14,6 +14,9 @@ public class SysRfidInfo {
     private String ip;
     private Integer port;
     private String type;
+    private Integer workAntenna;
+    private int did;
+    private String name;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -56,27 +59,34 @@ public class SysRfidInfo {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SysRfidInfo that = (SysRfidInfo) o;
-
-        if (rfid != that.rfid) return false;
-        if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
-        if (port != null ? !port.equals(that.port) : that.port != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "workAntenna")
+    public Integer getWorkAntenna() {
+        return workAntenna;
     }
 
-    @Override
-    public int hashCode() {
-        int result = rfid;
-        result = 31 * result + (ip != null ? ip.hashCode() : 0);
-        result = 31 * result + (port != null ? port.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
+    public void setWorkAntenna(Integer workAntenna) {
+        this.workAntenna = workAntenna;
     }
+
+    @Basic
+    @Column(name = "did")
+    public int getDid() {
+        return did;
+    }
+
+    public void setDid(int did) {
+        this.did = did;
+    }
+
+    @Basic
+    @Column(name = "name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

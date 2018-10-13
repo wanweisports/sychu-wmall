@@ -107,6 +107,34 @@
                 });
             }
         }
+
+        function connectRfid(rfid, btn){
+            if(window.confirm("确认连接射频吗？")){
+                $(btn).prop("disabled", true).text("正在尝试连接...");
+                $.post("/rfid/connectRfid", {rfid: rfid}, function(res) {
+                    if (res.code == 1) {
+                        window.location.reload();
+                    }else {
+                        $(btn).prop("disabled", false).text("连接");
+                    }
+                });
+            }
+        }
+
+        function downlineRfid(rfid, btn){
+            if(window.confirm("确认断开射频吗？")){
+                $(btn).prop("disabled", true).text("正在尝试断开射频...");
+                $.post("/rfid/closeRfid", {rfid: rfid}, function(res) {
+                    if (res.code == 1) {
+                        window.location.reload();
+                        $(btn).prop("disabled", true);
+                    }else {
+                        $(btn).prop("disabled", false).text("断开射频");
+                        alert(res.message);
+                    }
+                });
+            }
+        }
     </script>
 </layout:override>
 
@@ -114,6 +142,7 @@
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
+                <!--继电器-->
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
@@ -205,6 +234,60 @@
                                 </div>
                             </c:forEach>
                         </div>
+                    </div>
+                </div>
+
+                <!--射频-->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>${deviceInfo.name}</strong>
+                            <div class="card-block row">
+                                <c:forEach var="rfid" items="${sysRfidInfos}">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body p-3 d-flex align-items-center">
+                                                <div id="connectRfid2" <c:if test="${rfid.rfidBean != null && rfid.rfidBean.status=='1'}">style="display: none;"</c:if>>
+                                                    <button type="button" class="btn btn-success" onclick="connectRfid('${rfid.rfid}', this)">连接${rfid.name}</button>
+                                                </div>
+                                                <div <c:if test="${rfid.rfidBean == null || rfid.rfidBean.status=='2'}">style="display: none;"</c:if> id="closeRfid2">
+                                                    <button type="button" class="btn btn-success" onclick="downlineRfid('${rfid.rfid}', this)">断开${rfid.name}</button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-3 d-flex align-items-center">
+                                                <p>连接天线：${rfid.rfidBean.workAntenna != null ? ('天线'.concat(rfid.rfidBean.workAntenna)) : '未连接'}</p>
+                                            </div>
+                                            <div class="card-body p-3 d-flex align-items-center">
+                                                <p>天线状态：${rfid.rfidBean.workAntennaStatus == 0 ? '成功' : '未连接'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+
+                        </div>
+                        <%--<div class="card-block row">
+                            <c:forEach var="d" items="${deviceDoorControls}">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body p-3 d-flex align-items-center">
+                                            <i class="fa fa-lock bg-info p-3 font-2xl mr-3"></i>
+                                            <div class="mr-5">
+                                                <div class="text-value-sm text-primary">${d.name}</div>
+                                                <div class="text-muted text-uppercase font-weight-bold small">
+                                                    <span data-door-open-${d.lockId} class="badge badge-success" <c:if test="${d.status == 'Relayoff'}">style="display: none;" </c:if>>开${d.name}中</span>
+                                                    <span data-door-close-${d.lockId} class="badge badge-danger" <c:if test="${d.status == 'Relayon'}">style="display: none;"</c:if>>关${d.name}中</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button data-door-close-${d.lockId} class="btn btn-success" <c:if test="${d.status == 'Relayon'}">style="display: none;"</c:if> onclick="openDoop(this, '${d.lockId}', '${d.name}')">开${d.name}</button>
+                                                <button data-door-open-${d.lockId} class="btn btn-danger" <c:if test="${d.status == 'Relayoff'}">style="display: none;"</c:if> onclick="closeDoop(this, '${d.lockId}', '${d.name}')">关${d.name}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>--%>
                     </div>
                 </div>
                 <!--/.col-->

@@ -6,6 +6,7 @@ import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.platform.service.IRelayService;
+import com.wardrobe.platform.service.IRfidService;
 import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,9 @@ public class WardrobeController extends BaseController {
 
     @Autowired
     private IRelayService relayService;
+
+    @Autowired
+    private IRfidService rfidService;
 
     @ResponseBody
     @RequestMapping("saveDeviceInfo")
@@ -59,6 +63,7 @@ public class WardrobeController extends BaseController {
     @RequestMapping(value = "/dashboard")
     public String renderWardrobeDashboard(Model model) {
         model.addAllAttributes(relayService.getRealyIndexsIn());
+        model.addAllAttributes(rfidService.getSysRfidIndexsIn());
         return "Wardrobe/Dashboard";
     }
 

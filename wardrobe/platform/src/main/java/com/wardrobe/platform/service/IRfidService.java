@@ -18,4 +18,8 @@ public interface IRfidService {
 
     SysRfidInfo getRfidInfo(int rfid);
 
+    Map<String, Object> getSysRfidIndexsIn();
+
+    SysRfidInfo getSysRfidInfoByDid(int did, String type);
+
 }

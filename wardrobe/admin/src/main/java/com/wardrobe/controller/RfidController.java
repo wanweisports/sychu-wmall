@@ -2,6 +2,7 @@ package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysRfidInfo;
 import com.wardrobe.platform.rfid.bean.RfidBean;
 import com.wardrobe.platform.service.IRfidService;
@@ -28,7 +29,7 @@ public class RfidController extends BaseController {
     @RequestMapping(value = "/connectRfid")
     public ResponseBean connectRfid(int rfid){
         SysRfidInfo rfidInfo = rfidService.getRfidInfo(rfid);
-        rfidService.connectRfid(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort()));
+        rfidService.connectRfid(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()));
         return new ResponseBean(true);
     }
 
@@ -37,17 +38,24 @@ public class RfidController extends BaseController {
     @RequestMapping(value = "/closeRfid")
     public ResponseBean closeRfid(int rfid){
         SysRfidInfo rfidInfo = rfidService.getRfidInfo(rfid);
-        rfidService.closeRfid(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort()));
+        rfidService.closeRfid(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()));
         return new ResponseBean(true);
     }
 
-    @Desc("读取电子标签")
+    @Desc("读取仓库射频电子标签")
     @ResponseBody
-    @RequestMapping(value = "/readEpcLabel")
-    public ResponseBean readEpcLabel(int rfid, int count){
-        SysRfidInfo rfidInfo = rfidService.getRfidInfo(rfid);
-        rfidService.readEpcLabel(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort()), count);
-        return new ResponseBean(true);
+    @RequestMapping(value = "/readEpcLabelCK")
+    public ResponseBean readEpcLabelCK(int did){
+        SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_NO);
+        return new ResponseBean(rfidService.readEpcLabel(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 8));
+    }
+
+    @Desc("读取商场射频电子标签")
+    @ResponseBody
+    @RequestMapping(value = "/readEpcLabelSC")
+    public ResponseBean readEpcLabelSC(int did){
+        SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
+        return new ResponseBean(rfidService.readEpcLabel(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 8));
     }
 
 }
