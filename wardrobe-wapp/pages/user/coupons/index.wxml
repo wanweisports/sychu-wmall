@@ -1,6 +1,6 @@
 <view class="container">
 
-    <view class="coupons-list" v-if="hasCoupons">
+    <view class="coupons-list" wx:if="{{hasCoupons}}">
         <view wx:for="{{coupons}}" class="coupon-item" data-index="{{index}}" data-status="{{item.status}}">
             <view class="style-one">
                 <view class="info-box">
@@ -17,7 +17,7 @@
             </view>
         </view>
     </view>
-    <view class="no-coupons" v-if="!hasCoupons">
+    <view class="no-coupons" wx:else>
         <view class="title-box">没有任何优惠券～</view>
     </view>
 </view>
