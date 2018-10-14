@@ -221,6 +221,12 @@ App({
             });
         }
 
+        if (type == "reLaunch") {
+            return wx.reLaunch({
+                url: url
+            });
+        }
+
         return wx.redirectTo({
             url: url
         });
