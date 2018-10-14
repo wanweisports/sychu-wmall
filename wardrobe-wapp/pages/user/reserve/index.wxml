@@ -1,0 +1,58 @@
+<view class="container">
+    <view class="no-order" hidden="{{hasWardrobeInfo}}">
+        <image src="/images/no-order.png" class="no-order-img"></image>
+        <view class="text">暂无订单</view>
+    </view>
+    <form bindsubmit="scanOrder" report-submit="true" hidden="{{!hasWardrobeInfo}}">
+        <view class="address-box">
+            <view class="show-address">
+                <view class="name-tel">{{wardrobeInfo.sdName}}</view>
+                <view class="addr-text">{{wardrobeInfo.address}}</view>
+            </view>
+        </view>
+        <view class="peisong-way">
+            <view class="row-box">
+                <view class="row-label">预约日期</view>
+                <view class="right-text">{{wardrobeInfo.resDate}}</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">开始时间</view>
+                <view class="right-text">{{wardrobeInfo.resStartTime}}</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">结束时间</view>
+                <view class="right-text">{{wardrobeInfo.resEndTime}}</view>
+            </view>
+        </view>
+        <view class="goods-list">
+            <view class="list-title">商品列表</view>
+            <view class="a-goods" wx:for-items="{{goodsList}}">
+                <view class="img-box">
+                    <image src="{{item.resItemImg}}" class="img" />
+                </view>
+                <view class="text-box">
+                    <view class="arow arow01">
+                        <view class="goods-name">{{item.resItemName}}</view>
+                        <view class="goods-price">¥ {{item.resItemPrice}}</view>
+                    </view>
+                    <view class="arow">
+                        <view class="goods-label">{{item.resItemColor}}，{{item.resItemSize}}</view>
+                        <view class="goods-num">x {{item.resItemCount}}</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="goods-info">
+            <view class="row-box">
+                <view class="row-label">商品金额</view>
+                <view class="right-text">¥ {{sumPrice}}</view>
+            </view>
+        </view>
+        <view class="jiesuan-box">
+            <view class="left-price">
+                <view class="total">合计：¥ {{sumPrice}}</view>
+            </view>
+            <button class="to-pay-btn" formType="submit">扫码开门</button>
+        </view>
+    </form>
+</view>

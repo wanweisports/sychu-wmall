@@ -290,7 +290,7 @@ Page({
 
         // 重新计算价格，判断库存
         var shopList = [];
-        var shopCarInfoMem = wx.getStorageSync('shopCarInfo');
+        var shopCarInfoMem = wx.getStorageSync('shopCartInfo');
         if (shopCarInfoMem && shopCarInfoMem.shopList) {
             // shopList = shopCarInfoMem.shopList
             shopList = shopCarInfoMem.shopList.filter(function (entity) {

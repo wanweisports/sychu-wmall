@@ -7,6 +7,7 @@
         "pages/goods/cart/index",
         "pages/goods/settle/index",
         "pages/goods/room/index",
+        "pages/goods/reserve/index",
         "pages/to-fitting-order/index",
         "pages/select-address/index",
         "pages/address-add/index",
@@ -24,7 +25,8 @@
         "pages/user/coupons/index",
         "pages/user/about/index",
         "pages/user/order-list/index",
-        "pages/user/order-details/index"
+        "pages/user/order-details/index",
+        "pages/user/reserve/index"
     ],
     "window": {
         "backgroundTextStyle": "light",

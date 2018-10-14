@@ -32,6 +32,9 @@
         <navigator url="/pages/user/order-list/index" hover-class="navigator-hover">我的订单</navigator>
     </view>
     <view class="my-item">
+        <navigator url="/pages/user/reserve/index" hover-class="navigator-hover">我的预约</navigator>
+    </view>
+    <view class="my-item">
         <navigator url="/pages/user/coupons/index" hover-class="navigator-hover">
             我的优惠券<text class="right-text">{{userInfo.couponCount}}张</text>
         </navigator>
