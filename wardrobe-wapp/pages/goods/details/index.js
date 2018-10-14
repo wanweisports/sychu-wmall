@@ -1,7 +1,6 @@
 //index.js
 //获取应用实例
-var app = getApp();
-var WxParse = require('../../../wxParse/wxParse.js');
+const app = getApp();
 
 Page({
     data: {
@@ -13,8 +12,12 @@ Page({
         hasMoreSelect: false,
         selectSize: "选择：",
         selectSizePrice: 0,
-        shopNum: 0,
+
+        shopCartNum: 0,
+        shopOrderNum: 0,
+
         hideShopPopup: true,
+        hideShopOrderPopup: true,
 
         isFavorite: false,
 
@@ -25,10 +28,10 @@ Page({
         propertyChildIds: "",
         propertyChildNames: "",
         canSubmit: false,
-        //  选中规格尺寸时候是否允许加入购物车
-        shopCarInfo: {},
-        shopType: "addShopCar",
-        //购物类型，加入购物车或立即购买，默认为加入购物车
+
+        shopCartInfo: {},
+        shopOrderInfo: {},
+        shopType: "addShopCart", // "addShopOrder"
 
         goodId: 0,
         goodDetail: {},
@@ -37,37 +40,82 @@ Page({
 
     //事件处理函数
     swiperchange: function(e) {
-        //console.log(e.detail.current)
         this.setData({
             swiperCurrent: e.detail.current
         })
     },
-
+    bindColorTap: function (e) {
+        app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "navigateTo");
+    },
     getGoodsDetail: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest("/commodity/detail", {cid: that.data.goodId}, function (res) {
+        app.wxRequest("/commodity/detail", {cid: content.data.goodId}, function (res) {
             if (res.code == 1) {
-                var colors = res.data.colors;
+                let colors = res.data.colors;
                 for (var i = 0; i < colors.length; i++) {
                     res.data.colors[i].selected = false;
-                    if (colors[i].cid == that.data.goodId) {
+                    if (colors[i].cid == content.data.goodId) {
                         colors[i].selected = true;
                     }
                 }
 
-                that.setData({
-                    goodsDetail: res.data
+                content.setData({
+                    goodsDetail: res.data,
+                    isFavorite: res.data.collection == 1
                 });
             }
         });
     },
-    getGoodsDetailSize: function (sid) {
-        var that = this;
+    goShopCart: function() {
+        app.redirect("/pages/goods/cart/index", "reLaunch");
+    },
+    goShopOrderCart: function () {
+        app.redirect("/pages/goods/room/index", "reLaunch");
+    },
+    addShopFavorite: function () {
+        let content = this;
 
-        app.wxRequest("/commodity/detail/selected", {cid: that.data.goodId}, function (res) {
+        app.wxRequest("/user/saveCollection", {cid: content.data.goodId}, function (res) {
             if (res.code == 1) {
-                var sizes = res.data.sizes;
+                content.setData({
+                    isFavorite: true
+                });
+            }
+        });
+    },
+    removeShopFavorite: function () {
+        let content = this;
+
+        app.wxRequest("/user/cancelCollection", {cid: content.data.goodId}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    isFavorite: false
+                });
+            }
+        });
+    },
+    onLoad: function (e) {
+        let content = this;
+        let goodId = e.id;
+        let shopCartNum = app.getCookie("shopCartNum") || "";
+        let shopOrderNum = app.getCookie("shopOrderNum") || "";
+
+        content.setData({
+            goodId: goodId,
+            shopCartNum: shopCartNum,
+            shopOrderNum: shopOrderNum
+        });
+
+        content.getGoodsDetail();
+    },
+
+    getGoodsDetailSize: function (sid) {
+        let content = this;
+
+        app.wxRequest("/commodity/detail/selected", {cid: content.data.goodId}, function (res) {
+            if (res.code == 1) {
+                let sizes = res.data.sizes;
                 for (var i = 0; i < sizes.length; i++) {
                     res.data.sizes[i].selected = false;
                     if (sid && sizes[i].cid == sid) {
@@ -75,26 +123,20 @@ Page({
                     }
                 }
 
-                that.setData({
+                content.setData({
                     goodDetailSize: res.data
                 });
             }
         });
     },
     saveShopCartAdd: function (sid, num, type) {
-        var that = this;
-
         app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function () {}, function () {});
     },
-    bindColorTap: function (e) {
-        wx.navigateTo({
-            url: '/pages/goods/details/index?id=' + e.currentTarget.dataset.id
-        });
-    },
 
+    /***** 加购物车 *****/
     toAddShopCart: function() {
         this.setData({
-            shopType: "addShopCar"
+            shopType: "addShopCart"
         });
         this.bindGuiGeTap();
         this.getGoodsDetailSize();
@@ -109,17 +151,9 @@ Page({
             hideShopPopup: true
         })
     },
-    goShopCart: function() {
-        wx.reLaunch({
-            url: "/pages/goods/cart/index"
-        });
-    },
-    /**
-     * 加入购物车
-     */
     addShopCart: function () {
-        var selected = null;
-        var sizes = this.data.goodDetailSize.sizes;
+        let selected = null;
+        let sizes = this.data.goodDetailSize.sizes;
         for (var i = 0; i < sizes.length; i++) {
             if (sizes[i].selected) {
                 selected = sizes[i];
@@ -147,39 +181,44 @@ Page({
         this.saveShopCartAdd(selected.sid, this.data.buyNumber, 1);
 
         this.setData({
-            shopNum: ++this.data.buyNumber
+            shopCartNum: this.data.shopCartNum + this.data.buyNumber
         });
 
         this.closePopupTap();
-        wx.showToast({
-            title: '加入购物车成功',
-            icon: 'success',
-            duration: 2000
-        });
+
+        app.showToast("加入购物车成功", "success");
     },
 
-    toAddShopOrderCart: function() {
+    /***** 加闪衣橱 *****/
+    toAddShopOrderCart: function () {
         this.setData({
             shopType: "addShopOrderCart"
         });
         this.bindShopOrderTap();
+        this.getGoodsDetailSize();
     },
     bindShopOrderTap: function() {
         this.setData({
             hideShopOrderPopup: false
         });
     },
-    closeShopOrderPopupTap: function() {
+    closeShopOrderPopupTap: function () {
         this.setData({
             hideShopOrderPopup: true
         });
     },
-    /**
-     * 加入预约购物车
-     */
+    selectProductSize: function (e) {
+        this.labelItemTap(e);
+    },
+    addProductCount: function (e) {
+        this.numJiaTap(e);
+    },
+    minusProductCount: function (e) {
+        this.numJianTap(e);
+    },
     addShopOrderCart: function() {
-        var selected = null;
-        var sizes = this.data.goodDetailSize.sizes;
+        let selected = null;
+        let sizes = this.data.goodDetailSize.sizes;
         for (var i = 0; i < sizes.length; i++) {
             if (sizes[i].selected) {
                 selected = sizes[i];
@@ -192,7 +231,7 @@ Page({
                 showCancel: false
             });
 
-            this.bindGuiGeTap();
+            this.bindShopOrderTap();
             return;
         }
         if (this.data.buyNumber < 1) {
@@ -207,15 +246,11 @@ Page({
         this.saveShopCartAdd(selected.sid, this.data.buyNumber, 2);
 
         this.setData({
-            shopNum: ++this.data.buyNumber
+            shopOrderNum: this.data.shopOrderNum + this.data.buyNumber
         });
 
-        this.closePopupTap();
-        wx.showToast({
-            title: '加入试衣间成功',
-            icon: 'success',
-            duration: 2000
-        });
+        this.closeShopOrderPopupTap();
+        app.showToast("加入试衣间成功", "success");
     },
 
     /**
@@ -239,58 +274,6 @@ Page({
             goodDetailSize: that.data.goodDetailSize
         });
     },
-
-    onLoad: function (e) {
-        var that = this;
-
-        that.setData({
-            goodId: e.id
-        });
-
-        that.getGoodsDetail(e.id);
-
-        if (e.inviter_id) {
-            wx.setStorage({
-                key: 'inviter_id_' + e.id,
-                data: e.inviter_id
-            })
-        }
-
-        // 获取购物车数据
-        wx.getStorage({
-            key: 'shopCarInfo',
-            success: function(res) {
-                that.setData({
-                    shopCarInfo: res.data,
-                    shopNum: res.data.shopNum
-                });
-            }
-        });
-    },
-    tobuy: function() {
-        this.setData({
-            shopType: "tobuy"
-        });
-        this.bindGuiGeTap();
-        
-        if (this.data.goodsDetail.properties && !this.data.canSubmit) {
-            this.bindGuiGeTap();
-            return;
-        }
-
-        if (this.data.buyNumber < 1) {
-            wx.showModal({
-                title: '提示',
-                content: '暂时缺货哦~',
-                showCancel:false
-            });
-            return;
-        }
-
-        this.addShopCar();
-        this.goShopCar();
-    },
-
     numJianTap: function() {
         if (this.data.buyNumber > this.data.buyNumMin) {
             var currentNum = this.data.buyNumber;
@@ -308,163 +291,5 @@ Page({
                 buyNumber: currentNum
             })
         }
-    },
-    addShopFavorite: function () {
-        this.setData({
-            isFavorite: true
-        });
-    },
-    removeShopFavorite: function () {
-        this.setData({
-            isFavorite: false
-        });
-    },
-    /**
-    * 立即购买
-    */
-    buyNow: function() {
-        if (this.data.goodsDetail.properties && !this.data.canSubmit) {
-            if (!this.data.canSubmit) {
-                wx.showModal({
-                    title: '提示',
-                    content: '请选择商品规格！',
-                    showCancel: false
-                })
-            }
-            this.bindGuiGeTap();
-            wx.showModal({
-                title: '提示',
-                content: '请先选择规格尺寸哦~',
-                showCancel: false
-            });
-            return;
-        }
-        if (this.data.buyNumber < 1) {
-            wx.showModal({
-                title: '提示',
-                content: '购买数量不能为0！',
-                showCancel: false
-            });
-            return;
-        }
-        //组建立即购买信息
-        var buyNowInfo = this.buliduBuyNowInfo();
-        // 写入本地存储
-        wx.setStorage({
-            key: "buyNowInfo",
-            data: buyNowInfo
-        });
-        this.closePopupTap();
-
-        wx.navigateTo({
-            url: "/pages/to-pay-order/index?orderType=buyNow"
-        })
-    },
-    /**
-   * 组建购物车信息
-   */
-    bulidShopCarInfo: function() {
-        // 加入购物车
-        var shopCarMap = {};
-        shopCarMap.goodsId = this.data.goodsDetail.basicInfo.id;
-        shopCarMap.pic = this.data.goodsDetail.basicInfo.pic;
-        shopCarMap.name = this.data.goodsDetail.basicInfo.name;
-        // shopCarMap.label=this.data.goodsDetail.basicInfo.id; 规格尺寸 
-        shopCarMap.propertyChildIds = this.data.propertyChildIds;
-        shopCarMap.label = this.data.propertyChildNames;
-        shopCarMap.price = this.data.selectSizePrice;
-        shopCarMap.left = "";
-        shopCarMap.active = true;
-        shopCarMap.number = this.data.buyNumber;
-        shopCarMap.logisticsType = this.data.goodsDetail.basicInfo.logisticsId;
-        shopCarMap.logistics = this.data.goodsDetail.logistics;
-        shopCarMap.weight = this.data.goodsDetail.basicInfo.weight;
-
-        var shopCarInfo = this.data.shopCarInfo;
-        if (!shopCarInfo.shopNum) {
-            shopCarInfo.shopNum = 0;
-        }
-        if (!shopCarInfo.shopList) {
-            shopCarInfo.shopList = [];
-        }
-        var hasSameGoodsIndex = -1;
-        for (var i = 0; i < shopCarInfo.shopList.length; i++) {
-            var tmpShopCarMap = shopCarInfo.shopList[i];
-            if (tmpShopCarMap.goodsId == shopCarMap.goodsId && tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds) {
-                hasSameGoodsIndex = i;
-                shopCarMap.number = shopCarMap.number + tmpShopCarMap.number;
-                break;
-            }
-        }
-
-        shopCarInfo.shopNum = shopCarInfo.shopNum + this.data.buyNumber;
-        if (hasSameGoodsIndex > -1) {
-            shopCarInfo.shopList.splice(hasSameGoodsIndex, 1, shopCarMap);
-        } else {
-            shopCarInfo.shopList.push(shopCarMap);
-        }
-        return shopCarInfo;
-    },
-    /**
-   * 组建立即购买信息
-   */
-    buliduBuyNowInfo: function() {
-        var shopCarMap = {};
-        shopCarMap.goodsId = this.data.goodsDetail.basicInfo.id;
-        shopCarMap.pic = this.data.goodsDetail.basicInfo.pic;
-        shopCarMap.name = this.data.goodsDetail.basicInfo.name;
-        // shopCarMap.label=this.data.goodsDetail.basicInfo.id; 规格尺寸 
-        shopCarMap.propertyChildIds = this.data.propertyChildIds;
-        shopCarMap.label = this.data.propertyChildNames;
-        shopCarMap.price = this.data.selectSizePrice;
-        shopCarMap.left = "";
-        shopCarMap.active = true;
-        shopCarMap.number = this.data.buyNumber;
-        shopCarMap.logisticsType = this.data.goodsDetail.basicInfo.logisticsId;
-        shopCarMap.logistics = this.data.goodsDetail.logistics;
-        shopCarMap.weight = this.data.goodsDetail.basicInfo.weight;
-
-        var buyNowInfo = {};
-        if (!buyNowInfo.shopNum) {
-            buyNowInfo.shopNum = 0;
-        }
-        if (!buyNowInfo.shopList) {
-            buyNowInfo.shopList = [];
-        }
-        /*    var hasSameGoodsIndex = -1;
-        for (var i = 0; i < toBuyInfo.shopList.length; i++) {
-          var tmpShopCarMap = toBuyInfo.shopList[i];
-          if (tmpShopCarMap.goodsId == shopCarMap.goodsId && tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds) {
-            hasSameGoodsIndex = i;
-            shopCarMap.number = shopCarMap.number + tmpShopCarMap.number;
-            break;
-          }
-        }
-        toBuyInfo.shopNum = toBuyInfo.shopNum + this.data.buyNumber;
-        if (hasSameGoodsIndex > -1) {
-          toBuyInfo.shopList.splice(hasSameGoodsIndex, 1, shopCarMap);
-        } else {
-          toBuyInfo.shopList.push(shopCarMap);
-        }*/
-
-        buyNowInfo.shopList.push(shopCarMap);
-        return buyNowInfo;
-    },
-    reputation: function(goodsId) {
-        var that = this;
-        wx.request({
-            url: 'https://api.it120.cc/' + app.globalData.subDomain + '/shop/goods/reputation',
-            data: {
-                goodsId: goodsId
-            },
-            success: function(res) {
-                if (res.data.code == 0) {
-                    //console.log(res.data.data);
-                    that.setData({
-                        reputation: res.data.data
-                    });
-                }
-            }
-        })
     }
-})
+});

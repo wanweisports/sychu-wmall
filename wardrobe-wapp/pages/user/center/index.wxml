@@ -13,7 +13,7 @@
 
     <view class="my-item" style='background:none;display:flex;flex-direction:column;height:auto;'>
         <view>
-            余额 {{userInfo.balance}} 元， 衣橱币 {{userInfo.ycoid}} 元
+            余额 {{userInfo.balance}} 元， 衣橱币 {{userInfo.ycoid}} 币，积分 {{userInfo.point}} 分
         </view>
         <!--<view style='display:flex;padding-bottom:20rpx;'>-->
             <!--<button type='primary' style='width:100%;margin-right:70rpx;' bindtap="recharge">充值</button>-->
@@ -31,14 +31,6 @@
     <view class="my-item">
         <navigator url="/pages/user/order-list/index" hover-class="navigator-hover">我的订单</navigator>
     </view>
-
-    <view style="height:20rpx;background: #eee;width:100%;"></view>
-
-    <view class="my-item">
-        <navigator url="/pages/mycoupons/index" hover-class="navigator-hover">
-            我的积分<text class="right-text">{{userInfo.point}}分</text>
-        </navigator>
-    </view>
     <view class="my-item">
         <navigator url="/pages/user/coupons/index" hover-class="navigator-hover">
             我的优惠券<text class="right-text">1张</text>
@@ -46,6 +38,12 @@
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
+
+    <!--<view class="my-item">-->
+        <!--<navigator url="/pages/mycoupons/index" hover-class="navigator-hover">-->
+            <!--我的积分<text class="right-text">{{userInfo.point}}分</text>-->
+        <!--</navigator>-->
+    <!--</view>-->
 
     <view class="my-item">
         <navigator url="/pages/user/mobile-check/index" hover-class="navigator-hover">修改手机号</navigator>
