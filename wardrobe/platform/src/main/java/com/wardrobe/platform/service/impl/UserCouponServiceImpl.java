@@ -54,7 +54,7 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
 
     @Override
     public UserCouponInfo getUserCouponInfo(int cpid, int uid) throws ParseException{
-        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4", cpid, uid, IDBConstant.LOGIC_STATUS_YES, DateUtil.dateToDate(new Date()));
+        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4", cpid, uid, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToDate(new Date()));
     }
 
     @Override
@@ -86,6 +86,15 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
             userCouponInfo.setDueTime(new Timestamp(DateUtil.addDate(date, sysCouponRule.getDueNum()).getTime()));
         }
         baseDao.save(userCouponInfo, null);
+    }
+
+    @Override
+    public void updateUseUserCouponInfo(Integer cpid, String serviceType, int uid) throws ParseException{
+        if(IDBConstant.LOGIC_STATUS_YES.equals(serviceType)){
+            UserCouponInfo userCouponInfo = getUserCouponInfo(cpid, uid);
+            userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+            baseDao.save(userCouponInfo, userCouponInfo.getStatus());
+        }
     }
 
 }

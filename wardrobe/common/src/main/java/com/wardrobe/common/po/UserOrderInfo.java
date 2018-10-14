@@ -32,6 +32,7 @@ public class UserOrderInfo {
 
     private String serviceType;
     private Integer cpid;
+    private Integer ycoid;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -214,6 +215,27 @@ public class UserOrderInfo {
         this.updateTime = updateTime;
     }
 
+    @Basic
+    @Column(name = "cpid")
+    public Integer getCpid() {
+        return cpid;
+    }
+
+    public void setCpid(Integer cpid) {
+        this.cpid = cpid;
+    }
+
+
+    @Basic
+    @Column(name = "ycoid")
+    public Integer getYcoid() {
+        return ycoid;
+    }
+
+    public void setYcoid(Integer ycoid) {
+        this.ycoid = ycoid;
+    }
+
     @Transient
     public List<UserOrderDetail> getUserOrderDetails() {
         return userOrderDetails;
@@ -230,15 +252,6 @@ public class UserOrderInfo {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
-    }
-
-    @Transient
-    public Integer getCpid() {
-        return cpid;
-    }
-
-    public void setCpid(Integer cpid) {
-        this.cpid = cpid;
     }
 
     @Override

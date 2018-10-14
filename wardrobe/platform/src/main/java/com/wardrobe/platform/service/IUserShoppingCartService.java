@@ -27,6 +27,10 @@ public interface IUserShoppingCartService {
 
     Map<String, Object> settlementCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
 
+    Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
+
     double countDiscount(double sumPrice, String serviceType, Integer cpid, int uid) throws ParseException;
+
+    int updateUseUserYcoid(int uid, String serviceType, double sumPrice);
 
 }

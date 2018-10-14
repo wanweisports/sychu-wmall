@@ -12,7 +12,6 @@ import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.*;
-import com.wardrobe.wx.WeiXinConnector;
 import com.wardrobe.wx.http.HttpConnect;
 import com.wardrobe.wx.util.ConfigUtil;
 import com.wardrobe.wx.util.PayCommonUtil;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
@@ -50,6 +48,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     @Autowired
     private ISysDeviceService sysDeviceService;
+
+    @Autowired
+    private IUserCouponService userCouponService;
 
     private UserOrderInfo getUserOrderInfo(int oid){
         return baseDao.getToEvict(UserOrderInfo.class, oid);
@@ -165,8 +166,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
         //支付价格：之后减去优惠部分
-        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(userOrderInfo.getPriceSum().doubleValue(), userOrderInfo.getServiceType(), userOrderInfo.getCpid(), uid)));
+        double sumPrice = userOrderInfo.getPriceSum().doubleValue();
+        String serviceType = userOrderInfo.getServiceType();
+        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid)));
         baseDao.save(userOrderInfo, oid);
+
+        //优惠券置为使用状态
+        userCouponService.updateUseUserCouponInfo(userOrderInfo.getCpid(), serviceType, uid);
+
+        //衣橱币减去
+        int userYcoid = userShoppingCartService.updateUseUserYcoid(uid, serviceType, sumPrice);
+        if(userYcoid > 0) {
+            userOrderInfo.setYcoid(userYcoid);
+            baseDao.save(userOrderInfo, userOrderInfo.getOid());
+        }
         return oid;
     }
 
@@ -213,8 +226,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
         //支付价格：之后减去优惠部分
-        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(userOrderInfo.getPriceSum().doubleValue(), userOrderInfo.getServiceType(), userOrderInfo.getCpid(), uid)));
+        double sumPrice = userOrderInfo.getPriceSum().doubleValue();
+        String serviceType = userOrderInfo.getServiceType();
+        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid)));
         baseDao.save(userOrderInfo, oid);
+
+        //优惠券置为使用状态
+        userCouponService.updateUseUserCouponInfo(userOrderInfo.getCpid(), serviceType, uid);
+
+        //衣橱币减去
+        int userYcoid = userShoppingCartService.updateUseUserYcoid(uid, serviceType, sumPrice);
+        if(userYcoid > 0) {
+            userOrderInfo.setYcoid(userYcoid);
+            baseDao.save(userOrderInfo, userOrderInfo.getOid());
+        }
         return oid;
     }
 
@@ -321,7 +346,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Desc("获得未支付并在当前时间之前的最后一个未支付的订单（一个时间段只能预约一次）")
     @Override
     public Map<String, Object> getNowReserveOrderInfo(int uid){
-        StringBuilder sql = new StringBuilder("SELECT sdc.dcid, r.roid, DATE(r.reserveStartTime) resDate, TIME(r.reserveStartTime) resStartTime, TIME(r.reserveEndTime) resEndTime, sd.name sdName, sd.address, a.areaNameFull, sdc.name sdcName FROM reserve_order_info r, sys_device_control sdc, sys_device_info sd, sys_area a");
+        StringBuilder sql = new StringBuilder("SELECT sd.did, sdc.dcid, r.roid, DATE(r.reserveStartTime) resDate, TIME(r.reserveStartTime) resStartTime, TIME(r.reserveEndTime) resEndTime, sd.name sdName, sd.address, a.areaNameFull, sdc.name sdcName FROM reserve_order_info r, sys_device_control sdc, sys_device_info sd, sys_area a");
         sql.append(" WHERE r.dcid = sdc.dcid AND sdc.did = sd.did AND sd.areaId = a.areaId AND r.reserveEndTime >= NOW() AND r.uid = ?1 AND r.status = ?2 AND r.payStatus = ?3 ORDER BY r.roid DESC");
         List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), uid, IDBConstant.LOGIC_STATUS_YES, IDBConstant.LOGIC_STATUS_NO);
         list.parallelStream().forEach(map -> {

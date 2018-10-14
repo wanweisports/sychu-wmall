@@ -28,4 +28,6 @@ public interface IUserCouponService {
 
     void addUserCoupon(SysCouponRule sysCouponRule, int uid);
 
+    void updateUseUserCouponInfo(Integer cpid, String serviceType, int uid) throws ParseException;
+
 }
