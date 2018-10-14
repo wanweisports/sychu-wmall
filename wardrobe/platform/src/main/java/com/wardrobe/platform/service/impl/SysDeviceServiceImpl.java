@@ -33,10 +33,6 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         PageBean pageBean = getDevices(deviceInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.parallelStream().forEach(map -> {
-            String startTime = StrUtil.objToStr(map.get("startTime"));
-            String endTime = StrUtil.objToStr(map.get("endTime"));
-            map.put("startTime", startTime.substring(0, startTime.lastIndexOf(":")));
-            map.put("endTime", endTime.substring(0, endTime.lastIndexOf(":")));
             map.put("areaNameFull", StrUtil.objToStr(map.get("areaNameFull")).replace("->", " "));
         });
         return pageBean;
