@@ -157,6 +157,8 @@ public class ProductsController extends BaseController {
         commodityInfo.setPrice(productRequest.getPrice());
         commodityInfo.setCouPrice(productRequest.getCouPrice());
         commodityInfo.setGroupId(productRequest.getGroupId());
+        commodityInfo.setCommNo(productRequest.getCommNo());
+        commodityInfo.setBrandName(productRequest.getBrandName());
 
         CommodityColor commodityColor = new CommodityColor();
         commodityColor.setColorName(productRequest.getColorName());
@@ -194,6 +196,8 @@ public class ProductsController extends BaseController {
         commodityInfo.setPrice(productRequest.getPrice());
         commodityInfo.setCouPrice(productRequest.getCouPrice());
         commodityInfo.setGroupId(productRequest.getGroupId());
+        commodityInfo.setCommNo(productRequest.getCommNo());
+        commodityInfo.setBrandName(productRequest.getBrandName());
 
         CommodityColor commodityColor = new CommodityColor();
         commodityColor.setCid(productRequest.getCid());
