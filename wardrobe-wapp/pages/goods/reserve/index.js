@@ -124,6 +124,7 @@ Page({
         app.wxRequest("/order/saveReserveOrder", postData, function (res) {
             if (res.code == 1) {
                 app.clearCookie("shopOrderInfo");
+                app.redirect("/page/user/reserve/index");
             }
 
             // 配置模板消息推送

@@ -40,7 +40,7 @@ Page({
     getGoodsList: function () {
         var that = this;
 
-        app.wxRequest("/commodity/index", {newly: 1}, function (res) {
+        app.wxRequest("/user/userCollections", {}, function (res) {
             if (res.code == 1) {
               that.setData({
                 goods: res.data.list

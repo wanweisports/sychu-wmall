@@ -276,7 +276,7 @@ Page({
     },
     toPayOrder2: function () {
         wx.redirectTo({
-            url: "/pages/goods/settle/index"
+            url: "/pages/goods/reserve/index"
         });
     },
     toPayOrder:function(){
