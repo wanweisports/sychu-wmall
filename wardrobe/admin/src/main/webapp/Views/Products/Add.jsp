@@ -125,7 +125,7 @@
                                     </label>
                                     <div class="col-md-10 style-list">
                                         <c:forEach var="s" items="${styleList}">
-                                            <button type="button" class="btn btn-secondary style-item mr-2" data-id="${s.dictId}">${s.dictValue}</button>
+                                            <button type="button" class="btn btn-secondary style-item mr-2" data-id="${s.dictId}">${s.dictValue != '' ? s.dictValue : '无'}</button>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary style-add" data-toggle="modal" data-target="#product_style_add">
                                             <i class="fa fa-plus"></i>
@@ -141,7 +141,7 @@
                                     </label>
                                     <div class="col-md-10 material-list">
                                         <c:forEach var="m" items="${materialList}">
-                                            <button type="button" class="btn btn-secondary material-item mr-2" data-id="${m.dictId}">${m.dictValue}</button>
+                                            <button type="button" class="btn btn-secondary material-item mr-2" data-id="${m.dictId}">${m.dictValue != '' ? m.dictValue : '无'}</button>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary material-add" data-toggle="modal" data-target="#product_material_add">
                                             <i class="fa fa-plus"></i>

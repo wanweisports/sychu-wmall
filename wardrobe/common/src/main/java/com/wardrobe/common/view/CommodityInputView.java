@@ -21,6 +21,8 @@ public class CommodityInputView extends BaseInputView {
     private Integer uid;
     private String shoppingType;
 
+    private String commNo;
+
     public String getCategory() {
         return category;
     }
@@ -123,5 +125,13 @@ public class CommodityInputView extends BaseInputView {
 
     public void setShoppingType(String shoppingType) {
         this.shoppingType = shoppingType;
+    }
+
+    public String getCommNo() {
+        return commNo;
+    }
+
+    public void setCommNo(String commNo) {
+        this.commNo = commNo;
     }
 }

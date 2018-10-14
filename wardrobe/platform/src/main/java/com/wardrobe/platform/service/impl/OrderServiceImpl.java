@@ -581,7 +581,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
         whereSql.append(" ORDER BY roi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
+    }
 
+    @Override
+    public List<Map<String, Object>> getReserveOrderByTime(String time){
+        return baseDao.queryBySql("SELECT roi.roid, roi.rno FROM reserve_order_info roi WHERE reserveStartTime BETWEEN ?1 AND ?2", time + IPlatformConstant.time00, time + IPlatformConstant.time24);
     }
 
 }

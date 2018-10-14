@@ -53,6 +53,7 @@ public class DistributionController extends BaseController {
         deviceInputView.setType(IDBConstant.LOGIC_STATUS_NO);
         model.addAttribute("deviceList", deviceService.getSysDeviceInfoList(deviceInputView).getList());
         model.addAllAttributes(deviceService.getDistributionSetting(deviceInputView));
+        model.addAttribute("reserveOrders", orderService.getReserveOrderByTime(deviceInputView.getDbTime()));
         return "Distribution/Settings";
     }
 

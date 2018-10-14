@@ -8,6 +8,7 @@ import com.wardrobe.common.view.OrderInputView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,5 +41,7 @@ public interface IOrderService {
     PageBean getUserOrderListIn(OrderInputView orderInputView);
 
     PageBean getReserveOrderInfoList(OrderInputView orderInputView);
+
+    List<Map<String, Object>> getReserveOrderByTime(String time);
 
 }

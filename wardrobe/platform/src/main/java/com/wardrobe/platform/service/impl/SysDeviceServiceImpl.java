@@ -162,7 +162,12 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
 
     private List<Map<String, Object>> getSysDeviceControlCommoditys(int dcid, DeviceInputView deviceInputView){
         String dbTime = deviceInputView.getDbTime();
-        return baseDao.queryBySql("SELECT ci.*, cs.size, cd.dbid, cd.rfidEpc, cd.dbTime FROM sys_commodity_distribution cd, commodity_info ci, commodity_size cs WHERE cd.cid = ci.cid AND cd.sid = cs.sid AND cd.dcid = ?1 AND cd.dbTime = ?2", dcid, dbTime);
+        StringBuilder sql = new StringBuilder("SELECT ci.*, cs.size, cd.dbid, cd.rfidEpc, cd.dbTime, roi.rno FROM sys_commodity_distribution cd");
+        sql.append(" INNER JOIN commodity_info ci ON(cd.cid = ci.cid)");
+        sql.append(" INNER JOIN commodity_size cs ON(cd.sid = cs.sid)");
+        sql.append(" LEFT JOIN reserve_order_info roi ON(cd.roid = roi.roid)");
+        sql.append(" WHERE cd.dcid = ?1 AND cd.dbTime = ?2");
+        return baseDao.queryBySql(sql.toString(), dcid, dbTime);
     }
 
     @Override

@@ -38,18 +38,19 @@
                             <small>Products List</small>
                         </div>
                         <div class="card-block">
-                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list"<%-- novalidate onsubmit="return false;"--%>>
+                            <form id="products_query_form" method="post" class="form-horizontal" action="/admin/distribution/products"<%-- novalidate onsubmit="return false;"--%>>
                                 <input type="hidden" name="groupId" value="${groupId}" />
                                 <div class="form-group row">
                                     <div class="col-md-4">
                                         <input type="text" name="commName" class="form-control" placeholder="商品名称" value="${commName}">
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-control" name="status">
+                                        <input type="text" name="commNo" class="form-control" placeholder="商品编号" value="${commNo}">
+                                        <%--<select class="form-control" name="status">
                                             <option value>全部商品</option>
                                             <option value="1" <c:if test="${status=='1'}">selected</c:if>>已上架</option>
                                             <option value="2" <c:if test="${status=='2'}">selected</c:if>>已下架</option>
-                                        </select>
+                                        </select>--%>
                                     </div>
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-primary products-query-btn">
@@ -64,10 +65,11 @@
                             <table class="table table-striped table-sm products-list">
                                 <thead>
                                 <tr>
-                                    <th>商品图片</th>
-                                    <th>商品名称</th>
-                                    <th>商品品类</th>
-                                    <th>商品原价</th>
+                                    <th nowrap>商品图片</th>
+                                    <th nowrap>商品名称</th>
+                                    <th nowrap>商品编号</th>
+                                    <th nowrap>商品品类</th>
+                                    <th nowrap>商品原价</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -76,6 +78,7 @@
                                 <tr data-id="">
                                     <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
                                     <td>${c.commName}</td>
+                                    <td>${c.commNo}</td>
                                     <td>${c.styleName}</td>
                                     <td>￥${c.price}</td>
                                     <td>
