@@ -17,3 +17,12 @@ E:\Get\李磊\李磊9-19区分出rfid和1D2D各种配置+桌面版\C#封装接�
 E:\Get\李磊\李磊9-19区分出rfid和1D2D各种配置+桌面版\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.Form1.resources
 E:\Get\李磊\李磊9-19区分出rfid和1D2D各种配置+桌面版\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.Properties.Resources.resources
 E:\Get\李磊\李磊9-19区分出rfid和1D2D各种配置+桌面版\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.csproj.GenerateResource.Cache
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.exe
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.pdb
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\bin\Debug\UHFSDKTest.exe
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\bin\Debug\UHFSDKTest.pdb
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\bin\Debug\Reader.pdb
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.csprojResolveAssemblyReference.cache
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.Form1.resources
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.Properties.Resources.resources
+E:\HHHHHHHH\王军2018-08-11\sychu-wmall\闪衣橱相关\硬件相关\RFID-C#封装接口api\C#封装接口api-RFID\UHFSDKTest\UHFSDKTest\obj\x86\Debug\UHFSDKTest.csproj.GenerateResource.Cache

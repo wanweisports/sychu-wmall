@@ -49,9 +49,10 @@
             // btnConnectRs232
             // 
             this.btnConnectRs232.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnectRs232.Location = new System.Drawing.Point(236, 327);
+            this.btnConnectRs232.Location = new System.Drawing.Point(315, 409);
+            this.btnConnectRs232.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnConnectRs232.Name = "btnConnectRs232";
-            this.btnConnectRs232.Size = new System.Drawing.Size(90, 23);
+            this.btnConnectRs232.Size = new System.Drawing.Size(120, 29);
             this.btnConnectRs232.TabIndex = 3;
             this.btnConnectRs232.Text = "Connect";
             this.btnConnectRs232.UseVisualStyleBackColor = true;
@@ -60,9 +61,10 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(379, 327);
+            this.button1.Location = new System.Drawing.Point(505, 409);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 23);
+            this.button1.Size = new System.Drawing.Size(120, 29);
             this.button1.TabIndex = 4;
             this.button1.Text = "Disconnect";
             this.button1.UseVisualStyleBackColor = true;
@@ -71,9 +73,10 @@
             // btInventoryRealStart
             // 
             this.btInventoryRealStart.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btInventoryRealStart.Location = new System.Drawing.Point(12, 12);
+            this.btInventoryRealStart.Location = new System.Drawing.Point(16, 15);
+            this.btInventoryRealStart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btInventoryRealStart.Name = "btInventoryRealStart";
-            this.btInventoryRealStart.Size = new System.Drawing.Size(161, 23);
+            this.btInventoryRealStart.Size = new System.Drawing.Size(215, 29);
             this.btInventoryRealStart.TabIndex = 5;
             this.btInventoryRealStart.Text = "Test Inventory start";
             this.btInventoryRealStart.UseVisualStyleBackColor = true;
@@ -82,9 +85,10 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(362, 12);
+            this.button4.Location = new System.Drawing.Point(483, 15);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(132, 23);
+            this.button4.Size = new System.Drawing.Size(176, 29);
             this.button4.TabIndex = 7;
             this.button4.Text = "Test Read Tag";
             this.button4.UseVisualStyleBackColor = true;
@@ -93,9 +97,10 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(251, 114);
+            this.button5.Location = new System.Drawing.Point(335, 142);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(243, 23);
+            this.button5.Size = new System.Drawing.Size(324, 29);
             this.button5.TabIndex = 8;
             this.button5.Text = "Test get buffer tag count";
             this.button5.UseVisualStyleBackColor = true;
@@ -104,9 +109,10 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(17, 71);
+            this.button6.Location = new System.Drawing.Point(23, 89);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(176, 23);
+            this.button6.Size = new System.Drawing.Size(235, 29);
             this.button6.TabIndex = 9;
             this.button6.Text = "Test Buffer inventory";
             this.button6.UseVisualStyleBackColor = true;
@@ -115,9 +121,10 @@
             // button8
             // 
             this.button8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(17, 114);
+            this.button8.Location = new System.Drawing.Point(23, 142);
+            this.button8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(173, 23);
+            this.button8.Size = new System.Drawing.Size(231, 29);
             this.button8.TabIndex = 11;
             this.button8.Text = "Test Reader Version";
             this.button8.UseVisualStyleBackColor = true;
@@ -126,9 +133,10 @@
             // button9
             // 
             this.button9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(266, 186);
+            this.button9.Location = new System.Drawing.Point(355, 232);
+            this.button9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(203, 23);
+            this.button9.Size = new System.Drawing.Size(271, 29);
             this.button9.TabIndex = 12;
             this.button9.Text = "Test 6B inventory";
             this.button9.UseVisualStyleBackColor = true;
@@ -137,9 +145,10 @@
             // button11
             // 
             this.button11.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.Location = new System.Drawing.Point(40, 186);
+            this.button11.Location = new System.Drawing.Point(53, 232);
+            this.button11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(145, 23);
+            this.button11.Size = new System.Drawing.Size(193, 29);
             this.button11.TabIndex = 14;
             this.button11.Text = "Test 6B read";
             this.button11.UseVisualStyleBackColor = true;
@@ -166,10 +175,12 @@
             "COM14",
             "COM15",
             "COM16"});
-            this.cmbComPort.Location = new System.Drawing.Point(95, 271);
+            this.cmbComPort.Location = new System.Drawing.Point(127, 339);
+            this.cmbComPort.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmbComPort.Name = "cmbComPort";
-            this.cmbComPort.Size = new System.Drawing.Size(121, 20);
+            this.cmbComPort.Size = new System.Drawing.Size(160, 23);
             this.cmbComPort.TabIndex = 20;
+            this.cmbComPort.SelectedIndexChanged += new System.EventHandler(this.cmbComPort_SelectedIndexChanged);
             // 
             // cmbBaudrate
             // 
@@ -179,35 +190,40 @@
             "38400",
             "115200",
             "921600"});
-            this.cmbBaudrate.Location = new System.Drawing.Point(95, 327);
+            this.cmbBaudrate.Location = new System.Drawing.Point(127, 409);
+            this.cmbBaudrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmbBaudrate.Name = "cmbBaudrate";
-            this.cmbBaudrate.Size = new System.Drawing.Size(121, 20);
+            this.cmbBaudrate.Size = new System.Drawing.Size(160, 23);
             this.cmbBaudrate.TabIndex = 21;
+            this.cmbBaudrate.SelectedIndexChanged += new System.EventHandler(this.cmbBaudrate_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 274);
+            this.label1.Location = new System.Drawing.Point(16, 342);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 12);
+            this.label1.Size = new System.Drawing.Size(103, 15);
             this.label1.TabIndex = 22;
             this.label1.Text = "Serial Port:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 330);
+            this.label2.Location = new System.Drawing.Point(16, 412);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.Size = new System.Drawing.Size(79, 15);
             this.label2.TabIndex = 23;
             this.label2.Text = "Baudrate:";
             // 
             // button13
             // 
             this.button13.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button13.Location = new System.Drawing.Point(236, 71);
+            this.button13.Location = new System.Drawing.Point(315, 89);
+            this.button13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(275, 23);
+            this.button13.Size = new System.Drawing.Size(367, 29);
             this.button13.TabIndex = 24;
             this.button13.Text = "Test get Buffer inventory tag";
             this.button13.UseVisualStyleBackColor = true;
@@ -216,9 +232,10 @@
             // button7
             // 
             this.button7.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(273, 263);
+            this.button7.Location = new System.Drawing.Point(364, 329);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(177, 23);
+            this.button7.Size = new System.Drawing.Size(236, 29);
             this.button7.TabIndex = 25;
             this.button7.Text = "Test Reset Reader";
             this.button7.UseVisualStyleBackColor = true;
@@ -228,9 +245,10 @@
             // 
             this.btInventoryRealStop.Enabled = false;
             this.btInventoryRealStop.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btInventoryRealStop.Location = new System.Drawing.Point(179, 12);
+            this.btInventoryRealStop.Location = new System.Drawing.Point(239, 15);
+            this.btInventoryRealStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btInventoryRealStop.Name = "btInventoryRealStop";
-            this.btInventoryRealStop.Size = new System.Drawing.Size(177, 23);
+            this.btInventoryRealStop.Size = new System.Drawing.Size(236, 29);
             this.btInventoryRealStop.TabIndex = 26;
             this.btInventoryRealStop.Text = "Test Inventory stop";
             this.btInventoryRealStop.UseVisualStyleBackColor = true;
@@ -238,9 +256,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(523, 381);
+            this.ClientSize = new System.Drawing.Size(697, 476);
             this.Controls.Add(this.btInventoryRealStop);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button13);
@@ -257,6 +275,7 @@
             this.Controls.Add(this.btInventoryRealStart);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnConnectRs232);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

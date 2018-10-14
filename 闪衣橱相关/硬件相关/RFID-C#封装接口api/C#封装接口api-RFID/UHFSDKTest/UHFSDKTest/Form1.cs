@@ -198,5 +198,15 @@ namespace UHFSDKTest
             btInventoryRealStop.Enabled = false;
             isLoop = false;
         }
+
+        private void cmbComPort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbBaudrate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
