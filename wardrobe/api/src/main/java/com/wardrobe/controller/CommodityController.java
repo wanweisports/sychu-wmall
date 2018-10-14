@@ -84,6 +84,12 @@ public class CommodityController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("settlementRfidCount")
+    public ResponseBean settlementRfidCount(UserCouponInputView userCouponInputView) throws ParseException {
+        return new ResponseBean(userShoppingCartService.settlementRfidCount(userCouponInputView, getUserInfo().getUid()));
+    }
+
+    @ResponseBody
     @RequestMapping("commodityBanners")
     public ResponseBean commodityBanners(){
         return new ResponseBean(commodityService.getCommodityBanners());

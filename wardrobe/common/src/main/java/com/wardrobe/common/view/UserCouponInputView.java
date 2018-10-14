@@ -8,6 +8,7 @@ public class UserCouponInputView extends BaseInputView {
     private String scids;
     private String serviceType;
     private Integer cpid;
+    private String dbids; //配送ids，多个逗号分隔
 
     public String getScids() {
         return scids;
@@ -31,5 +32,13 @@ public class UserCouponInputView extends BaseInputView {
 
     public void setCpid(Integer cpid) {
         this.cpid = cpid;
+    }
+
+    public String getDbids() {
+        return dbids;
+    }
+
+    public void setDbids(String dbids) {
+        this.dbids = dbids;
     }
 }

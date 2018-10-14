@@ -65,6 +65,21 @@ URL：/commodity/commodity/settlementCount?scids=22,23,25&serviceType=1&cpid=1
 		}
 	}
 
+30. 普通订单结算---计算金额【新增接口】
+URL：/commodity/commodity/settlementCount?dbids=6,9,10&serviceType=1&cpid=1
+      请求参数：
+	1. dbids（配送的衣服id，请见上一个接口标蓝色参数，多个逗号）
+	2. serviceType：1：使用优惠券（必传优惠券id）  2：使用衣橱币	
+	3. cpid：优惠券id（非必填，使用优惠券传此id）
+      返回JSON：
+	{
+		"code": "1",
+		"message": "操作成功",
+		"data": {
+			"sumPrice": 1807.11
+		}
+	}
+
 17. 第17个接口有修改：保存普通订单【修改接口】
 	URL：/order/saveOrder
 	请求参数：1. expressName    【不变】

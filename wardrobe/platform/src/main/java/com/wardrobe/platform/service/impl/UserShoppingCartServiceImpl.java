@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
@@ -162,7 +163,28 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
         Map<String, Object> data = new HashMap<>(1, 1);
         //乘以折扣(四舍五入)
-        data.put("sumPrice", countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid));
+        double price = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
+        data.put("sumPrice", price > 0 ? price : 0);
+        return data;
+    }
+
+    @Override
+    public Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException{
+        StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
+        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND cd.dbid IN(:dbids)");
+        String dbids = userCouponInputView.getDbids();
+        List<Map<String, Object>> settlement = baseDao.queryBySql(sql.toString(), new HashMap() {{
+            putAll(SQLUtil.getInToSQL("dbids", dbids));
+        }});
+        double sumPrice = 0;
+        for(Map<String, Object> map : settlement){
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+        }
+
+        Map<String, Object> data = new HashMap<>(1, 1);
+        //乘以折扣(四舍五入)
+        double price = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
+        data.put("sumPrice", price > 0 ? price : 0);
         return data;
     }
 
@@ -175,11 +197,35 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
                 sumPrice = Arith.sub(sumPrice, userCouponInfo.getCouponPrice().doubleValue());
             }
         }else if(IDBConstant.LOGIC_STATUS_NO.equals(serviceType)){ //使用衣橱币
-            sumPrice = Arith.sub(sumPrice, userAccount.getYcoid());
+            int ycoid = userAccount.getYcoid();
+            if(ycoid >= sumPrice) {  //衣橱币超过总金额
+                sumPrice = (sumPrice) -  (int)(sumPrice); //处理衣橱币整数，还要支付小数
+            }else{
+                sumPrice = Arith.sub(sumPrice, ycoid);
+            }
         }
         //乘以折扣(四舍五入)
         SysRankInfo rankInfoByRank = rankService.getRankInfoByRank(userAccount.getRank());
         return StrUtil.roundKeepTwo(Arith.mul(sumPrice > 0 ? sumPrice : 0, rankInfoByRank.getRankDiscount().doubleValue()));
+    }
+
+    @Desc("减去用户使用的衣橱币")
+    @Override
+    public int updateUseUserYcoid(int uid, String serviceType, double sumPrice){
+        UserAccount userAccount = userAccountService.getUserAccount(uid);
+        if(IDBConstant.LOGIC_STATUS_NO.equals(serviceType)) { //使用衣橱币
+            int subYcoid = 0;
+            int ycoid = userAccount.getYcoid();
+            if(ycoid >= sumPrice) {  //衣橱币超过总金额
+                subYcoid = (int) sumPrice;
+            }else{
+                subYcoid = ycoid;
+            }
+            userAccount.setYcoid(userAccount.getYcoid() - subYcoid);
+            baseDao.save(userAccount, userAccount.getUid());
+            return subYcoid;
+        }
+        return 0;
     }
 
 }
