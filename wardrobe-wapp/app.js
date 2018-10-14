@@ -160,7 +160,7 @@ App({
             },
             function (res) {
                 if (res.code == 1) {
-                    var data = res.data;
+                    let data = res.data;
 
                     wx.requestPayment({
                         timeStamp: data.timeStamp,
