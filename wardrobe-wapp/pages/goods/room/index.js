@@ -1,5 +1,5 @@
 //index.js
-var app = getApp();
+const app = getApp();
 
 Page({
     data: {
@@ -13,13 +13,11 @@ Page({
         delBtnWidth: 120    //删除按钮宽度单位（rpx）
     },
     toListPage:function(){
-        wx.switchTab({
-            url: "/pages/goods/list/index"
-        });
+        app.redirect("/pages/goods/list/index", "switchTab");
     },
     // 获取购物车列表
     getShoppingCart: function () {
-        var that = this;
+        let content = this;
 
         app.wxRequest("/commodity/userShoppingCarts", {shoppingType: 2}, function (res) {
             var data = res.data;
@@ -30,7 +28,7 @@ Page({
                     data.saveHidden = true;
                     data.allSelect = true;
                     data.noSelect = false;
-                    for (var i = 0; i < data.list.length; i++) {
+                    for (let i = 0; i < data.list.length; i++) {
                         //pic,name,label,price,number,left,active
                         data.list[i].pic = data.list[i].resourcePath;
                         data.list[i].name = data.list[i].commName;
@@ -41,19 +39,17 @@ Page({
                     }
                 }
 
-                that.setData({
+                content.setData({
                     goodsList: data
                 });
 
-                that.setGoodsList(that.getSaveHide(), that.totalPrice(), that.allSelect(), that.noSelect(), data.list);
+                content.setGoodsList(content.getSaveHide(), content.totalPrice(), content.allSelect(), content.noSelect(), data.list);
             }
         });
     },
     // 删除购物车列表
     deleteShoppingCart: function (scid) {
-        var that = this;
-
-        app.wxRequest("/commodity/delShoppingCart", {scid: scid}, function (res) {});
+        app.wxRequest("/commodity/delShoppingCart", {scids: scid}, function (res) {});
     },
     //获取元素自适应后的实际宽度
     getEleWidth: function (w) {
@@ -81,17 +77,7 @@ Page({
         this.onShow();
     },
     onShow: function () {
-        var shopList = [];
-
         this.getShoppingCart();
-        // // 获取购物车数据
-        // var shopCarInfoMem = wx.getStorageSync('shopCarInfo');
-        // if (shopCarInfoMem && shopCarInfoMem.shopList) {
-        //     shopList = shopCarInfoMem.shopList
-        // }
-        // this.data.goodsList.list = shopList;
-        //
-        // this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),shopList);
     },
     touchS: function (e) {
         if (e.touches.length == 1) {
@@ -208,18 +194,14 @@ Page({
             }
         });
 
-        var shopCarInfo = {};
-        var tempNumber = 0;
-        shopCarInfo.shopList = list;
-        for(var i = 0;i<list.length;i++){
+        let shopCartInfo = {}, tempNumber = 0;
+        shopCartInfo.shopList = list;
+        for (let i = 0; i < list.length; i++) {
             tempNumber = tempNumber + list[i].number
         }
-        shopCarInfo.shopNum = tempNumber;
+        shopCartInfo.shopNum = tempNumber;
 
-        wx.setStorage({
-            key: "shopCarInfo",
-            data: shopCarInfo
-        });
+        app.setCookie("shopOrderInfo", shopCartInfo);
     },
     bindAllSelect:function(){
         var currentAllSelect = this.data.goodsList.allSelect;
@@ -278,21 +260,19 @@ Page({
         var saveHidden = this.data.goodsList.saveHidden;
         return saveHidden;
     },
-    deleteSelected:function(){
-        var list = this.data.goodsList.list;
-        /*
-         for(let i = 0 ; i < list.length ; i++){
-         let curItem = list[i];
-         if(curItem.active){
-         list.splice(i,1);
-         }
-         }
-         */
-        // above codes that remove elements in a for statement may change the length of list dynamically
+    // 删除
+    deleteSelected: function () {
+        let list = this.data.goodsList.list;
+        let scid = [];
+
         list = list.filter(function(curGoods) {
+            if (curGoods.active) {
+                scid.push(curGoods.scid);
+            }
             return !curGoods.active;
         });
-        this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+        this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
+        this.deleteShoppingCart(scid.join(","));
     },
     toPayOrder:function(){
         wx.showLoading();
