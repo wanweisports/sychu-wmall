@@ -111,7 +111,8 @@ public class RfidBean {
     }
 
     public List<String> getEpcs(int count) { //最大读取次数
-        this.maxReadCount = count;
+        this.currentReadCount = 1; //初始化当前读取
+        this.maxReadCount = count; //设置最大读取次数
         ((RFIDReaderHelper) readerHelper).realTimeInventory(RfidCache.BA, (byte) 0x01);
         sleep(100*count);
         return epcList;

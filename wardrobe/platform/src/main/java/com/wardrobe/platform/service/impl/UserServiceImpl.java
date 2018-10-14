@@ -244,10 +244,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public PageBean userCollections(UserInputView userInputView){
         Integer uid = userInputView.getUid();
-        StringBuilder headSql = new StringBuilder("SELECT uci.*, sd.dictValue ");
-        StringBuilder bodySql = new StringBuilder(" FROM user_coupon_info uci");
-        bodySql.append(" LEFT JOIN sys_dict sd ON(sd.dictId = uci.serviceType)");
-        StringBuilder whereSql = new StringBuilder(" WHERE uci.uid = :uid");
+        StringBuilder headSql = new StringBuilder("SELECT uc.*, ci.commName, ci.price, ci.brandName");
+        StringBuilder bodySql = new StringBuilder(" FROM user_collection uc, commodity_info ci");
+        StringBuilder whereSql = new StringBuilder(" WHERE uc.cid = ci.cid AND uc.uid = :uid");
         return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }
 

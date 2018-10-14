@@ -14,7 +14,9 @@ public interface IRfidService {
 
     void closeRfid(RfidBean rfidBean);
 
-    Map<String, Object> readEpcLabel(RfidBean rfidBean, int count);
+    Map<String, Object> readEpcLabelIn(RfidBean rfidBean, int count);
+
+    Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count);
 
     SysRfidInfo getRfidInfo(int rfid);
 

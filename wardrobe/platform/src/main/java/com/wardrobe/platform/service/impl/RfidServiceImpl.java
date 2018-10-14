@@ -124,7 +124,7 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
     }
 
     @Override
-    public Map<String, Object> readEpcLabel(RfidBean rfidBean, int count){
+    public Map<String, Object> readEpcLabelIn(RfidBean rfidBean, int count){
         RfidBean rb = RfidCache.isConnect(rfidBean);
         if(rb == null) throw new MessageException("未连接射频");
 
@@ -139,6 +139,23 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
         }
         if(epcs.size() == 0) throw new MessageException("未读到标签，请重试！");
         if(epcs.size() > 0) throw new MessageException("范围内检测到多个标签，请在范围内只保留一个标签进行读取！");
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count){
+        RfidBean rb = RfidCache.isConnect(rfidBean);
+        if(rb == null) throw new MessageException("未连接射频");
+
+        rb.clearEpcs();
+
+        List<String> epcs = rb.getEpcs(count);
+        System.out.println(epcs);
+        if(epcs.size() == 1) {
+            Map<String, Object> data = new HashMap<>(1, 1);
+            data.put("epcs", epcs);
+            return data;
+        }
         return null;
     }
 
