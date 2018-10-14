@@ -118,17 +118,20 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+        Map<String, Object> data = new HashMap<>(8, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
         data.put("headImg", userInfo.getHeadImg());
+        data.put("inviteCode", userInfo.getInviteCode());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());
         data.put("ycoid", userAccount.getYcoid());
         data.put("rank", userAccount.getRank());
         data.put("point", userAccount.getScore());
+
+        data.put("couponCount", userCouponService.getUserCouponCount(uid));
         return data;
     }
 
@@ -236,6 +239,16 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public UserCollection getUserCollection(int cid, int uid){
         return baseDao.queryByHqlFirst("FROM UserCollection WHERE cid = ?1 AND uid = ?2", cid, uid);
+    }
+
+    @Override
+    public PageBean userCollections(UserInputView userInputView){
+        Integer uid = userInputView.getUid();
+        StringBuilder headSql = new StringBuilder("SELECT uci.*, sd.dictValue ");
+        StringBuilder bodySql = new StringBuilder(" FROM user_coupon_info uci");
+        bodySql.append(" LEFT JOIN sys_dict sd ON(sd.dictId = uci.serviceType)");
+        StringBuilder whereSql = new StringBuilder(" WHERE uci.uid = :uid");
+        return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }
 
 }

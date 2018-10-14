@@ -23,18 +23,23 @@ import java.util.Map;
 public class UserCouponServiceImpl extends BaseService implements IUserCouponService {
 
     @Override
+    public int getUserCouponCount(int userId){
+        return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_coupon_info uci WHERE uci.uid = ?1 AND uci.status = ?2", userId, IDBConstant.LOGIC_STATUS_NO).intValue();
+    }
+
+    @Override
     public List<Map<String, Object>> getUserCoupons(int userId){
         return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 ORDER BY uci.createTime DESC", userId, IDBConstant.USER_COUPON);
     }
 
     @Override
     public List<Map<String, Object>> getUserCouponList(int userId){
-        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 ORDER BY uci.status DESC, uci.dueTime DESC", userId, IDBConstant.USER_COUPON);
+        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 ORDER BY uci.dueTime DESC", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO);
     }
 
     @Override
     public List<Map<String, Object>> getUserEffectiveCoupons(int userId, double priceSum){
-        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND uci.dueTime >= ?4 ORDER BY uci.fullPrice, uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_YES, DateUtil.dateToString(new Date(), null) + IPlatformConstant.time00);
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND uci.dueTime >= ?4 ORDER BY uci.fullPrice, uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToString(new Date(), null) + IPlatformConstant.time00);
         if(!CollectionUtils.isEmpty(list)){
             list.stream().forEach(map -> { //计算满减优惠是否能使用
                 if(StrUtil.objToDouble(map.get("fullPrice")) <= priceSum){ //金额大于满减优惠，则可以使用
@@ -72,7 +77,7 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
         Timestamp nowDate = new Timestamp(date.getTime());
         UserCouponInfo userCouponInfo = new UserCouponInfo();
         userCouponInfo.setCreateTime(nowDate);
-        userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
+        userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_NO);
         userCouponInfo.setCouponPrice(sysCouponRule.getCouponPrice());
         userCouponInfo.setFullPrice(sysCouponRule.getFullPrice());
         userCouponInfo.setServiceType(sysCouponRule.getServiceType());

@@ -7,6 +7,9 @@ import com.wardrobe.common.util.CustomizedPropertyConfigurer;
  * 自定义常量
  */
 public interface IPlatformConstant {
+
+	String excelExtension = ".xls";
+	String excelExtensionX = ".xlsx";
 	
 	String SUCCESS_CODE = "1";
 	

@@ -22,6 +22,25 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/list.js?v=${static_resource_version}"></script>
+    <script type="text/javascript">
+        function uoloadExcel(btn){
+            $(btn).prop("disabled", true).text("正在上传..");
+            $("#upload_form").ajaxSubmit({
+                type: "post",
+                dataType: "json",
+                data: {},
+                url: "/commodity/excelCommoditys",
+                success: function (res) {
+                    if(res.code == 1){
+                        window.location.reload();
+                    }else{
+                        alert(res.message);
+                        $(btn).prop("disabled", false).text("上传商品Excel");
+                    }
+                }
+            });
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -59,7 +78,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="card-footer text-right"></div>
+                        <div class="card-footer text-right">
+                            <form id="upload_form" enctype="multipart/form-data">
+                                <input type="file" name="file1"><br/>
+                                <button type="button" onclick="uoloadExcel(this)">上传商品Excel</button>
+                                <a href="/commodity/downCommodityTpl" target="_blank">下载商品Excel</a>
+                            </form>
+                        </div>
                         <div class="card-block">
                             <table class="table table-striped table-sm products-list">
                                 <thead>

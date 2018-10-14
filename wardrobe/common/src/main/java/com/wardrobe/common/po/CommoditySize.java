@@ -13,7 +13,7 @@ public class CommoditySize {
     private Integer cid;
     private String size;
     private Integer stock;
-    private Integer lockStock;
+    private Integer lockStock = 0;
     private Timestamp createTime;
     private Timestamp updateTime;
 

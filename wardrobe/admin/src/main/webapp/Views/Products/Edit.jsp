@@ -137,10 +137,10 @@
                                     <div class="col-md-10 style-list">
                                         <c:forEach var="s" items="${styleList}">
                                             <c:if test="${fn:contains(commodity.style, dh.concat(s.dictId).concat(dh))}">
-                                                <button type="button" class="btn btn-success style-item" data-id="${s.dictId}">${s.dictValue}</button>
+                                                <button type="button" class="btn btn-success style-item" data-id="${s.dictId}">${s.dictValue != '' ? s.dictValue : '无'}</button>
                                             </c:if>
                                             <c:if test="${!fn:contains(commodity.style, dh.concat(s.dictId).concat(dh))}">
-                                                <button type="button" class="btn btn-secondary style-item" data-id="${s.dictId}">${s.dictValue}</button>
+                                                <button type="button" class="btn btn-secondary style-item" data-id="${s.dictId}">${s.dictValue != '' ? s.dictValue : '无'}</button>
                                             </c:if>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary style-add" data-toggle="modal" data-target="#product_style_add">
@@ -158,10 +158,10 @@
                                     <div class="col-md-10 material-list">
                                         <c:forEach var="s" items="${materialList}">
                                             <c:if test="${fn:contains(commodity.material, dh.concat(s.dictId).concat(dh))}">
-                                                <button type="button" class="btn btn-success material-item" data-id="${s.dictId}">${s.dictValue}</button>
+                                                <button type="button" class="btn btn-success material-item" data-id="${s.dictId}">${s.dictValue != '' ? s.dictValue : '无'}</button>
                                             </c:if>
                                             <c:if test="${!fn:contains(commodity.material, dh.concat(s.dictId).concat(dh))}">
-                                                <button type="button" class="btn btn-secondary material-item" data-id="${s.dictId}">${s.dictValue}</button>
+                                                <button type="button" class="btn btn-secondary material-item" data-id="${s.dictId}">${s.dictValue != '' ? s.dictValue : '无'}</button>
                                             </c:if>
                                         </c:forEach>
                                         <button type="button" class="btn btn-primary material-add" data-toggle="modal" data-target="#product_material_add">

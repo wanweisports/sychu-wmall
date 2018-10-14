@@ -44,4 +44,6 @@ public interface IUserService {
 
     UserCollection getUserCollection(int cid, int uid);
 
+    PageBean userCollections(UserInputView userInputView);
+
 }

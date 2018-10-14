@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.annotation.NotPerfect;
 import com.wardrobe.common.annotation.NotProtected;
+import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
@@ -10,6 +11,7 @@ import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.UserCollection;
 import com.wardrobe.common.util.JsonUtils;
+import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +136,16 @@ public class UserController extends BaseController {
         userService.deleteCollection(cid, getUserInfo().getUid());
         return new ResponseBean(true);
     }
+
+    @Desc("用户收藏列表")
+    @ResponseBody
+    @RequestMapping("userCollections")
+    public ResponseBean userCollections(UserInputView userInputView){
+        userInputView.setUid(getUserInfo().getUid());
+        PageBean pageBean = userService.userCollections(userInputView);
+        return new ResponseBean(setPageInfo(pageBean));
+    }
+
 
 }
 
