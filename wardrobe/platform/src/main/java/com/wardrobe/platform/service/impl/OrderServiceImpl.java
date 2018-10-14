@@ -346,7 +346,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Desc("获得未支付并在当前时间之前的最后一个未支付的订单（一个时间段只能预约一次）")
     @Override
     public Map<String, Object> getNowReserveOrderInfo(int uid){
-        StringBuilder sql = new StringBuilder("SELECT sdc.dcid, r.roid, DATE(r.reserveStartTime) resDate, TIME(r.reserveStartTime) resStartTime, TIME(r.reserveEndTime) resEndTime, sd.name sdName, sd.address, a.areaNameFull, sdc.name sdcName FROM reserve_order_info r, sys_device_control sdc, sys_device_info sd, sys_area a");
+        StringBuilder sql = new StringBuilder("SELECT sd.did, sdc.dcid, r.roid, DATE(r.reserveStartTime) resDate, TIME(r.reserveStartTime) resStartTime, TIME(r.reserveEndTime) resEndTime, sd.name sdName, sd.address, a.areaNameFull, sdc.name sdcName FROM reserve_order_info r, sys_device_control sdc, sys_device_info sd, sys_area a");
         sql.append(" WHERE r.dcid = sdc.dcid AND sdc.did = sd.did AND sd.areaId = a.areaId AND r.reserveEndTime >= NOW() AND r.uid = ?1 AND r.status = ?2 AND r.payStatus = ?3 ORDER BY r.roid DESC");
         List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), uid, IDBConstant.LOGIC_STATUS_YES, IDBConstant.LOGIC_STATUS_NO);
         list.parallelStream().forEach(map -> {
