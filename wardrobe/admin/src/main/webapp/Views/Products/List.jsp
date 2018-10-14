@@ -61,13 +61,16 @@
                                         <input type="text" name="commName" class="form-control" placeholder="商品名称" value="${commName}">
                                     </div>
                                     <div class="col-md-2">
+                                        <input type="text" name="commNo" class="form-control" placeholder="商品编号" value="${commNo}">
+                                    </div>
+                                    <div class="col-md-2">
                                         <select class="form-control" name="status">
                                             <option value>全部商品</option>
                                             <option value="1" <c:if test="${status=='1'}">selected</c:if>>已上架</option>
                                             <option value="2" <c:if test="${status=='2'}">selected</c:if>>已下架</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary products-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
@@ -91,6 +94,7 @@
                                 <tr>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
+                                    <th>商品编号</th>
                                     <th>商品品类</th>
                                     <th>商品材质</th>
                                     <th>商品原价</th>
@@ -107,6 +111,7 @@
                                     <td>
                                         <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
+                                    <td>${c.commNo}</td>
                                     <td>${c.styleName}</td>
                                     <td>${c.materialName}</td>
                                     <td>￥${c.price}</td>

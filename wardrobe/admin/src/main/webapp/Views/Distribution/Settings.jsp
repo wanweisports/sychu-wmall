@@ -115,6 +115,20 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="distribution_roi">
+                                <span class="text-danger">*</span> 选择预约单
+                            </label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="distribution_roi" name="roid" data-val="true" data-val-required="请选择预约单">
+                                    <option value="">公共衣服</option>
+                                    <c:forEach var="roi" items="${reserveOrders}">
+                                        <option value="${roi.roid}">${roi.rno}</option>
+                                    </c:forEach>
+                                </select>
+                                <div data-valmsg-for="size" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="distribution_size">
                                 <span class="text-danger">*</span> 选择尺码
                             </label>
@@ -222,6 +236,8 @@
                                                 <th nowrap>衣服</th>
                                                 <th nowrap>尺码</th>
                                                 <th nowrap>射频编码</th>
+                                                <th nowrap>预约单号</th>
+                                                <th nowrap>状态</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
@@ -231,6 +247,15 @@
                                                     <td>${comm.commName}</td>
                                                     <td>${comm.size}</td>
                                                     <td>${comm.rfidEpc}</td>
+                                                    <th>${comm.rno != null ? comm.rno : '-'}</th>
+                                                    <td>
+                                                        <c:if test="${comm.status == '1'}">
+                                                            正常
+                                                        </c:if>
+                                                        <c:if test="${comm.status == '2'}">
+                                                            已出售
+                                                        </c:if>
+                                                    </td>
                                                     <td>
                                                         <a href="javascript:;" class="btn btn-sm btn-danger" onclick="delDistributionCommodity('${comm.dbid}')">
                                                             <i class="fa fa-remove"></i> 移 除

@@ -187,6 +187,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String commName = commodityInputView.getCommName();
         String status = commodityInputView.getStatus();
         Integer groupId = commodityInputView.getGroupId();
+        String commNo = commodityInputView.getCommNo();
 
         StringBuilder headSql = new StringBuilder("SELECT ci.*");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
@@ -199,6 +200,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         if(StrUtil.isNotBlank(commName)){
             whereSql.append(" AND ci.commName = :commName");
+        }
+        if(StrUtil.isNotBlank(commNo)){
+            whereSql.append(" AND ci.commNo = :commNo");
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");

@@ -149,6 +149,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>商品品牌：</th>
+                                    <td colspan="5">${product.brandName}</td>
+                                </tr>
+                                <tr>
                                     <th>商品描述：</th>
                                     <td colspan="5">${product.productDesc}</td>
                                 </tr>

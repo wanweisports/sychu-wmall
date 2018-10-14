@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -18,6 +20,8 @@ public class SysCommodityDistribution {
     private String rfidEpc;
     private Integer dcid;
     private Date dbTime;
+    private Integer roid;
+    private String status = IDBConstant.LOGIC_STATUS_YES;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -80,6 +84,26 @@ public class SysCommodityDistribution {
 
     public void setDbTime(Date dbTime) {
         this.dbTime = dbTime;
+    }
+
+    @Basic
+    @Column(name = "roid")
+    public Integer getRoid() {
+        return roid;
+    }
+
+    public void setRoid(Integer roid) {
+        this.roid = roid;
+    }
+
+    @Basic
+    @Column(name = "status")
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Basic
