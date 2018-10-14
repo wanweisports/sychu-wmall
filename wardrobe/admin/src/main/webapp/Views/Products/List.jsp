@@ -82,7 +82,7 @@
                             <form id="upload_form" enctype="multipart/form-data">
                                 <input type="file" name="file1"><br/>
                                 <button type="button" onclick="uoloadExcel(this)">上传商品Excel</button>
-                                <a href="/commodity/downCommodityTpl" target="_blank">下载商品Excel</a>
+                                <a href="/commodity/downCommodityTpl" target="_blank">下载商品Excel模板</a>
                             </form>
                         </div>
                         <div class="card-block">

@@ -275,6 +275,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfoDB.setPrice(commodityInfo.getPrice());
             commodityInfoDB.setCouPrice(commodityInfo.getCouPrice());
             commodityInfoDB.setProductDesc(commodityInfo.getProductDesc());
+            commodityInfoDB.setCommNo(commodityInfo.getCommNo());
+            commodityInfoDB.setBrandName(commodityInfo.getBrandName());
             commodityInfoDB.setUpdateTime(timestamp);
             baseDao.save(commodityInfoDB, cid);
 

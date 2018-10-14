@@ -20,6 +20,8 @@ public class ProductRequest {
     private String hot;
     private String newly;
     private Integer groupId;
+    private String commNo;
+    private String brandName;
 
     private int coid;
     private String colorName;
@@ -116,6 +118,22 @@ public class ProductRequest {
     }
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    public String getCommNo() {
+        return commNo;
+    }
+
+    public void setCommNo(String commNo) {
+        this.commNo = commNo;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public int getCoid() {
