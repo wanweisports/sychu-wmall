@@ -47,7 +47,7 @@ public class RfidController extends BaseController {
     @RequestMapping(value = "/readEpcLabelCK")
     public ResponseBean readEpcLabelCK(int did){
         SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_NO);
-        return new ResponseBean(rfidService.readEpcLabelIn(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 8));
+        return new ResponseBean(rfidService.readEpcLabelIn(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 15));
     }
 
     @Desc("读取商场射频电子标签")
@@ -55,7 +55,7 @@ public class RfidController extends BaseController {
     @RequestMapping(value = "/readEpcLabelSC")
     public ResponseBean readEpcLabelSC(int did){
         SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
-        return new ResponseBean(rfidService.readEpcLabelApi(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 8));
+        return new ResponseBean(rfidService.readEpcLabelApi(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 15, did));
     }
 
 }

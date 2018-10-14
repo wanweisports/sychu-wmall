@@ -20,6 +20,8 @@ public interface IOrderService {
 
     Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException;
 
+    Integer saveRfidOrderInfo(UserOrderInfo userOrderInfo, String dbids, int uid) throws ParseException;
+
     Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException;
 
     Map<String, Object> getNowReserveOrderInfo(int uid);

@@ -114,7 +114,11 @@ public class RfidBean {
         this.currentReadCount = 1; //初始化当前读取
         this.maxReadCount = count; //设置最大读取次数
         ((RFIDReaderHelper) readerHelper).realTimeInventory(RfidCache.BA, (byte) 0x01);
-        sleep(100*count);
+        long start = System.currentTimeMillis();
+        while ((System.currentTimeMillis()-start) <= 5000 && currentReadCount < maxReadCount){
+            System.out.println(maxReadCount + "等待中..." + currentReadCount);
+            sleep(50);
+        }
         return epcList;
     }
 

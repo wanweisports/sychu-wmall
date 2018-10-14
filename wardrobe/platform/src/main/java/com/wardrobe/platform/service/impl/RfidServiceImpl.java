@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.po.SysRfidInfo;
@@ -15,12 +16,11 @@ import com.wardrobe.platform.rfid.rfid.rxobserver.RXObserver;
 import com.wardrobe.platform.rfid.rfid.rxobserver.bean.RXInventoryTag;
 import com.wardrobe.platform.rfid.util.StringTool;
 import com.wardrobe.platform.service.IRfidService;
+import com.wardrobe.platform.service.IUserShoppingCartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Created by cxs on 2018/10/12.
@@ -28,24 +28,28 @@ import java.util.Observer;
 @Service
 public class RfidServiceImpl extends BaseService implements IRfidService {
 
+    @Autowired
+    private IUserShoppingCartService userShoppingCartService;
+
     private Observer mObserver(String ip1, int port1){
         Observer mObserver = new RXObserver() {
 
             @Override
             protected void onInventoryTag(RXInventoryTag tag) {
                 System.out.println("EPC data:" + tag.strEPC);
-                RfidBean rfidBean = RfidCache.getRfidBean(new RfidBean(ip1, port1)).pushEpc(tag.strEPC);
-                int currentReadCount = rfidBean.getCurrentReadCount();
-                if(currentReadCount < rfidBean.getMaxReadCount()) {
-                    rfidBean.setCurrentReadCount(currentReadCount+1);
-                    ((RFIDReaderHelper) rfidBean.getReaderHelper()).realTimeInventory(RfidCache.BA, (byte) 0x01);
-                }
+                RfidCache.getRfidBean(ip1, port1).pushEpc(tag.strEPC);
             }
 
             @Override
             protected void onInventoryTagEnd(RXInventoryTag.RXInventoryTagEnd endTag) {
                 System.out.println("inventory end:" + endTag.mTotalRead);
-                //((RFIDReaderHelper) mReaderHelper).realTimeInventory((byte) 0xff, (byte) 0x01);
+                RfidBean rfidBean = RfidCache.getRfidBean(ip1, port1);
+                int currentReadCount = rfidBean.getCurrentReadCount();
+                if(currentReadCount <= rfidBean.getMaxReadCount()) {
+                    System.out.println("Read...." + currentReadCount + "---" + rfidBean.getMaxReadCount());
+                    rfidBean.setCurrentReadCount(currentReadCount+1);
+                    ((RFIDReaderHelper) rfidBean.getReaderHelper()).realTimeInventory(RfidCache.BA, (byte) 0x01);
+                }
             }
 
             @Override
@@ -143,7 +147,7 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
     }
 
     @Override
-    public Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count){
+    public Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count, int did){
         RfidBean rb = RfidCache.isConnect(rfidBean);
         if(rb == null) throw new MessageException("未连接射频");
 
@@ -151,12 +155,28 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
 
         List<String> epcs = rb.getEpcs(count);
         System.out.println(epcs);
-        if(epcs.size() == 1) {
-            Map<String, Object> data = new HashMap<>(1, 1);
-            data.put("epcs", epcs);
-            return data;
+        //查询某个商场当天柜子里的衣服
+        StringBuilder sql = new StringBuilder("SELECT cd.dbid, ci.cid, ci.commName, ci.price, sdc.`name`, 1 count, rfidEpc FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
+        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.dbTime = CURDATE()");
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES);
+        List<Map<String, Object>> payCommoditys = new ArrayList<>();
+        for(Map<String, Object> map : list){
+            String rfidEpc = map.get("rfidEpc").toString();
+            boolean exist = false;
+            for(String epc : epcs){
+                if(epc.equals(rfidEpc)){
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                payCommoditys.add(map);
+            }
         }
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("commoditys", payCommoditys);
+        map.put("sumPrice", userShoppingCartService.countSumPrice(payCommoditys));
+        return map;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.UserCouponInputView;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +22,8 @@ public interface IUserShoppingCartService {
     UserShoppingCart getUserShoppingCart(int scid);
 
     Map<String, Object> settlement(String scids, int uid);
+
+    double countSumPrice(List<Map<String, Object>> list);
 
     Map<String, Object> settlementCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
 

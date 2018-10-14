@@ -26,13 +26,11 @@ public class RelayController extends BaseController {
     @Autowired
     private IRelayService relayService;
 
-    private String relayUrl = "http://localhost/relay";
-
     @Desc("开启门")
     @ResponseBody
     @RequestMapping("openDoor")
-    public ResponseBean openDoor() throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId=1");
+    public ResponseBean openDoor(int did) throws Exception{
+        String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId="+did);
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
@@ -58,8 +56,8 @@ public class RelayController extends BaseController {
     @Desc("关门")
     @ResponseBody
     @RequestMapping("closeDoor")
-    public ResponseBean closeDoor() throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId=1");
+    public ResponseBean closeDoor(int did) throws Exception{
+        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId="+did);
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }

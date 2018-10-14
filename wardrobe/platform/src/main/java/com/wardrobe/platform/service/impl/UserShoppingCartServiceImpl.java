@@ -14,6 +14,7 @@ import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -114,22 +115,30 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     @Override
     public Map<String, Object> settlement(String scids, int uid){
         List<Map<String, Object>> settlement = getSettlement(scids, uid);
-        double sumPrice = 0;
-        for(Map<String, Object> map : settlement){
-            map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
-        }
+        double sumPrice = countSumPrice(settlement);
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         Map<String, Object> data = new HashMap(4, 1);
         data.put("list", settlement);
-        data.put("sumPrice", sumPrice);
         //用户优惠券列表
         data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, sumPrice));
         //用户衣橱币
         data.put("ycoid", userAccount.getYcoid());
         //用户折扣
-        data.put("discount", rankService.getRankInfoByRank(userAccount.getRank()).getRankDiscount());
+        BigDecimal rankDiscount = rankService.getRankInfoByRank(userAccount.getRank()).getRankDiscount();
+        data.put("discount", rankDiscount);
+        //减去折扣的金额
+        data.put("sumPrice", StrUtil.roundKeepTwo(Arith.mul(sumPrice, rankDiscount.doubleValue())));
         return data;
+    }
+
+    @Override
+    public double countSumPrice(List<Map<String, Object>> list){
+        double sumPrice = 0;
+        for(Map<String, Object> map : list){
+            map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+        }
+        return sumPrice;
     }
 
     private List<Map<String, Object>> getSettlement(final String scids, final int uid) {
@@ -170,7 +179,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         }
         //乘以折扣(四舍五入)
         SysRankInfo rankInfoByRank = rankService.getRankInfoByRank(userAccount.getRank());
-        return StrUtil.roundKeepTwo(Arith.mul(sumPrice, rankInfoByRank.getRankDiscount().doubleValue()));
+        return StrUtil.roundKeepTwo(Arith.mul(sumPrice > 0 ? sumPrice : 0, rankInfoByRank.getRankDiscount().doubleValue()));
     }
 
 }

@@ -26,6 +26,9 @@ public class BaseController {
     
 	public static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 
+	protected String relayUrl = "http://localhost/relay";
+	protected String rfidUrl = "http://localhost/rfid";
+
 	protected String redirect(String path) {
         return new StringBuilder(UrlBasedViewResolver.REDIRECT_URL_PREFIX).append(path).toString();
     }

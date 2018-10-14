@@ -66,7 +66,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     private List<UserOrderDetail> getUserOrderDetails(int oid){
-        return baseDao.queryByHql("FROM UserOrderDetail WHERE oid = ?", oid);
+        return baseDao.queryByHql("FROM UserOrderDetail WHERE oid = ?1", oid);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         int oid = userOrderInfo.getOid();
         String[] scidArr = scids.split(",");
         double priceSum = 0;
-        for(String scid : scidArr) { //待处理积分与优惠券问题
+        for(String scid : scidArr) { //待处理积分与优惠券问题【已处理】
             UserShoppingCart userShoppingCart = userShoppingCartService.getUserShoppingCart(StrUtil.objToInt(scid));
             Integer cid = userShoppingCart.getCid();
             UserOrderDetail userOrderDetail = new UserOrderDetail();
@@ -161,6 +161,54 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             //删除购物车
             baseDao.delete(userShoppingCart);
+        }
+
+        userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
+        //支付价格：之后减去优惠部分
+        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(userOrderInfo.getPriceSum().doubleValue(), userOrderInfo.getServiceType(), userOrderInfo.getCpid(), uid)));
+        baseDao.save(userOrderInfo, oid);
+        return oid;
+    }
+
+    @Override
+    public synchronized Integer saveRfidOrderInfo(UserOrderInfo userOrderInfo, String dbids, int uid) throws ParseException{ //配送ids，多个逗号分隔
+        Timestamp nowDate = DateUtil.getNowDate();
+        userOrderInfo.setUid(uid);
+        userOrderInfo.setCreateTime(nowDate);
+        userOrderInfo.setOrderType(IDBConstant.LOGIC_STATUS_OTHER); //射频订单
+        userOrderInfo.setPayStatus(IDBConstant.ORDER_PAY_STATUS_NO);
+        userOrderInfo.setStatus(IDBConstant.ORDER_STATUS_NORMAL);
+        userOrderInfo.setOno(getOno()); //订单编号
+        baseDao.save(userOrderInfo, null);
+
+        int oid = userOrderInfo.getOid();
+        String[] cidArr = dbids.split(",");
+        double priceSum = 0;
+        for(String dbid : cidArr) { //待处理积分与优惠券问题【已处理】
+            SysCommodityDistribution sysCommodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, StrUtil.objToInt(dbid));
+            Integer cid = sysCommodityDistribution.getCid();
+            UserOrderDetail userOrderDetail = new UserOrderDetail();
+            userOrderDetail.setCreateTime(nowDate);
+            userOrderDetail.setCid(cid);
+            userOrderDetail.setDbid(StrUtil.objToInt(dbid));
+
+            CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
+            userOrderDetail.setItemCount(1);
+            userOrderDetail.setItemName(commodityInfo.getCommName());
+            userOrderDetail.setItemPrice(commodityInfo.getPrice());
+
+            CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
+            userOrderDetail.setItemColor(commodityColor.getColorName());
+
+            CommoditySize commoditySize = commodityService.getCommoditySize(sysCommodityDistribution.getSid());
+            userOrderDetail.setItemSize(commoditySize.getSize());
+
+            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), 1)));
+            userOrderDetail.setOid(oid);
+            userOrderDetail.setItemImg(commodityService.getFmImg(cid));
+            baseDao.save(userOrderDetail, null);
+
+            priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
         }
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
@@ -469,6 +517,22 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
                     //1衣米 = 1元。使用衣米支付时，订单元以下金额 = 1衣米。
                     userAccountService.addUserScoreAndYcoid(userOrderInfo.getUid(), userOrderInfo.getPayPrice().doubleValue());
+
+                    //处理配送改为已售出
+                    if(IDBConstant.LOGIC_STATUS_OTHER.equals(userOrderInfo.getOrderType())){
+                        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+                        if(userOrderDetails != null) {
+                            for (UserOrderDetail ud : userOrderDetails) {
+                                if (ud != null) {
+                                    SysCommodityDistribution commodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, ud.getDbid());
+                                    if (commodityDistribution != null) {
+                                        commodityDistribution.setStatus(IDBConstant.LOGIC_STATUS_NO);
+                                        baseDao.save(commodityDistribution, commodityDistribution.getDcid());
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额

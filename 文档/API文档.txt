@@ -105,7 +105,7 @@ URL：/order/wxPayPackage
 ======================================================================
 打开与关闭大门与锁接口
 1. 开门（进大门）：  URL：/relay/openDoor
-	参数：无
+	参数：did:1  #设备大门id
 		{
 			code: 1
 			message: "操作成功"
@@ -115,7 +115,7 @@ URL：/order/wxPayPackage
 
 
 2. 开门（出大门）： URL：/relay/closeDoor
-              参数：无
+              参数：did:1  #设备大门id
 		{
 			code: 1
 			message: "操作成功"

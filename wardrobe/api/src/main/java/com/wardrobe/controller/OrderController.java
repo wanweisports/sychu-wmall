@@ -1,18 +1,16 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
-import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.annotation.NotPerfect;
+import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.ReserveOrderInfo;
-import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.po.UserOrderInfo;
-import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -44,6 +42,14 @@ public class OrderController extends BaseController {
     @RequestMapping("saveReserveOrder")
     public ResponseBean saveOrder(ReserveOrderInfo orderInfo, String scids) throws Exception{
         Integer oid = orderService.saveReserveOrderInfo(orderInfo, scids, getUserInfo().getUid());
+        return new ResponseBean(new HashMap(){{put("oid", oid);}});
+    }
+
+    @Desc("保存射频订单")
+    @ResponseBody
+    @RequestMapping("saveRfidOrder")
+    public ResponseBean saveRfidOrder(UserOrderInfo orderInfo, String dbids) throws Exception{
+        Integer oid = orderService.saveRfidOrderInfo(orderInfo, dbids, getUserInfo().getUid());
         return new ResponseBean(new HashMap(){{put("oid", oid);}});
     }
 
@@ -86,6 +92,8 @@ public class OrderController extends BaseController {
     /*
      * 订单支付回调
      */
+    @NotProtected
+    @NotPerfect
     @ResponseBody
     @RequestMapping("asynNotify")
     public ResponseBean asynNotify(HttpServletRequest request, HttpServletResponse response) throws Exception{

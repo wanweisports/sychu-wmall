@@ -100,7 +100,7 @@ public class Test {
 				mReaderHelper.registerObserver(mObserver);
 				mReaderHelper.setRXTXListener(mListener);
 				//((RFIDReaderHelper) mReaderHelper).getTagMask((byte) 0xff);
-				int success = ((RFIDReaderHelper) mReaderHelper).setWorkAntenna(RfidCache.BA, (byte)0x01);//设置工作天线
+				int success = ((RFIDReaderHelper) mReaderHelper).setWorkAntenna(RfidCache.BA, (byte)0x00);//设置工作天线
 				((RFIDReaderHelper) mReaderHelper).realTimeInventory((byte) 0xFF, (byte) 0x01);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

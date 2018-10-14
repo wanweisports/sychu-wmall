@@ -41,6 +41,15 @@ public class RfidCache {
         return null;
     }
 
+    public static RfidBean getRfidBean(String ip, int port){
+        for(RfidBean rb : rfidBeans){
+            if(rb.getIp().equals(ip) && rb.getPort() == port){
+                return rb;
+            }
+        }
+        return null;
+    }
+
     public static RfidBean isConnect(RfidBean rfidBean){
         RfidBean rb = getRfidBean(rfidBean);
         return rb != null && rb.getmConnector().isConnected() ? rb : null;

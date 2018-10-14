@@ -62,7 +62,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String hot = commodityInputView.getHot();
         Integer groupId = commodityInputView.getGroupId();
 
-        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
+        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
         if(StrUtil.isNotBlank(category)){
@@ -202,7 +202,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             whereSql.append(" AND ci.commName = :commName");
         }
         if(StrUtil.isNotBlank(commNo)){
-            whereSql.append(" AND ci.commNo = :commNo");
+            whereSql.append(" AND ci.commName = :commName");
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");

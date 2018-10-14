@@ -47,10 +47,17 @@
         });
     }
 
+      function jianche(){
+          $.post("/rfid/readEpcLabelSC", {did: 1}, function(res){
+              console.log(JSON.stringify(res));
+              alert(JSON.stringify(res));
+          });
+      }
   </script>
 </head>
 <body>
-  <h3>当前柜子状态：<span id="lockStatus"></span></h3>
+<button type="button" onclick="jianche()">检测</button>
+<%--  <h3>当前柜子状态：<span id="lockStatus"></span></h3>
   <input type="button" value="连接柜子服务器" onclick="connectTcp(1)" /><br/>
   <input type="text" id="lockId" placeholder="柜子号" /><br/>
   <input type="button" value="打开柜子" onclick="openLock($('#lockId').val())" />
@@ -64,6 +71,6 @@
   <input type="button" value="连接门设备服务器" onclick="connectTcp(2)" /><br/>
   <input type="text" id="driveId" placeholder="门设备命令号" /><br/>
   <input type="button" value="连接门设备命令号" onclick="openDrive($('#driveId').val())" />
-  <input type="button" value="关闭门设备命令号" onclick="closeDrive($('#driveId').val())" />
+  <input type="button" value="关闭门设备命令号" onclick="closeDrive($('#driveId').val())" />--%>
 </body>
 </html>

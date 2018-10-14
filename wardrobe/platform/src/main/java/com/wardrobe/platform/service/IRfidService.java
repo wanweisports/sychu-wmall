@@ -16,7 +16,7 @@ public interface IRfidService {
 
     Map<String, Object> readEpcLabelIn(RfidBean rfidBean, int count);
 
-    Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count);
+    Map<String, Object> readEpcLabelApi(RfidBean rfidBean, int count, int did);
 
     SysRfidInfo getRfidInfo(int rfid);
 
