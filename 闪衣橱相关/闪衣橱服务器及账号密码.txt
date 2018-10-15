@@ -31,7 +31,7 @@ syc*123456
 
 借的域名：#http://mystore.01time.cn/
 	 http://mystore.jonham.cn/
-正式：yifoutech.com
+正式：mystore.yifoutech.com
 
 
 VPN：
@@ -40,6 +40,5 @@ syc123456
 
 pptp
 =========================================================
-测试： root@
-47.93.59.41
+测试： root@47.93.59.41
        http://mystore.jonham.cn/
