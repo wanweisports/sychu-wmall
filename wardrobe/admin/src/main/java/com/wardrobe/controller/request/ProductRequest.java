@@ -22,6 +22,7 @@ public class ProductRequest {
     private Integer groupId;
     private String commNo;
     private String brandName;
+    private Integer seqNo;
 
     private int coid;
     private String colorName;
@@ -134,6 +135,14 @@ public class ProductRequest {
 
     public void setBrandName(String brandName) {
         this.brandName = brandName;
+    }
+
+    public Integer getSeqNo() {
+        return seqNo;
+    }
+
+    public void setSeqNo(Integer seqNo) {
+        this.seqNo = seqNo;
     }
 
     public int getCoid() {

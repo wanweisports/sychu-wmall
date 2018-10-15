@@ -12,6 +12,7 @@ public class ReserveOrderDetail {
     private int rdid;
     private Integer roid;
     private Integer cid;
+    private Integer sid;
     private String resItemName;
     private String resItemColor;
     private String resItemImg;
@@ -51,6 +52,16 @@ public class ReserveOrderDetail {
 
     public void setCid(Integer cid) {
         this.cid = cid;
+    }
+
+    @Basic
+    @Column(name = "sid")
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 
     @Basic

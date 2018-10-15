@@ -121,7 +121,7 @@
                                     <label class="form-check-label" for="wardrobe_status1">开放</label>
                                 </div>
                                 <div class="form-check form-check-inline mr-1">
-                                    <input class="form-check-input" id="wardrobe_status2" type="radio" value="2" name="status">
+                                    <input class="form-check-input" id="wardrobe_status2" type="radio" value="3" name="status">
                                     <label class="form-check-label" for="wardrobe_status2">关闭</label>
                                 </div>
                             </div>
@@ -179,8 +179,11 @@
                                         <c:if test="${d.status == '1'}">
                                             <td class="text-success">已开放</td>
                                         </c:if>
-                                        <c:if test="${d.status != '1'}">
-                                            <td class="text-danger">未开放</td>
+                                        <c:if test="${d.status == '2'}">
+                                            <td class="text-danger">被占用</td>
+                                        </c:if>
+                                        <c:if test="${d.status == '3'}">
+                                            <td class="text-danger">已下线</td>
                                         </c:if>
 
                                         <td>

@@ -202,7 +202,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             whereSql.append(" AND ci.commName = :commName");
         }
         if(StrUtil.isNotBlank(commNo)){
-            whereSql.append(" AND ci.commName = :commName");
+            whereSql.append(" AND ci.commNo = :commNo");
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");
@@ -244,7 +244,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfo.setHot(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setNewly(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setSaleCount(0);
-            commodityInfo.setSeqNo(0);
             baseDao.save(commodityInfo, null);
 
             int newCid = commodityInfo.getCid();
@@ -281,6 +280,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfoDB.setProductDesc(commodityInfo.getProductDesc());
             commodityInfoDB.setCommNo(commodityInfo.getCommNo());
             commodityInfoDB.setBrandName(commodityInfo.getBrandName());
+            commodityInfoDB.setSeqNo(commodityInfo.getSeqNo());
             commodityInfoDB.setUpdateTime(timestamp);
             baseDao.save(commodityInfoDB, cid);
 
@@ -415,6 +415,27 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             baseDao.save(commoditySize, commoditySize.getSid());
         }
         baseDao.save(commodityStock, null);
+    }
+
+    @Override
+    public void saveOrderSubStock(UserOrderInfo userOrderInfo){
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        if(userOrderDetails != null){
+            Timestamp nowDate = DateUtil.getNowDate();
+            userOrderDetails.stream().forEach(userOrderDetail -> {
+                CommoditySize commoditySize = getCommoditySize(userOrderDetail.getSid());
+                if (commoditySize != null) {
+                    CommodityStock commodityStock = new CommodityStock();
+                    commodityStock.setSid(userOrderDetail.getSid());
+                    commodityStock.setNum(userOrderDetail.getItemCount());
+                    commodityStock.setCreateTime(nowDate);
+                    commodityStock.setOperatorId(userOrderInfo.getUid());
+                    commodityStock.setType(IDBConstant.COMM_STOCK_TYPE_SUB);
+                    commodityStock.setRemark("购买");
+                    baseDao.save(commodityStock, null);
+                }
+            });
+        }
     }
 
     @Override

@@ -73,7 +73,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserInfo userInfo = getUserInfo(userId);
         String inviteCode = userPerfectBean.getInviteCode();
 
-        userInfo.setSex(userPerfectBean.getSex());
+        //userInfo.setSex(userPerfectBean.getSex());
         userInfo.setAge(userPerfectBean.getAge());
         userInfo.setDressStyle(userPerfectBean.getDressStyle());
         userInfo.setUsualSize(userPerfectBean.getUsualSize());

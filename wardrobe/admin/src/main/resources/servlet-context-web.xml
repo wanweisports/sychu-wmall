@@ -74,7 +74,7 @@
     </mvc:annotation-driven>
 
     <!-- 自动扫描(自动注入) -->
-    <context:component-scan base-package="com.wardrobe">
+    <context:component-scan base-package="com.wardrobe.controller">
       <!-- 过滤不需要扫描的包 --> 
 <!--       <context:exclude-filter type="regex" expression="com.laiqu.netty" />    -->
     </context:component-scan>
