@@ -18,11 +18,13 @@ Page({
             if (res.code == 1) {
                 let data = res.data.list;
 
-                content.setData({
-                    wardrobeInfo: data[0],
-                    hasWardrobeInfo: true
-                });
-                content.getWardrobeOrderDetail(data[0].roid);
+                if (data.length > 0) {
+                    content.setData({
+                        wardrobeInfo: data[0],
+                        hasWardrobeInfo: true
+                    });
+                    content.getWardrobeOrderDetail(data[0].roid);
+                }
             }
         });
     },

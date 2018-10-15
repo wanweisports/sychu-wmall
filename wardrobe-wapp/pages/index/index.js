@@ -67,5 +67,8 @@ Page({
         if (e.currentTarget.dataset.id != 0) {
             app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
         }
+    },
+    onShareAppMessage: function () {
+        app.onShareAppMessage();
     }
 });

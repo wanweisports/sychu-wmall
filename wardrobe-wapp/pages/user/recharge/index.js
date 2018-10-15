@@ -1,4 +1,3 @@
-var wxpay = require('../../../utils/pay.js');
 var app = getApp();
 
 Page({
@@ -57,6 +56,6 @@ Page({
             return;
         }
 
-        wxpay.wxpay(app, price, 0, "/pages/my/index");
+        //wxpay.wxpay(app, price, 0, "/pages/my/index");
     }
 });
