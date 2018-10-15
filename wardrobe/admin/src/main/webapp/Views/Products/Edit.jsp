@@ -245,8 +245,18 @@
                                     </label>
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="p_colorName" placeholder="请输入商品颜色" name="colorName"
-                                               data-val="true" data-val-required="请至少输入一种商品颜色" autocomplete="off" value="${commodityColor.colorName}">
+                                               data-val="true" data-val-required="商品颜色不能为空" autocomplete="off" value="${commodityColor.colorName}">
                                         <div data-valmsg-for="colorName" data-valmsg-replace="true"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 商品排序
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="p_seqNo" placeholder="请输入商品排序(值越大越靠前)" name="seqNo"
+                                               data-val="true" data-val-required="商品排序不能为空" autocomplete="off" value="${commodity.seqNo}">
+                                        <div data-valmsg-for="seqNo" data-valmsg-replace="true"></div>
                                     </div>
                                 </div>
                             </form>

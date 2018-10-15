@@ -244,7 +244,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfo.setHot(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setNewly(IDBConstant.LOGIC_STATUS_NO);
             commodityInfo.setSaleCount(0);
-            commodityInfo.setSeqNo(0);
             baseDao.save(commodityInfo, null);
 
             int newCid = commodityInfo.getCid();
@@ -281,6 +280,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInfoDB.setProductDesc(commodityInfo.getProductDesc());
             commodityInfoDB.setCommNo(commodityInfo.getCommNo());
             commodityInfoDB.setBrandName(commodityInfo.getBrandName());
+            commodityInfoDB.setSeqNo(commodityInfo.getSeqNo());
             commodityInfoDB.setUpdateTime(timestamp);
             baseDao.save(commodityInfoDB, cid);
 
