@@ -3,6 +3,7 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysRfidInfo;
 import com.wardrobe.platform.rfid.bean.RfidBean;
 import com.wardrobe.platform.service.IRfidService;
@@ -54,8 +55,12 @@ public class RfidController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/readEpcLabelSC")
     public ResponseBean readEpcLabelSC(int did){
-        SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
-        return new ResponseBean(rfidService.readEpcLabelApi(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 10, did));
+        try {
+            SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
+            return new ResponseBean(rfidService.readEpcLabelApi(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 10, did));
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            return new ResponseBean(e.getMessage());
+        }
     }
 
 }
