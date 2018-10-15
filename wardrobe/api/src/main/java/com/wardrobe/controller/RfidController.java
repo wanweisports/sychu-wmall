@@ -21,7 +21,7 @@ public class RfidController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/readRfid")
     public ResponseBean readRfid(int did){
-        String response = HttpUtil.sendGet("http://localhost:8090/rfid/readEpcLabelSC?did=" + did);
+        String response = HttpUtil.sendGet(rfidUrl + "/readEpcLabelSC?did=" + did);
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
