@@ -46,4 +46,8 @@ public interface IOrderService {
 
     List<Map<String, Object>> getReserveOrderByTime(String time);
 
+    List<UserOrderInfo> getOvertimeOrders();
+
+    void updateOvertimeOrders(List<UserOrderInfo> userOrderInfos) throws ParseException;
+
 }

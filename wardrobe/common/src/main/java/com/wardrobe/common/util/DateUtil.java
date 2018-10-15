@@ -184,6 +184,13 @@ public class DateUtil {
 		cal.add(Calendar.DATE, addDay);
 		return cal.getTime();
 	}
+
+	public static Date addDateByType(Date date, int field, int amount){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(field, amount);
+		return c.getTime();
+	}
 	
 	/** 
      * 获取当月的 天数 

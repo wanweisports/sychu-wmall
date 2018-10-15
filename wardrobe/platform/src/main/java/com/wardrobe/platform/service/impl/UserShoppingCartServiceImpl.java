@@ -45,8 +45,10 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         Integer sid = userShoppingCart.getSid();
         Timestamp nowDate = DateUtil.getNowDate();
         UserShoppingCart userShoppingCartDB = getUserShoppingCartBySid(sid, userShoppingCart.getShoppingType(), userShoppingCart.getUid());
+        CommoditySize commoditySize = commodityService.getCommoditySize(sid);
         if(userShoppingCartDB == null) {
-            CommoditySize commoditySize = commodityService.getCommoditySize(sid);
+            if(commoditySize.getStock() < 0) throw new MessageException("存在不足,当前库存：" + commoditySize.getStock());
+
             CommodityColor commodityColor = commodityService.getCommodityColor(commoditySize.getCoid());
             CommodityInfo commodityInfo = commodityService.getCommodityInfo(commodityColor.getCid());
             userShoppingCart.setCoid(commodityColor.getCoid());
@@ -55,6 +57,8 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
             baseDao.save(userShoppingCart, null);
         }else{
             userShoppingCartDB.setCount(userShoppingCartDB.getCount()+userShoppingCart.getCount());
+            if(commoditySize.getStock() < userShoppingCartDB.getCount()) throw new MessageException("存在不足,当前库存：" + commoditySize.getStock());
+
             userShoppingCartDB.setUpdateTime(nowDate);
             baseDao.save(userShoppingCartDB, userShoppingCartDB.getScid());
         }
@@ -192,7 +196,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     public double countDiscount(double sumPrice, String serviceType, Integer cpid, int uid) throws ParseException{
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         if(IDBConstant.LOGIC_STATUS_YES.equals(serviceType)){ //使用优惠券
-            UserCouponInfo userCouponInfo = userCouponService.getUserCouponInfo(cpid, uid);
+            UserCouponInfo userCouponInfo = userCouponService.getUserNotUseCouponInfo(cpid, uid);
             if(userCouponInfo != null) {
                 sumPrice = Arith.sub(sumPrice, userCouponInfo.getCouponPrice().doubleValue());
             }

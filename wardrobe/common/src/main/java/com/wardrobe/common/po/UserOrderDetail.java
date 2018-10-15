@@ -14,6 +14,7 @@ public class UserOrderDetail {
     private int odid;
     private Integer oid;
     private Integer cid;
+    private Integer sid;
     private String itemName;
     private String itemColor;
     private String itemSize;
@@ -55,6 +56,16 @@ public class UserOrderDetail {
 
     public void setCid(Integer cid) {
         this.cid = cid;
+    }
+
+    @Basic
+    @Column(name = "sid")
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 
     @Basic

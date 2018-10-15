@@ -151,6 +151,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setItemColor(commodityColor.getColorName());
 
             CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
+            commoditySize.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
@@ -162,6 +163,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             //删除购物车
             baseDao.delete(userShoppingCart);
+
+            //减少库存
+            Integer stock = commoditySize.getStock();
+            commoditySize.setStock(stock - userOrderDetail.getItemCount());
+            if(stock <= 0) throw new MessageException("存在不足,当前库存：" + stock);
+            baseDao.save(commoditySize, commoditySize.getSid());
         }
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
@@ -214,6 +221,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setItemColor(commodityColor.getColorName());
 
             CommoditySize commoditySize = commodityService.getCommoditySize(sysCommodityDistribution.getSid());
+            userOrderDetail.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), 1)));
@@ -222,6 +230,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             baseDao.save(userOrderDetail, null);
 
             priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
+
+            //减少库存
+            Integer stock = commoditySize.getStock();
+            commoditySize.setStock(stock - userOrderDetail.getItemCount());
+            if(stock <= 0) throw new MessageException("存在不足,当前库存：" + stock);
+            baseDao.save(commoditySize, commoditySize.getSid());
         }
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
@@ -312,6 +326,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             orderDetail.setResItemColor(commodityColor.getColorName());
 
             CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
+            orderDetail.setSid(commoditySize.getSid());
             orderDetail.setResItemSize(commoditySize.getSize());
 
             orderDetail.setResItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
@@ -675,6 +690,47 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Override
     public List<Map<String, Object>> getReserveOrderByTime(String time){
         return baseDao.queryBySql("SELECT roi.roid, roi.rno FROM reserve_order_info roi WHERE reserveStartTime BETWEEN ?1 AND ?2", time + IPlatformConstant.time00, time + IPlatformConstant.time24);
+    }
+
+    @Override
+    public List<UserOrderInfo> getOvertimeOrders(){
+        Date minute30Before = DateUtil.addDateByType(new Date(), Calendar.MINUTE, -30);
+        List<UserOrderInfo> userOrderInfos = baseDao.queryByHql("FROM UserOrderInfo oi WHERE oi.payStatus = ?1 AND oi.createTime <= ?2", IDBConstant.LOGIC_STATUS_NO, minute30Before);
+        userOrderInfos.stream().forEach(userOrderInfo -> {
+            userOrderInfo.setUserOrderDetails(getUserOrderDetails(userOrderInfo.getOid()));
+        });
+        return userOrderInfos;
+    }
+
+    @Desc("超时订单变为已取消，优惠券返还，衣橱币返还，库存还原")
+    @Override
+    public void updateOvertimeOrders(List<UserOrderInfo> userOrderInfos) throws ParseException{
+        for(UserOrderInfo userOrderInfo : userOrderInfos){
+            userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_OTHER); //已取消
+            baseDao.save(userOrderInfo, userOrderInfo.getOid());
+            Integer uid = userOrderInfo.getUid();
+            if(userOrderInfo.getCpid() != null){ //处理优惠券
+                UserCouponInfo userCouponInfo = userCouponService.getUserUseCouponInfo(userOrderInfo.getCpid(), uid);
+                if(userCouponInfo != null){
+                    userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_NO);
+                    baseDao.save(userCouponInfo, userCouponInfo.getCpid());
+                }
+            }
+            if(userOrderInfo.getYcoid() != null){ //处理优惠券
+                UserAccount userAccount = userAccountService.getUserAccount(uid);
+                userAccount.setYcoid(userAccount.getYcoid() + userOrderInfo.getYcoid());
+                baseDao.save(userAccount, uid);
+            }
+            //处理库存
+            List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+            userOrderDetails.stream().forEach(userOrderDetail -> {
+                CommoditySize commoditySize = commodityService.getCommoditySize(userOrderDetail.getSid());
+                if(commoditySize != null) {
+                    commoditySize.setStock(commoditySize.getStock() + userOrderDetail.getItemCount());
+                    baseDao.save(commoditySize, commoditySize.getSid());
+                }
+            });
+        }
     }
 
 }
