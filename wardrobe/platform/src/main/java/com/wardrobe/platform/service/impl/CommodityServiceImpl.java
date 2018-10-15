@@ -202,7 +202,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             whereSql.append(" AND ci.commName = :commName");
         }
         if(StrUtil.isNotBlank(commNo)){
-            whereSql.append(" AND ci.commName = :commName");
+            whereSql.append(" AND ci.commNo = :commNo");
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");
