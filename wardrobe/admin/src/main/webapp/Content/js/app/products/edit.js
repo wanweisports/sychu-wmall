@@ -143,6 +143,8 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         e.preventDefault();
 
         var $this = $(this);
+        if(!$this.val()) return false;
+            ;
         var exist = $categorySelectedList.find(".category-item[data-id='" + $this.val() + "']");
         if (exist && exist.length > 0) {
             return false;
