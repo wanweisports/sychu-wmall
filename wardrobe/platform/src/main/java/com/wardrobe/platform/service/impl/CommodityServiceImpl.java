@@ -418,6 +418,27 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
+    public void saveOrderSubStock(UserOrderInfo userOrderInfo){
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        if(userOrderDetails != null){
+            Timestamp nowDate = DateUtil.getNowDate();
+            userOrderDetails.stream().forEach(userOrderDetail -> {
+                CommoditySize commoditySize = getCommoditySize(userOrderDetail.getSid());
+                if (commoditySize != null) {
+                    CommodityStock commodityStock = new CommodityStock();
+                    commodityStock.setSid(userOrderDetail.getSid());
+                    commodityStock.setNum(userOrderDetail.getItemCount());
+                    commodityStock.setCreateTime(nowDate);
+                    commodityStock.setOperatorId(userOrderInfo.getUid());
+                    commodityStock.setType(IDBConstant.COMM_STOCK_TYPE_SUB);
+                    commodityStock.setRemark("购买");
+                    baseDao.save(commodityStock, null);
+                }
+            });
+        }
+    }
+
+    @Override
     public PageBean getStockListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getStocks(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();

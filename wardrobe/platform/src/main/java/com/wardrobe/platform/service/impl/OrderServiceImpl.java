@@ -574,6 +574,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                         }
                     }
 
+                    //写入库存日志
+                    commodityService.saveOrderSubStock(userOrderInfo);
+
                     //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额
                     /*synchronized (OrderServiceImpl.class) {

@@ -54,6 +54,8 @@ public interface ICommodityService {
 
     void saveStock(CommodityStock commodityStock, boolean add);
 
+    void saveOrderSubStock(UserOrderInfo userOrderInfo);
+
     PageBean getStockListIn(CommodityInputView commodityInputView);
 
     void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException;
