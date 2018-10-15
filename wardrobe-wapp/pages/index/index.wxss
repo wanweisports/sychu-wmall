@@ -74,7 +74,7 @@ swiper-item image {
 
 .goods-box {
     width: 339rpx;
-    height: 472rpx;
+    height: 585rpx;
     background-color: #fff;
     overflow: hidden;
     margin-bottom: 24rpx;
@@ -82,13 +82,16 @@ swiper-item image {
 
 .goods-box .img-box {
     width: 339rpx;
-    height: 339rpx;
+    height: 452rpx;
     overflow: hidden;
 }
 
 .goods-box .img-box image {
-    width: 339rpx;
-    height: 339rpx;
+    width: auto;
+    max-width: 100%;
+    height: 452rpx;
+    display: block;
+    margin: 0 auto;
 }
 
 .goods-box .goods-title {
