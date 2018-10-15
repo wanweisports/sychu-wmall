@@ -44,7 +44,7 @@
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="/admin/products/hot/list?banner=1">
+                                        <a href="/admin/products/banner/list">
                                             <strong>banner商品</strong>
                                             <small>Banner Products</small>
                                         </a>
