@@ -6,7 +6,7 @@
 
         <view class="button-sp-area">
             <button class="weui-btn" type="primary" plain wx:if="{{isSupported}}" open-type="getUserInfo"
-                    bindgetuserinfo="onGetUserInfo">进入闪衣橱</button>
+                    bindgetuserinfo="onGetUserInfo">进入衣否</button>
             <view wx:else>当前微信版本不支持，请立即升级</view>
         </view>
     </view>
