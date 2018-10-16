@@ -142,7 +142,7 @@ public class FileUtil {
 	}
 
 	public static String getFileName(Timestamp timestamp, String originalFilename) {
-		return StrUtil.getUUID() + IPlatformConstant.YS_IMG_SUFFIX + originalFilename.substring(originalFilename.lastIndexOf("."));
+		return StrUtil.getUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
 	}
 
 	public static String getFileExtension(String fileName) {
