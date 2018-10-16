@@ -60,5 +60,5 @@ public interface IPlatformConstant {
 	String RNO = "MK";
 
 	String OG_IMG_SUFFIX = "_OG"; //原图后缀
-
+	String YS_IMG_SUFFIX = "_YS"; //压缩图后缀
 }
