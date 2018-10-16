@@ -58,7 +58,7 @@
             <view class="shop-num">
                 <text wx:if="{{shopOrderNum > 0}}">({{shopOrderNum}})</text>
             </view>
-            <text>试衣间</text>
+            <text>配衣间</text>
         </view>
         <view class="shop-cart-btn" bindtap="goShopCart">
             <view class="shop-num">
