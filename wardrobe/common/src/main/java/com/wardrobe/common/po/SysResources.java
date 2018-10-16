@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IPlatformConstant;
+
 import javax.persistence.*;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -25,6 +27,8 @@ public class SysResources {
 
     private String name; //前端file的name名称，用于业务判断
     private InputStream inputStream;
+
+    private String resourcePathOG; //原图后缀路径
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -173,6 +177,17 @@ public class SysResources {
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
+    }
+
+    @Transient
+    public String getResourcePathOG() {
+        int suffix = resourcePath.lastIndexOf(".");
+        resourcePathOG = new StringBuilder(resourcePath.substring(0, suffix)).append(IPlatformConstant.OG_IMG_SUFFIX).append(resourcePath.substring(suffix)).toString();
+        return resourcePathOG;
+    }
+
+    public void setResourcePathOG(String resourcePathOG) {
+        this.resourcePathOG = resourcePathOG;
     }
 
     @Override

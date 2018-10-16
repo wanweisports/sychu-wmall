@@ -152,7 +152,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setItemColor(commodityColor.getColorName());
 
             CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
-            commoditySize.setSid(commoditySize.getSid());
+            userOrderDetail.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));

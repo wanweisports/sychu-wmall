@@ -10,15 +10,21 @@ import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.UserCollection;
+import com.wardrobe.common.util.FileUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserCouponService;
 import com.wardrobe.platform.service.IUserService;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.HashMap;
 
 @RequestMapping("user")
@@ -144,6 +150,18 @@ public class UserController extends BaseController {
         userInputView.setUid(getUserInfo().getUid());
         PageBean pageBean = userService.userCollections(userInputView);
         return new ResponseBean(setPageInfo(pageBean));
+    }
+
+    public static void main(String[] args) throws Exception{
+        FileInputStream inputStream = new FileInputStream(new File("D:\\Users\\HHHHH\\0-shiyijian2018-07-17\\img\\2.JPG"));
+
+        BufferedImage bufImg = ImageIO.read(inputStream);// 把图片读入到内存中
+        // 压缩代码
+        bufImg = Thumbnails.of(bufImg).width(750).keepAspectRatio(true).outputQuality(0.9).asBufferedImage();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();// 存储图片文件byte数组
+        ImageIO.write(bufImg, "jpg", bos); // 图片写入到 ImageOutputStream
+        ByteArrayInputStream input = new ByteArrayInputStream(bos.toByteArray());
+        FileUtils.copyInputStreamToFile(input, new File("D:\\Users\\HHHHH\\0-shiyijian2018-07-17\\img\\12.jpg"));
     }
 
 

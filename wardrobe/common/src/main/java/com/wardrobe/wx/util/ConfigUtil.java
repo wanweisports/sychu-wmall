@@ -1,6 +1,7 @@
 package com.wardrobe.wx.util;
 
 import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.util.CustomizedPropertyConfigurer;
 
 public class ConfigUtil {
 	/**
@@ -14,7 +15,7 @@ public class ConfigUtil {
 	 public final static String SIGN_TYPE = "MD5";//签名加密方式
 	 //public final static String CERT_PATH = "D:/weixin/apiclient_cert.p12";//微信支付证书存放路径地址
 	//微信支付统一接口的回调action
-	 public final static String NOTIFY_URL = "https://mystore.jonham.cn/api/order/asynNotify";
+	 public final static String NOTIFY_URL = (String) CustomizedPropertyConfigurer.getContextProperty("wx_notify_url"); //微信支付回调
 /*	//微信支付成功支付后跳转的地址
 	 public final static String SUCCESS_URL = "http://localhost:8080/com.yidian/winxinpayaction/paysuccess.action";
 	 //oauth2授权时回调action
