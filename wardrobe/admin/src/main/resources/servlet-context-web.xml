@@ -31,10 +31,9 @@
     		<!-- 上传文件总大小不能超过5M -->
         	<beans:value>51200000</beans:value>
     	</beans:property>
-        <beans:property name="maxInMemorySize">
-            <!-- 上传文件总大小不能超过5M -->
+        <!--<beans:property name="maxInMemorySize">
             <beans:value>5120000</beans:value>
-        </beans:property>
+        </beans:property>-->
     </beans:bean>
     
     <beans:bean class="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
