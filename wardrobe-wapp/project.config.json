@@ -22,6 +22,9 @@
 		}, {
 			"type": "folder",
 			"value": "./src"
+		}, {
+			"type": "folder",
+			"value": "./node_modules"
 		}]
 	},
 	"setting": {
