@@ -1,4 +1,1 @@
-Page({
-    data: {},
-    onLoad: function () {}
-});
+"use strict";Page({data:{},onLoad:function(){}});

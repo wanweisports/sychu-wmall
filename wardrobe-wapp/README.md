@@ -1,4 +1,4 @@
-# 闪衣橱小程序商城
+# 衣否小程序商城
 
 
 ## 1，项目说明：
@@ -9,6 +9,7 @@
 - pages  — 存放项目页面相关文件
 - style  — 存放独立wxss样式文件，可import引入
 - utils  — 存放utils文件，可require引入
+- dist   - 压缩目录
 
 ### 2.1，页面目录：pages
 - "pages/auth/index"        - A00 - 授权登录，如果已经授权自动登录
@@ -39,4 +40,4 @@
 微信web开发者工具 v1.02.1807120
 
 ## 5，项目地址：
-https://github.com/liuxuanqiang/wechat-weapp-mall
+

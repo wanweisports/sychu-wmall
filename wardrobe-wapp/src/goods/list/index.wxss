@@ -1,0 +1,134 @@
+/**index.wxss**/
+@import "../../../style/weui.wxss";
+
+.container {
+    background-color: #F2f2f2;
+    min-height: 100%
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+
+.goods-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: content-box;
+    padding: 24rpx;
+}
+
+.goods-box {
+    width: 339rpx;
+    height: 472rpx;
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 24rpx;
+}
+
+.goods-box .img-box {
+    width: 339rpx;
+    height: 339rpx;
+    overflow: hidden;
+}
+
+.goods-box .img-box image {
+    width: 339rpx;
+    height: 339rpx;
+}
+
+.goods-box .goods-title {
+    width: 280rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 24rpx;
+    padding: 24rpx 0 0rpx 0;
+    color: #000;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-price {
+    width: 280rpx;
+    overflow: hidden;
+    font-size: 24rpx;
+    padding: 24rpx 0;
+    color: #e64340;
+    margin-left: 24rpx;
+}
+
+.no-more-goods {
+    text-align: center;
+    font-size: 24rpx;
+    padding-bottom: 48rpx;
+    color: #999;
+}
+
+.pos-fiexd {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.good-filter-image {
+    position: fixed;
+    right:30rpx;
+    bottom:30rpx;
+    width:100rpx;
+    height:100rpx;
+    border-radius:50rpx;
+    background: rgba(10,109,1, .8);
+    box-shadow:0 0 5rpx #0a6d01;
+}
+
+.good-filter-image image {
+    width: 60%;
+    height: 60%;
+    margin: 20% auto;
+    display: block;
+}
+
+.good-filter {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    background: rgba(0,0,0,.4);
+}
+
+.good-filter-container {
+    background: #FFFFFF;
+    width: 82%;
+    min-height: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.button-sp-area {
+    padding: 0 20rpx;
+}
+
+.mini-btn {
+    margin-right: 10rpx;
+    display: inline-block;
+    font-size: 26rpx;
+    margin-top: 10rpx;
+}
+
+.button-sp-next {
+    padding-top: 30rpx;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.button-sp-next .weui-btn {
+    display: inline-block;
+    margin-right: 20rpx;
+    width: 40%;
+    font-size: 28rpx;
+}
