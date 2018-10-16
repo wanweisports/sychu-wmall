@@ -75,11 +75,10 @@ page{
     box-sizing: border-box;
 }
 .goods-info .img-box{
-    width: 160rpx;
     height:160rpx;
     overflow: hidden;
     margin-right: 20rpx;
-    background-color: #d8d8d8;
+    background-color: #eee;
 }
 .goods-info .text-box{
     width: 440rpx;

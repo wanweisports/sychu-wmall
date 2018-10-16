@@ -6,13 +6,13 @@
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
             <block wx:for="{{banners}}">
                 <swiper-item>
-                    <image bindtap="tapBanner" data-id="{{item.cid}}" src="{{item.resourcePath}}" class="slide-image" width="750rpx" height="562.5rpx"/>
+                    <image bindtap="tapBanner" data-id="{{item.cid}}" src="{{item.resourcePath}}" class="slide-image" mode="aspectFit"/>
                 </swiper-item>
             </block>
         </swiper>
         <view class="dots">
-            <block wx:for="{{banners}}" wx:key="unique">
-                <view class="dot{{index == swiperCurrent ? ' active' : ''}}"></view>
+            <block wx:for="{{banners}}">
+                <view class="dot {{index == swiperCurrent ? ' active' : ''}}"></view>
             </block>
         </view>
     </view>

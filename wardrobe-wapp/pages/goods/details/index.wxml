@@ -34,19 +34,22 @@
     <view class="goods-des-info">
         <view class="label-title">商品介绍</view>
         <view class="goods-text">
-            {{goodsDetail.desc}}
+            <block wx:for="{{goodsDetail.desc}}">
+                <view>{{item}}</view>
+            </block>
         </view>
     </view>
     <view class="goods-des-info">
         <view class="label-title">配送说明</view>
         <view class="goods-text">
-            <text>配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明配送说明</text>
+            <view>衣否配衣间订单，免配送费，目前仅支持北京地区，其他城市将会陆续入驻。</view>
+            <view>衣否在线购买订单，满两件包邮，配送范围覆盖全国除港澳台地区以外的所有城市。</view>
         </view>
     </view>
     <view class="goods-des-info">
         <view class="label-title">售后服务</view>
         <view class="goods-text">
-            <text>售后说明售后说明售后说明售后说明售后说明售后说明售后说明售后说明售后说明售后说明</text>
+            <view>衣否支持7天无理由退换货。详情请关注“衣否”公众号，联系客服</view>
         </view>
     </view>
 

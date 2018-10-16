@@ -1,6 +1,6 @@
 //index.js
 //获取应用实例
-var app = getApp();
+const app = getApp();
 
 Page({
     data: {
@@ -15,6 +15,9 @@ Page({
         goods: [],
         scrollTop: "0",
         loadingMoreHidden: true,
+
+        lastPage: 0,
+        currentPage: 1,
 
         // 风格
         styleValue     : "",
@@ -35,24 +38,19 @@ Page({
         isShowFilter   : false
     },
     getStyleList: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest("/dict/getDicts",
-            {
-                dictName: "COMM_STYLE"
-            },
-            function (res) {
-                that.setData({
-                    styleList: res.data.dicts
-                });
-            }
-        );
+        app.wxRequest("/dict/getDicts", {
+            dictName: "COMM_STYLE"
+        }, function (res) {
+            content.setData({
+                styleList: res.data.dicts
+            });
+        });
     },
     bindStyleTap: function (e) {
-        var that = this;
-        var data = e.currentTarget.dataset;
-
-        var current = that.data.styleList[data.index];
+        let data = e.currentTarget.dataset;
+        let current = this.data.styleList[data.index];
 
         current.selected = !current.selected;
 
@@ -63,24 +61,20 @@ Page({
         });
     },
     getCategoryList: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest("/dict/getDicts",
-            {
-                dictName: "COMM_CATEGORY"
-            },
-            function (res) {
-                that.setData({
-                    categoryList: res.data.dicts
-                });
-            }
-        );
+        app.wxRequest("/dict/getDicts", {
+            dictName: "COMM_CATEGORY"
+        }, function (res) {
+            content.setData({
+                categoryList: res.data.dicts
+            });
+        });
     },
     bindCategoryTap: function (e) {
-        var that = this;
-        var data = e.currentTarget.dataset;
+        let data = e.currentTarget.dataset;
 
-        var current = that.data.categoryList[data.index];
+        let current = this.data.categoryList[data.index];
 
         current.selected = !current.selected;
 
@@ -91,24 +85,20 @@ Page({
         });
     },
     getMaterialList: function () {
-        var that = this;
+        let content = this;
 
-        app.wxRequest("/dict/getDicts",
-            {
-                dictName: "COMM_MATERIAL"
-            },
-            function (res) {
-                that.setData({
-                    materialList: res.data.dicts
-                });
-            }
-        );
+        app.wxRequest("/dict/getDicts", {
+            dictName: "COMM_MATERIAL"
+        }, function (res) {
+            content.setData({
+                materialList: res.data.dicts
+            });
+        });
     },
     bindMaterialTap: function (e) {
-        var that = this;
-        var data = e.currentTarget.dataset;
+        let data = e.currentTarget.dataset;
 
-        var current = that.data.materialList[data.index];
+        let current = this.data.materialList[data.index];
 
         current.selected = !current.selected;
 
@@ -166,68 +156,55 @@ Page({
     },
 
     bindConfirmTap: function () {
-        var that = this;
-
-        that.getGoodsList();
-        that.setData({
+        this.getGoodsList(1);
+        this.setData({
             isShowFilter: false
         });
     },
     bindResetTap: function () {
-        var that = this;
-
-        that.clearSelectedItems();
-        that.getGoodsList();
-        that.setData({
+        this.clearSelectedItems();
+        this.getGoodsList(1);
+        this.setData({
             isShowFilter: false
         });
     },
     bindFilterTap: function () {
-        var that = this;
-
-        that.setData({
+        this.setData({
             isShowFilter: true
         });
     },
 
     toDetailsTap: function(e) {
-        wx.navigateTo({
-            url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-        })
+        app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
     },
-    scroll: function(e) {
-        console.log(e);
+    onReachBottom: function () {
+        if (this.data.currentPage >= this.data.lastPage) {
+            return app.showToast("已经最后一页", "none");
+        }
 
-        var that = this;
-        var scrollTop = that.data.scrollTop;
-        
-        that.setData({
-            scrollTop: e.detail.scrollTop
-        });
+        this.getGoodsList(++this.data.currentPage);
     },
-    onLoad: function() {
-        var that = this;
-
-        wx.setNavigationBarTitle({
-            title: wx.getStorageSync('mallName')
-        });
-
-        that.getCategoryList();
-        that.getStyleList();
-        that.getMaterialList();
-        that.getGoodsList();
+    onLoad: function () {
+        this.getCategoryList();
+        this.getStyleList();
+        this.getMaterialList();
+        this.getGoodsList(1);
     },
 
-    getGoodsList: function () {
-        var that = this;
+    getGoodsList: function (page) {
+        let content = this;
+        let conditions = content.getSelectedItems();
 
-        app.wxRequest("/commodity/index", that.getSelectedItems(), function (res) {
+        conditions.page = page || 1;
+
+        app.wxRequest("/commodity/index", conditions, function (res) {
             if (res.code == 1) {
-              that.setData({
-                goods: res.data.list
-              });
+                content.setData({
+                    goods: content.data.goods.concat(res.data.list),
+                    lastPage: res.data.lastPage,
+                    currentPage: res.data.currentPage
+                });
             }
-          }
-        );
+        });
     }
 });

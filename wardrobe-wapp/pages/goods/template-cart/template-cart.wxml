@@ -15,7 +15,7 @@
                   bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}" style="{{item.left}}">
                 <view class="goods-info">
                     <view class="img-box">
-                        <image src="{{item.pic}}" class="img"/>
+                        <image src="{{item.pic}}" class="img" mode="aspectFit"></image>
                     </view>
                     <view class="text-box">
                         <view class="goods-title">{{item.name}}</view>

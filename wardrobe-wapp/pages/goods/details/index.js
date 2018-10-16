@@ -60,6 +60,8 @@ Page({
                     }
                 }
 
+                res.data.desc = res.data.desc.split(/\n/);
+
                 content.setData({
                     goodsDetail: res.data,
                     isFavorite: res.data.collection == 1
