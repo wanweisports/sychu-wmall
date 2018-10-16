@@ -146,7 +146,7 @@ public class ProductsController extends BaseController {
     @Desc("商品提交")
     @ResponseBody
     @RequestMapping(value = "/saveAdd", method = RequestMethod.POST)
-    public ResponseBean saveProductsAdd(ProductRequest productRequest, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public ResponseBean saveProductsAdd(ProductRequest productRequest, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
 
         CommodityInfo commodityInfo = new CommodityInfo();
         commodityInfo.setCommName(productRequest.getCommName());
@@ -185,7 +185,7 @@ public class ProductsController extends BaseController {
     @Desc("商品提交")
     @ResponseBody
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
-    public ResponseBean saveProductsEdit(ProductRequest productRequest, String resourceIds, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public ResponseBean saveProductsEdit(ProductRequest productRequest, String resourceIds, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
 
         CommodityInfo commodityInfo = new CommodityInfo();
         commodityInfo.setCid(productRequest.getCid());

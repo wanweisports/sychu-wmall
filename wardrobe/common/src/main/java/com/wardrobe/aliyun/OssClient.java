@@ -1,10 +1,11 @@
 package com.wardrobe.aliyun;
 
 import com.aliyun.oss.OSSClient;
+import net.coobird.thumbnailator.Thumbnails;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 /**
  * Created by cxs on 2018/9/3.
@@ -27,6 +28,18 @@ public class OssClient {
         ossClient.putObject(BUCKET_NAME, fileName, inputStream);
         // 关闭OSSClient。
         ossClient.shutdown();
+    }
+
+    public static void putInputStreamYS(InputStream inputStream, String fileName) throws Exception{
+        BufferedImage bufImg = ImageIO.read(inputStream);// 把图片读入到内存中
+
+        // 压缩代码
+        bufImg = Thumbnails.of(bufImg).width(750).keepAspectRatio(true).outputQuality(0.9).asBufferedImage();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();// 存储图片文件byte数组
+        ImageIO.write(bufImg, "jpg", bos); // 图片写入到 ImageOutputStream
+        ByteArrayInputStream input = new ByteArrayInputStream(bos.toByteArray());
+
+        putInputStream(input, fileName); //上传到OSS
     }
 
     public static String getImgPath(String path){

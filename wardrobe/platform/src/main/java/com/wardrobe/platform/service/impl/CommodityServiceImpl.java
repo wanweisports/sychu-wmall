@@ -15,6 +15,7 @@ import com.wardrobe.platform.service.ICommodityService;
 import com.wardrobe.platform.service.IResourceService;
 import com.wardrobe.platform.service.IUserService;
 import com.wardrobe.platform.service.IXlsExportImportService;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -25,6 +26,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
@@ -233,7 +235,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void addUpdateCommodityIn(CommodityInfo commodityInfo, String resourceIds, MultipartHttpServletRequest request) throws IOException{
+    public void addUpdateCommodityIn(CommodityInfo commodityInfo, String resourceIds, MultipartHttpServletRequest request) throws Exception{
         int cid = commodityInfo.getCid();
         int coid = commodityInfo.getCommodityColor().getCoid();
         Timestamp timestamp = DateUtil.getNowDate();
@@ -322,7 +324,10 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         List<SysResources> sysResources = FileUtil.getSpringUpload(request, OssClient.OSS_IMG_PATH);
         for(SysResources sysResource : sysResources){
             //保存到阿里云oss
-            OssClient.putInputStream(sysResource.getInputStream(), sysResource.getResourcePath());
+            byte[] bytes = IOUtils.toByteArray(sysResource.getInputStream());
+            OssClient.putInputStreamYS(new ByteArrayInputStream(bytes), sysResource.getResourcePath()); //保存压缩图
+            OssClient.putInputStream(new ByteArrayInputStream(bytes), sysResource.getResourcePathOG()); //保存原图
+
             //保存到数据库
             String name = sysResource.getName();
             sysResource.setResourceSeq(StrUtil.objToInt(name.substring(name.lastIndexOf(IPlatformConstant.UNDERLINE) + 1)));
