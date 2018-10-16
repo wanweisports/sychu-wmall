@@ -70,7 +70,7 @@
         <checkbox-group bindchange="bindAgreeChange">
             <label class="weui-agree">
                 <view class="weui-agree__text">
-                    阅读并同意<navigator url="" class="weui-agree__link">《闪衣橱服务条款》</navigator>
+                    阅读并同意<navigator url="/pages/user/protocols/user" class="weui-agree__link">《衣否用户协议》</navigator>
                 </view>
             </label>
         </checkbox-group>

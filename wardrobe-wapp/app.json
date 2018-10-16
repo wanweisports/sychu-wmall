@@ -17,10 +17,10 @@
         "pages/user/recharge/index",
         "pages/user/transactions/index",
         "pages/user/coupons/index",
-        "pages/user/about/index",
         "pages/user/order-list/index",
         "pages/user/order-details/index",
-        "pages/user/reserve/index"
+        "pages/user/reserve/index",
+        "pages/user/protocols/user"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -45,13 +45,13 @@
                 "pagePath": "pages/goods/list/index",
                 "iconPath": "images/nav/list-off.png",
                 "selectedIconPath": "images/nav/list-on.png",
-                "text": "挑衣服"
+                "text": "全部商品"
             },
             {
                 "pagePath": "pages/goods/room/index",
                 "iconPath": "images/nav/fitting-off.png",
                 "selectedIconPath": "images/nav/fitting-on.png",
-                "text": "试衣间"
+                "text": "配衣间"
             },
             {
                 "pagePath": "pages/goods/cart/index",
