@@ -1,0 +1,8 @@
+<view class="container">
+    <view class="transactions-list"></view>
+    <view wx:for="{{transactions.list}}" class="item" data-index="{{index}}">
+        <text class="transactions-balance">{{item.price}}元</text>
+        <text class="transactions-type">{{item.serviceTypeName}}</text>
+        <text class="transactions-time">{{item.createTime}}</text>
+    </view>
+</view>

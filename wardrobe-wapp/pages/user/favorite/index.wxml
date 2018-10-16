@@ -1,15 +1,1 @@
-<!--index.wxml-->
-<!--1px = 750/320 = 2.34rpx;-->
-
-<view class="container">
-    <view class="goods-container">
-        <view class="goods-box" wx:for-items="{{goods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}">
-           <view class="img-box">
-              <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
-           </view>
-           <view class="goods-title">{{item.commName}}</view>
-           <view class="goods-price">¥ {{item.price}}</view>
-        </view>
-    </view>
-    <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">没有更多啦</view>
-</view>
+<view class="container"><view class="goods-container"><view class="goods-box" wx:for-items="{{goods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}"><view class="img-box"><image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/></view><view class="goods-title">{{item.commName}}</view><view class="goods-price">¥ {{item.price}}</view></view></view><view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">没有更多啦</view></view>
