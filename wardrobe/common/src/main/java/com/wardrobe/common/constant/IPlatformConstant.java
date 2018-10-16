@@ -49,7 +49,9 @@ public interface IPlatformConstant {
 
 	int ADD_USER_SCORE = 1;
 
-	int INIT_USER_SCORE = 500;
+	int INIT_USER_SCORE = 0;
+
+	int FREIGHT = 12; //两件包邮，其余运费写12
 
 	String UNDERLINE = "_";
 

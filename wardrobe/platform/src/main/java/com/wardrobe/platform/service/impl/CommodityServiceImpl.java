@@ -62,7 +62,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String hot = commodityInputView.getHot();
         Integer groupId = commodityInputView.getGroupId();
 
-        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price");
+        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
         if(StrUtil.isNotBlank(category)){
@@ -472,6 +472,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException{
+        if(getCommodityBanner(commodityBanner.getCid()) != null) return;
         commodityBanner.setCreateTime(DateUtil.getNowDate());
         baseDao.save(commodityBanner, null);
 
