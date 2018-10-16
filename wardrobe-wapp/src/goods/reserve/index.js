@@ -23,7 +23,7 @@ Page({
 
         app.wxRequest("/device/devices", {}, function (res) {
             let date = new Date();
-            let end = date.getTime() + 7 * 24 * 60 * 60 * 1000;
+            let end = date.getTime() + 2 * 24 * 60 * 60 * 1000;
 
             if (res.code == 1) {
                 let wardrobe = res.data.list[0];
@@ -32,8 +32,8 @@ Page({
                     reserveDate: [utils.formatDate(date), utils.formatDate(new Date(end))],
                     reserveTime: [wardrobe.startTime, wardrobe.endTime],
                     reserveDateValue: utils.formatDate(date),
-                    reserveTimeStart: wardrobe.startTime + ":00",
-                    reserveTimeEnd: wardrobe.startTime + ":00"
+                    reserveTimeStart: wardrobe.startTime,
+                    reserveTimeEnd: wardrobe.startTime
                 });
             }
         });

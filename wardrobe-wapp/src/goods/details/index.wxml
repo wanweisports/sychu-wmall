@@ -14,7 +14,7 @@
         </view>
     </view>
     <view class="goods-info">
-        <view class="goods-title">{{goodsDetail.commName}}</view>
+        <view class="goods-title">[{{goodsDetail.brandName}}]{{goodsDetail.commName}}</view>
         <view class="goods-price" style="padding-left:35rpx;">¥ {{goodsDetail.price}}</view>
 
         <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{!isFavorite}}">

@@ -153,7 +153,7 @@ page{
     min-height: 48rpx;
     text-align: center;
     font-size: 24rpx;
-    border: 1rpx solid #ccc;
+    border: solid #ccc 1rpx;
 }
 
 .goods-info .img-box .img{

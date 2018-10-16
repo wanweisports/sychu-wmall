@@ -4,63 +4,98 @@ const app = getApp();
 
 Page({
     data: {
-        goodsListId: [],
-        goodsList:[],
-        isNeedLogistics:0, // 是否需要物流信息
+        goodsListId: [], //
+        goodsList:[], //
+
         allGoodsPrice:0,
-        yunPrice:0,
-        allGoodsAndYunPrice:0,
-        goodsJsonStr:"",
-        orderType:"", //订单类型，购物车下单或立即支付下单，默认是购物车，
+        yunPrice:0, //
 
-        youhuijine:0, //优惠券金额
-        curCoupon:null, // 当前选择使用的优惠券
+        allGoodsAndYunPrice:0, // 
 
-        hasNoCoupons: true,
+        youhuijine: 0, //优惠券金额
+        curCoupon: null, // 当前选择使用的优惠券
+        couponsIndex: 0,
+        serviceType: 2,
+        cpid: 0,
         coupons: [],
 
-        hasNoPoint: true,
-        point: 0,
+        ycoidList: [],
+        ycoidIndex: 0,
+        ycoid: 0,
 
         userInfo: {}
     },
 
-    getUserCouponsList: function () {
+    getCartSettle: function () {
         let content = this;
 
-        app.wxRequest("/user/userCouponList", {}, function (res) {
+        app.wxRequest("/commodity/settlement", {scids: content.data.goodsListId.join(",")}, function (res) {
             if (res.code == 1) {
+                let coupons = res.data.coupons;
+                let ycoid = res.data.ycoid;
+
+                !!coupons && coupons.forEach(function (item) {
+                    item.textShow = "[" + item.dictValue + "]优惠" + item.couponPrice + "元";
+                });
+
                 content.setData({
-                    coupons : res.data.coupons
+                    goodsList : res.data.list,
+                    coupons : coupons.length > 0 ? [{textShow: "不使用优惠券", cpid: ""}].concat(coupons) : [{textShow: "无可用优惠券", cpid: ""}],
+                    discount : res.data.discount,
+                    allGoodsPrice : res.data.sumPrice,
+                    allGoodsAndYunPrice : res.data.sumPrice,
+                    ycoid: res.data.ycoid,
+                    ycoidList: ycoid > 0 ? ["不使用薏米", res.data.ycoid + "薏米"] : ["无薏米"],
+                    yunPrice: res.data.freight
                 });
             }
         });
     },
 
-    getUserInfo: function () {
+    countCartSettle: function () {
         let content = this;
 
-        app.wxRequest("/user/userCenter", {}, function (res) {
-            content.setData({
-                userInfo : res.data
-            });
-
-            if (content.data.userInfo.couponCount > 0) {
+        app.wxRequest("/commodity/settlementCount", {
+            scids: content.data.goodsListId.join(","),
+            serviceType: content.data.serviceType,
+            cpid: content.data.cpid,
+        }, function (res) {
+            if (res.code == 1) {
                 content.setData({
-                    hasNoCoupons: false,
-                    couponCount: content.data.userInfo.couponCount
-                });
-
-                content.getUserCouponsList();
-            }
-
-            if (content.data.userInfo.point > 0) {
-                content.setData({
-                    hasNoPoint: false,
-                    point: content.data.userInfo.point
+                    allGoodsAndYunPrice : res.data.sumPrice,
+                    yunPrice: res.data.freight
                 });
             }
         });
+    },
+
+    bindCouponsChange: function (e) {
+        let curCoupon = this.data.coupons[e.detail.value]; 
+
+        this.setData({
+            couponsIndex : e.detail.value,
+            curCoupon : curCoupon,
+            serviceType: 1,
+            cpid: curCoupon.cpid
+        });
+
+        if (!!curCoupon.cpid) {
+            this.countCartSettle();
+        }
+    },
+
+     bindYcoidChange: function (e) {
+        let ycoid = this.data.ycoidList[e.detail.value]; 
+
+        this.setData({
+            ycoidIndex : e.detail.value,
+            ycoid : ycoid,
+            serviceType: 2
+        });
+
+        if (ycoid > 0) {
+            this.countCartSettle();
+        }
     },
 
     onLoad: function () {
@@ -74,23 +109,16 @@ Page({
             });
         }
 
-        let allGoodsPrice = 0;
         let goodsListId = [];
         for (let i = 0; i < shopList.length; i++) {
-            let carShopBean = shopList[i];
-            allGoodsPrice += carShopBean.price * carShopBean.number;
             goodsListId.push(shopList[i].scid);
         }
 
         content.setData({
-            isNeedLogistics: 1,
-            goodsList: shopList,
-            allGoodsPrice: allGoodsPrice,
-            allGoodsAndYunPrice: allGoodsPrice,
             goodsListId: goodsListId
         });
 
-        content.getUserInfo();
+        content.getCartSettle();
     },
 
     createOrder:function () {
@@ -112,14 +140,9 @@ Page({
             expressAddress: content.data.curAddressData.address,
             remark: remark,
             scids: content.data.goodsListId.join(","),
-            serviceType: "",
-            cpid: ""
+            serviceType: content.data.serviceType,
+            cpid: content.data.cpid
         };
-        if (content.data.curCoupon) {
-            postData.serviceType = 2;
-            postData.cpid = content.data.curCoupon.id;
-        }
-        postData.calculate = "true";
 
         app.wxRequest("/order/saveOrder", postData, function (res) {
             // 清空购物车数据

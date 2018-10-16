@@ -10,9 +10,9 @@ const combiner = require('stream-combiner2');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require("gulp-rename");
-const minifycss = require('gulp-minify-css');
 const runSequence = require('run-sequence');
 const jsonlint = require("gulp-jsonlint");
+const cleanCSS = require('gulp-clean-css');
 
 var colors = gutil.colors;
 
@@ -74,34 +74,14 @@ gulp.task('templatesPro', function () {
 });
 
 gulp.task('wxss', function () {
-    var combined = combiner.obj([
-        gulp.src(['./src/**/*.wxss']),
-        sass().on('error', sass.logError),
-        autoprefixer([
-            'iOS >= 8',
-            'Android >= 4.1'
-        ]),
-        rename(function (path) {path.extname = '.wxss'}),
-        gulp.dest('./pages')
-    ]);
-
-    combined.on('error', handleError);
+    return gulp.src('./src/**/*.wxss')
+        .pipe(gulp.dest('./pages'))
 });
 
 gulp.task('wxssPro', function () {
-    var combined = combiner.obj([
-        gulp.src(['./src/**/*.wxss']),
-        sass().on('error', sass.logError),
-        autoprefixer([
-            'iOS >= 8',
-            'Android >= 4.1'
-        ]),
-        minifycss(),
-        rename(function (path) {path.extname = '.wxss'}),
-        gulp.dest('./pages')
-    ]);
-
-    combined.on('error', handleError);
+    return gulp.src('./src/**/*.wxss')
+        .pipe(cleanCSS())
+        .pipe(gulp.dest('./pages'))
 });
 
 gulp.task('scripts', function () {
