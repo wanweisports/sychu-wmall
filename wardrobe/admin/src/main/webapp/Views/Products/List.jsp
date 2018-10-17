@@ -40,6 +40,14 @@
                 }
             });
         }
+
+        function updateSeqNo(cid, obj){
+            $.post("/admin/products/updateCommoditySeqNo", {cid: cid, seqNo: $(obj).val()}, function (res) {
+                if(res.code != 1){
+                    window.location.reload();
+                }
+            });
+        }
     </script>
 </layout:override>
 
@@ -100,6 +108,8 @@
                                     <th>商品原价</th>
                                     <%--<th>优惠价格</th>--%>
                                     <th>已售数量</th>
+                                    <th>收藏次数</th>
+                                    <th>当前排序</th>
                                     <th>商品状态</th>
                                     <th></th>
                                 </tr>
@@ -117,7 +127,11 @@
                                     <td>￥${c.price}</td>
                                     <%--<td>￥399</td>--%>
                                     <td>
-                                        <a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
+                                        <%--<a href="/admin/products/transaction/records?productId=1" class="btn btn-sm btn-link">--%>${c.saleCount}件<%--</a>--%>
+                                    </td>
+                                    <td>${c.collectionCount}</td>
+                                    <td>
+                                        <input type="text" value="${c.seqNo}" onchange="updateSeqNo('${c.cid}', this)" />
                                     </td>
                                     <td>
                                         <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
@@ -133,26 +147,9 @@
                                                 <i class="fa fa-level-up"></i> 上架
                                             </a>
                                         </c:if>
-                                            <%--<c:if test="${c.hot == '1'}">--%>
-                                                <%--<a href="javascript:;" class="btn btn-sm btn-danger product-hot-cancel js-hot-down" title="取消热门" data-id="${c.cid}">--%>
-                                                    <%--<i class="fa fa-remove"></i> 取消热门--%>
-                                                <%--</a>--%>
-                                            <%--</c:if>--%>
-                                            <%--<c:if test="${c.hot != '1'}">--%>
-                                                <%--<a href="javascript:;" class="btn btn-sm btn-primary js-hot-top" title="添加到热门" data-id="${c.cid}">--%>
-                                                    <%--<i class="fa fa-heart"></i> 热门--%>
-                                                <%--</a>--%>
-                                            <%--</c:if>--%>
-                                            <%--<c:if test="${c.newly == '1'}">--%>
-                                                <%--<a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-newly-down" title="取消最新" data-id="${c.cid}">--%>
-                                                    <%--<i class="fa fa-remove"></i> 取消最新--%>
-                                                <%--</a>--%>
-                                            <%--</c:if>--%>
-                                            <%--<c:if test="${c.newly != '1'}">--%>
-                                                <%--<a href="javascript:;" class="btn btn-sm btn-primary js-newly-top" title="添加到最新" data-id="${c.cid}">--%>
-                                                    <%--<i class="fa fa-bolt"></i> 最新--%>
-                                                <%--</a>--%>
-                                            <%--</c:if>--%>
+                                        <a href="javascript:;" class="btn btn-sm btn-danger js-status-del" title="删除" data-id="${c.cid}">
+                                            <i class="fa fa-level-down"></i> 删除
+                                        </a>
                                     </td>
                                 </tr>
                                 </c:forEach>

@@ -66,7 +66,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
         StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
-        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
+        StringBuilder whereSql = new StringBuilder(" WHERE ci.status = '").append(IDBConstant.LOGIC_STATUS_YES).append("'"); //小程序前端只查询上架商品
         if(StrUtil.isNotBlank(category)){
             whereSql.append(" AND ci.category REGEXP :category");
         }
@@ -148,7 +148,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     private List<Map<String, Object>> getCommodityColors(int groupId){
-        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
+        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1 AND ci.status = ?2", groupId, IDBConstant.LOGIC_STATUS_YES);
     }
 
     private String[] getCommoditySizeNames(int cid){
@@ -166,11 +166,17 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getCommoditysIn(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((commodity) -> {
+            Integer cid = StrUtil.objToInt(commodity.get("cid"));
             getType(commodity);
             commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
-            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+            commodity.put("resourcePath", getFmImg(cid));//0表示封面图
+            commodity.put("collectionCount", getCollectionCount(cid));
         });
         return pageBean;
+    }
+
+    private int getCollectionCount(int cid){
+        return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_collection uc WHERE uc.cid = ?1", cid).intValue();
     }
 
     private Map<String, Object> getType(Map<String, Object> commodity){
@@ -606,7 +612,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityColor.setColorName(commodityInfo.getColor());
             commodityColor.setCreateTime(nowDate);
             baseDao.save(commodityColor, null);
-            List<Map<String, Object>> sizes = getcommoditySizes(commodityInfo.getCidMapping(), list1);
+            List<Map<String, Object>> sizes = getCommoditySizes(commodityInfo.getCidMapping(), list1);
             sizes.stream().forEach(sizeMap -> {
                 CommoditySize commoditySize = JsonUtils.fromJson(sizeMap, CommoditySize.class);
                 commoditySize.setCreateTime(nowDate);
@@ -618,7 +624,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     }
 
-    private List<Map<String, Object>> getcommoditySizes(int cidMapping, List<Map<String, Object>> list1){
+    private List<Map<String, Object>> getCommoditySizes(int cidMapping, List<Map<String, Object>> list1){
         List<Map<String, Object>> sizes = new ArrayList<>();
         for(Map<String, Object> map : list1){
             if(StrUtil.objToInt(map.get("cidMapping")) == cidMapping){
@@ -626,6 +632,44 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             }
         }
         return sizes;
+    }
+
+    @Override
+    public void deletecCommodity(int cid){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        CommodityColor commodityColor = getCommodityColorByCid(cid);
+        List<CommoditySize> commoditySizes = getCommoditySizeList(cid);
+
+        List<SysResources> resources = resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG);
+        List<SysResources> resourceBanners = resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
+        if(commodityInfo != null){
+            baseDao.delete(commodityInfo);
+        }
+        if(commodityColor != null){
+            baseDao.delete(commodityColor);
+        }
+        if(commoditySizes != null && commoditySizes.size() > 0){
+            commoditySizes.stream().forEach(commoditySize -> {
+                baseDao.delete(commoditySize);
+            });
+        }
+        if(resources != null && resources.size() > 0){
+            resources.stream().forEach(resource -> {
+                baseDao.delete(resource);
+            });
+        }
+        if(resourceBanners != null && resourceBanners.size() > 0){
+            resourceBanners.stream().forEach(resource -> {
+                baseDao.delete(resource);
+            });
+        }
+    }
+
+    @Override
+    public void updateCommoditySeqNo(int cid, int seqNo){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        commodityInfo.setSeqNo(seqNo);
+        baseDao.save(commodityInfo, cid);
     }
 
 }

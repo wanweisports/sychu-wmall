@@ -68,4 +68,8 @@ public interface ICommodityService {
 
     void saveExcelCommoditys(MultipartHttpServletRequest multipartRequest) throws IOException;
 
+    void deletecCommodity(int cid);
+
+    void updateCommoditySeqNo(int cid, int seqNo);
+
 }

@@ -34,6 +34,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Autowired
     private ISysRankService sysRankService;
 
+    @Autowired
+    private ICommodityService commodityService;
+
     @Override
     public UserInfo getUserInfo(int uid){
         return baseDao.getToEvict(UserInfo.class, uid);
@@ -246,8 +249,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
         Integer uid = userInputView.getUid();
         StringBuilder headSql = new StringBuilder("SELECT uc.*, ci.commName, ci.price, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM user_collection uc, commodity_info ci");
-        StringBuilder whereSql = new StringBuilder(" WHERE uc.cid = ci.cid AND uc.uid = :uid");
-        return super.getPageBean(headSql, bodySql, whereSql, userInputView);
+        StringBuilder whereSql = new StringBuilder(" WHERE uc.cid = ci.cid AND uc.uid = :uid AND ci.status = '").append(IDBConstant.LOGIC_STATUS_YES).append("'");
+        PageBean pageBean = super.getPageBean(headSql, bodySql, whereSql, userInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach(commodity -> {
+            commodity.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+        });
+        return pageBean;
     }
 
 }

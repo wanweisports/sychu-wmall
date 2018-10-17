@@ -252,5 +252,21 @@ public class ProductsController extends BaseController {
         return "Products/BannerList";
     }
 
+    @Desc("修改商品排序")
+    @ResponseBody
+    @RequestMapping("updateCommoditySeqNo")
+    public ResponseBean updateCommoditySeqNo(int cid, int seqNo){
+        commodityService.updateCommoditySeqNo(cid, seqNo);
+        return new ResponseBean(true);
+    }
+
+    @Desc("删除商品")
+    @ResponseBody
+    @RequestMapping("deleteCommodity")
+    public ResponseBean deleteCommodity(int cid){
+        commodityService.deletecCommodity(cid);
+        return new ResponseBean(true);
+    }
+
 }
 

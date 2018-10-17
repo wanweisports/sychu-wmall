@@ -19,7 +19,7 @@
                 </a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'list' || param.subMenu == 'detail' || param.subMenu == 'edit')}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'list' || param.subMenu == 'detail' || param.subMenu == 'edit')}">active</c:if>" href="/admin/products/list">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'list' || param.subMenu == 'detail' || param.subMenu == 'edit')}">active</c:if>" href="/admin/products/list?status=1">
                             <i class="icon-arrow-right"></i> 商品列表
                         </a>
                     </li>
