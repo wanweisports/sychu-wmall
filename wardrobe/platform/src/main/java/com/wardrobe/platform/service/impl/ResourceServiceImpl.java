@@ -99,7 +99,7 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq){
-        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3", resourceServiceParentId, resourceServiceType, resourceSeq));
+        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3 ORDER BY resourceId DESC", resourceServiceParentId, resourceServiceType, resourceSeq));
     }
 
     @Override

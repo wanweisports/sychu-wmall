@@ -147,7 +147,7 @@
                                                 <i class="fa fa-level-up"></i> 上架
                                             </a>
                                         </c:if>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger js-status-del" title="删除" data-id="${c.cid}">
+                                        <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-status-del" title="删除" data-id="${c.cid}">
                                             <i class="fa fa-level-down"></i> 删除
                                         </a>
                                     </td>
