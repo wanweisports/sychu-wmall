@@ -2,7 +2,7 @@
     <form bindsubmit="createOrder" report-submit="true">
         <view class="address-box">
             <view class="add-address" hidden="{{wardrobeInfo}}">
-                <view class="title" bindtap="addAddress">选择试衣间</view>
+                <view class="title" bindtap="addAddress">选择配衣间</view>
             </view>
             <view class="show-address" hidden="{{!wardrobeInfo}}">
                 <view class="name-tel">{{wardrobeInfo.name}}  {{wardrobeInfo.startTime}}-{{wardrobeInfo.endTime}}</view>
