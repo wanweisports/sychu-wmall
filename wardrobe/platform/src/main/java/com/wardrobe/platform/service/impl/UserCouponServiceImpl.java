@@ -35,7 +35,8 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
 
     @Override
     public List<Map<String, Object>> getUserCouponList(int userId){
-        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 ORDER BY uci.dueTime DESC", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO);
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 ORDER BY uci.dueTime DESC", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO);
+        return descCoupons(list);
     }
 
     @Override
@@ -47,6 +48,19 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
                     map.put("status", IDBConstant.LOGIC_STATUS_YES);
                 }else{
                     map.put("status", IDBConstant.LOGIC_STATUS_NO);
+                }
+            });
+        }
+        return descCoupons(list);
+    }
+
+    private List<Map<String, Object>> descCoupons(List<Map<String, Object>> list){
+        if(list != null && list.size() > 0){
+            StringBuilder desc = new StringBuilder();
+            list.stream().forEach(map -> {
+                desc.setLength(0);
+                if(IDBConstant.COUPON_SERVICE_TYPE.equals(map.get("serviceType").toString())) {
+                    map.put("dictValue", desc.append("满").append(StrUtil.objToInt(map.get("fullPrice"))).append("元可使用"));
                 }
             });
         }
