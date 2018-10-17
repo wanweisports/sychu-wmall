@@ -28,4 +28,6 @@ public interface IUserAccountService {
 
     Map<String, Object> getScore(int uid);
 
+    void updateUserYcoid(int useYcoidCount, int uid);
+
 }

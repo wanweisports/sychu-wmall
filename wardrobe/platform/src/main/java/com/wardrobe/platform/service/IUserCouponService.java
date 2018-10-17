@@ -20,7 +20,7 @@ public interface IUserCouponService {
 
     List<Map<String, Object>> getUserEffectiveCoupons(int userId, double priceSum);
 
-    UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid) throws ParseException;
+    UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid, double fullPrice) throws ParseException;
 
     UserCouponInfo getUserUseCouponInfo(int cpid, int uid) throws ParseException;
 
@@ -30,6 +30,6 @@ public interface IUserCouponService {
 
     void addUserCoupon(SysCouponRule sysCouponRule, int uid);
 
-    void updateUseUserCouponInfo(Integer cpid, String serviceType, int uid) throws ParseException;
+    void updateUseUserCouponInfo(int cpid) throws ParseException;
 
 }

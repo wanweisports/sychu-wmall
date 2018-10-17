@@ -9,9 +9,13 @@ URL：/commodity/settlement?scids=22,23,25
 	"message": "操作成功",
 	"data": {
 		"discount": 0.95,
-		"sumPrice": 2202.22,
-商品应收价格
-                "ycoid": 500,
+		"sumPrice": 2202.22,  	      #最终支付金额
+		"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）【新10-17】
+		"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）【新10-17】
+		"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【新10-17】
+		"couponPrice": 0,             #使用的优惠券金额【新10-17】
+		"useYcoid": 0,                #使用的衣橱币数量【新10-17】
+                "ycoid": 500,		      #用户当前衣橱币数量
 		"freight": 12   #【新10-16，运费】
 		"list": [{
 				"colorName": "黄色",
@@ -63,7 +67,12 @@ URL：/commodity/commodity/settlementCount?scids=22,23,25&serviceType=1&cpid=1
 		"code": "1",
 		"message": "操作成功",
 		"data": {
-			"sumPrice": 1807.11,
+			"sumPrice": 2202.22,  	      #最终支付金额
+			"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）【新10-17】
+			"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）【新10-17】
+			"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【新10-17】
+			"couponPrice": 0,             #使用的优惠券金额【新10-17】
+			"useYcoid": 0,                #使用的衣橱币数量【新10-17】
 			"freight": 12   #【新10-16，运费】
 优惠金额
 薏米抵现金额
@@ -81,7 +90,9 @@ URL：/commodity/commodity/settlementCount?dbids=6,9,10&serviceType=1&cpid=1
 		"code": "1",
 		"message": "操作成功",
 		"data": {
-			"sumPrice": 1807.11
+			"sumPrice": 1807.11,
+			"sumOldDisPrice": 2302.22, //商品应收价格（用户等级折扣后的金额）
+			
 		}
 	}
 

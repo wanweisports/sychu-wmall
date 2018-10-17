@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.DiscountBean;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
@@ -178,22 +179,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         //支付价格：之后减去优惠部分
         double sumPrice = userOrderInfo.getPriceSum().doubleValue();
         String serviceType = userOrderInfo.getServiceType();
-        sumPrice = userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid);
-        sumPrice = sumPrice > 0 ? sumPrice : 0;
-        //运费
-        int freight = IPlatformConstant.FREIGHT;
-        if(commodityCount >= 2) sumPrice += freight;
+        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, serviceType, userOrderInfo.getCpid(), uid, commodityCount);
 
-        userOrderInfo.setFreight(Arith.conversion(freight));
-        userOrderInfo.setPayPrice(Arith.conversion(sumPrice));
+        userOrderInfo.setFreight(Arith.conversion(discountBean.getFreight()));
+        userOrderInfo.setPayPrice(Arith.conversion(discountBean.getSumPrice())); //支付金额
         baseDao.save(userOrderInfo, oid);
 
         //优惠券置为使用状态
-        userCouponService.updateUseUserCouponInfo(userOrderInfo.getCpid(), serviceType, uid);
+        userCouponService.updateUseUserCouponInfo(discountBean.getCpid());
 
         //衣橱币减去
-        int userYcoid = userShoppingCartService.updateUseUserYcoid(uid, serviceType, sumPrice);
-        if(userYcoid > 0) {
+        int userYcoid = discountBean.getUseYcoid();
+        //减去用户衣橱币
+        userAccountService.updateUserYcoid(userYcoid, uid);
+        if(discountBean.getUseYcoid() > 0) {
             userOrderInfo.setYcoid(userYcoid);
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
         }
@@ -251,16 +250,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
         //支付价格：之后减去优惠部分
         double sumPrice = userOrderInfo.getPriceSum().doubleValue();
+
         String serviceType = userOrderInfo.getServiceType();
-        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid)));
+        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, serviceType, userOrderInfo.getCpid(), uid, 0);
+        userOrderInfo.setPayPrice(Arith.conversion(discountBean.getSumPrice()));
         baseDao.save(userOrderInfo, oid);
 
         //优惠券置为使用状态
-        userCouponService.updateUseUserCouponInfo(userOrderInfo.getCpid(), serviceType, uid);
+        userCouponService.updateUseUserCouponInfo(discountBean.getCpid());
 
         //衣橱币减去
-        int userYcoid = userShoppingCartService.updateUseUserYcoid(uid, serviceType, sumPrice);
-        if(userYcoid > 0) {
+        int userYcoid = discountBean.getUseYcoid();
+        //减去用户衣橱币
+        userAccountService.updateUserYcoid(userYcoid, uid);
+        if(discountBean.getUseYcoid() > 0) {
             userOrderInfo.setYcoid(userYcoid);
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
         }

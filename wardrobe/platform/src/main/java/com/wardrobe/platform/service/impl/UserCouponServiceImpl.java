@@ -10,6 +10,7 @@ import com.wardrobe.platform.service.IUserCouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
@@ -53,8 +54,8 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     }
 
     @Override
-    public UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid) throws ParseException{
-        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4", cpid, uid, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToDate(new Date()));
+    public UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid, double fullPrice) throws ParseException{
+        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4 AND fullPrice <= ?5", cpid, uid, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToDate(new Date()), new BigDecimal(fullPrice));
     }
 
     @Override
@@ -94,9 +95,9 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     }
 
     @Override
-    public void updateUseUserCouponInfo(Integer cpid, String serviceType, int uid) throws ParseException{
-        if(IDBConstant.LOGIC_STATUS_YES.equals(serviceType)){
-            UserCouponInfo userCouponInfo = getUserNotUseCouponInfo(cpid, uid);
+    public void updateUseUserCouponInfo(int cpid) throws ParseException {
+        if (cpid > 0) {
+            UserCouponInfo userCouponInfo = baseDao.getToEvict(UserCouponInfo.class, cpid);
             userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
             baseDao.save(userCouponInfo, userCouponInfo.getStatus());
         }

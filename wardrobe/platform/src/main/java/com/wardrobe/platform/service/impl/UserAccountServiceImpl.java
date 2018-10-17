@@ -136,10 +136,19 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
     }
 
     @Override
-    public synchronized Map<String, Object> getScore(int uid){
+    public Map<String, Object> getScore(int uid){
         Map<String, Object> data = new HashMap(1, 1);
         data.put("score", baseDao.getUniqueResult("SELECT score FROM user_account WHERE uid = ?1", uid).intValue());
         return data;
+    }
+
+    @Override
+    public synchronized void updateUserYcoid(int useYcoidCount, int uid){
+        if(useYcoidCount > 0) {
+            UserAccount userAccount = getUserAccount(uid);
+            userAccount.setYcoid(userAccount.getYcoid() - useYcoidCount);
+            baseDao.save(userAccount, uid);
+        }
     }
 
 }
