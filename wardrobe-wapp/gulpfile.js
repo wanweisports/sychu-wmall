@@ -14,7 +14,7 @@ const runSequence = require('run-sequence');
 const jsonlint = require("gulp-jsonlint");
 const cleanCSS = require('gulp-clean-css');
 
-var colors = gutil.colors;
+let colors = gutil.colors;
 
 const handleError = function (err) {
     console.log('\n');
