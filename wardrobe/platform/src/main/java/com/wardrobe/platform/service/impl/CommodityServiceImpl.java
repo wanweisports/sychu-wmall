@@ -66,7 +66,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
         StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
-        StringBuilder whereSql = new StringBuilder(" WHERE 1=1");
+        StringBuilder whereSql = new StringBuilder(" WHERE ci.status = '").append(IDBConstant.LOGIC_STATUS_YES).append("'"); //小程序前端只查询上架商品
         if(StrUtil.isNotBlank(category)){
             whereSql.append(" AND ci.category REGEXP :category");
         }
@@ -148,7 +148,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     private List<Map<String, Object>> getCommodityColors(int groupId){
-        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1", groupId);
+        return baseDao.queryBySql("SELECT cc.cid, cc.colorName FROM commodity_info ci, commodity_color cc WHERE ci.cid = cc.cid AND ci.groupId = ?1 AND ci.status = ?2", groupId, IDBConstant.LOGIC_STATUS_YES);
     }
 
     private String[] getCommoditySizeNames(int cid){

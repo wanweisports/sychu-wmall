@@ -50,4 +50,6 @@ public interface IOrderService {
 
     void updateOvertimeOrders(List<UserOrderInfo> userOrderInfos) throws ParseException;
 
+    Map<String, Object> getNowCanOpenLock(int did, int uid);
+
 }

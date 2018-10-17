@@ -749,4 +749,14 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         }
     }
 
+    @Override
+    public Map<String, Object> getNowCanOpenLock(int did, int uid){
+        StringBuilder sql = new StringBuilder("SELECT sdc.did, sdc.dcid, sdc.`name` FROM sys_device_control sdc ");
+        sql.append(" WHERE sdc.did = ?1 AND type = ?2 AND NOT EXISTS(SELECT 1 FROM reserve_order_info roi WHERE roi.dcid = sdc.dcid AND roi.uid != ?3 AND roi.reserveEndTime >= NOW())");
+        List<Map<String, Object>> locks = baseDao.queryBySql(sql.toString(), new Object[]{did, IDBConstant.LOGIC_STATUS_NO, uid});
+        Map<String, Object> data = new HashMap<>(2, 1);
+        data.put("locks", locks);
+        return data;
+    }
+
 }

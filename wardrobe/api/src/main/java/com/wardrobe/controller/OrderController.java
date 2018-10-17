@@ -120,4 +120,11 @@ public class OrderController extends BaseController {
         return new ResponseBean(orderService.getUserOrderDetail(oid, getUserInfo().getUid()));
     }
 
+    @Desc("获取当前能开的柜子")
+    @ResponseBody
+    @RequestMapping("nowCanOpenLock")
+    public ResponseBean nowCanOpenLock(int did){
+        return new ResponseBean(orderService.getNowCanOpenLock(did, getUserInfo().getUid()));
+    }
+
 }

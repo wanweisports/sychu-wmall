@@ -41,12 +41,12 @@ pptp
 =========================================
 ==================测试===================
 root@47.93.59.41
-新：http://mystore.yifoutech.cn
+新：https://mystore.yifoutech.cn
 /*http://mystore.jonham.cn*/
 
 ==================正式===================
 root@47.94.196.103
-域名：mystore.yifoutech.com
+域名：https://mystore.yifoutech.com
 
 
 
