@@ -1,5 +1,4 @@
 <view class="container">
-    <form bindsubmit="createOrder" report-submit="true">
         <view class="address-box">
             <view class="add-address" hidden="{{wardrobeInfo}}">
                 <view class="title" bindtap="addAddress">选择配衣间</view>
@@ -63,7 +62,6 @@
             <view class="left-price">
                 <view class="total">合计：¥ {{allGoodsPrice}}</view>
             </view>
-            <button class="to-pay-btn" formType="submit">提交订单</button>
+            <button class="to-pay-btn" bindtap="createOrder">提交订单</button>
         </view>
-    </form>
 </view>

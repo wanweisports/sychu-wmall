@@ -1,5 +1,4 @@
 <view class="container">
-    <form bindsubmit="createOrder" report-submit="true">
         <view class="address-box">
             <view class="add-address" hidden="{{curAddressData}}">
                 <view class="title" bindtap="addAddress">新增收货地址</view>
@@ -35,8 +34,8 @@
             </view>
             <view class="row-box" wx:if="{{hasYcoid}}">
                 <view class="row-label">使用薏米</view>
-                <picker bindchange="bindYcoidChange" value="{{ycoidIndex}}" range="{{ycoidList}}">
-                        <view class="right-text">{{ycoidList[ycoidIndex]}}</view>
+                <picker bindchange="bindYcoidChange" value="{{ycoidIndex}}" range="{{ycoidList}}" range-key="{{'textShow'}}">
+                        <view class="right-text">{{ycoidList[ycoidIndex].textShow}}</view>
                 </picker>
             </view>
             <view class="row-box" wx:if="{{hasCoupons}}">
@@ -55,11 +54,11 @@
                 <view class="row-label">运费</view>
                 <view class="right-text">+ ¥ {{yunPrice}}</view>
             </view>
-            <view class="row-box" wx:if="{{!hasYcoid}}">
+            <view class="row-box" wx:if="{{hasYcoid}}">
                 <view class="row-label">薏米抵现</view>
                 <view class="right-text">- ¥ {{useYcoid}}</view>
             </view>
-            <view class="row-box" wx:if="{{!hasCoupons}}">
+            <view class="row-box" wx:if="{{hasCoupons}}">
                 <view class="row-label">优惠金额</view>
                 <view class="right-text">- ¥ {{couponPrice}}</view>
             </view>
@@ -68,7 +67,6 @@
             <view class="left-price">
                 <view class="total">合计：¥ {{allGoodsAndYunPrice}}</view>
             </view>
-            <button class="to-pay-btn" formType="submit">提交订单</button>
+            <button class="to-pay-btn" bindtap="createOrder">提交订单</button>
         </view>
-    </form>
 </view>

@@ -190,7 +190,7 @@ App({
                         success: function () {
                             wx.showToast({title: '支付成功'});
 
-                            wx.reLaunch({
+                            wx.navigateTo({
                                 url: redirectUrl
                             });
                         }

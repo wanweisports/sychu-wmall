@@ -53,7 +53,7 @@ Page({
                     allGoodsAndYunPrice : res.data.sumPrice,
                     ycoid: res.data.ycoid,
                     useYcoid: 0,
-                    ycoidList: ycoid > 0 ? ["不使用薏米", res.data.ycoid + "薏米"] : ["无薏米"],
+                    ycoidList: ycoid > 0 ? [{textShow: "不使用薏米", ycoid: "0"}, {textShow: res.data.ycoid + "薏米", ycoid: res.data.ycoid}] : [{textShow: "没有薏米", ycoid: "0"}],
                     hasYcoid: ycoid > 0,
                     yunPrice: res.data.freight
                 });
@@ -96,17 +96,14 @@ Page({
     },
 
      bindYcoidChange: function (e) {
-        let ycoid = this.data.ycoidList[e.detail.value]; 
+        let curYcoid = this.data.ycoidList[e.detail.value]; 
 
         this.setData({
             ycoidIndex : e.detail.value,
-            ycoid : ycoid,
             serviceType: 2
         });
 
-        if (ycoid > 0) {
-            this.countCartSettle();
-        }
+        this.countCartSettle();
     },
 
     onLoad: function () {
@@ -132,7 +129,7 @@ Page({
         content.getCartSettle();
     },
 
-    createOrder:function () {
+    createOrder: function () {
         let content = this;
         let remark = ""; // 备注信息
 
@@ -149,7 +146,6 @@ Page({
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
-            remark: remark,
             scids: content.data.goodsListId.join(","),
             serviceType: content.data.serviceType,
             cpid: content.data.cpid

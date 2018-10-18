@@ -9,7 +9,6 @@
                 <view class="name-tel">{{wardrobeInfo.sdName}}</view>
                 <view class="addr-text">{{wardrobeInfo.address}}</view>
             </view>
-            <button class="to-pay-btn" bindtap="leave">直接离开</button>
         </view>
         <view class="peisong-way">
             <view class="row-box">
@@ -53,10 +52,8 @@
             </view>
         </view>
         <view class="jiesuan-box">
-            <view class="left-price">
-                <view class="total">合计：¥ {{sumPrice}}</view>
-            </view>
-            <button class="to-pay-btn" bindtap="toCartOrder">结 算</button>
+            <button class="to-leave-btn" bindtap="leave">直接离开</button>
+            <button class="to-pay-btn" bindtap="toCartOrder">开始试衣</button>
         </view>
     </view>
 </view>
