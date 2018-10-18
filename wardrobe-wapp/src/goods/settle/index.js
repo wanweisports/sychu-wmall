@@ -205,21 +205,5 @@ Page({
                 });
             }
         });
-    },
-    bindChangeCoupon: function (e) {
-        const selIndex = e.detail.value[0] - 1;
-
-        if (selIndex == -1) {
-            this.setData({
-                youhuijine: 0,
-                curCoupon: null
-            });
-            return;
-        }
-
-        this.setData({
-            youhuijine: this.data.coupons[selIndex].couponPrice,
-            curCoupon: this.data.coupons[selIndex]
-        });
     }
 });

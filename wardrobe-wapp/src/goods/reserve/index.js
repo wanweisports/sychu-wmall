@@ -39,32 +39,6 @@ Page({
         });
     },
 
-    getUserInfo: function () {
-        let content = this;
-
-        app.wxRequest("/user/userCenter", {}, function (res) {
-            content.setData({
-                userInfo : res.data
-            });
-
-            if (content.data.userInfo.couponCount > 0) {
-                content.setData({
-                    hasNoCoupons: false,
-                    couponCount: content.data.userInfo.couponCount
-                });
-
-                content.getUserCouponsList();
-            }
-
-            if (content.data.userInfo.point > 0) {
-                content.setData({
-                    hasNoPoint: false,
-                    point: content.data.userInfo.point
-                });
-            }
-        });
-    },
-
     bindDateChange: function (e) {
         this.setData({
             reserveDateValue: e.detail.value
@@ -108,7 +82,6 @@ Page({
             allGoodsPrice: allGoodsPrice
         });
 
-        content.getUserInfo();
         content.getWardrobeList();
     },
 

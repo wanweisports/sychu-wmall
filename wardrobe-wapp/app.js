@@ -171,6 +171,8 @@ App({
     },
     // 微信支付
     wxPay: function (orderId, redirectUrl) {
+        let content = this;
+
         this.wxRequest('/order/wxPayPackage', {
                 orderId: orderId
             },
@@ -190,16 +192,12 @@ App({
                         success: function () {
                             wx.showToast({title: '支付成功'});
 
-                            wx.navigateTo({
-                                url: redirectUrl
-                            });
+                            content.redirect(redirectUrl, "navigateTo");
                         }
                     });
                 }
                 else if (res.code == 2) {
-                    wx.reLaunch({
-                        url: redirectUrl
-                    });
+                    content.redirect(redirectUrl, "navigateTo");
                 }
                 else {
                     wx.showToast({title: '调起支付失败:' + res.message})
@@ -290,8 +288,8 @@ App({
     config: {
         getApiHost: function () {
             //return "http://127.0.0.1:8070";
-            //return "https://mystore.yifoutech.com/api";
-            return "https://mystore.yifoutech.cn/api";
+            return "https://mystore.yifoutech.com/api";
+            //return "https://mystore.yifoutech.cn/api";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您',
