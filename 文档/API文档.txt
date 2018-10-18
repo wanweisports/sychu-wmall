@@ -77,10 +77,32 @@ URL：/commodity/commodity/settlementCount?scids=22,23,25&serviceType=1&cpid=1
 			"couponPrice": 0,             #使用的优惠券金额【新10-17】
 			"useYcoid": 0,                #使用的衣橱币数量【新10-17】
 			"freight": 12   #【新10-16，运费】
-优惠金额
-薏米抵现金额
 		}
 	}
+
+
+29.2 射频订单结算---计算金额【新增接口10-18】
+URL：/commodity/commodity/settlementRfidCount?dbids=22,23,25&serviceType=1&cpid=1
+      请求参数：
+	1. dbids（配送的衣服id，请见上一个接口标蓝色参数，多个逗号）
+	2. serviceType：1：使用优惠券（必传优惠券id）  2：使用衣橱币	
+	3. cpid：优惠券id（非必填，使用优惠券传此id）
+      返回JSON：
+	{
+		"code": "1",
+		"message": "操作成功",
+		"data": {
+			"sumPrice": 2202.22,  	      #最终支付金额
+			"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）
+			"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）
+			"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【
+			"couponPrice": 0,             #使用的优惠券金额
+			"useYcoid": 0,                #使用的衣橱币数量
+			"freight": 12   #【新10-16，运费】
+		}
+	}
+
+
 
 30. 普通订单结算---计算金额【新增接口】
 URL：/commodity/commodity/settlementCount?dbids=6,9,10&serviceType=1&cpid=1
