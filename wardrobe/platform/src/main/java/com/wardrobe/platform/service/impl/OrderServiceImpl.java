@@ -7,10 +7,7 @@ import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
-import com.wardrobe.common.util.Arith;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.SQLUtil;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.*;
 import com.wardrobe.wx.http.HttpConnect;
@@ -201,6 +198,17 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
         }
         return oid;
+    }
+
+    @Override
+    public Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException{
+        Double sumPrice = StrUtil.objToDouble(data.get("sumPrice"));
+        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, null, null, uid, 0);
+        data.putAll(JsonUtils.fromJson(discountBean));
+        UserAccount userAccount = userAccountService.getUserAccount(uid);
+        data.put("ycoid", userAccount.getYcoid());
+        data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, discountBean.getSumOldDisPrice()));
+        return data;
     }
 
     @Override
