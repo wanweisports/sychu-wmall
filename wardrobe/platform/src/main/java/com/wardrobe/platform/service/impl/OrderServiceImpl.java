@@ -61,6 +61,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return baseDao.getToEvict(ReserveOrderInfo.class, roid);
     }
 
+    private List<ReserveOrderDetail> getReserveOrderDetails(int roid){
+        return baseDao.queryByHql("FROM ReserveOrderDetail WHERE roid = ?1", roid);
+    }
+
     private UserOrderInfo getUserOrderInfoAndDetails(int oid){
         UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
         userOrderInfo.setUserOrderDetails(getUserOrderDetails(oid));
@@ -766,6 +770,21 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Map<String, Object> data = new HashMap<>(2, 1);
         data.put("locks", locks);
         return data;
+    }
+
+    @Override
+    public void deleteReservation(int roid){
+        ReserveOrderInfo reserveOrderInfo = getReserveOrderInfo(roid);
+        if(reserveOrderInfo != null){
+            List<ReserveOrderDetail> reserveOrderDetails = getReserveOrderDetails(roid);
+            if(reserveOrderDetails != null && reserveOrderDetails.size() > 0){
+                reserveOrderDetails.stream().forEach(reserveOrderDetail -> {
+                    baseDao.delete(reserveOrderDetail);
+                });
+            }
+            baseDao.delete(reserveOrderInfo);
+        }
+
     }
 
 }

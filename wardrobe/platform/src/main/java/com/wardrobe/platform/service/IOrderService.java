@@ -54,4 +54,6 @@ public interface IOrderService {
 
     Map<String, Object> getNowCanOpenLock(int did, int uid);
 
+    void deleteReservation(int roid);
+
 }

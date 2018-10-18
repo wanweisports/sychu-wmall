@@ -45,6 +45,14 @@ public class OrdersController extends BaseController {
         return "Orders/Reservation";
     }
 
+    @Desc("删除预约订单")
+    @ResponseBody
+    @RequestMapping("/reservation/delete")
+    public ResponseBean deleteReservation(int roid) {
+        orderService.deleteReservation(roid);
+        return new ResponseBean(true);
+    }
+
     @Desc("退款订单列表")
     @RequestMapping(value = "/refund")
     public String renderOrdersRefund(OrderInputView orderInputView, Model model) {

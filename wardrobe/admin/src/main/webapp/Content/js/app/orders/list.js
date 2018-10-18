@@ -26,4 +26,16 @@ requirejs.config({
 require(['jquery', 'alert', 'override', 'bootstrap', 'base'], function ($, jqueryAlert) {
     'use strict';
 
+    $(".js-status-del").click(function(){
+        var roid = $(this).data('id');
+        if(window.confirm("确认删除吗(不可恢复)？")) {
+            $.post("/admin/orders/reservation/delete", {roid: roid}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
+
 });
