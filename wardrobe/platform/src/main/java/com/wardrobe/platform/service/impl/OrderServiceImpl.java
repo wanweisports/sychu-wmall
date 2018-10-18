@@ -408,7 +408,16 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public void saveCancelReserveOrder(int uid, int roid){
+    public void saveCancelOrder(int oid, int uid){
+        UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
+        if(userOrderInfo.getUid() != uid) throw new MessageException("错误");
+        userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_OTHER); //取消订单
+        userOrderInfo.setUpdateTime(DateUtil.getNowDate());
+        baseDao.save(userOrderInfo, oid);
+    }
+
+    @Override
+    public void saveCancelReserveOrder(int roid, int uid){
         ReserveOrderInfo reserveOrderInfo = getReserveOrderInfo(roid);
         if(reserveOrderInfo.getUid() != uid) throw new MessageException("错误");
         reserveOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //取消预约

@@ -30,7 +30,9 @@ public interface IOrderService {
 
     ReserveOrderInfo getLastReserveOrderInfo(int uid);
 
-    void saveCancelReserveOrder(int uid, int roid);
+    void saveCancelOrder(int oid, int uid);
+
+    void saveCancelReserveOrder(int roid, int uid);
 
     Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 

@@ -38,6 +38,7 @@ URL：/commodity/settlement?scids=22,23,25
 		],
 		"coupons": [{     #可用优惠券列表
 				"dictValue": "满1000元可使用",
+				"dictValue2": "满1000元减100",【新10-18】
 				"fullPrice":1000,     #满多少可用【新10-17】
 				"cpid": 1,
 				"status": "1",  #1：可以使用（满减够了）  2：不能使用（金额不够满减）

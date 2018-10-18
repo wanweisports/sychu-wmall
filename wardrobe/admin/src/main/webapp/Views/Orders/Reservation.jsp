@@ -68,7 +68,14 @@
                                             <td>${r.reserveStartTime}</td>
                                             <td>${r.reserveEndTime}</td>
                                             <td>${r.nickname}</td>
-                                            <td>${r.statusName}</td>
+                                            <td>
+                                                <c:if test="${r.status=='1'}">
+                                                    正常
+                                                </c:if>
+                                                <c:if test="${r.status=='2'}">
+                                                    已取消
+                                                </c:if>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 <tbody>

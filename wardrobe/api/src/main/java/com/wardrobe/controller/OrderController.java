@@ -67,6 +67,14 @@ public class OrderController extends BaseController {
         return new ResponseBean(orderService.getNowReserveOrderDetail(getUserInfo().getUid(), roid));
     }
 
+    @Desc("取消订单")
+    @ResponseBody
+    @RequestMapping("cancelOrder")
+    public ResponseBean cancelOrder(int oid) throws Exception{
+        orderService.saveCancelOrder(oid, getUserInfo().getUid());
+        return new ResponseBean(true);
+    }
+
     @Desc("取消预约")
     @ResponseBody
     @RequestMapping("cancelReserveOrder")
