@@ -168,19 +168,37 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
 
     @Override
     public void deleteSysDeviceControlCommodity(int dbid){
-        SysCommodityDistribution commodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, dbid);
+        SysCommodityDistribution commodityDistribution = getCommodityDistribution(dbid);
         if(commodityDistribution != null){
             baseDao.delete(commodityDistribution);
         }
     }
 
+    private SysCommodityDistribution getCommodityDistribution(int dbid){
+        return baseDao.getToEvict(SysCommodityDistribution.class, dbid);
+    }
+
     @Override
     public void saveSysDeviceControlCommodity(SysCommodityDistribution commodityDistribution){
-        Map<String, Object> map = baseDao.queryBySqlFirst("SELECT ci.commName FROM sys_commodity_distribution cd, commodity_info ci WHERE cd.cid = cd.cid AND cd.rfidEpc = ?1", commodityDistribution.getRfidEpc());
-        if(map != null) throw new MessageException("标签码与【" + map.get("commName") + "】重复，请检查后再试！");
+        checkRfidEpc(commodityDistribution.getRfidEpc());
 
         commodityDistribution.setCreateTime(DateUtil.getNowDate());
         baseDao.save(commodityDistribution, null);
+    }
+
+    @Override
+    public void updateRfidEpc(SysCommodityDistribution commodityDistribution){
+        checkRfidEpc(commodityDistribution.getRfidEpc());
+
+        SysCommodityDistribution commodityDistributionDB = getCommodityDistribution(commodityDistribution.getDbid());
+        commodityDistributionDB.setRfidEpc(commodityDistribution.getRfidEpc());
+        baseDao.save(commodityDistributionDB, commodityDistributionDB.getDbid());
+    }
+
+    private Map checkRfidEpc(String rfidEpc){
+        Map<String, Object> map = baseDao.queryBySqlFirst("SELECT ci.commName FROM sys_commodity_distribution cd, commodity_info ci WHERE cd.cid = cd.cid AND cd.rfidEpc = ?1", rfidEpc);
+        if(map != null) throw new MessageException("标签码与【" + map.get("commName") + "】重复，请检查后再试！");
+        return map;
     }
 
 }

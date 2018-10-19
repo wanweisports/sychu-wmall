@@ -40,4 +40,6 @@ public interface ISysDeviceService {
 
     void saveSysDeviceControlCommodity(SysCommodityDistribution commodityDistribution);
 
+    void updateRfidEpc(SysCommodityDistribution commodityDistribution);
+
 }

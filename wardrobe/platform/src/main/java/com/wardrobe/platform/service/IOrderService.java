@@ -32,7 +32,7 @@ public interface IOrderService {
 
     ReserveOrderInfo getLastReserveOrderInfo(int uid);
 
-    void saveCancelOrder(int oid, int uid);
+    void saveCancelOrder(int oid, int uid) throws Exception;
 
     void saveCancelReserveOrder(int roid, int uid);
 
