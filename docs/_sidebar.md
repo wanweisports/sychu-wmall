@@ -6,6 +6,10 @@
 * [4. 获取用户信息](./api/get_user_info.md)
 * [5. 用户修改手机号](./api/update_user_mobile.md)
 
+* [13. 获取购物车详情](./goods/list_shop_cart.md)
+* [12. 添加购物车商品](./goods/add_shop_cart.md)
+* [14. 删除购物车商品](./goods/del_shop_cart.md)
+
 * [26. 用户订单列表](./order/get_order_list.md)
 * [27. 用户订单详情](./order/get_order_detail.md)
 

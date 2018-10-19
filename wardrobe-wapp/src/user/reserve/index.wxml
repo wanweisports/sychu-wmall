@@ -29,9 +29,9 @@
         </view>
         <view class="goods-list">
             <view class="list-title">商品列表</view>
-            <view class="a-goods" wx:for-items="{{goodsList}}">
+            <view class="a-goods" wx:for-items="{{goodsList}}" wx:key="{{index}}">
                 <view class="img-box">
-                    <image src="{{item.resItemImg}}" class="img" />
+                    <image src="{{item.resItemImg}}" class="img"></image>
                 </view>
                 <view class="text-box">
                     <view class="arow arow01">
@@ -39,7 +39,7 @@
                         <view class="goods-price">¥ {{item.resItemPrice}}</view>
                     </view>
                     <view class="arow">
-                        <view class="goods-label">{{item.resItemColor}}，{{item.resItemSize}}</view>
+                        <view class="goods-label">颜色：{{item.resItemColor}}、尺码：{{item.resItemSize}}</view>
                         <view class="goods-num">x {{item.resItemCount}}</view>
                     </view>
                 </view>
