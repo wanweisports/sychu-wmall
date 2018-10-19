@@ -2,7 +2,7 @@
     <view class="page__bd">
         <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{showTopTips}}</view>
 
-        <view class="weui-cells__tips">欢迎来到闪衣橱</view>
+        <view class="weui-cells__tips">欢迎来到衣否</view>
         <view class="weui-cells__tips">请完善以下信息以便为您选出更满意的衣服：</view>
 
         <view class="weui-cells__title">基本信息</view>
@@ -77,7 +77,7 @@
 
 
         <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" bindtap="userComplete">进入闪衣橱</button>
+            <button class="weui-btn" type="primary" bindtap="userComplete">进入衣否</button>
         </view>
     </view>
 </view>
