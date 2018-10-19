@@ -105,4 +105,12 @@ public class DistributionController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("修改射频标签码")
+    @ResponseBody
+    @RequestMapping(value = "/updateRfidEpc")
+    public ResponseBean updateRfidEpc(SysCommodityDistribution commodityDistribution){
+        deviceService.updateRfidEpc(commodityDistribution);
+        return new ResponseBean(true);
+    }
+
 }
