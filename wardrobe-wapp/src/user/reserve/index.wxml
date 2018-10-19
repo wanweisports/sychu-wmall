@@ -53,7 +53,7 @@
         </view>
         <view class="jiesuan-box">
             <button class="to-leave-btn" bindtap="leave">直接离开</button>
-            <button class="to-pay-btn" bindtap="toCartOrder">开始试衣</button>
+            <button class="to-pay-btn" bindtap="toCartOrder">试衣结算</button>
         </view>
     </view>
 </view>
