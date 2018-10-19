@@ -39,7 +39,7 @@ Page({
 
                 !!coupons && coupons.forEach(function (item) {
                     if (item.status == 1) {
-                        item.textShow = item.dictValue;
+                        item.textShow = item.dictValue2;
                         couponsList.push(item);
                     }
                 });
@@ -81,7 +81,9 @@ Page({
     },
 
     bindCouponsChange: function (e) {
-        let curCoupon = this.data.coupons[e.detail.value]; 
+        let curCoupon = this.data.coupons[e.detail.value];
+
+        console.log(e.detail.value)
 
         this.setData({
             couponsIndex : e.detail.value,
@@ -92,18 +94,35 @@ Page({
 
         if (!!curCoupon.cpid) {
             this.countCartSettle();
+
+            if (this.data.ycoidIndex > 0) {
+                this.setData({
+                    ycoidIndex: 0
+                });
+            }
         }
     },
 
      bindYcoidChange: function (e) {
-        let curYcoid = this.data.ycoidList[e.detail.value]; 
+        let curYcoid = this.data.ycoidList[e.detail.value];
+
+        console.log(e.detail.value)
 
         this.setData({
             ycoidIndex : e.detail.value,
             serviceType: 2
         });
 
-        this.countCartSettle();
+        if (curYcoid.ycoid > 0) {
+            this.countCartSettle();
+
+            if (this.data.cpid > 0) {
+                this.setData({
+                    cpid: "",
+                    couponsIndex: 0
+                });
+            }
+        }
     },
 
     onLoad: function () {

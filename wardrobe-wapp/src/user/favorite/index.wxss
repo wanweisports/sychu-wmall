@@ -1,5 +1,4 @@
 /**index.wxss**/
-@import "../../../style/weui.wxss";
 
 .container {
     background-color: #F2f2f2;
@@ -22,7 +21,7 @@
 
 .goods-box {
     width: 339rpx;
-    height: 472rpx;
+    height: 595rpx;
     background-color: #fff;
     overflow: hidden;
     margin-bottom: 24rpx;
@@ -30,13 +29,16 @@
 
 .goods-box .img-box {
     width: 339rpx;
-    height: 339rpx;
+    height: 452rpx;
     overflow: hidden;
 }
 
 .goods-box .img-box image {
-    width: 339rpx;
-    height: 339rpx;
+    width: auto;
+    max-width: 100%;
+    height: 452rpx;
+    display: block;
+    margin: 0 auto;
 }
 
 .goods-box .goods-title {
@@ -45,18 +47,20 @@
     white-space: nowrap;
     overflow: hidden;
     font-size: 24rpx;
-    padding: 24rpx 0 0rpx 0;
-    color: #000;
+    padding: 12rpx 0 0rpx 0;
+    color: #353535;
     margin-left: 24rpx;
+    text-align: center;
 }
 
 .goods-box .goods-price {
     width: 280rpx;
     overflow: hidden;
     font-size: 24rpx;
-    padding: 24rpx 0;
+    padding: 12rpx 0;
     color: #e64340;
     margin-left: 24rpx;
+    text-align: center;
 }
 
 .no-more-goods {
@@ -72,61 +76,24 @@
     left: 0;
 }
 
-.good-filter-image {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
-    background: #0a6d01;
-}
-
-.good-filter-image image {
-    width: 60%;
-    height: 60%;
-    margin: 20% auto;
-    display: block;
-}
-
-.good-filter {
-    position: fixed;
-    right: 0;
-    top: 0;
+.no-order{
     width: 100%;
-    min-height: 100%;
-    background: rgba(0,0,0,.4);
-}
-
-.good-filter-container {
-    background: #FFFFFF;
-    width: 82%;
-    min-height: 100%;
-    height: 100%;
     position: absolute;
+    bottom: 0;
+    top: 88rpx;
+    left: 0;
     right: 0;
-    top: 0;
+    text-align: center;
+    padding-top: 203rpx;
+    background-color: #F2f2f2;
 }
-
-.button-sp-area {
-    padding: 0 10px;
+.no-order-img{
+    width: 81rpx;
+    height: 96rpx;
+    margin-bottom: 31rpx;
 }
-
-.mini-btn {
-    margin-right: 5px;
-    display: inline-block;
-    font-size: 14px;
-    line-height: 2;
-}
-
-.button-sp-next {
-    padding-top: 15px;
-    width: 80%;
-    margin: 0 auto;
-}
-
-.button-sp-next .weui-btn {
-    display: inline-block;
-    margin-right: 10px;
-    width: 40%;
+.no-order .text{
+    font-size:28rpx;
+    color:#999999;
+    text-align: center
 }

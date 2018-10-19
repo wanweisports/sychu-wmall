@@ -9,6 +9,7 @@
                 <view class="date-box">订单号: {{item.ono}} </view>
                 <view class="status" wx:if="{{item.payStatus == 1}}">已支付</view>
                 <view class="status red" wx:if="{{item.payStatus == 2}}">待支付</view>
+                <view class="status red" wx:if="{{item.payStatus == 3}}">已取消</view>
             </view>
             <view bindtap="orderDetail" data-id="{{item.oid}}">
                 <scroll-view class="goods-img-container" scroll-x="true">
@@ -18,7 +19,7 @@
                 </scroll-view>
             </view>
             <view class="price-box">
-                <view class="total-price">合计：¥ {{item.priceSum}}</view>
+                <view class="total-price">合计：¥ {{item.payPrice}}</view>
                 <view class="btn cancel-btn" hidden="{{item.payStatus == 2 ? false : true}}" bindtap="cancelOrderTap"  data-id="{{item.oid}}">取消订单</view>
                 <view class="btn topay-btn" hidden="{{item.payStatus == 2 ? false : true}}" bindtap="toPayTap" data-id="{{item.oid}}">马上付款</view>
             </view>  

@@ -11,27 +11,23 @@
         <view class="peisong-way">
             <view class="row-box">
                 <view class="row-label">预约日期</view>
-                <view class="right-text">
-                    <picker mode="date" value="{{reserveDateValue}}" start="{{reserveDate[0]}}" end="{{reserveDate[1]}}" bindchange="bindDateChange">
-                        <view class="picker">{{reserveDateValue}}</view>
+                    <picker bindchange="bindReserveDateChange" value="{{reserveDateIndex}}" range="{{reserveDateList}}" range-key="{{'reserveDateText'}}">
+                        <view class="right-text">{{reserveDateText}}</view>
                     </picker>
-                </view>
             </view>
+
             <view class="row-box">
                 <view class="row-label">开始时间</view>
-                <view class="right-text">
-                    <picker mode="time" value="{{reserveTimeStart}}" start="{{reserveTime[0]}}" end="{{reserveTime[1]}}" bindchange="bindStartTimeChange">
-                        <view class="picker">{{reserveTimeStart}}</view>
+                    <picker mode="multiSelector" bindchange="bindStartTimeChange" value="{{reserveTimeStartIndex}}" range="{{reserveTimeStartList}}">
+                        <view class="right-text">{{reserveTimeStartValue}}</view>
                     </picker>
-                </view>
             </view>
+
             <view class="row-box">
                 <view class="row-label">结束时间</view>
-                <view class="right-text">
-                    <picker mode="time" value="{{reserveTimeEnd}}" start="{{reserveTime[0]}}" end="{{reserveTime[1]}}" bindchange="bindEndTimeChange">
-                        <view class="picker">{{reserveTimeEnd}}</view>
+                    <picker mode="multiSelector" bindchange="bindEndTimeChange" value="{{reserveTimeEndIndex}}" range="{{reserveTimeEndList}}">
+                        <view class="right-text">{{reserveTimeEndValue}}</view>
                     </picker>
-                </view>
             </view>
         </view>
         <view class="goods-list">

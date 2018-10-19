@@ -1,9 +1,9 @@
 <view class="container">
-    <view class="no-order" wx:if="{{!hasWardrobeInfo}}">
+    <view class="no-order" hidden="{{hasWardrobeInfo}}">
         <image src="/images/no-order.png" class="no-order-img"></image>
-        <view class="text">暂无订单</view>
+        <view class="text">暂无预约订单</view>
     </view>
-    <view class="order-detail" wx:if="{{hasWardrobeInfo}}">
+    <view class="order-detail" hidden="{{!hasWardrobeInfo}}">
         <view class="address-box">
             <view class="show-address">
                 <view class="name-tel">{{wardrobeInfo.sdName}}</view>
@@ -52,7 +52,8 @@
             </view>
         </view>
         <view class="jiesuan-box">
-            <button class="to-leave-btn" bindtap="leave">直接离开</button>
+            <button class="to-leave-btn" bindtap="cancelOrder">取消订单</button>
+           <!--  <button class="to-leave-btn" bindtap="leave">直接离开</button> -->
             <button class="to-pay-btn" bindtap="toCartOrder">试衣结算</button>
         </view>
     </view>
