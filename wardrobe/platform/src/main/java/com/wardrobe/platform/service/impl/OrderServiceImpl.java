@@ -324,6 +324,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         if(sysDeviceControl == null) throw new MessageException("当前预约已满，请稍候再试！");
 
         Timestamp nowDate = DateUtil.getNowDate();
+        //只能预约第二天，每天只能预约一单
+        String startDateStr = startTime.substring(0, startTime.indexOf(" "));
+        String tomorrow = DateUtil.dateToString(DateUtil.addDate(new Date(nowDate.getTime()), 1), DateUtil.YYYYMMDD);
+        if(!tomorrow.equals(startDateStr)) throw new MessageException("只能预约明天的试衣间！");
+
+        if(baseDao.queryBySqlFirst("SELECT 1 FROM reserve_order_info WHERE DATE(reserveStartTime) = ?1", tomorrow) != null) throw new MessageException("您已经预约过" + tomorrow + "号的试衣间，请明天再预约，谢谢！");
+
         orderInfo.setDcid(sysDeviceControl.getDcid());
         orderInfo.setUid(uid);
         orderInfo.setCreateTime(nowDate);
@@ -364,6 +371,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             //预约购物车商品变为普通购物车商品
             userShoppingCart.setShoppingType(IDBConstant.LOGIC_STATUS_YES);
             baseDao.save(userShoppingCart, userShoppingCart.getScid());
+
+            //放入到配送表
+
+
         }
 
         orderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
@@ -420,12 +431,14 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public void saveCancelOrder(int oid, int uid){
+    public void saveCancelOrder(int oid, int uid) throws Exception{
         UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
         if(userOrderInfo.getUid() != uid) throw new MessageException("错误");
         userOrderInfo.setStatus(IDBConstant.LOGIC_STATUS_OTHER); //取消订单
         userOrderInfo.setUpdateTime(DateUtil.getNowDate());
         baseDao.save(userOrderInfo, oid);
+        //取消订单恢复---》优惠券返还，衣橱币返还，库存还原
+        updateOrderHander(userOrderInfo);
     }
 
     @Override
@@ -720,13 +733,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             whereSql.append(" AND roi.rno = :ono");
         }
 
-        whereSql.append(" ORDER BY roi.createTime DESC");
+        whereSql.append(" ORDER BY roi.status, roi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
 
     @Override
     public List<Map<String, Object>> getReserveOrderByTime(String time){
-        return baseDao.queryBySql("SELECT roi.roid, roi.rno FROM reserve_order_info roi WHERE reserveStartTime BETWEEN ?1 AND ?2", time + IPlatformConstant.time00, time + IPlatformConstant.time24);
+        return baseDao.queryBySql("SELECT roi.roid, roi.rno FROM reserve_order_info roi WHERE reserveStartTime BETWEEN ?1 AND ?2 AND  roi.status = ?3", time + IPlatformConstant.time00, time + IPlatformConstant.time24, IDBConstant.LOGIC_STATUS_YES);
     }
 
     @Override
@@ -745,29 +758,34 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         for(UserOrderInfo userOrderInfo : userOrderInfos){
             userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_OTHER); //已取消
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
-            Integer uid = userOrderInfo.getUid();
-            if(userOrderInfo.getCpid() != null){ //处理优惠券
-                UserCouponInfo userCouponInfo = userCouponService.getUserUseCouponInfo(userOrderInfo.getCpid(), uid);
-                if(userCouponInfo != null){
-                    userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_NO);
-                    baseDao.save(userCouponInfo, userCouponInfo.getCpid());
-                }
-            }
-            if(userOrderInfo.getYcoid() != null){ //处理优惠券
-                UserAccount userAccount = userAccountService.getUserAccount(uid);
-                userAccount.setYcoid(userAccount.getYcoid() + userOrderInfo.getYcoid());
-                baseDao.save(userAccount, uid);
-            }
-            //处理库存
-            List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
-            userOrderDetails.stream().forEach(userOrderDetail -> {
-                CommoditySize commoditySize = commodityService.getCommoditySize(userOrderDetail.getSid());
-                if(commoditySize != null) {
-                    commoditySize.setStock(commoditySize.getStock() + userOrderDetail.getItemCount());
-                    baseDao.save(commoditySize, commoditySize.getSid());
-                }
-            });
+            updateOrderHander(userOrderInfo);
         }
+    }
+
+    @Desc("取消订单处理方法--->优惠券返还，衣橱币返还，库存还原")
+    private void updateOrderHander(UserOrderInfo userOrderInfo) throws ParseException {
+        Integer uid = userOrderInfo.getUid();
+        if(userOrderInfo.getCpid() != null){ //处理优惠券
+            UserCouponInfo userCouponInfo = userCouponService.getUserUseCouponInfo(userOrderInfo.getCpid(), uid);
+            if(userCouponInfo != null){
+                userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_NO);
+                baseDao.save(userCouponInfo, userCouponInfo.getCpid());
+            }
+        }
+        if(userOrderInfo.getYcoid() != null){ //处理衣橱币
+            UserAccount userAccount = userAccountService.getUserAccount(uid);
+            userAccount.setYcoid(userAccount.getYcoid() + userOrderInfo.getYcoid());
+            baseDao.save(userAccount, uid);
+        }
+        //处理库存
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        userOrderDetails.stream().forEach(userOrderDetail -> {
+            CommoditySize commoditySize = commodityService.getCommoditySize(userOrderDetail.getSid());
+            if(commoditySize != null) {
+                commoditySize.setStock(commoditySize.getStock() + userOrderDetail.getItemCount());
+                baseDao.save(commoditySize, commoditySize.getSid());
+            }
+        });
     }
 
     @Override
