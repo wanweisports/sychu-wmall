@@ -9,9 +9,13 @@ URL：/commodity/settlement?scids=22,23,25
 	"message": "操作成功",
 	"data": {
 		"discount": 0.95,
-		"sumPrice": 2202.22,
-商品应收价格
-                "ycoid": 500,
+		"sumPrice": 2202.22,  	      #最终支付金额
+		"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）【新10-17】
+		"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）【新10-17】
+		"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【新10-17】
+		"couponPrice": 0,             #使用的优惠券金额【新10-17】
+		"useYcoid": 0,                #使用的衣橱币数量【新10-17】
+                "ycoid": 500,		      #用户当前衣橱币数量
 		"freight": 12   #【新10-16，运费】
 		"list": [{
 				"colorName": "黄色",
@@ -32,19 +36,22 @@ URL：/commodity/settlement?scids=22,23,25
 				"scid": 23
 			}
 		],
-		"coupons": [{     #可用优惠券列表【新增】
-				"dictValue": "满减优惠",
+		"coupons": [{     #可用优惠券列表
+				"dictValue": "满1000元可使用",
+				"dictValue2": "满1000元减100",【新10-18】
+				"fullPrice":1000,     #满多少可用【新10-17】
 				"cpid": 1,
 				"status": "1",  #1：可以使用（满减够了）  2：不能使用（金额不够满减）
-				"couponPrice": 300,
-				"dueTime": "2018-09-22 00:00:00"
+				"couponPrice": 100,
+				"dueTime": "2018-09-22 12:30:00" #优惠券过期时间
 			},
 			{
-				"dictValue": "满减优惠",
+				"dictValue": "满2500元可使用",
+				"fullPrice":2500,
 				"cpid": 2,
 				"status": "1",
-				"couponPrice": 500,
-				"dueTime": "2018-09-22 00:00:00"
+				"couponPrice": 300,
+				"dueTime": "2018-09-22 10:50:00"
 			}
 		]
 	}
@@ -63,12 +70,39 @@ URL：/commodity/commodity/settlementCount?scids=22,23,25&serviceType=1&cpid=1
 		"code": "1",
 		"message": "操作成功",
 		"data": {
-			"sumPrice": 1807.11,
+			"sumPrice": 2202.22,  	      #最终支付金额
+			"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）【新10-17】
+			"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）【新10-17】
+			"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【新10-17】
+			"couponPrice": 0,             #使用的优惠券金额【新10-17】
+			"useYcoid": 0,                #使用的衣橱币数量【新10-17】
 			"freight": 12   #【新10-16，运费】
-优惠金额
-薏米抵现金额
 		}
 	}
+
+
+29.2 射频订单结算---计算金额【新增接口10-18】
+URL：/commodity/commodity/settlementRfidCount?dbids=22,23,25&serviceType=1&cpid=1
+      请求参数：
+	1. dbids（配送的衣服id，请见上一个接口标蓝色参数，多个逗号）
+	2. serviceType：1：使用优惠券（必传优惠券id）  2：使用衣橱币	
+	3. cpid：优惠券id（非必填，使用优惠券传此id）
+      返回JSON：
+	{
+		"code": "1",
+		"message": "操作成功",
+		"data": {
+			"sumPrice": 2202.22,  	      #最终支付金额
+			"sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）
+			"sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）
+			"userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【
+			"couponPrice": 0,             #使用的优惠券金额
+			"useYcoid": 0,                #使用的衣橱币数量
+			"freight": 12   #【新10-16，运费】
+		}
+	}
+
+
 
 30. 普通订单结算---计算金额【新增接口】
 URL：/commodity/commodity/settlementCount?dbids=6,9,10&serviceType=1&cpid=1
@@ -81,7 +115,9 @@ URL：/commodity/commodity/settlementCount?dbids=6,9,10&serviceType=1&cpid=1
 		"code": "1",
 		"message": "操作成功",
 		"data": {
-			"sumPrice": 1807.11
+			"sumPrice": 1807.11,
+			"sumOldDisPrice": 2302.22, //商品应收价格（用户等级折扣后的金额）
+			
 		}
 	}
 

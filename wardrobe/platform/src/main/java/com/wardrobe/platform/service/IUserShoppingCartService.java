@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service;
 
+import com.wardrobe.common.bean.DiscountBean;
 import com.wardrobe.common.po.UserShoppingCart;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.UserCouponInputView;
@@ -21,7 +22,7 @@ public interface IUserShoppingCartService {
 
     UserShoppingCart getUserShoppingCart(int scid);
 
-    Map<String, Object> settlement(String scids, int uid);
+    Map<String, Object> settlement(String scids, int uid) throws ParseException;
 
     double countSumPrice(List<Map<String, Object>> list);
 
@@ -29,8 +30,6 @@ public interface IUserShoppingCartService {
 
     Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
 
-    double countDiscount(double sumPrice, String serviceType, Integer cpid, int uid) throws ParseException;
-
-    int updateUseUserYcoid(int uid, String serviceType, double sumPrice);
+    DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, int commodityCount) throws ParseException;
 
 }

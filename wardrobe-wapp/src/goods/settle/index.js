@@ -12,16 +12,18 @@ Page({
 
         allGoodsAndYunPrice:0, // 
 
-        youhuijine: 0, //优惠券金额
         curCoupon: null, // 当前选择使用的优惠券
         couponsIndex: 0,
         serviceType: 2,
         cpid: 0,
         coupons: [],
+        hasCoupons: false,
 
         ycoidList: [],
         ycoidIndex: 0,
         ycoid: 0,
+        useYcoid: 0,
+        hasYcoid: false,
 
         userInfo: {}
     },
@@ -33,19 +35,26 @@ Page({
             if (res.code == 1) {
                 let coupons = res.data.coupons;
                 let ycoid = res.data.ycoid;
+                let couponsList = [];
 
                 !!coupons && coupons.forEach(function (item) {
-                    item.textShow = "[" + item.dictValue + "]优惠" + item.couponPrice + "元";
+                    if (item.status == 1) {
+                        item.textShow = item.dictValue2;
+                        couponsList.push(item);
+                    }
                 });
 
                 content.setData({
                     goodsList : res.data.list,
-                    coupons : coupons.length > 0 ? [{textShow: "不使用优惠券", cpid: ""}].concat(coupons) : [{textShow: "无可用优惠券", cpid: ""}],
-                    discount : res.data.discount,
-                    allGoodsPrice : res.data.sumPrice,
+                    coupons : couponsList.length > 0 ? [{textShow: "不使用优惠券", cpid: ""}].concat(couponsList) : [{textShow: "无可用优惠券", cpid: ""}],
+                    hasCoupons : couponsList.length > 0,
+                    couponPrice : 0,
+                    allGoodsPrice : res.data.sumOldDisPrice,
                     allGoodsAndYunPrice : res.data.sumPrice,
                     ycoid: res.data.ycoid,
-                    ycoidList: ycoid > 0 ? ["不使用薏米", res.data.ycoid + "薏米"] : ["无薏米"],
+                    useYcoid: 0,
+                    ycoidList: ycoid > 0 ? [{textShow: "不使用薏米", ycoid: "0"}, {textShow: res.data.ycoid + "薏米", ycoid: res.data.ycoid}] : [{textShow: "没有薏米", ycoid: "0"}],
+                    hasYcoid: ycoid > 0,
                     yunPrice: res.data.freight
                 });
             }
@@ -63,14 +72,18 @@ Page({
             if (res.code == 1) {
                 content.setData({
                     allGoodsAndYunPrice : res.data.sumPrice,
-                    yunPrice: res.data.freight
+                    yunPrice: res.data.freight,
+                    couponPrice: res.data.couponPrice,
+                    useYcoid: res.data.useYcoid
                 });
             }
         });
     },
 
     bindCouponsChange: function (e) {
-        let curCoupon = this.data.coupons[e.detail.value]; 
+        let curCoupon = this.data.coupons[e.detail.value];
+
+        console.log(e.detail.value)
 
         this.setData({
             couponsIndex : e.detail.value,
@@ -81,20 +94,34 @@ Page({
 
         if (!!curCoupon.cpid) {
             this.countCartSettle();
+
+            if (this.data.ycoidIndex > 0) {
+                this.setData({
+                    ycoidIndex: 0
+                });
+            }
         }
     },
 
      bindYcoidChange: function (e) {
-        let ycoid = this.data.ycoidList[e.detail.value]; 
+        let curYcoid = this.data.ycoidList[e.detail.value];
+
+        console.log(e.detail.value)
 
         this.setData({
             ycoidIndex : e.detail.value,
-            ycoid : ycoid,
             serviceType: 2
         });
 
-        if (ycoid > 0) {
+        if (curYcoid.ycoid > 0) {
             this.countCartSettle();
+
+            if (this.data.cpid > 0) {
+                this.setData({
+                    cpid: "",
+                    couponsIndex: 0
+                });
+            }
         }
     },
 
@@ -121,7 +148,7 @@ Page({
         content.getCartSettle();
     },
 
-    createOrder:function () {
+    createOrder: function () {
         let content = this;
         let remark = ""; // 备注信息
 
@@ -138,7 +165,6 @@ Page({
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
-            remark: remark,
             scids: content.data.goodsListId.join(","),
             serviceType: content.data.serviceType,
             cpid: content.data.cpid
@@ -151,11 +177,11 @@ Page({
             app.wxPay(res.data.oid, "/pages/user/order-list/index");
 
             // 配置模板消息推送
-            // var postJsonString = {};
-            // postJsonString.keyword1 = { value: res.data.data.dateAdd, color: '#173177' }
-            // postJsonString.keyword2 = { value: res.data.data.amountReal + '元', color: '#173177' }
-            // postJsonString.keyword3 = { value: res.data.data.orderNumber, color: '#173177' }
-            // postJsonString.keyword4 = { value: '订单已关闭', color: '#173177' }
+            //let postJsonString = {};
+            //postJsonString.keyword1 = { value: utils.formatTime(new Date()), color: '#173177' }
+            //postJsonString.keyword2 = { value: content.data.allGoodsAndYunPrice + '元', color: '#173177' }
+            //postJsonString.keyword3 = { value: res.data.data.orderNumber, color: '#173177' }
+            //postJsonString.keyword4 = { value: '订单已关闭', color: '#173177' }
             // postJsonString.keyword5 = { value: '您可以重新下单，请在30分钟内完成支付', color:'#173177'}
             // app.sendTempleMsg(res.data.data.id, -1,
             //     'uJQMNVoVnpjRm18Yc6HSchn_aIFfpBn1CZRntI685zY', e.detail.formId,
@@ -197,22 +223,6 @@ Page({
                     }
                 });
             }
-        });
-    },
-    bindChangeCoupon: function (e) {
-        const selIndex = e.detail.value[0] - 1;
-
-        if (selIndex == -1) {
-            this.setData({
-                youhuijine: 0,
-                curCoupon: null
-            });
-            return;
-        }
-
-        this.setData({
-            youhuijine: this.data.coupons[selIndex].couponPrice,
-            curCoupon: this.data.coupons[selIndex]
         });
     }
 });

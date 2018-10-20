@@ -183,7 +183,7 @@ Page({
         this.saveShopCartAdd(selected.sid, this.data.buyNumber, 1);
 
         this.setData({
-            shopCartNum: this.data.shopCartNum + this.data.buyNumber
+            shopCartNum: Number(this.data.shopCartNum) + this.data.buyNumber
         });
 
         this.closePopupTap();
@@ -248,11 +248,11 @@ Page({
         this.saveShopCartAdd(selected.sid, this.data.buyNumber, 2);
 
         this.setData({
-            shopOrderNum: this.data.shopOrderNum + this.data.buyNumber
+            shopOrderNum: Number(this.data.shopOrderNum) + this.data.buyNumber
         });
 
         this.closeShopOrderPopupTap();
-        app.showToast("加入试衣间成功", "success");
+        app.showToast("加入配衣间成功", "success");
     },
 
     /**

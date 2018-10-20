@@ -1,15 +1,13 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.bean.DiscountBean;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
-import com.wardrobe.common.util.Arith;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.SQLUtil;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.CommodityInputView;
 import com.wardrobe.common.view.UserCouponInputView;
 import com.wardrobe.platform.service.*;
@@ -119,27 +117,19 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     }
 
     @Override
-    public Map<String, Object> settlement(String scids, int uid){
+    public Map<String, Object> settlement(String scids, int uid) throws ParseException{
         List<Map<String, Object>> settlement = getSettlement(scids, uid);
         double sumPrice = countSumPrice(settlement);
         UserAccount userAccount = userAccountService.getUserAccount(uid);
-        Map<String, Object> data = new HashMap(4, 1);
+        Map<String, Object> data = new HashMap(10, 1);
         data.put("list", settlement);
-        //用户优惠券列表
-        data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, sumPrice));
-        //用户衣橱币
+        //用户总衣橱币
         data.put("ycoid", userAccount.getYcoid());
-        //用户折扣
-        BigDecimal rankDiscount = rankService.getRankInfoByRank(userAccount.getRank()).getRankDiscount();
-        data.put("discount", rankDiscount);
-        //减去折扣的金额
-        sumPrice = StrUtil.roundKeepTwo(Arith.mul(sumPrice, rankDiscount.doubleValue()));
-        sumPrice = sumPrice > 0 ? sumPrice : 0;
-        //运费
-        double freight = getFreight(settlement);
-        sumPrice += freight; //加运费
-        data.put("freight", freight);
-        data.put("sumPrice", sumPrice);
+        //乘以折扣(四舍五入)
+        DiscountBean discountBean = concessionalPrice(sumPrice, null, null, uid, settlement.size());
+        //用户优惠券列表
+        data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, discountBean.getSumOldDisPrice()));
+        data.putAll(JsonUtils.fromJson(discountBean));
         return data;
     }
 
@@ -165,32 +155,18 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     }
 
     @Override
-    public Map<String, Object> settlementCount(UserCouponInputView userCouponInputView, int uid) throws ParseException{
+    public Map<String, Object> settlementCount(UserCouponInputView userCouponInputView, int uid) throws ParseException {
         List<Map<String, Object>> settlement = getSettlement(userCouponInputView.getScids(), uid);
         double sumPrice = 0;
         for(Map<String, Object> map : settlement){
             sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
         }
 
-        Map<String, Object> data = new HashMap<>(1, 1);
+        Map<String, Object> data = new HashMap<>(10, 1);
         //乘以折扣(四舍五入)
-        sumPrice = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
-        sumPrice = sumPrice > 0 ? sumPrice : 0;
-        //运费
-        double freight = getFreight(settlement);
-        sumPrice += freight; //加运费
-        data.put("freight", freight);
-        data.put("sumPrice", sumPrice);
+        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, settlement.size());
+        data.putAll(JsonUtils.fromJson(discountBean));
         return data;
-    }
-
-    @Desc("计算运费")
-    private double getFreight(List<Map<String, Object>> settlement){
-        int count = 0;
-        for(Map<String, Object> map : settlement){
-            count += StrUtil.objToInt(map.get("count"));
-        }
-        return count >= 2 ? IPlatformConstant.FREIGHT : 0; //运费
     }
 
     @Override
@@ -206,51 +182,52 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
             sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
         }
 
-        Map<String, Object> data = new HashMap<>(1, 1);
-        //乘以折扣(四舍五入)
-        double price = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
-        data.put("sumPrice", price > 0 ? price : 0);
+        Map<String, Object> data = new HashMap<>(10, 1);
+        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, settlement.size());
+        data.putAll(JsonUtils.fromJson(discountBean));
         return data;
     }
 
+    @Desc("计算优惠")
     @Override
-    public double countDiscount(double sumPrice, String serviceType, Integer cpid, int uid) throws ParseException{
+    public DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, int commodityCount) throws ParseException{
+        DiscountBean discountBean = new DiscountBean();
         UserAccount userAccount = userAccountService.getUserAccount(uid);
+
+        int freight = commodityCount >= 2 ? IPlatformConstant.FREIGHT : 0;//运费
+        discountBean.setFreight(freight);
+        discountBean.setSumOldPrice(StrUtil.roundKeepTwo(sumPrice));
+
+        SysRankInfo rankInfoByRank = rankService.getRankInfoByRank(userAccount.getRank());
+        double discount = rankInfoByRank.getRankDiscount().doubleValue();
+        discountBean.setDiscount(discount);
+        sumPrice = StrUtil.roundKeepTwo(Arith.mul(sumPrice > 0 ? sumPrice : 0, discount)); //先计算用户折扣
+        discountBean.setSumOldDisPrice(sumPrice);
+
+        //再使用衣橱币或者优惠券
         if(IDBConstant.LOGIC_STATUS_YES.equals(serviceType)){ //使用优惠券
-            UserCouponInfo userCouponInfo = userCouponService.getUserNotUseCouponInfo(cpid, uid);
+            UserCouponInfo userCouponInfo = userCouponService.getUserNotUseCouponInfo(cpid, uid, sumPrice);
             if(userCouponInfo != null) {
-                sumPrice = Arith.sub(sumPrice, userCouponInfo.getCouponPrice().doubleValue());
+                double couponPrice = userCouponInfo.getCouponPrice().doubleValue();
+                discountBean.setCouponPrice(couponPrice);
+                discountBean.setCpid(userCouponInfo.getCpid());
+                sumPrice = Arith.sub(sumPrice, couponPrice);
             }
         }else if(IDBConstant.LOGIC_STATUS_NO.equals(serviceType)){ //使用衣橱币
             int ycoid = userAccount.getYcoid();
             if(ycoid >= sumPrice) {  //衣橱币超过总金额
+                discountBean.setUseYcoid((int)(sumPrice));
                 sumPrice = (sumPrice) -  (int)(sumPrice); //处理衣橱币整数，还要支付小数
             }else{
+                discountBean.setUseYcoid(ycoid);
                 sumPrice = Arith.sub(sumPrice, ycoid);
             }
         }
-        //乘以折扣(四舍五入)
-        SysRankInfo rankInfoByRank = rankService.getRankInfoByRank(userAccount.getRank());
-        return StrUtil.roundKeepTwo(Arith.mul(sumPrice > 0 ? sumPrice : 0, rankInfoByRank.getRankDiscount().doubleValue()));
-    }
+        sumPrice = sumPrice > 0 ? sumPrice : 0;
+        discountBean.setSumPrice(StrUtil.roundKeepTwo(sumPrice + freight)); //支付总金额
 
-    @Desc("减去用户使用的衣橱币")
-    @Override
-    public int updateUseUserYcoid(int uid, String serviceType, double sumPrice){
-        UserAccount userAccount = userAccountService.getUserAccount(uid);
-        if(IDBConstant.LOGIC_STATUS_NO.equals(serviceType)) { //使用衣橱币
-            int subYcoid = 0;
-            int ycoid = userAccount.getYcoid();
-            if(ycoid >= sumPrice) {  //衣橱币超过总金额
-                subYcoid = (int) sumPrice;
-            }else{
-                subYcoid = ycoid;
-            }
-            userAccount.setYcoid(userAccount.getYcoid() - subYcoid);
-            baseDao.save(userAccount, userAccount.getUid());
-            return subYcoid;
-        }
-        return 0;
+        discountBean.countUserDiscountSubPrice(); //计算用户等级折扣减去多少金额
+        return discountBean;
     }
 
 }

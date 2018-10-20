@@ -87,6 +87,17 @@
                 $(btn).prop("disabled", false).text("扫描标签");
             });
         }
+
+        function updateRfidEpc(dbid, obj){
+            if(window.confirm("确认保存标签码吗？")) {
+                $.post("/admin/distribution/updateRfidEpc", {dbid: dbid, rfidEpc: $(obj).val()}, function (res) {
+                    alert(res.message);
+                    if(res.code != 1){
+                        window.location.reload();
+                    }
+                });
+            }
+        }
     </script>
 </layout:override>
 
@@ -246,7 +257,9 @@
                                                 <tr data-id="">
                                                     <td>${comm.commName}</td>
                                                     <td>${comm.size}</td>
-                                                    <td>${comm.rfidEpc}</td>
+                                                    <td>
+                                                        <input type="text" class="form-control" value="${comm.rfidEpc}" onchange="updateRfidEpc('${comm.dbid}', this)" />
+                                                    </td>
                                                     <th>${comm.rno != null ? comm.rno : '-'}</th>
                                                     <td>
                                                         <c:if test="${comm.status == '1'}">

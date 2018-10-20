@@ -1,8 +1,7 @@
 <view class="container">
-    <form bindsubmit="createOrder" report-submit="true">
         <view class="address-box">
             <view class="add-address" hidden="{{wardrobeInfo}}">
-                <view class="title" bindtap="addAddress">选择试衣间</view>
+                <view class="title" bindtap="addAddress">选择配衣间</view>
             </view>
             <view class="show-address" hidden="{{!wardrobeInfo}}">
                 <view class="name-tel">{{wardrobeInfo.name}}  {{wardrobeInfo.startTime}}-{{wardrobeInfo.endTime}}</view>
@@ -12,34 +11,30 @@
         <view class="peisong-way">
             <view class="row-box">
                 <view class="row-label">预约日期</view>
-                <view class="right-text">
-                    <picker mode="date" value="{{reserveDateValue}}" start="{{reserveDate[0]}}" end="{{reserveDate[1]}}" bindchange="bindDateChange">
-                        <view class="picker">{{reserveDateValue}}</view>
+                    <picker bindchange="bindReserveDateChange" value="{{reserveDateIndex}}" range="{{reserveDateList}}" range-key="{{'reserveDateText'}}">
+                        <view class="right-text">{{reserveDateText}}</view>
                     </picker>
-                </view>
             </view>
+
             <view class="row-box">
                 <view class="row-label">开始时间</view>
-                <view class="right-text">
-                    <picker mode="time" value="{{reserveTimeStart}}" start="{{reserveTime[0]}}" end="{{reserveTime[1]}}" bindchange="bindStartTimeChange">
-                        <view class="picker">{{reserveTimeStart}}</view>
+                    <picker mode="multiSelector" bindchange="bindStartTimeChange" value="{{reserveTimeStartIndex}}" range="{{reserveTimeStartList}}">
+                        <view class="right-text">{{reserveTimeStartValue}}</view>
                     </picker>
-                </view>
             </view>
+
             <view class="row-box">
                 <view class="row-label">结束时间</view>
-                <view class="right-text">
-                    <picker mode="time" value="{{reserveTimeEnd}}" start="{{reserveTime[0]}}" end="{{reserveTime[1]}}" bindchange="bindEndTimeChange">
-                        <view class="picker">{{reserveTimeEnd}}</view>
+                    <picker mode="multiSelector" bindchange="bindEndTimeChange" value="{{reserveTimeEndIndex}}" range="{{reserveTimeEndList}}">
+                        <view class="right-text">{{reserveTimeEndValue}}</view>
                     </picker>
-                </view>
             </view>
         </view>
         <view class="goods-list">
             <view class="list-title">商品列表</view>
             <view class="a-goods" wx:for-items="{{goodsList}}" wx:key="{{index}}">
                 <view class="img-box">
-                    <image src="{{item.pic}}" class="img" />
+                    <image src="{{item.pic}}" class="img" mode="aspectFit"></image>
                 </view>
                 <view class="text-box">
                     <view class="arow arow01">
@@ -63,7 +58,6 @@
             <view class="left-price">
                 <view class="total">合计：¥ {{allGoodsPrice}}</view>
             </view>
-            <button class="to-pay-btn" formType="submit">提交订单</button>
+            <button class="to-pay-btn" bindtap="createOrder">提交订单</button>
         </view>
-    </form>
 </view>

@@ -67,6 +67,14 @@ public class OrderController extends BaseController {
         return new ResponseBean(orderService.getNowReserveOrderDetail(getUserInfo().getUid(), roid));
     }
 
+    @Desc("取消订单")
+    @ResponseBody
+    @RequestMapping("cancelOrder")
+    public ResponseBean cancelOrder(int oid) throws Exception{
+        orderService.saveCancelOrder(oid, getUserInfo().getUid());
+        return new ResponseBean(true);
+    }
+
     @Desc("取消预约")
     @ResponseBody
     @RequestMapping("cancelReserveOrder")
@@ -118,6 +126,13 @@ public class OrderController extends BaseController {
     @RequestMapping("userOrderDetail")
     public ResponseBean userOrderDetail(int oid){
         return new ResponseBean(orderService.getUserOrderDetail(oid, getUserInfo().getUid()));
+    }
+
+    @Desc("获取当前能开的柜子")
+    @ResponseBody
+    @RequestMapping("nowCanOpenLock")
+    public ResponseBean nowCanOpenLock(int did){
+        return new ResponseBean(orderService.getNowCanOpenLock(did, getUserInfo().getUid()));
     }
 
 }

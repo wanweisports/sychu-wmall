@@ -73,7 +73,7 @@ public class CommodityController extends BaseController {
 
     @ResponseBody
     @RequestMapping("settlement")
-    public ResponseBean settlement(String scids){
+    public ResponseBean settlement(String scids) throws ParseException{
         return new ResponseBean(userShoppingCartService.settlement(scids, getUserInfo().getUid()));
     }
 

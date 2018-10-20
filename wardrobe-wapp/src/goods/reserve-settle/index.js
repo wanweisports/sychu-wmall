@@ -4,116 +4,197 @@ const app = getApp();
 
 Page({
     data: {
-        goodsListId: [],
-        goodsList:[],
-        isNeedLogistics:0, // 是否需要物流信息
+        goodsListId: [], //
+        goodsList:[], //
+
         allGoodsPrice:0,
-        yunPrice:0,
-        allGoodsAndYunPrice:0,
-        goodsJsonStr:"",
-        orderType:"", //订单类型，购物车下单或立即支付下单，默认是购物车，
+        yunPrice:0, //
 
-        youhuijine:0, //优惠券金额
-        curCoupon:null, // 当前选择使用的优惠券
+        allGoodsAndYunPrice:0, // 
 
-        hasNoCoupons: true,
+        curCoupon: null, // 当前选择使用的优惠券
+        couponsIndex: 0,
+        serviceType: 2,
+        cpid: 0,
         coupons: [],
+        hasCoupons: false,
 
-        hasNoPoint: true,
-        point: 0,
+        ycoidList: [],
+        ycoidIndex: 0,
+        ycoid: 0,
+        useYcoid: 0,
+        hasYcoid: false,
 
-        userInfo: {}
+        userInfo: {},
+
+        did: "",
+        dbids: [],
     },
 
-    getUserCouponsList: function () {
+    getCartSettle: function () {
         let content = this;
 
-        app.wxRequest("/user/userCouponList", {}, function (res) {
+        app.wxRequest("/rfid/readRfid", {did: this.data.did}, function (res) {
+//             res = {
+//     "code": "1",
+//     "message": "操作成功",
+//     "data": {
+// "discount": 0.95,
+//         "sumPrice": 2202.22,          
+//         "sumOldPrice": 2512.33,      
+//         "sumOldDisPrice": 2312.33,    
+//         "userDiscountSubPrice":200,   
+//         "couponPrice": 0,             
+// "useYcoid": 0,                         
+// "ycoid": 500,        
+//         "commoditys": [{
+//             "price": 178.2,
+//             "resourcePath": "https://oss-admin.oss-cn-b6c5.jpg",
+//             "name": "柜子2号",
+//             "commName": "惠维2018秋女装 ",
+//             "cid": 19,
+// "dbid": 1
+//         }, {
+//             "price": 59,
+//             "resourcePath": "https://oss157aceb3a2b7a60.jpg",
+//             "name": "柜子2号",
+//             "commName": "洛蔓希性感透视装女士内衣白上衣+黑裙",
+//             "cid": 17,
+//             "dbid": 2
+//         }, {
+//             "price": 100.99,
+//             "resourcePath": "https://oss2fa.jpg",
+//             "name": "柜子1号",
+//             "commName": "商品3",
+//             "cid": 14,
+// "dbid": 3
+//         }],
+//         "coupons": [{    
+//                 "dictValue": "满1000元可使用",
+//                 "dictValue2": "满1000元减100",
+//                 "fullPrice":1000,    
+//                 "cpid": 1,
+//                 "status": "1",  
+//                 "couponPrice": 100,
+//                 "dueTime": "2018-09-22 12:30:00" 
+//             },
+//             {
+//                 "dictValue": "满2500元可使用",
+//                 "fullPrice":2500,
+//                 "cpid": 2,
+//                 "status": "1",
+//                 "couponPrice": 300,
+//                 "dueTime": "2018-09-22 10:50:00"
+//             }
+//         ]
+//     }
+// }
+
+
             if (res.code == 1) {
+                let coupons = res.data.coupons;
+                let ycoid = res.data.ycoid;
+                let goodsList = res.data.commoditys;
+                let couponsList = [];
+                let dbids = [];
+
+                !!coupons && coupons.forEach(function (item) {
+                    if (item.status == 1) {
+                        item.textShow = item.dictValue;
+                        couponsList.push(item);
+                    }
+                });
+
+                !!goodsList && goodsList.forEach(function (item) {
+                    dbids.push(item.dbid);
+                });
+
                 content.setData({
-                    coupons : res.data.coupons
+                    dbids : dbids.join(","),
+                    goodsList : res.data.commoditys,
+                    coupons : couponsList.length > 0 ? [{textShow: "不使用优惠券", cpid: ""}].concat(couponsList) : [{textShow: "无可用优惠券", cpid: ""}],
+                    hasCoupons : couponsList.length > 0,
+                    couponPrice : 0,
+                    allGoodsPrice : res.data.sumOldDisPrice,
+                    allGoodsAndYunPrice : res.data.sumPrice,
+                    ycoid: res.data.ycoid,
+                    useYcoid: 0,
+                    ycoidList: ycoid > 0 ? [{textShow: "不使用薏米", ycoid: "0"}, {textShow: res.data.ycoid + "薏米", ycoid: res.data.ycoid}] : [{textShow: "没有薏米", ycoid: "0"}],
+                    hasYcoid: ycoid > 0,
+                    yunPrice: res.data.freight
                 });
             }
         });
     },
 
-    getUserInfo: function () {
+    countCartSettle: function () {
         let content = this;
 
-        app.wxRequest("/user/userCenter", {}, function (res) {
-            content.setData({
-                userInfo : res.data
-            });
-
-            if (content.data.userInfo.couponCount > 0) {
+        app.wxRequest("/commodity/settlementRfidCount", {
+            dbids: content.data.dbids,
+            serviceType: content.data.serviceType,
+            cpid: content.data.cpid,
+        }, function (res) {
+            if (res.code == 1) {
                 content.setData({
-                    hasNoCoupons: false,
-                    couponCount: content.data.userInfo.couponCount
-                });
-
-                content.getUserCouponsList();
-            }
-
-            if (content.data.userInfo.point > 0) {
-                content.setData({
-                    hasNoPoint: false,
-                    point: content.data.userInfo.point
+                    allGoodsAndYunPrice : res.data.sumPrice,
+                    yunPrice: res.data.freight,
+                    couponPrice: res.data.couponPrice,
+                    useYcoid: res.data.useYcoid
                 });
             }
         });
     },
 
-    getGoodsList: function (did) {
-        app.wxRequest("/rfid/readRfid", {did: did}, function (res) {
-            if (res.code == 1) {
-                content.setData({
-                    goodsList: res.code.commoditys,
-                    sumPrice: res.code.sumPrice
-                });
-            }
+    bindCouponsChange: function (e) {
+        let curCoupon = this.data.coupons[e.detail.value]; 
+
+        this.setData({
+            couponsIndex : e.detail.value,
+            curCoupon : curCoupon,
+            serviceType: 1,
+            cpid: curCoupon.cpid
         });
+
+        if (!!curCoupon.cpid) {
+            this.countCartSettle();
+        }
+    },
+
+     bindYcoidChange: function (e) {
+        let curYcoid = this.data.ycoidList[e.detail.value]; 
+
+        this.setData({
+            ycoidIndex : e.detail.value,
+            serviceType: 2
+        });
+
+        this.countCartSettle();
     },
 
     onLoad: function (e) {
         let content = this;
 
-        content.getGoodsList(e.did);
-        content.getUserInfo();
+        content.setData({
+            did : e.did
+        });
+
+        content.getCartSettle(e.did);
     },
 
     createOrder:function () {
         let content = this;
-        let remark = ""; // 备注信息
-
-        if (!content.data.curAddressData) {
-            wx.showModal({
-                title: '提 示',
-                content: '请先设置您的收货地址！',
-                showCancel: false
-            });
-            return;
-        }
 
         let postData = {
-            expressName: content.data.curAddressData.linkMan,
-            expressMobile: content.data.curAddressData.mobile,
-            expressAddress: content.data.curAddressData.address,
-            remark: remark,
-            scids: content.data.goodsListId.join(","),
-            serviceType: "",
-            cpid: ""
+            dbids: content.data.dbids,
+            serviceType: content.data.serviceType,
+            cpid: content.data.cpid
         };
-        if (content.data.curCoupon) {
-            postData.serviceType = 2;
-            postData.cpid = content.data.curCoupon.id;
-        }
-        postData.calculate = "true";
 
-        app.wxRequest("/order/saveOrder", postData, function (res) {
-            // 清空购物车数据
-            app.clearCookie("shopCartInfo");
-
-            app.wxPay(res.data.oid, "/pages/user/order-list/index");
+        app.wxRequest("/order/saveRfidOrder", postData, function (res) {
+            if (res.code == 1) {
+                app.wxPay(res.data.oid, "/pages/user/order-list/index");
+            }
 
             // 配置模板消息推送
             // var postJsonString = {};
@@ -133,51 +214,5 @@ Page({
             //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
             //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
         })
-    },
-    addAddress: function () {
-        let content = this;
-
-        wx.chooseAddress({
-            success: function (res) {
-                content.setData({
-                    curAddressData: {
-                        linkMan: res.userName,
-                        mobile: res.telNumber,
-                        address: res.provinceName + " " + res.cityName + " " + res.countyName + " " + res.detailInfo
-                    }
-                });
-            }
-        });
-    },
-    selectAddress: function () {
-        let content = this;
-
-        wx.chooseAddress({
-            success: function (res) {
-                content.setData({
-                    curAddressData: {
-                        linkMan: res.userName,
-                        mobile: res.telNumber,
-                        address: res.provinceName + " " + res.cityName + " " + res.countyName + " " + res.detailInfo
-                    }
-                });
-            }
-        });
-    },
-    bindChangeCoupon: function (e) {
-        const selIndex = e.detail.value[0] - 1;
-
-        if (selIndex == -1) {
-            this.setData({
-                youhuijine: 0,
-                curCoupon: null
-            });
-            return;
-        }
-
-        this.setData({
-            youhuijine: this.data.coupons[selIndex].couponPrice,
-            curCoupon: this.data.coupons[selIndex]
-        });
     }
 });

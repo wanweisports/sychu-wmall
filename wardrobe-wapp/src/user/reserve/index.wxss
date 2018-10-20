@@ -184,7 +184,7 @@ order-detail{
     background-color: #fff;
 }
 .jiesuan-box .to-pay-btn{
-    width:250rpx;
+    width:50%;
     text-align: center;
     height: 100%;
     line-height: 100rpx;
@@ -193,6 +193,18 @@ order-detail{
     color:#ffffff;
     border-radius: 0;
 }
+
+.jiesuan-box .to-leave-btn{
+    width:50%;
+    text-align: center;
+    height: 100%;
+    line-height: 100rpx;
+    background-color: #EBEBEB;
+    font-size:32rpx;
+    color:#333333;
+    border-radius: 0;
+}
+
 
 .jiesuan-box  .left-price{
     display: flex;

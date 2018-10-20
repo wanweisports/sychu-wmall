@@ -20,6 +20,8 @@ public interface IOrderService {
 
     Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException;
 
+    Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException;
+
     Integer saveRfidOrderInfo(UserOrderInfo userOrderInfo, String dbids, int uid) throws ParseException;
 
     Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException;
@@ -30,7 +32,9 @@ public interface IOrderService {
 
     ReserveOrderInfo getLastReserveOrderInfo(int uid);
 
-    void saveCancelReserveOrder(int uid, int roid);
+    void saveCancelOrder(int oid, int uid) throws Exception;
+
+    void saveCancelReserveOrder(int roid, int uid);
 
     Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 
@@ -49,5 +53,9 @@ public interface IOrderService {
     List<UserOrderInfo> getOvertimeOrders();
 
     void updateOvertimeOrders(List<UserOrderInfo> userOrderInfos) throws ParseException;
+
+    Map<String, Object> getNowCanOpenLock(int did, int uid);
+
+    void deleteReservation(int roid);
 
 }

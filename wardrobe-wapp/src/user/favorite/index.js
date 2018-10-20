@@ -1,52 +1,47 @@
 //index.js
 //获取应用实例
-var app = getApp();
+const app = getApp();
 
 Page({
     data: {
-        indicatorDots: true,
-        autoplay: true,
-        interval: 3000,
-        duration: 1000,
-        loadingHidden: false,
-        // loading
-        userInfo: {},
-        selectCurrent: 0,
-        goods: [],
-        scrollTop: "0",
-        loadingMoreHidden: true
+        lastPage: 0,
+        currentPage: 1,
+        goods: null
     },
-    toDetailsTap: function(e) {
-        wx.navigateTo({
-            url: "/pages/goods/details/index?id=" + e.currentTarget.dataset.id
-        })
-    },
-    scroll: function(e) {
-        console.log(e);
+    toDetailsTap: function (e) {
+        let goodId = e.currentTarget.dataset.id;
 
-        var that = this;
-        var scrollTop = that.data.scrollTop;
-        
-        that.setData({
-            scrollTop: e.detail.scrollTop
-        });
+        app.redirect("/pages/goods/details/index?id=" + goodId, "navigateTo");
+    },
+     onReachBottom: function () {
+        if (this.data.currentPage >= this.data.lastPage) {
+            return app.showToast("已经最后一页", "none");
+        }
+
+        this.getGoodsList(++this.data.currentPage);
     },
     onLoad: function() {
-        var that = this;
-
-        that.getGoodsList();
+        this.getGoodsList(1);
     },
 
-    getGoodsList: function () {
-        var that = this;
+    getGoodsList: function (page) {
+        let content = this;
 
-        app.wxRequest("/user/userCollections", {}, function (res) {
+        page = page || 1;
+
+        app.wxRequest("/user/userCollections", {page: page}, function (res) {
             if (res.code == 1) {
-              that.setData({
-                goods: res.data.list
-              });
+                content.setData({
+                    lastPage: res.data.lastPage,
+                    currentPage: res.data.currentPage,
+                    goods : res.data.list
+                });
             }
-          }
-        );
+            else {
+                content.setData({
+                    goods : null
+                });
+            }
+        });
     }
 });

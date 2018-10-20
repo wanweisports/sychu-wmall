@@ -10,6 +10,7 @@ import com.wardrobe.platform.service.IUserCouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
@@ -34,12 +35,13 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
 
     @Override
     public List<Map<String, Object>> getUserCouponList(int userId){
-        return baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 ORDER BY uci.dueTime DESC", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO);
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 ORDER BY uci.dueTime DESC", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO);
+        return descCoupons(list);
     }
 
     @Override
     public List<Map<String, Object>> getUserEffectiveCoupons(int userId, double priceSum){
-        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND uci.dueTime >= ?4 ORDER BY uci.fullPrice, uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToString(new Date(), null) + IPlatformConstant.time00);
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT sd.dictValue, uci.* FROM user_coupon_info uci, sys_dict sd WHERE uci.serviceType = sd.dictId AND uci.uid = ?1 AND sd.dictName = ?2 AND uci.status = ?3 AND DATE(uci.dueTime) >= ?4 ORDER BY uci.fullPrice, uci.dueTime", userId, IDBConstant.USER_COUPON, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToString(new Date(), null));
         if(!CollectionUtils.isEmpty(list)){
             list.stream().forEach(map -> { //计算满减优惠是否能使用
                 if(StrUtil.objToDouble(map.get("fullPrice")) <= priceSum){ //金额大于满减优惠，则可以使用
@@ -49,12 +51,29 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
                 }
             });
         }
+        return descCoupons(list);
+    }
+
+    private List<Map<String, Object>> descCoupons(List<Map<String, Object>> list){
+        if(list != null && list.size() > 0){
+            StringBuilder desc = new StringBuilder();
+            list.stream().forEach(map -> {
+                desc.setLength(0);
+                Object dueTime = map.get("dueTime");
+                map.put("dueTime", dueTime != null ? dueTime.toString().substring(0, dueTime.toString().lastIndexOf(" ")) : StrUtil.EMPTY);
+                if(IDBConstant.COUPON_SERVICE_TYPE.equals(map.get("serviceType").toString())) {
+                    map.put("dictValue", desc.append("满").append(StrUtil.objToInt(map.get("fullPrice"))).append("元可使用").toString());
+                    desc.setLength(0);
+                    map.put("dictValue2", desc.append("满").append(StrUtil.objToInt(map.get("fullPrice"))).append("减").append(StrUtil.objToInt(map.get("couponPrice"))).toString());
+                }
+            });
+        }
         return list;
     }
 
     @Override
-    public UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid) throws ParseException{
-        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4", cpid, uid, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToDate(new Date()));
+    public UserCouponInfo getUserNotUseCouponInfo(int cpid, int uid, double fullPrice) throws ParseException{
+        return baseDao.queryByHqlFirst("FROM UserCouponInfo WHERE cpid = ?1 AND uid = ?2 AND status = ?3 AND dueTime >= ?4 AND fullPrice <= ?5", cpid, uid, IDBConstant.LOGIC_STATUS_NO, DateUtil.dateToDate(new Date()), new BigDecimal(fullPrice));
     }
 
     @Override
@@ -94,9 +113,9 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     }
 
     @Override
-    public void updateUseUserCouponInfo(Integer cpid, String serviceType, int uid) throws ParseException{
-        if(IDBConstant.LOGIC_STATUS_YES.equals(serviceType)){
-            UserCouponInfo userCouponInfo = getUserNotUseCouponInfo(cpid, uid);
+    public void updateUseUserCouponInfo(int cpid) throws ParseException {
+        if (cpid > 0) {
+            UserCouponInfo userCouponInfo = baseDao.getToEvict(UserCouponInfo.class, cpid);
             userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
             baseDao.save(userCouponInfo, userCouponInfo.getStatus());
         }

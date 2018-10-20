@@ -87,52 +87,54 @@ Page({
         }
     },
     touchM: function (e) {
-        var index = e.currentTarget.dataset.index;
+        let index = e.currentTarget.dataset.index;
 
         if (e.touches.length == 1) {
-            var moveX = e.touches[0].clientX;
-            var disX = this.data.startX - moveX;
-            var delBtnWidth = this.data.delBtnWidth;
-            var left = "";
+            let moveX = e.touches[0].clientX;
+            let disX = this.data.startX - moveX;
+            let delBtnWidth = this.data.delBtnWidth;
+            let left = "";
 
-            if (disX == 0 || disX < 0) {//如果移动距离小于等于0，container位置不变
+            if (disX == 0 || disX < 0) {
                 left = "margin-left: 0px";
-            } else if (disX > 0 ) {//移动距离大于0，container left值等于手指移动距离
+            } else if (disX > 0 ) {
                 left = "margin-left: -" + disX + "px";
                 if (disX >= delBtnWidth) {
-                    left = "left:-" + delBtnWidth + "px";
+                    left = "left: -" + delBtnWidth + "px";
                 }
             }
 
-            var list = this.data.goodsList.list;
+            let list = this.data.goodsList.list;
             if (index != "" && index != null) {
                 list[parseInt(index)].left = left;
-                this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+                this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
             }
         }
     },
     touchE: function (e) {
-        var index = e.currentTarget.dataset.index;
+        let index = e.currentTarget.dataset.index;
 
         if (e.changedTouches.length == 1) {
-            var endX = e.changedTouches[0].clientX;
-            var disX = this.data.startX - endX;
-            var delBtnWidth = this.data.delBtnWidth;
+            let endX = e.changedTouches[0].clientX;
+            let disX = this.data.startX - endX;
+            let delBtnWidth = this.data.delBtnWidth;
             //如果距离小于删除按钮的1/2，不显示删除按钮
-            var left = disX > delBtnWidth/2 ? "margin-left:-" + delBtnWidth + "px" : "margin-left: 0px";
+            let left = disX > delBtnWidth / 2 ? "margin-left: -" + delBtnWidth + "px" : "margin-left: 0px";
 
-            var list = this.data.goodsList.list;
+            let list = this.data.goodsList.list;
             if (index !== "" && index != null) {
                 list[parseInt(index)].left = left;
-                this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+                this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
             }
         }
     },
     delItem: function (e) {
-        var index = e.currentTarget.dataset.index;
-        var list = this.data.goodsList.list;
-        list.splice(index, 1);
-        this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+        let index = e.currentTarget.dataset.index;
+        let list = this.data.goodsList.list;
+        let del = list.splice(index, 1);
+
+        this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
+        this.deleteShoppingCart(del[0].scid);
     },
     selectTap:function(e){
         var index = e.currentTarget.dataset.index;
@@ -275,8 +277,6 @@ Page({
         this.deleteShoppingCart(scid.join(","));
     },
     toPayOrder2: function () {
-        wx.redirectTo({
-            url: "/pages/goods/reserve/index"
-        });
+        app.redirect("/pages/goods/reserve/index", "navigateTo");
     }
 });

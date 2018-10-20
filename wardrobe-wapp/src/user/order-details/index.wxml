@@ -2,12 +2,12 @@
     <view class="sec-wrap">
         <view class="order-status">
             <view class="icon-box">
-                <image wx:if="{{orderDetail.status == 2}}" class="icon" src="/images/order-details/icon-ddgb.png"></image>
+                <image wx:if="{{orderDetail.payStatus == 3}}" class="icon" src="/images/order-details/icon-ddgb.png"></image>
                 <image wx:elif="{{orderDetail.payStatus == 2}}" class="icon" src="/images/order-details/icon-ddfk.png"></image>
                 <image wx:elif="{{orderDetail.payStatus == 1}}" class="icon" src="/images/order-details/icon-jycg.png"></image>
             </view>
             <view class="right-text">
-                <view class="status" wx:if="{{orderDetail.status == 2}}">已取消</view>
+                <view class="status" wx:if="{{orderDetail.payStatus == 3}}">已取消</view>
                 <view class="status" wx:if="{{orderDetail.payStatus == 1}}">已支付</view>
                 <view class="status red" wx:if="{{orderDetail.payStatus == 2}}">待支付</view>
             </view>
@@ -26,7 +26,7 @@
                         <view class="goods-price">¥ {{item.itemPriceSum}}</view>
                     </view>
                     <view class="arow">
-                        <view class="goods-label">{{item.itemColor}}，{{item.itemSize}}</view>
+                        <view class="goods-label">颜色：{{item.itemColor}}、尺码：{{item.itemSize}}</view>
                         <view class="goods-num">x {{item.itemCount}}</view>
                     </view>
                 </view>
@@ -38,13 +38,11 @@
             <view class="row-label">商品金额</view>
             <view class="right-text">¥ {{orderDetail.priceSum}}</view>
         </view>
-        <view class="row-box">
-            <view class="row-label">运费</view>
-            <view class="right-text">+ ¥ 0</view>
-        </view>
-        <view class="row-box">
-            <view class="row-label">应付总额</view>
-            <view class="right-text">¥ {{orderDetail.payPrice}}</view>
-        </view>
     </view>
+    <view class="jiesuan-box">
+        <view class="left-price">
+            <view class="total">合计：¥ {{orderDetail.payPrice}}</view>
+        </view>
+        <view class="btn to-pay-btn" hidden="{{orderDetail.payStatus == 2 ? false : true}}" bindtap="toPayTap" data-id="{{item.oid}}">马上付款</view>
+    </view> 
 </view>

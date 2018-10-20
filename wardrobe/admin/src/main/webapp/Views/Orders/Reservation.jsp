@@ -68,7 +68,19 @@
                                             <td>${r.reserveStartTime}</td>
                                             <td>${r.reserveEndTime}</td>
                                             <td>${r.nickname}</td>
-                                            <td>${r.statusName}</td>
+                                            <td>
+                                                <c:if test="${r.status=='1'}">
+                                                    正常
+                                                </c:if>
+                                                <c:if test="${r.status=='2'}">
+                                                    已取消
+                                                </c:if>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-status-del" title="删除" data-id="${r.roid}">
+                                                    <i class="fa fa-level-down"></i> 删除
+                                                </a>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 <tbody>

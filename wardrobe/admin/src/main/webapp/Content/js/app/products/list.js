@@ -330,4 +330,15 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment', 'jquery.
             });
         }
     });
+    $(".js-status-del").click(function(){
+        var cid = $(this).data('id');
+        if(window.confirm("确认删除吗(不可恢复)？")) {
+            $.post("/admin/products/deleteCommodity", {cid: cid}, function (res) {
+                alert(res.message)
+                if(res.code == 1){
+                    window.location.reload();
+                }
+            });
+        }
+    });
 });

@@ -59,6 +59,26 @@ Page({
         });
     },
 
+    cancelOrder: function () {
+        let content = this;
+
+        wx.showModal({
+            title: '确定要取消该订单吗？',
+            content: '',
+            success: function (res) {
+                if (res.confirm) {
+                    app.wxRequest("/order/cancelReserveOrder", {roid: content.data.wardrobeInfo.roid}, function (res) {});
+
+                    content.getWardrobeOrder();
+                }
+            }
+        });
+
+        app.wxRequest("/order/cancelReserveOrder", {roid: this.data.wardrobeInfo.roid}, function (res) {
+            if (res.code == 1) {}
+        });
+    },
+
     toCartOrder: function () {
         app.redirect("/pages/goods/reserve-settle/index?did=" + this.data.wardrobeInfo.did, "navigateTo");
     },

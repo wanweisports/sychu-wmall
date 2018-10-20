@@ -9,13 +9,95 @@ Page({
         goodsList:[],
         allGoodsPrice:0,
 
-        userInfo: {},
-
-        reserveDate: [],
+        reserveDateList: [],
+        reserveDateIndex: 1,
         reserveDateValue: "",
-        reserveTime: [],
-        reserveTimeStart: "",
-        reserveTimeEnd: ""
+
+        reserveTimeStartList: [],
+        reserveTimeStartIndex: [0, 0],
+        reserveTimeStartValue: "",
+
+        reserveTimeEndList: [],
+        reserveTimeEndIndex: [0, 0],
+        reserveTimeEndValue: ""
+    },
+
+    initDate: function (startTime, endTime) {
+        let today = new Date();
+        let todayStr = utils.formatDate(today);
+
+        let tomorrow = new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000);
+        let tomorrowStr = utils.formatDate(tomorrow);
+
+        let third = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+        let thirdStr = utils.formatDate(third);
+
+        this.setData({
+            reserveDateList: [{
+                reserveDateValue: todayStr,
+                reserveDateText: "（今天）" + todayStr,
+            }, {
+                reserveDateValue: tomorrowStr,
+                reserveDateText: "（明天）" + tomorrowStr,
+            }, {
+                reserveDateValue: thirdStr,
+                reserveDateText: "（后天）" + thirdStr,
+            }],
+            reserveDateIndex: 1,
+        });
+
+        this.setData({
+            reserveDateValue: this.data.reserveDateList[this.data.reserveDateIndex].reserveDateValue,
+            reserveDateText: this.data.reserveDateList[this.data.reserveDateIndex].reserveDateText,
+        });
+
+        let startHours = Number(startTime.split(":")[0]);
+        let endHours = Number(endTime.split(":")[0]);
+        let reserveTimeHoursList = [];
+        for (let i = startHours; i < endHours; i++) {
+            reserveTimeHoursList.push([i > 9 ? i : "0" + i]);
+        }
+        this.setData({
+            reserveTimeStartList: [reserveTimeHoursList, ["00", "15", "30", "45"]],
+            reserveTimeStartIndex: [0, 0],
+            reserveTimeEndList: [reserveTimeHoursList, ["00", "15", "30", "45"]],
+            reserveTimeEndIndex: [0, 0]
+        });
+
+        this.setData({
+            reserveTimeStartValue: this.data.reserveTimeStartList[0][this.data.reserveTimeStartIndex[0]] + ":" + 
+                this.data.reserveTimeStartList[1][this.data.reserveTimeStartIndex[1]],
+            reserveTimeEndValue: this.data.reserveTimeEndList[0][this.data.reserveTimeEndIndex[0]] + ":" + 
+                this.data.reserveTimeEndList[1][this.data.reserveTimeEndIndex[1]]
+        });
+    },
+
+    bindReserveDateChange: function(e) {
+        this.setData({
+            reserveDateIndex: e.detail.value,
+            reserveDateValue: this.data.reserveDateList[e.detail.value].reserveDateValue,
+            reserveDateText: this.data.reserveDateList[e.detail.value].reserveDateText,
+        })
+    },
+
+    bindStartTimeChange: function (e) {
+        let reserveTimeStartIndex = e.detail.value;
+
+        this.setData({
+            reserveTimeStartIndex: reserveTimeStartIndex,
+            reserveTimeStartValue: this.data.reserveTimeStartList[0][reserveTimeStartIndex[0]] + ":" + 
+                this.data.reserveTimeStartList[1][reserveTimeStartIndex[1]]
+        })
+    },
+
+    bindEndTimeChange: function (e) {
+        let reserveTimeEndIndex = e.detail.value;
+
+        this.setData({
+            reserveTimeEndIndex: reserveTimeEndIndex,
+            reserveTimeEndValue: this.data.reserveTimeEndList[0][reserveTimeEndIndex[0]] + ":" + 
+                this.data.reserveTimeEndList[1][reserveTimeEndIndex[1]]
+        })
     },
 
     getWardrobeList: function () {
@@ -28,59 +110,12 @@ Page({
             if (res.code == 1) {
                 let wardrobe = res.data.list[0];
                 content.setData({
-                    wardrobeInfo: wardrobe,
-                    reserveDate: [utils.formatDate(date), utils.formatDate(new Date(end))],
-                    reserveTime: [wardrobe.startTime, wardrobe.endTime],
-                    reserveDateValue: utils.formatDate(date),
-                    reserveTimeStart: wardrobe.startTime,
-                    reserveTimeEnd: wardrobe.startTime
+                    wardrobeInfo: wardrobe
                 });
+
+                content.initDate(wardrobe.startTime, wardrobe.endTime);
             }
         });
-    },
-
-    getUserInfo: function () {
-        let content = this;
-
-        app.wxRequest("/user/userCenter", {}, function (res) {
-            content.setData({
-                userInfo : res.data
-            });
-
-            if (content.data.userInfo.couponCount > 0) {
-                content.setData({
-                    hasNoCoupons: false,
-                    couponCount: content.data.userInfo.couponCount
-                });
-
-                content.getUserCouponsList();
-            }
-
-            if (content.data.userInfo.point > 0) {
-                content.setData({
-                    hasNoPoint: false,
-                    point: content.data.userInfo.point
-                });
-            }
-        });
-    },
-
-    bindDateChange: function (e) {
-        this.setData({
-            reserveDateValue: e.detail.value
-        })
-    },
-
-    bindStartTimeChange: function (e) {
-        this.setData({
-            reserveTimeStart: e.detail.value
-        })
-    },
-
-    bindEndTimeChange: function (e) {
-        this.setData({
-            reserveTimeEnd: e.detail.value
-        })
     },
 
     onLoad: function () {
@@ -108,15 +143,36 @@ Page({
             allGoodsPrice: allGoodsPrice
         });
 
-        content.getUserInfo();
         content.getWardrobeList();
     },
 
-    createOrder:function () {
+    createOrder: function () {
         let content = this;
+        let reserveStartTime = content.data.reserveDateValue + " " + content.data.reserveTimeStartValue + ":00";
+        let reserveEndTime = content.data.reserveDateValue + " " + content.data.reserveTimeEndValue + ":00";
+
+        if (reserveStartTime >= reserveEndTime) {
+            wx.showModal({
+                title: '提 示',
+                content: '开始时间必须小于结束时间！！',
+                showCancel: false
+            });
+            return;
+        }
+
+        if ((new Date(reserveStartTime)).getTime() <= (new Date()).getTime()) {
+            wx.showModal({
+                title: '提 示',
+                content: '开始时间不能小于当前时间！！',
+                showCancel: false
+            });
+            return;
+        }
+
+
         let postData = {
-            reserveStartTime : content.data.reserveDateValue + " " + content.data.reserveTimeStart + ":00",
-            reserveEndTime : content.data.reserveDateValue + " " + content.data.reserveTimeEnd + ":00",
+            reserveStartTime : reserveStartTime,
+            reserveEndTime : reserveEndTime,
             did: content.data.wardrobeInfo.did,
             scids: content.data.goodsListId.join(",")
         };
@@ -124,7 +180,7 @@ Page({
         app.wxRequest("/order/saveReserveOrder", postData, function (res) {
             if (res.code == 1) {
                 app.clearCookie("shopOrderInfo");
-                app.redirect("/page/user/reserve/index");
+                app.redirect("/pages/user/reserve/index", "navigateTo");
             }
 
             // 配置模板消息推送
