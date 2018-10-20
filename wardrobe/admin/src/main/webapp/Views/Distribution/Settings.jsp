@@ -143,14 +143,14 @@
                             <label class="col-md-3 form-control-label" for="distribution_code">
                                 <span class="text-danger">*</span> 射频编码
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <input type="text" class="form-control" id="distribution_code" placeholder="射频编码" name="rfidEpc"
-                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off" readonly>
+                                       data-val="true" data-val-required="射频编码不能为空" autocomplete="off" <%--readonly--%>>
                                 <div data-valmsg-for="code" data-valmsg-replace="true"></div>
                             </div>
-                            <div class="col-md-3">
+                            <%--<div class="col-md-3">
                                 <button class="btn" type="button" onclick="readEpcLabel(this)">扫描标签</button>
-                            </div>
+                            </div>--%>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="distribution_code"></label>

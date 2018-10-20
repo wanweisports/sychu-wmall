@@ -25,7 +25,7 @@ public class UserOrderInfo {
     private String expressAreaId;
     private String expressAddress;
     private Timestamp sendTime;
-    private BigDecimal freight;
+    private BigDecimal freight = new BigDecimal(0);
     private Timestamp createTime;
     private Timestamp updateTime;
     private List<UserOrderDetail> userOrderDetails;

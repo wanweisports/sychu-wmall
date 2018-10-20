@@ -1,0 +1,50 @@
+<view class="container">
+    <view class="sec-wrap">
+        <view class="order-status">
+            <view class="icon-box">
+                <image wx:if="{{orderDetail.status == 2}}" class="icon" src="/images/order-details/icon-ddgb.png"></image>
+                <image wx:elif="{{orderDetail.payStatus == 2}}" class="icon" src="/images/order-details/icon-ddfk.png"></image>
+                <image wx:elif="{{orderDetail.payStatus == 1}}" class="icon" src="/images/order-details/icon-jycg.png"></image>
+            </view>
+            <view class="right-text">
+                <view class="status" wx:if="{{orderDetail.status == 2}}">已取消</view>
+                <view class="status" wx:if="{{orderDetail.payStatus == 1}}">已支付</view>
+                <view class="status red" wx:if="{{orderDetail.payStatus == 2}}">待支付</view>
+            </view>
+        </view>
+    </view>
+    <view class="goods-list">
+        <view class="list-title">商品信息</view>
+        <block wx:for-items="{{orderGoods}}" wx:key="{{index}}">
+            <view class="a-goods">
+                <view class="img-box">
+                    <image src="{{item.itemImg}}" class="img" />
+                </view>
+                <view class="text-box">
+                    <view class="arow arow01">
+                        <view class="goods-name">{{item.itemName}}</view>
+                        <view class="goods-price">¥ {{item.itemPriceSum}}</view>
+                    </view>
+                    <view class="arow">
+                        <view class="goods-label">{{item.itemColor}}，{{item.itemSize}}</view>
+                        <view class="goods-num">x {{item.itemCount}}</view>
+                    </view>
+                </view>
+            </view>
+        </block>
+    </view>
+    <view class="goods-info">
+        <view class="row-box">
+            <view class="row-label">商品金额</view>
+            <view class="right-text">¥ {{orderDetail.priceSum}}</view>
+        </view>
+        <view class="row-box">
+            <view class="row-label">运费</view>
+            <view class="right-text">+ ¥ 0</view>
+        </view>
+        <view class="row-box">
+            <view class="row-label">应付总额</view>
+            <view class="right-text">¥ {{orderDetail.payPrice}}</view>
+        </view>
+    </view>
+</view>

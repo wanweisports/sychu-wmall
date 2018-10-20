@@ -134,7 +134,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
         int oid = userOrderInfo.getOid();
         String[] scidArr = scids.split(",");
-        double priceSum = 0;
+        double priceSum = 0;    //总价
+        int commodityCount = 0; //订单商品总数量
         for(String scid : scidArr) { //待处理积分与优惠券问题【已处理】
             UserShoppingCart userShoppingCart = userShoppingCartService.getUserShoppingCart(StrUtil.objToInt(scid));
             Integer cid = userShoppingCart.getCid();
@@ -151,7 +152,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setItemColor(commodityColor.getColorName());
 
             CommoditySize commoditySize = commodityService.getCommoditySize(userShoppingCart.getSid());
-            commoditySize.setSid(commoditySize.getSid());
+            userOrderDetail.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
@@ -169,13 +170,22 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             commoditySize.setStock(stock - userOrderDetail.getItemCount());
             if(stock <= 0) throw new MessageException("存在不足,当前库存：" + stock);
             baseDao.save(commoditySize, commoditySize.getSid());
+
+            commodityCount += userOrderDetail.getItemCount();
         }
 
         userOrderInfo.setPriceSum(Arith.conversion(priceSum));  //商品原总价
         //支付价格：之后减去优惠部分
         double sumPrice = userOrderInfo.getPriceSum().doubleValue();
         String serviceType = userOrderInfo.getServiceType();
-        userOrderInfo.setPayPrice(Arith.conversion(userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid)));
+        sumPrice = userShoppingCartService.countDiscount(sumPrice, serviceType, userOrderInfo.getCpid(), uid);
+        sumPrice = sumPrice > 0 ? sumPrice : 0;
+        //运费
+        int freight = IPlatformConstant.FREIGHT;
+        if(commodityCount >= 2) sumPrice += freight;
+
+        userOrderInfo.setFreight(Arith.conversion(freight));
+        userOrderInfo.setPayPrice(Arith.conversion(sumPrice));
         baseDao.save(userOrderInfo, oid);
 
         //优惠券置为使用状态

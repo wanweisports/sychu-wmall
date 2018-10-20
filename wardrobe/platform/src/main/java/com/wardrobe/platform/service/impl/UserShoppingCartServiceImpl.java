@@ -3,6 +3,7 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
@@ -132,7 +133,13 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         BigDecimal rankDiscount = rankService.getRankInfoByRank(userAccount.getRank()).getRankDiscount();
         data.put("discount", rankDiscount);
         //减去折扣的金额
-        data.put("sumPrice", StrUtil.roundKeepTwo(Arith.mul(sumPrice, rankDiscount.doubleValue())));
+        sumPrice = StrUtil.roundKeepTwo(Arith.mul(sumPrice, rankDiscount.doubleValue()));
+        sumPrice = sumPrice > 0 ? sumPrice : 0;
+        //运费
+        double freight = getFreight(settlement);
+        sumPrice += freight; //加运费
+        data.put("freight", freight);
+        data.put("sumPrice", sumPrice);
         return data;
     }
 
@@ -167,9 +174,23 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
         Map<String, Object> data = new HashMap<>(1, 1);
         //乘以折扣(四舍五入)
-        double price = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
-        data.put("sumPrice", price > 0 ? price : 0);
+        sumPrice = countDiscount(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid);
+        sumPrice = sumPrice > 0 ? sumPrice : 0;
+        //运费
+        double freight = getFreight(settlement);
+        sumPrice += freight; //加运费
+        data.put("freight", freight);
+        data.put("sumPrice", sumPrice);
         return data;
+    }
+
+    @Desc("计算运费")
+    private double getFreight(List<Map<String, Object>> settlement){
+        int count = 0;
+        for(Map<String, Object> map : settlement){
+            count += StrUtil.objToInt(map.get("count"));
+        }
+        return count >= 2 ? IPlatformConstant.FREIGHT : 0; //运费
     }
 
     @Override

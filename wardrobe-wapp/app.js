@@ -2,7 +2,7 @@
 
 App({
     onLaunch: function () {
-        this.setCookie('syc_appName', "闪衣橱");
+        this.setCookie('syc_appName', "衣否");
     },
 
     toLogin: function () {
@@ -18,11 +18,20 @@ App({
         success = success || new Function;
         fail = fail || new Function;
 
+        wx.showLoading({
+            title: "加载中",
+            mask: true
+        });
+
          wx.checkSession({
             success: function () {
+                wx.hideLoading();
+
                 success();
             },
             fail: function () {
+                wx.hideLoading();
+
                 fail();
             }
         });
@@ -30,6 +39,11 @@ App({
 
     login: function () {
         let content = this;
+
+        wx.showLoading({
+            title: "加载中",
+            mask: true
+        });
 
         wx.login({
             success: function (res) {
@@ -39,6 +53,8 @@ App({
                     success: function (res) {
                         let iv = res.iv;
                         let encryptedData = res.encryptedData;
+
+                        wx.hideLoading();
 
                         content.wxRequest('/login', {
                             code: code,
@@ -194,10 +210,11 @@ App({
             }
         );
     },
-    onShareAppMessage: function() {
+    onShareAppMessage: function () {
         return {
-            title: wx.getStorageSync('mallName') + '——' + this.config.shareProfile,
-            path: '/pages/landing/index',
+            title : this.getCookie('syc_appName') + '——' + this.config.shareProfile,
+            path  : '/pages/landing/index',
+            withShareTicket: true,
             success: function(res) {
                 // 转发成功
             },
@@ -273,8 +290,8 @@ App({
     config: {
         getApiHost: function () {
             //return "http://127.0.0.1:8070";
-            //return "http://192.168.1.105:8070";
-            return "https://mystore.jonham.cn/api";
+            //return "https://mystore.yifoutech.com/api";
+            return "https://mystore.yifoutech.cn/api";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您',

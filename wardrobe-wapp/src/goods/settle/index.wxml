@@ -1,0 +1,74 @@
+<view class="container">
+    <form bindsubmit="createOrder" report-submit="true">
+        <view class="address-box" wx:if="{{isNeedLogistics > 0}}">
+            <view class="add-address" hidden="{{curAddressData}}">
+                <view class="title" bindtap="addAddress">新增收货地址</view>
+            </view>
+            <view class="show-address" hidden="{{!curAddressData}}" bindtap="selectAddress">
+                <view class="name-tel">{{curAddressData.linkMan}}  {{curAddressData.mobile}}</view>
+                <view class="addr-text">{{curAddressData.address}}</view>
+            </view>
+        </view>
+        <view class="goods-list">
+            <view class="list-title">商品列表</view>
+            <view class="a-goods" wx:for-items="{{goodsList}}" wx:key="{{index}}">
+                <view class="img-box">
+                    <image src="{{item.pic}}" class="img"></image>
+                </view>
+                <view class="text-box">
+                    <view class="arow arow01">
+                        <view class="goods-name">{{item.commName}}</view>
+                        <view class="goods-price">¥ {{item.price}}</view>
+                    </view>
+                    <view class="arow">
+                        <view class="goods-label">{{item.colorName}}，{{item.size}}</view>
+                        <view class="goods-num">x {{item.count}}</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="peisong-way">
+            <view class="row-box">
+                <view class="row-label">配送方式</view>
+                <view class="right-text" wx:if="{{yunPrice > 0}}">快递</view>
+                <view class="right-text" wx:if="{{yunPrice == 0}}">包邮</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">使用薏米</view>
+                <picker bindchange="bindYcoidChange" value="{{ycoidIndex}}" range="{{ycoidList}}">
+                        <view class="right-text">{{ycoidList[ycoidIndex]}}</view>
+                </picker>
+            </view>
+            <view class="row-box">
+                <view class="row-label">优惠券</view>
+                <picker bindchange="bindCouponsChange" value="{{couponsIndex}}" range="{{coupons}}" range-key="{{'textShow'}}">
+                        <view class="right-text">{{coupons[couponsIndex].textShow}}</view>
+                </picker>
+            </view>
+        </view>
+        <view class="goods-info">
+            <view class="row-box">
+                <view class="row-label">商品金额</view>
+                <view class="right-text">¥ {{allGoodsPrice}}</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">运费</view>
+                <view class="right-text">+ ¥ {{yunPrice}}</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">薏米抵现</view>
+                <view class="right-text">- ¥ {{youhuijine}}</view>
+            </view>
+            <view class="row-box">
+                <view class="row-label">优惠金额</view>
+                <view class="right-text">- ¥ {{youhuijine}}</view>
+            </view>
+        </view>
+        <view class="jiesuan-box">
+            <view class="left-price">
+                <view class="total">合计：¥ {{allGoodsAndYunPrice - youhuijine}}</view>
+            </view>
+            <button class="to-pay-btn" formType="submit">提交订单</button>
+        </view>
+    </form>
+</view>

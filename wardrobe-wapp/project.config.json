@@ -1,7 +1,31 @@
 {
-	"description": "闪衣橱小程序项目配置文件",
+	"description": "衣否小程序项目配置文件",
 	"packOptions": {
-		"ignore": []
+		"ignore": [{
+			"type": "folder",
+			"value": "./pages/wuliu"
+		}, {
+			"type": "file",
+			"value": "./.gitignore"
+		}, {
+			"type": "file",
+			"value": "./LICENSE"
+		}, {
+			"type": "file",
+			"value": "./README.md"
+		}, {
+			"type": "file",
+			"value": "./package.json"
+		}, {
+			"type": "file",
+			"value": "./gulpfile.js"
+		}, {
+			"type": "folder",
+			"value": "./src"
+		}, {
+			"type": "folder",
+			"value": "./node_modules"
+		}]
 	},
 	"setting": {
 		"urlCheck": true,
@@ -10,6 +34,7 @@
 		"minified": true,
 		"newFeature": false
 	},
+	"miniprogramRoot": "./",
 	"compileType": "miniprogram",
 	"libVersion": "2.2.4",
 	"appid": "wx7988cd8a6691f962",

@@ -115,7 +115,7 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
     private List<SysResources> parseResourcesPath(List<SysResources> resources){
         if(resources != null){
             resources.stream().forEach(resource ->
-                            parseResourcePath(resource)
+                parseResourcePath(resource)
             );
         }
         return resources;

@@ -362,6 +362,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
                     'modal'        : true,
                     'isModalClose' : true
                 });
+                $(".save-products").prop("disabled", false).html('<i class="fa fa-check"></i> 保 存');
             }
         } catch(er) {
             jqueryAlert({
@@ -371,6 +372,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
                 'modal'        : true,
                 'isModalClose' : true
             });
+            $(".save-products").prop("disabled", false).html('<i class="fa fa-check"></i> 保 存');
         }
     });
 
@@ -388,6 +390,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
             return false;
         }
         $form.attr("submitting", "submitting");
+        $(this).prop("disabled", true).html('<i class="fa fa-check"></i> 正在上传...');
 
         $("#product_form").submit();
         $form.attr("submitting", "");
