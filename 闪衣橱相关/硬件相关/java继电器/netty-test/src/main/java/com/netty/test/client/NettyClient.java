@@ -62,7 +62,7 @@ public class NettyClient {
     }
 
     public static void main(String[] args) throws Exception{ //串口波特率：115200 ，LengthFieldBasedFrameDecoder解码器
-        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001); //"192.168.1.198", 4001
+        NettyClient nettyClient = new NettyClient("127.0.0.1", 9900); //"192.168.1.198", 4001
         nettyClient.clientServer();
     }
 

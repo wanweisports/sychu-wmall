@@ -32,7 +32,7 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
         //PooledUnsafeDirectByteBuf
         System.out.println("Heartbeat-client:" + msg);
         String message = getMessage((ByteBuf) msg);
-        System.out.println("message-client:" + message);
+        System.out.println("message-client:" + message + ",channelId：" + ctx.channel().id());
         if(message.equals("Heartbeat")){
             ctx.write("has read message from server");
             ctx.flush();

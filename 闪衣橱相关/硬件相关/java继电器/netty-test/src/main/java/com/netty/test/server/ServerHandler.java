@@ -59,7 +59,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         ByteBuf buf = msg.readBytes(msg.readableBytes());
         String msgStr = buf.toString(Charset.forName("utf-8"));
-        System.out.println(ctx.channel().remoteAddress() + "收到客户端消息：" + msgStr);
+        System.out.println(ctx.channel().remoteAddress() + "收到客户端消息：" + msgStr + "，channelId：" + ctx.channel().id());
 
         //返回客户端消息
         System.out.println("服务端说：我收到你的消息了=====");

@@ -50,8 +50,8 @@ public class ClientHandlerInit extends ChannelInitializer<SocketChannel> {
                 };
             }
         }.handlers());
-        //自己的逻辑
-        pipeline.addLast(new ClientHandler());
+        //自己的逻辑(多余)
+        //pipeline.addLast(new ClientHandler());
     }
 
 }
