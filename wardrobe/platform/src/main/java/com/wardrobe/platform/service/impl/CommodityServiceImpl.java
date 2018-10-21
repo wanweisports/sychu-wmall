@@ -85,7 +85,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC, ci.cid");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
@@ -218,7 +218,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC, ci.cid");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }

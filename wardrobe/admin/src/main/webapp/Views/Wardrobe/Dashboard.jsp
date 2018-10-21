@@ -135,6 +135,23 @@
                 });
             }
         }
+
+        function readEpcLabel(btn){
+            $(btn).prop("disabled", true).text("正在读取..");
+            $("#distribution_code").val("");
+            $("#testReads").html("");
+            $.post("/rfid/readEpcLabelCK", {did: 1}, function(res){
+                if(res.code == 1){
+                    $("#testReads").html('<p>读到以下标签：共'+res.data.epcs.length+'个</p>')
+                    $.each(res.data.epcs, function (index, item) {
+                        $("#testReads").append('<p>'+item+'</p>');
+                    });
+                }else{
+                    $("#testReads").html(res.message);
+                }
+                $(btn).prop("disabled", false).text("测试读取");
+            });
+        }
     </script>
 </layout:override>
 
@@ -252,6 +269,10 @@
                                                 </div>
                                                 <div <c:if test="${rfid.rfidBean == null || rfid.rfidBean.status=='2'}">style="display: none;"</c:if> id="closeRfid2">
                                                     <button type="button" class="btn btn-success" onclick="downlineRfid('${rfid.rfid}', this)">断开${rfid.name}</button>
+                                                    <div>&nbsp;</div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-success" onclick="readEpcLabel(this)">测试读取</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="card-body p-3 d-flex align-items-center">
@@ -259,6 +280,8 @@
                                             </div>
                                             <div class="card-body p-3 d-flex align-items-center">
                                                 <p>天线状态：${rfid.rfidBean.workAntennaStatus == 0 ? '成功' : '未连接'}</p>
+                                            </div>
+                                            <div class="card-body p-3 align-items-center" style="color: red;" id="testReads">
                                             </div>
                                         </div>
                                     </div>

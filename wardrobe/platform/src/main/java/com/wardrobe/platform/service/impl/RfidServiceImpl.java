@@ -135,15 +135,10 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
         rb.clearEpcs();
 
         List<String> epcs = rb.getEpcs(count);
-        System.out.println(epcs);
-        if(epcs.size() == 1) {
-            Map<String, Object> data = new HashMap<>(1, 1);
-            data.put("epcs", epcs);
-            return data;
-        }
-        if(epcs.size() == 0) throw new MessageException("未读到标签，请重试！");
-        if(epcs.size() > 0) throw new MessageException("范围内检测到多个标签，请在范围内只保留一个标签进行读取！");
-        return null;
+        System.out.println("epcs===>" + epcs);
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("epcs", epcs);
+        return data;
     }
 
     @Override

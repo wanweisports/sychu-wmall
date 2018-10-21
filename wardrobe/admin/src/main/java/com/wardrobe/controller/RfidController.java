@@ -43,11 +43,11 @@ public class RfidController extends BaseController {
         return new ResponseBean(true);
     }
 
-    @Desc("读取仓库射频电子标签")
+    @Desc("测试读取射频电子标签")
     @ResponseBody
     @RequestMapping(value = "/readEpcLabelCK")
     public ResponseBean readEpcLabelCK(int did){
-        SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_NO);
+        SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
         return new ResponseBean(rfidService.readEpcLabelIn(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 10));
     }
 
