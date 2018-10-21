@@ -72,7 +72,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public void updateUser(UserPerfectBean userPerfectBean){
+
         int userId = userPerfectBean.getUserId();
+        UserInfo ui = baseDao.queryByHqlFirst("FROM UserInfo WHERE mobile = ?1 AND uid != ?2", userPerfectBean.getMobile(), userId);
+        if(ui != null) throw new MessageException("手机号已被注册，请重新输入！");
+
         UserInfo userInfo = getUserInfo(userId);
         String inviteCode = userPerfectBean.getInviteCode();
 
