@@ -4,8 +4,8 @@
 }
 .userinfo {
     display: flex;
-    padding: 20rpx 50rpx;
-    background: #e85654;
+    padding: 50rpx 50rpx;
+    background: #262626;
     width: 750rpx;
 }
 

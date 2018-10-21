@@ -4,6 +4,9 @@ Page({
     data: {
         isSupported: wx.canIUse('button.open-type.getUserInfo')
     },
+    onLoad: function () {
+        //app.toLogin();
+    },
     onGetUserInfo: function (event) {
         if (event.type.toLowerCase() == "getuserinfo" && event.detail.errMsg.toLowerCase() == "getuserinfo:ok") {
             app.toLogin();

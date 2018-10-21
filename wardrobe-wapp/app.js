@@ -3,6 +3,8 @@
 App({
     onLaunch: function () {
         this.setCookie('syc_appName', "衣否");
+
+        this.toLogin();
     },
 
     toLogin: function () {
@@ -50,6 +52,7 @@ App({
                 let code = res.code;
 
                 wx.getUserInfo({
+                    withCredentials: true,
                     success: function (res) {
                         let iv = res.iv;
                         let encryptedData = res.encryptedData;
@@ -82,8 +85,10 @@ App({
                         });
                     },
                     fail: function (err) {
+                        wx.hideLoading();
+
                         content.showLog("[F][wx.getUserInfo]：" + JSON.stringify(err));
-                        content.showToast("用户授权失败", "none");
+                        //content.showToast("用户授权失败", "none");
                     }
                 });
             }
