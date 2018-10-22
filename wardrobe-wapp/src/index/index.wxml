@@ -6,7 +6,7 @@
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
             <block wx:for="{{banners}}" wx:key="cid">
                 <swiper-item>
-                    <image bindtap="tapBanner" data-id="{{item.cid}}" src="{{item.resourcePath}}" class="slide-image" mode="aspectFit"/>
+                    <image bindtap="tapBanner" data-id="{{item.cid}}" src="{{item.resourcePath}}" class="slide-image" mode="aspectFit"  lazy-load="true"/>
                 </swiper-item>
             </block>
         </swiper>
@@ -42,9 +42,9 @@
                 <view class="img-box">
                     <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
                 </view>
-                <view class="goods-title">{{item.brandName}}</view>
+                <view class="goods-brand">{{item.brandName}}</view>
                 <view class="goods-title">{{item.commName}}</view>
-                <view class="goods-price">¥ {{item.price}}</view>
+                <view class="goods-price">RMB{{item.price}}</view>
             </view>
         </view>
     </view>
