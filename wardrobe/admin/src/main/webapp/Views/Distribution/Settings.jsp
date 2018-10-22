@@ -120,7 +120,7 @@
                                 <div data-valmsg-for="commName" data-valmsg-replace="true"></div>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#distribution_query_list">
+                                <button type="button" class="btn btn-sm btn-primary" id="distribution_product_query" data-toggle="modal" data-target="#distribution_query_list">
                                     <i class="fa fa-search"></i> 检 索
                                 </button>
                             </div>
@@ -192,7 +192,7 @@
                     <iframe src="/admin/distribution/products" style="width: 100%; height: 500px" id="distribution_iframe"></iframe>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                    <button type="button" class="btn btn-sm btn-secondary" id="distribution_query_list_hide" data-dismiss="modal">
                         <i class="fa fa-close"></i> 取 消
                     </button>
                 </div>

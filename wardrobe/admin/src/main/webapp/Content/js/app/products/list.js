@@ -341,4 +341,27 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment', 'jquery.
             });
         }
     });
+
+    // enter
+    $(".products-list").on("click", ".product-enter", function (e) {
+        e.preventDefault();
+
+        var cid = $(this).attr("data-id");
+
+        $("#distribution_query_list_hide", parent.document.body).trigger("click");
+
+        $("#distribution_cid", parent.document.body).val(cid);
+        $("#distribution_product", parent.document.body).val($(this).attr("data-name"));
+
+        //加载商品尺码
+        $("#distribution_size", parent.document.body).html("");
+
+        $.post("/commodity/getCommoditySizes", {cid: cid}, function (res) {
+            if (res.code == 1) {
+                $.each(res.data.sizes, function (index, item) {
+                    $("#distribution_size", parent.document.body).append('<option value="' + item.sid + '">' + item.size + '</option>');
+                });
+            }
+        });
+    });
 });
