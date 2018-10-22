@@ -58,4 +58,6 @@ public interface IOrderService {
 
     void deleteReservation(int roid);
 
+    int getOrderCommodityCount(List<Map<String, Object>> settments);
+
 }

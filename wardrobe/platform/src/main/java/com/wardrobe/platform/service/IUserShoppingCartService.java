@@ -30,6 +30,6 @@ public interface IUserShoppingCartService {
 
     Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException;
 
-    DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, int commodityCount) throws ParseException;
+    DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, Integer commodityCount) throws ParseException;
 
 }

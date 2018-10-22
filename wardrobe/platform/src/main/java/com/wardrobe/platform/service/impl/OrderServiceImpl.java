@@ -204,7 +204,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Override
     public Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException{
         Double sumPrice = StrUtil.objToDouble(data.get("sumPrice"));
-        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, null, null, uid, 0);
+        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, null, null, uid, null);
         data.putAll(JsonUtils.fromJson(discountBean));
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("ycoid", userAccount.getYcoid());
@@ -265,7 +265,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         double sumPrice = userOrderInfo.getPriceSum().doubleValue();
 
         String serviceType = userOrderInfo.getServiceType();
-        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, serviceType, userOrderInfo.getCpid(), uid, 0);
+        DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, serviceType, userOrderInfo.getCpid(), uid, null);
         userOrderInfo.setPayPrice(Arith.conversion(discountBean.getSumPrice()));
         baseDao.save(userOrderInfo, oid);
 
@@ -838,6 +838,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         }
         //移除此预约柜子
         deleteRemoveCommodityDistribution(roid);
+    }
+
+    @Override
+    public int getOrderCommodityCount(List<Map<String, Object>> settments){
+        int count = 0;
+        for(Map map : settments){
+            count += StrUtil.objToInt(map.get("count"));
+        }
+        return count;
     }
 
 }

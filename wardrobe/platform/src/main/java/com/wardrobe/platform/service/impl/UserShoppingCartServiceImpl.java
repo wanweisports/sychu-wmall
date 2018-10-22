@@ -39,6 +39,9 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
     @Autowired
     private ISysRankService rankService;
 
+    @Autowired
+    private IOrderService orderService;
+
     @Override
     public synchronized void saveShoppingCart(UserShoppingCart userShoppingCart){
         Integer sid = userShoppingCart.getSid();
@@ -88,7 +91,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         Integer uid = commodityInputView.getUid();
         String shoppingType = commodityInputView.getShoppingType();
 
-        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size, ci.cid");
+        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.sid, cs.size, ci.cid");
         StringBuilder bodySql = new StringBuilder(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
         if(uid != null){
@@ -126,7 +129,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         //用户总衣橱币
         data.put("ycoid", userAccount.getYcoid());
         //乘以折扣(四舍五入)
-        DiscountBean discountBean = concessionalPrice(sumPrice, null, null, uid, settlement.size());
+        DiscountBean discountBean = concessionalPrice(sumPrice, null, null, uid, orderService.getOrderCommodityCount(settlement));
         //用户优惠券列表
         data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, discountBean.getSumOldDisPrice()));
         data.putAll(JsonUtils.fromJson(discountBean));
@@ -164,7 +167,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
         Map<String, Object> data = new HashMap<>(10, 1);
         //乘以折扣(四舍五入)
-        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, settlement.size());
+        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid,  orderService.getOrderCommodityCount(settlement));
         data.putAll(JsonUtils.fromJson(discountBean));
         return data;
     }
@@ -183,18 +186,18 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         }
 
         Map<String, Object> data = new HashMap<>(10, 1);
-        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, settlement.size());
+        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, null);
         data.putAll(JsonUtils.fromJson(discountBean));
         return data;
     }
 
     @Desc("计算优惠")
     @Override
-    public DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, int commodityCount) throws ParseException{
+    public DiscountBean concessionalPrice(double sumPrice, String serviceType, Integer cpid, int uid, Integer commodityCount) throws ParseException{
         DiscountBean discountBean = new DiscountBean();
         UserAccount userAccount = userAccountService.getUserAccount(uid);
 
-        int freight = commodityCount < 2 ? IPlatformConstant.FREIGHT : 0;//运费（满两件包邮，只买一件商品的运费写￥12）
+        int freight = commodityCount != null && commodityCount < 2 ? IPlatformConstant.FREIGHT : 0;//运费（满两件包邮，只买一件商品的运费写￥12）
         discountBean.setFreight(freight);
         discountBean.setSumOldPrice(StrUtil.roundKeepTwo(sumPrice));
 
