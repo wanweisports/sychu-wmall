@@ -73,9 +73,14 @@ Page({
             success: function (res) {
                 if (res.confirm) {
                     app.wxRequest("/order/cancelReserveOrder", {roid: content.data.wardrobeInfo.roid}, function (res) {
-                        app.showToast("取消订单成功", "success");
+                        if (res.code == 1) {
+                            app.showToast("取消预约成功", "success");
 
-                        content.getWardrobeOrder();
+                            content.getWardrobeOrder();
+                        }
+                        else {
+                            app.showToast("取消预约失败", "none");
+                        }
                     });
                 }
             }

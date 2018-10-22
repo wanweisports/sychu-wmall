@@ -22,13 +22,20 @@
             <text>最新上架</text>
         </view>
         <view class="goods-container">
-            <view class="goods-box" wx:for-items="{{newlyGoods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}">
-                <view class="img-box">
+            <view class="goods-box" wx:for-items="{{newlyGoods}}" wx:key="{{index}}">
+                <view class="img-box" bindtap="toDetailsTap" data-id="{{item.cid}}">
                     <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
                 </view>
-                <view class="goods-brand">{{item.brandName}}</view>
-                <view class="goods-title">{{item.commName}}</view>
-                <view class="goods-price">RMB{{item.price}}</view>
+                <view class="goods-brand" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.brandName}}</view>
+                <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
+                <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">RMB{{item.price}}</view>
+
+                <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{item.collection != 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="new">
+                    <text>收藏</text>
+                </view>
+                <view class="favorite selected" bindtap="removeShopFavorite" wx:if="{{item.collection == 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="new">
+                    <text>已收藏</text>
+                </view>
             </view>
         </view>
     </view>
@@ -38,13 +45,20 @@
             <text>人气热卖</text>
         </view>
         <view class="goods-container">
-            <view class="goods-box" wx:for-items="{{hotGoods}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.cid}}">
-                <view class="img-box">
+            <view class="goods-box" wx:for-items="{{hotGoods}}" wx:key="{{index}}">
+                <view class="img-box" bindtap="toDetailsTap" data-id="{{item.cid}}">
                     <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"/>
                 </view>
-                <view class="goods-brand">{{item.brandName}}</view>
-                <view class="goods-title">{{item.commName}}</view>
-                <view class="goods-price">RMB{{item.price}}</view>
+                <view class="goods-brand" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.brandName}}</view>
+                <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
+                <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">RMB{{item.price}}</view>
+
+                <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{item.collection != 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="hot">
+                    <text>收藏</text>
+                </view>
+                <view class="favorite selected" bindtap="removeShopFavorite" wx:if="{{item.collection == 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="hot">
+                    <text>已收藏</text>
+                </view>
             </view>
         </view>
     </view>

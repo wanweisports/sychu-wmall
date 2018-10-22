@@ -10,7 +10,6 @@ Page({
         duration: 1000,
         loadingHidden: false,
         swiperCurrent: 0,
-        goods: [],
 
         banners: [],
         newlyGoods: [],
@@ -51,6 +50,56 @@ Page({
                 content.setData({
                     hotGoods: res.data.list
                 });
+            }
+        });
+    },
+    addShopFavorite: function (e) {
+        let content = this;
+        let type = e.currentTarget.dataset.type;
+        let index = e.currentTarget.dataset.index;
+        let cid = e.currentTarget.dataset.id;
+
+        app.wxRequest("/user/saveCollection", {cid: cid}, function (res) {
+            if (res.code == 1) {
+                if (type == "new") {
+                    // content.data.newlyGoods[index].collection == 1;
+                    // content.setData({
+                    //     newlyGoods: content.data.newlyGoods
+                    // });
+                    content.getNewlyGoodsList();
+                }
+                if (type == "hot") {
+                    // content.data.hotGoods[index].collection == 1;
+                    // content.setData({
+                    //     hotGoods: content.data.hotGoods
+                    // });
+                    content.getHotGoodsList();
+                }
+            }
+        });
+    },
+    removeShopFavorite: function (e) {
+        let content = this;
+        let type = e.currentTarget.dataset.type;
+        let index = e.currentTarget.dataset.index;
+        let cid = e.currentTarget.dataset.id;
+
+        app.wxRequest("/user/cancelCollection", {cid: cid}, function (res) {
+            if (res.code == 1) {
+                if (type == "new") {
+                    content.getNewlyGoodsList();
+                    // content.data.newlyGoods[index].collection == 2;
+                    // content.setData({
+                    //     newlyGoods: content.data.newlyGoods
+                    // });
+                }
+                if (type == "hot") {
+                    // content.data.hotGoods[index].collection == 2;
+                    // content.setData({
+                    //     hotGoods: content.data.hotGoods
+                    // });
+                    content.getHotGoodsList();
+                }
             }
         });
     },

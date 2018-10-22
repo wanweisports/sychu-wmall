@@ -14,7 +14,7 @@ Page({
 
         curCoupon: null, // 当前选择使用的优惠券
         couponsIndex: 0,
-        serviceType: 2,
+        serviceType: "",
         cpid: 0,
         coupons: [],
         hasCoupons: false,
@@ -81,18 +81,18 @@ Page({
     },
 
     bindCouponsChange: function (e) {
-        let curCoupon = this.data.coupons[e.detail.value];
+        let index = e.detail.value;
 
-        console.log(e.detail.value)
+        if (index > 0) {
+            let curCoupon = this.data.coupons[index];
 
-        this.setData({
-            couponsIndex : e.detail.value,
-            curCoupon : curCoupon,
-            serviceType: 1,
-            cpid: curCoupon.cpid
-        });
+            this.setData({
+                couponsIndex : index,
+                curCoupon : curCoupon,
+                serviceType: 1,
+                cpid: curCoupon.cpid
+            });
 
-        if (!!curCoupon.cpid) {
             this.countCartSettle();
 
             if (this.data.ycoidIndex > 0) {
@@ -104,19 +104,19 @@ Page({
     },
 
      bindYcoidChange: function (e) {
-        let curYcoid = this.data.ycoidList[e.detail.value];
+        let index = e.detail.value;
 
-        console.log(e.detail.value)
+        if (index > 0) {
+            let curYcoid = this.data.ycoidList[index];
 
-        this.setData({
-            ycoidIndex : e.detail.value,
-            serviceType: 2
-        });
+            this.setData({
+                ycoidIndex : index,
+                serviceType: 2
+            });
 
-        if (curYcoid.ycoid > 0) {
             this.countCartSettle();
 
-            if (this.data.cpid > 0) {
+            if (this.data.couponsIndex > 0) {
                 this.setData({
                     cpid: "",
                     couponsIndex: 0
@@ -165,10 +165,16 @@ Page({
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
-            scids: content.data.goodsListId.join(","),
-            serviceType: content.data.serviceType,
-            cpid: content.data.cpid
+            scids: content.data.goodsListId.join(",")
         };
+
+        if (content.data.serviceType == 1) {
+            postData.serviceType = content.data.serviceType;
+            postData.cpid = content.data.cpid;
+        }
+        else if (content.data.serviceType == 2) {
+            postData.serviceType = content.data.serviceType;
+        }
 
         app.wxRequest("/order/saveOrder", postData, function (res) {
             // 清空购物车数据

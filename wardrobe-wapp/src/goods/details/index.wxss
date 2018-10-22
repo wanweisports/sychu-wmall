@@ -119,9 +119,13 @@ swiper-item image {
     font-size: 28rpx;
     color: #000000;
     padding: 30rpx;
-    text-align: center;
     margin-bottom: 16rpx;
 
+}
+
+.goods-colors .label-title {
+    padding: 30rpx 0 0;
+    margin-bottom: 16rpx;
 }
 
 .goods-text {
