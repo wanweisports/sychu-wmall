@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class DashboardController extends BaseController {
 
     private ModelAndView setModelAndView(ModelAndView modelAndView) {
-        return modelAndView.addObject("Admin", super.getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER));
+        return modelAndView; //modelAndView.addObject("Admin", super.getRequest().getSession().getAttribute(IPlatformConstant.LOGIN_USER_IN));
     }
 
     @Desc("工作面板")

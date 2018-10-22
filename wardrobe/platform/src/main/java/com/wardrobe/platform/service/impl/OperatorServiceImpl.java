@@ -1,5 +1,6 @@
 package com.wardrobe.platform.service.impl;
 
+import com.wardrobe.common.po.OperatorInfo;
 import com.wardrobe.platform.service.IOperatorService;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,8 @@ import java.util.Map;
 public class OperatorServiceImpl extends BaseService implements IOperatorService {
 
     @Override
-    public List<Map<String, Object>> get(){
-        return baseDao.queryBySql("SELECT * FROM sys_user");
+    public OperatorInfo loginIn(OperatorInfo operatorInfo){
+        return baseDao.queryByHqlFirst("FROM OperatorInfo WHERE operatorAccount = ?1 AND operatorPwd = ?2", operatorInfo.getOperatorAccount(), operatorInfo.getOperatorPwd());
     }
 	
 }

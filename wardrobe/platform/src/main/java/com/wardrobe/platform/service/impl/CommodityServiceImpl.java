@@ -48,10 +48,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
+        Integer uid = commodityInputView.getUid();
         PageBean pageBean = getCommoditys(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach((commodity) ->{
-            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+            Integer cid = StrUtil.objToInt(commodity.get("cid"));
+            commodity.put("resourcePath", getFmImg(cid));//0表示封面图
+            commodity.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
         });
         return pageBean;
     }
@@ -85,7 +88,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC, ci.cid");
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
@@ -218,7 +221,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC, ci.cid");
+        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
 
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }

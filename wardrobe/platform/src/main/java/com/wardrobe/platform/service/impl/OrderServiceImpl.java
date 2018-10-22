@@ -440,7 +440,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     @Override
     public void saveCancelOrder(int oid, int uid) throws Exception{
-        UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
+        UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oid);
         if(userOrderInfo.getUid() != uid) throw new MessageException("错误");
         userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_OTHER); //取消订单
         userOrderInfo.setUpdateTime(DateUtil.getNowDate());
