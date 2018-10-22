@@ -12,7 +12,7 @@ public class SysRankServiceImpl extends BaseService implements ISysRankService {
 
     @Override
     public Integer getRank(int scopeSum, int oldRank){
-        Number rank = baseDao.getUniqueResult("SELECT rank FROM sys_rank_info WHERE rankScore >= ?1 ORDER BY rid DESC LIMIT 1", scopeSum);
+        Number rank = baseDao.getUniqueResult("SELECT rank FROM sys_rank_info WHERE rankScore <= ?1 ORDER BY rid DESC LIMIT 1", scopeSum);
         if(rank != null){
             int r = rank.intValue();
             if(r > oldRank) return r;
