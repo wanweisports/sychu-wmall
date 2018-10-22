@@ -31,6 +31,7 @@ public class CommodityController extends BaseController {
     @ResponseBody
     @RequestMapping("index")
     public ResponseBean index(CommodityInputView commodityInputView){
+        commodityInputView.setUid(getUserInfo().getUid());
         return new ResponseBean(super.setPageInfo(commodityService.getCommodityList(commodityInputView)));
     }
 

@@ -29,7 +29,9 @@ public interface IPlatformConstant {
 	
     String time24 = " 23:59:59";
     
-    String LOGIN_USER = "LOGIN_USER";
+    String LOGIN_USER = "LOGIN_USER"; //api
+
+	String LOGIN_USER_IN = "LOGIN_USER_IN"; //admin
 
 	String AND = "&";
     

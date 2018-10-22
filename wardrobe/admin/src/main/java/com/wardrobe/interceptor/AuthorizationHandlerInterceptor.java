@@ -1,11 +1,15 @@
 package com.wardrobe.interceptor;
 
+import com.wardrobe.common.annotation.NotProtected;
+import com.wardrobe.common.constant.IPlatformConstant;
+import com.wardrobe.common.util.RequestUtil;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 	
@@ -20,21 +24,21 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
         
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 未标记不受保护权限的Controller和方法，在没有登录的情况下跳转至登录页面
-        /*NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
+        NotProtected classAnnotation = handlerMethod.getBeanType().getAnnotation(NotProtected.class);
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
         if (classAnnotation == null && methodAnnotation == null) {
-            if (request.getSession().getAttribute(IPlatformConstant.LOGIN_USER) == null) {
-                if(isAjax(request)){
+            if (request.getSession().getAttribute(IPlatformConstant.LOGIN_USER_IN) == null) {
+                if(InterceptorHelp.isAjax(request)){
                     PrintWriter out = response.getWriter();
-                    out.write(NOT_LOGIN); //这里必须是数字, 不能是字符串(字符串会解析成js变量)
+                    out.write(InterceptorHelp.NOT_LOGIN); //这里必须是数字, 不能是字符串(字符串会解析成js变量)
                     out.close();
                     return false;
                 }else {
-                	request.getRequestDispatcher(loginType(request)+"?returnUrl="+RequestUtil.getRequestURIQuery(request)).forward(request, response);    
+                	response.sendRedirect("/operator/login");
                     return false;// 终止拦截器继续传播
                 }
             }
-        }*/
+        }
         return true;
     }
 

@@ -36,17 +36,17 @@
         <li class="nav-item dropdown pr-4">
             <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
                 aria-haspopup="true" aria-expanded="false">
-                <img src="Content/images/avatars/6.jpg?v=${static_resource_version}" class="img-avatar" alt="${Admin.realName}">
-                <span class="d-md-down-none">${Admin.realName}</span>
+                <img src="Content/images/avatars/6.jpg?v=${static_resource_version}" class="img-avatar" alt="${LOGIN_USER_IN.operatorName}">
+                <span class="d-md-down-none">${LOGIN_USER_IN.operatorName}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="/admin/settings/profile">
+                <%--<a class="dropdown-item" href="/admin/settings/profile">
                     <i class="fa fa-pencil"></i> 完善信息
                 </a>
                 <a class="dropdown-item" href="/admin/settings/profile">
                     <i class="fa fa-key"></i> 修改密码
-                </a>
-                <a class="dropdown-item" href="/admin/passport/logout">
+                </a>--%>
+                <a class="dropdown-item" href="/operator/loginLogout">
                     <i class="fa fa-lock"></i> 退出登录
                 </a>
             </div>

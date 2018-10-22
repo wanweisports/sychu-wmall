@@ -40,7 +40,7 @@ public class MobileController extends BaseController {
             //operatorService.saveLastLoginTime(operator.getId());
             super.getRequest().getSession().setAttribute(IPlatformConstant.LOGIN_USER, operator);*/
             //return new ResponseBean(true);
-            return new ResponseBean(new HashMap(){{put("users", operatorService.get());}});
+            return new ResponseBean(/*new HashMap(){{put("users", operatorService.get());}}*/true);
         } catch (MessageException e) {
             e.printStackTrace();
             return new ResponseBean(e.getMessage());
@@ -50,7 +50,7 @@ public class MobileController extends BaseController {
         }
     }
 
-    // 用户退出
+    /*// 用户退出
     @ResponseBody
     @RequestMapping("passport/userLogout")
     public ResponseBean userLogout() {
@@ -64,6 +64,6 @@ public class MobileController extends BaseController {
             e.printStackTrace();
             return new ResponseBean(false);
         }
-    }
+    }*/
 
 }

@@ -194,7 +194,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         DiscountBean discountBean = new DiscountBean();
         UserAccount userAccount = userAccountService.getUserAccount(uid);
 
-        int freight = commodityCount >= 2 ? IPlatformConstant.FREIGHT : 0;//运费
+        int freight = commodityCount < 2 ? IPlatformConstant.FREIGHT : 0;//运费（满两件包邮，只买一件商品的运费写￥12）
         discountBean.setFreight(freight);
         discountBean.setSumOldPrice(StrUtil.roundKeepTwo(sumPrice));
 
