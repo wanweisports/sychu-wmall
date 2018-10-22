@@ -53,11 +53,9 @@
     </view>
 
     <view class="my-item" bindtap="inviteFriends" data-code="{{userInfo.inviteCode}}">邀请好友</view>
-    <view class="my-item" open-type="contact">
+    <view class="my-item">
         联系客服<text class="right-text"></text>
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
-
-    <button open-type="contact" /> 
 </view>
