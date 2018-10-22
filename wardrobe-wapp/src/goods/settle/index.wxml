@@ -12,7 +12,7 @@
             <view class="list-title">商品列表</view>
             <view class="a-goods" wx:for-items="{{goodsList}}" wx:key="{{index}}">
                 <view class="img-box">
-                    <image src="{{item.resourcePath}}" class="img" mode="aspectFit"></image>
+                    <image src="{{item.resourcePath}}" class="img" mode="aspectFit" lazy-load="true"></image>
                 </view>
                 <view class="text-box">
                     <view class="arow arow01">
@@ -30,7 +30,7 @@
             <view class="row-box">
                 <view class="row-label">配送方式</view>
                 <view class="right-text" wx:if="{{yunPrice > 0}}">快递</view>
-                <view class="right-text" wx:if="{{yunPrice == 0}}">包邮</view>
+                <view class="right-text" wx:if="{{yunPrice == 0}}">满2件包邮</view>
             </view>
             <view class="row-box" wx:if="{{hasYcoid}}">
                 <view class="row-label">使用薏米</view>

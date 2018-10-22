@@ -25,6 +25,11 @@ Page({
                     });
                     content.getWardrobeOrderDetail(data[0].roid);
                 }
+                else {
+                    content.setData({
+                        hasWardrobeInfo: false
+                    });
+                }
             }
         });
     },
@@ -67,15 +72,18 @@ Page({
             content: '',
             success: function (res) {
                 if (res.confirm) {
-                    app.wxRequest("/order/cancelReserveOrder", {roid: content.data.wardrobeInfo.roid}, function (res) {});
+                    app.wxRequest("/order/cancelReserveOrder", {roid: content.data.wardrobeInfo.roid}, function (res) {
+                        if (res.code == 1) {
+                            app.showToast("取消预约成功", "success");
 
-                    content.getWardrobeOrder();
+                            content.getWardrobeOrder();
+                        }
+                        else {
+                            app.showToast("取消预约失败", "none");
+                        }
+                    });
                 }
             }
-        });
-
-        app.wxRequest("/order/cancelReserveOrder", {roid: this.data.wardrobeInfo.roid}, function (res) {
-            if (res.code == 1) {}
         });
     },
 

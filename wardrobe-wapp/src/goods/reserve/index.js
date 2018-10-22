@@ -169,6 +169,15 @@ Page({
             return;
         }
 
+        if ((new Date(reserveEndTime)).getTime() - (new Date(reserveStartTime)).getTime() > (2 * 60 * 60 * 1000)) {
+            wx.showModal({
+                title: '提 示',
+                content: '预约时长不能超过2小时！！',
+                showCancel: false
+            });
+            return;
+        }
+
 
         let postData = {
             reserveStartTime : reserveStartTime,
@@ -181,6 +190,9 @@ Page({
             if (res.code == 1) {
                 app.clearCookie("shopOrderInfo");
                 app.redirect("/pages/user/reserve/index", "navigateTo");
+            }
+            else {
+                app.showToast(res.message || "预约失败");
             }
 
             // 配置模板消息推送

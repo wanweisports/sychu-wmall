@@ -30,9 +30,16 @@ Page({
             content: '',
             success: function (res) {
                 if (res.confirm) {
-                    app.wxRequest("/order/cancelOrder", {oid: orderId}, function (res) {});
+                    app.wxRequest("/order/cancelOrder", {oid: orderId}, function (res) {
+                        if (res.code == 1) {
+                            app.showToast("取消订单成功", "success");
 
-                    content.orderList(1);
+                            content.orderList(1);
+                        }
+                        else {
+                            app.showToast("取消订单失败", "none");
+                        }
+                    });
                 }
             }
         });
@@ -50,16 +57,29 @@ Page({
         page = page || 1;
 
         app.wxRequest("/order/userOrders", {page: page}, function (res) {
+            let data = res.data;
+
             if (res.code == 1) {
-                content.setData({
-                    lastPage: res.data.lastPage,
-                    currentPage: res.data.currentPage,
-                    orderList : res.data.list
-                });
+                if (page == 1) {
+                    content.setData({
+                        orderList: data.list,
+                        lastPage: data.lastPage,
+                        currentPage: data.currentPage
+                    });
+                }
+                else {
+                    content.setData({
+                        orderList: content.data.orderList.concat(data.list),
+                        lastPage: data.lastPage,
+                        currentPage: data.currentPage
+                    });
+                }
             }
             else {
                 content.setData({
-                    orderList : null
+                    orderList: null,
+                    lastPage: 0,
+                    currentPage: 1
                 });
             }
         });

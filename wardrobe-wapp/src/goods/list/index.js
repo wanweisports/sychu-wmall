@@ -191,6 +191,41 @@ Page({
         this.getGoodsList(1);
     },
 
+    addShopFavorite: function (e) {
+        let content = this;
+        let cid = e.currentTarget.dataset.id;
+
+        app.wxRequest("/user/saveCollection", {cid: cid}, function (res) {
+            if (res.code == 1) {
+                content.data.goods.forEach(function (item) {
+                    if (item.cid == cid) {
+                        item.collection = 1;
+                    }
+                });
+                content.setData({
+                    goods: content.data.goods
+                });
+            }
+        });
+    },
+    removeShopFavorite: function (e) {
+        let content = this;
+        let cid = e.currentTarget.dataset.id;
+
+        app.wxRequest("/user/cancelCollection", {cid: cid}, function (res) {
+            if (res.code == 1) {
+                content.data.goods.forEach(function (item) {
+                    if (item.cid == cid) {
+                        item.collection = 2;
+                    }
+                });
+                content.setData({
+                    goods: content.data.goods
+                });
+            }
+        });
+    },
+
     getGoodsList: function (page) {
         let content = this;
         let conditions = content.getSelectedItems();
@@ -198,11 +233,29 @@ Page({
         conditions.page = page || 1;
 
         app.wxRequest("/commodity/index", conditions, function (res) {
+            let data = res.data;
+
             if (res.code == 1) {
+                if (conditions.page == 1) {
+                    content.setData({
+                        goods: data.list,
+                        lastPage: data.lastPage,
+                        currentPage: data.currentPage
+                    });
+                }
+                else {
+                    content.setData({
+                        goods: content.data.goods.concat(data.list),
+                        lastPage: data.lastPage,
+                        currentPage: data.currentPage
+                    });
+                }
+            }
+            else {
                 content.setData({
-                    goods: content.data.goods.concat(res.data.list),
-                    lastPage: res.data.lastPage,
-                    currentPage: res.data.currentPage
+                    goods: [],
+                    lastPage: 0,
+                    currentPage: 1
                 });
             }
         });

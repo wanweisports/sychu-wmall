@@ -49,7 +49,8 @@
     <view class="goods-des-info">
         <view class="label-title">售后服务</view>
         <view class="goods-text">
-            <view>衣否支持7天无理由退换货。详情请关注“衣否”公众号，联系客服</view>
+            <view>衣否支持7天无理由退换货。</view>
+            <view>详情请关注“衣否”公众号，联系客服。</view>
         </view>
     </view>
 

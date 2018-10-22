@@ -2,8 +2,7 @@
     <view class="page__bd">
         <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{showTopTips}}</view>
 
-        <view class="weui-cells__tips">欢迎来到衣否</view>
-        <view class="weui-cells__tips">请完善以下信息以便为您选出更满意的衣服：</view>
+        <view class="weui-cells__tips">请准确填写生日信息以便会员享受生日福利：</view>
 
         <view class="weui-cells__title">基本信息</view>
         <view class="weui-cells weui-cells_after-title">

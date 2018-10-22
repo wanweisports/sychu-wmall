@@ -32,7 +32,7 @@ Page({
                         //pic,name,label,price,number,left,active
                         data.list[i].pic = data.list[i].resourcePath;
                         data.list[i].name = data.list[i].commName;
-                        data.list[i].label = data.list[i].colorName;
+                        data.list[i].label = "颜色：" + data.list[i].colorName + "、尺码：" + data.list[i].size;
                         data.list[i].number = data.list[i].count;
                         data.list[i].left = '';
                         data.list[i].active = false;
@@ -74,9 +74,6 @@ Page({
     },
     onLoad: function () {
         this.initEleWidth();
-        this.onShow();
-    },
-    onShow: function () {
         this.getShoppingCart();
     },
     touchS: function (e) {
