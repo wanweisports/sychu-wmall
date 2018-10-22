@@ -53,7 +53,7 @@ public interface IPlatformConstant {
 
 	int INIT_USER_SCORE = 0;
 
-	int FREIGHT = 12; //两件包邮，其余运费写12
+	int FREIGHT = 13; //两件包邮，其余运费写13（顺丰）
 
 	String UNDERLINE = "_";
 
