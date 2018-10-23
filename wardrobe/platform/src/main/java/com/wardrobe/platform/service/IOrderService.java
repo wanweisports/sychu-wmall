@@ -48,6 +48,8 @@ public interface IOrderService {
 
     Map<String, Object> getUserOrderDetailIn(int oid);
 
+    Map<String, Object> getUserOrderReservationDetailIn(int roid);
+
     PageBean getReserveOrderInfoList(OrderInputView orderInputView);
 
     List<Map<String, Object>> getReserveOrderByTime(String time);

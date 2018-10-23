@@ -46,6 +46,13 @@ public class OrdersController extends BaseController {
         return "Orders/Reservation";
     }
 
+    @Desc("预约订单详情")
+    @RequestMapping(value = "/reservation/detail")
+    public String renderOrdersReservationDetail(int roid, Model model) {
+        model.addAllAttributes(orderService.getUserOrderReservationDetailIn(roid));
+        return "Orders/ReservationDetail";
+    }
+
     @Desc("删除预约订单")
     @ResponseBody
     @RequestMapping("/reservation/delete")

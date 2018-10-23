@@ -450,7 +450,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
                     commodityStock.setNum(userOrderDetail.getItemCount());
                     commodityStock.setCreateTime(nowDate);
                     commodityStock.setOperatorId(userOrderInfo.getUid());
-                    commodityStock.setType(IDBConstant.COMM_STOCK_TYPE_SUB);
+                    commodityStock.setType(IDBConstant.COMM_STOCK_TYPE_SALE);
                     commodityStock.setRemark("购买");
                     baseDao.save(commodityStock, null);
                 }
@@ -494,9 +494,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(StrUtil.isNotBlank(type)){
             whereSql.append(" AND ct.type = :type");
         }
-        if(commId != null){
+        /*if(commId != null){
             whereSql.append(" AND ci.cid = :commId");
-        }
+        }*/
         if(StrUtil.isNotBlank(startTime)){
             whereSql.append(" AND ct.createTime >= :startTime");
         }

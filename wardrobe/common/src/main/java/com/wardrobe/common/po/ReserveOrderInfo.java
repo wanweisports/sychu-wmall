@@ -3,6 +3,7 @@ package com.wardrobe.common.po;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,6 +25,8 @@ public class ReserveOrderInfo {
     private Timestamp updateTime;
 
     private Integer did;
+
+    private List<ReserveOrderDetail> reserveOrderDetails;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -163,6 +166,15 @@ public class ReserveOrderInfo {
 
     public void setDid(Integer did) {
         this.did = did;
+    }
+
+    @Transient
+    public List<ReserveOrderDetail> getReserveOrderDetails() {
+        return reserveOrderDetails;
+    }
+
+    public void setReserveOrderDetails(List<ReserveOrderDetail> reserveOrderDetails) {
+        this.reserveOrderDetails = reserveOrderDetails;
     }
 
     @Override
