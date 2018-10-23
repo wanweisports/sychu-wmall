@@ -46,6 +46,8 @@ public interface IOrderService {
 
     PageBean getUserOrderListIn(OrderInputView orderInputView);
 
+    Map<String, Object> getUserOrderDetailIn(int oid);
+
     PageBean getReserveOrderInfoList(OrderInputView orderInputView);
 
     List<Map<String, Object>> getReserveOrderByTime(String time);

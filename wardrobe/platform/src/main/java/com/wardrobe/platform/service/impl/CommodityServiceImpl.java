@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.aliyun.OssClient;
+import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
@@ -122,7 +123,12 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public String getFmImg(int cid){
-        SysResources sysResources = resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0);  //0表示封面图
+        return getFmImg(cid, true);
+    }
+
+    @Override
+    public String getFmImg(int cid, boolean isOss){
+        SysResources sysResources = resourceService.getResourceByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0, isOss);  //0表示封面图
         return sysResources != null ? sysResources.getResourcePath() : StrUtil.EMPTY;
     }
 
@@ -452,6 +458,19 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
     }
 
+    @Desc("写入商品销售总数")
+    @Override
+    public void saveCommoditySaleCount(UserOrderInfo userOrderInfo){
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        if(userOrderDetails != null){
+            for(UserOrderDetail userOrderDetail : userOrderDetails){
+                CommodityInfo commodityInfo = getCommodityInfo(userOrderDetail.getCid());
+                commodityInfo.setSaleCount(commodityInfo.getSaleCount() + userOrderDetail.getItemCount());
+                baseDao.save(commodityInfo, commodityInfo.getCid());
+            }
+        }
+    }
+
     @Override
     public PageBean getStockListIn(CommodityInputView commodityInputView){
         PageBean pageBean = getStocks(commodityInputView);
@@ -465,6 +484,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     private PageBean getStocks(CommodityInputView commodityInputView){
         String type = commodityInputView.getType();
+        Integer commId = commodityInputView.getCommId();
         String startTime = commodityInputView.getStartTime();
         String endTime = commodityInputView.getEndTime();
 
@@ -473,6 +493,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         StringBuilder whereSql = new StringBuilder(" WHERE ct.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
         if(StrUtil.isNotBlank(type)){
             whereSql.append(" AND ct.type = :type");
+        }
+        if(commId != null){
+            whereSql.append(" AND ci.cid = :commId");
         }
         if(StrUtil.isNotBlank(startTime)){
             whereSql.append(" AND ct.createTime >= :startTime");

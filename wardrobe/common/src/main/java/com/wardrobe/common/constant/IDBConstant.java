@@ -38,8 +38,6 @@ public interface IDBConstant {
 
     String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小
 
-    String USER_COUPON = "USER_COUPON"; //优惠券类型
-
     String COMM_STATUS = "COMM_STATUS"; //商品状态
 
     String COMM_STOCK_TYPE = "COMM_STOCK_TYPE"; //商品库存变更类型
@@ -57,6 +55,7 @@ public interface IDBConstant {
     String ORDER_STATUS_RETURN = "3";     //退款成功
     String ORDER_STATUS_REFUSE = "4";     //退款拒绝
 
+    String USER_COUPON = "USER_COUPON"; //优惠券类型
     String COUPON_SERVICE_TYPE = "100008"; //满减优惠类型
 
 }

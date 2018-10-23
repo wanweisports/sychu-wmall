@@ -23,6 +23,8 @@ public interface ICommodityService {
 
     String getFmImg(int cid);
 
+    String getFmImg(int cid, boolean isOss);
+
     CommodityInfo getCommodityInfo(int cid);
 
     CommodityColor getCommodityColor(int coid);
@@ -55,6 +57,8 @@ public interface ICommodityService {
     void saveStock(CommodityStock commodityStock, boolean add);
 
     void saveOrderSubStock(UserOrderInfo userOrderInfo);
+
+    void saveCommoditySaleCount(UserOrderInfo userOrderInfo);
 
     PageBean getStockListIn(CommodityInputView commodityInputView);
 

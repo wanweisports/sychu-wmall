@@ -32,9 +32,13 @@ public interface IResourceService {
 
     SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq);
 
+    SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq, boolean isOss);
+
     List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType);
 
     List<SysResources> getResourcesByParentId(int resourceServiceParentId, String resourceServiceType, int notResourceSeq);
+
+    String parseImgPath(String img);
 
     String getResourcePath(int resourceServiceId, String resourceServiceType);
 
