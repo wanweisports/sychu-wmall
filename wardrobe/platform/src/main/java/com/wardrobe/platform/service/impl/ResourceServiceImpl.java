@@ -99,7 +99,16 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
 
     @Override
     public SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq){
-        return parseResourcePath(baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3 ORDER BY resourceId DESC", resourceServiceParentId, resourceServiceType, resourceSeq));
+        return getResourceByParentId(resourceServiceParentId, resourceServiceType, resourceSeq, true);
+    }
+
+    @Override
+    public SysResources getResourceByParentId(int resourceServiceParentId, String resourceServiceType, int resourceSeq, boolean isOss){
+        SysResources sysResourcess = baseDao.queryByHqlFirst("FROM SysResources WHERE resourceServiceParentId = ?1 AND resourceServiceType = ?2 AND resourceSeq = ?3 ORDER BY resourceId DESC", resourceServiceParentId, resourceServiceType, resourceSeq);
+        if(isOss) {
+            return parseResourcePath(sysResourcess);
+        }
+        return sysResourcess;
     }
 
     @Override
@@ -126,6 +135,14 @@ public class ResourceServiceImpl extends BaseService implements IResourceService
             resource.setResourcePath(OssClient.getImgPath(resource.getResourcePath()));
         }
         return resource;
+    }
+
+    @Override
+    public String parseImgPath(String img){
+        if(img != null){
+            return OssClient.getImgPath(img);
+        }
+        return img;
     }
 
     @Override

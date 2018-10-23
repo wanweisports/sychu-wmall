@@ -33,7 +33,8 @@ public class OrdersController extends BaseController {
 
     @Desc("订单详情")
     @RequestMapping(value = "/detail")
-    public String renderOrdersDetail() {
+    public String renderOrdersDetail(int oid, Model model) {
+        model.addAllAttributes(orderService.getUserOrderDetailIn(oid));
         return "Orders/Detail";
     }
 

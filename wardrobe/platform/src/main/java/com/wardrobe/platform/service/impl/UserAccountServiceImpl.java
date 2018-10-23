@@ -56,7 +56,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         if(userAccount != null) {
             int ycoid = (int) priceSum / 100;
             if(ycoid > 0) {
-                userAccount.setYcoid((int) priceSum * IPlatformConstant.ADD_USER_YCOID);
+                userAccount.setYcoid(userAccount.getYcoid() + ((int) priceSum * IPlatformConstant.ADD_USER_YCOID));
                 baseDao.save(userAccount, uid);
             }
         }

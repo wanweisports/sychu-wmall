@@ -62,7 +62,9 @@
                                 <tbody>
                                     <c:forEach var="o" items="${page.list}">
                                         <tr>
-                                            <td>${o.ono}</td>
+                                            <td>
+                                                <a href="/admin/orders/detail?oid=${o.oid}" target="_blank">${o.ono}</a>
+                                            </td>
                                             <td>${o.createTime}</td>
                                             <td>${o.priceSum}</td>
                                             <td>${o.nickname}</td>

@@ -32,4 +32,6 @@ public interface IUserCouponService {
 
     void updateUseUserCouponInfo(int cpid) throws ParseException;
 
+    String getUserCouponDescIn(Integer cpid);
+
 }

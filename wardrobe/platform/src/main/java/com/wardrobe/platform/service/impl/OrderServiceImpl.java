@@ -51,6 +51,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Autowired
     private IUserCouponService userCouponService;
 
+    @Autowired
+    private IResourceService resourceService;
+
     private UserOrderInfo getUserOrderInfo(int oid){
         return baseDao.getToEvict(UserOrderInfo.class, oid);
     }
@@ -160,7 +163,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
             userOrderDetail.setOid(oid);
-            userOrderDetail.setItemImg(commodityService.getFmImg(cid));
+            userOrderDetail.setItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(userOrderDetail, null);
 
             priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
@@ -248,7 +251,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), 1)));
             userOrderDetail.setOid(oid);
-            userOrderDetail.setItemImg(commodityService.getFmImg(cid));
+            userOrderDetail.setItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(userOrderDetail, null);
 
             priceSum = Arith.add(priceSum, userOrderDetail.getItemPriceSum().doubleValue());
@@ -623,7 +626,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oId);
                 if(!IDBConstant.LOGIC_STATUS_YES.equals(userOrderInfo.getPayStatus())){ //未支付状态
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
+                    userOrderInfo.setPayTime(DateUtil.getNowDate());
                     baseDao.save(userOrderInfo, userOrderInfo.getOid());
+                    //交易流水
                     userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
                     //累加积分与衣橱币(衣米)
                     //每消费或充值1元，获得1积分。消费金额按照商品订单实际支付金额（仅微信支付）计算，舍弃订单金额小数位。
@@ -650,14 +655,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     //写入库存日志
                     commodityService.saveOrderSubStock(userOrderInfo);
 
+                    //写入商品已售多少件
+                    commodityService.saveCommoditySaleCount(userOrderInfo);
+
                     //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
                     //充值类型需要处理用户账户金额
                     /*synchronized (OrderServiceImpl.class) {
                         if (IDBConstant.TRANSACTIONS_TYPE_ZF.equals(userOrderInfo.getOrderType())) {
                             //userAccountService.addRechargePrice(userOrderInfo.getUid(), userOrderInfo.getPayPrice());
                         }
-                        //交易流水
-                        userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
                     }*/
                 }
             }else{
@@ -723,6 +729,22 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             map.put("statusName", dictService.getDictValue(IDBConstant.ORDER_STATUS, StrUtil.objToStr(map.get("status"))));
         });
         return pageBean;
+    }
+
+    @Override
+    public Map<String, Object> getUserOrderDetailIn(int oid){
+        UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oid);
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        userOrderDetails.parallelStream().forEach(userOrderDetail -> {
+            userOrderDetail.setItemImg(resourceService.parseImgPath(userOrderDetail.getItemImg()));
+        });
+        userOrderInfo.setPayStatus(dictService.getDictValue(IDBConstant.ORDER_PAY_STATUS, userOrderInfo.getPayStatus()));
+        userOrderInfo.setStatus(dictService.getDictValue(IDBConstant.ORDER_STATUS, userOrderInfo.getStatus()));
+
+        Map<String, Object> data = new HashMap<>(2, 1);
+        data.put("order", userOrderInfo);
+        data.put("couponDesc", userCouponService.getUserCouponDescIn(userOrderInfo.getCpid()));
+        return data;
     }
 
     private PageBean getUserOrdersIn(OrderInputView orderInputView){

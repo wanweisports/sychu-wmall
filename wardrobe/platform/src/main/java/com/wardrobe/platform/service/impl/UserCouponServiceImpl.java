@@ -3,6 +3,7 @@ package com.wardrobe.platform.service.impl;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.SysCouponRule;
+import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserCouponInfo;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
@@ -61,7 +62,7 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
                 desc.setLength(0);
                 Object dueTime = map.get("dueTime");
                 map.put("dueTime", dueTime != null ? dueTime.toString().substring(0, dueTime.toString().lastIndexOf(" ")) : StrUtil.EMPTY);
-                if(IDBConstant.COUPON_SERVICE_TYPE.equals(map.get("serviceType").toString())) {
+                if (IDBConstant.COUPON_SERVICE_TYPE.equals(map.get("serviceType").toString())) {
                     map.put("dictValue", desc.append("满").append(StrUtil.objToInt(map.get("fullPrice"))).append("元可使用").toString());
                     desc.setLength(0);
                     map.put("dictValue2", desc.append("满").append(StrUtil.objToInt(map.get("fullPrice"))).append("减").append(StrUtil.objToInt(map.get("couponPrice"))).toString());
@@ -115,10 +116,27 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
     @Override
     public void updateUseUserCouponInfo(int cpid) throws ParseException {
         if (cpid > 0) {
-            UserCouponInfo userCouponInfo = baseDao.getToEvict(UserCouponInfo.class, cpid);
+            UserCouponInfo userCouponInfo = getUserCouponInfo(cpid);
             userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
             baseDao.save(userCouponInfo, userCouponInfo.getStatus());
         }
+    }
+
+    private UserCouponInfo getUserCouponInfo(int cpid){
+        return baseDao.getToEvict(UserCouponInfo.class, cpid);
+    }
+
+    @Override
+    public String getUserCouponDescIn(Integer cpid){
+        if(cpid != null) {
+            UserCouponInfo userCouponInfo = getUserCouponInfo(cpid);
+            if (userCouponInfo != null) {
+                if (IDBConstant.COUPON_SERVICE_TYPE.equals(userCouponInfo.getServiceType().toString())) {
+                    return new StringBuilder().append("满").append(StrUtil.objToInt(userCouponInfo.getFullPrice())).append("减").append(StrUtil.objToInt(userCouponInfo.getCouponPrice())).toString();
+                }
+            }
+        }
+        return StrUtil.EMPTY;
     }
 
 }
