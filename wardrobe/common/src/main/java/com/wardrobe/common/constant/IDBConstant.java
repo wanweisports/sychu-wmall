@@ -41,8 +41,9 @@ public interface IDBConstant {
     String COMM_STATUS = "COMM_STATUS"; //商品状态
 
     String COMM_STOCK_TYPE = "COMM_STOCK_TYPE"; //商品库存变更类型
-    String COMM_STOCK_TYPE_ADD = "10"; //商品库存增加
-    String COMM_STOCK_TYPE_SUB = "20"; //商品库存减少
+    String COMM_STOCK_TYPE_ADD = "10"; //商品库存入库
+    String COMM_STOCK_TYPE_SUB = "20"; //商品库存出库
+    String COMM_STOCK_TYPE_SALE = "30"; //商品库存销售
 
     String ORDER_PAY_STATUS = "ORDER_PAY_STATUS"; //订单支付状态
     String ORDER_PAY_STATUS_YES = "1"; //已支付
@@ -57,5 +58,9 @@ public interface IDBConstant {
 
     String USER_COUPON = "USER_COUPON"; //优惠券类型
     String COUPON_SERVICE_TYPE = "100008"; //满减优惠类型
+
+    String RESERVE_ORDER_STATUS = "RESERVE_ORDER_STATUS"; //预约单状态
+    String RESERVE_ORDER_STATUS_YES = "1"; //正常
+    String  RESERVE_ORDER_STATUS_NO = "2"; //取消
 
 }

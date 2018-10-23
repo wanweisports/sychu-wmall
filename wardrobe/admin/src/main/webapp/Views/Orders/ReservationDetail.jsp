@@ -42,7 +42,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>订单详情</strong>
+                            <strong>预约订单详情</strong>
                             <small>Order Information</small>
                         </div>
                         <div class="card-block">
@@ -50,51 +50,15 @@
                                 <tbody>
                                 <tr>
                                     <th>订单编号：</th>
-                                    <td>${order.ono}</td>
-                                    <th>订单类型：</th>
-                                    <td colspan="5">
-                                        <c:if test="${order.orderType=='1'}">
-                                            商品订单
-                                        </c:if>
-                                    </td>
-                                </tr>
+                                    <td colspan="5">${order.rno}</td>
                                 <tr>
-                                    <th>订单总金额：</th>
-                                    <td>${order.priceSum}</td>
-                                    <th>订单支付金额：</th>
-                                    <td colspan="5">${order.payPrice}</td>
-                                </tr>
-                                <tr>
-                                    <th>支付状态：</th>
-                                    <td>${order.payStatus}</td>
                                     <th>订单状态：</th>
                                     <td>${order.status}</td>
                                 </tr>
-                                <tr>
-                                    <th>支付时间</th>
-                                    <td colspan="5">${order.payTime}</td>
-                                </tr>
-                                <tr>
-                                    <th>收货人姓名：</th>
-                                    <td>${order.expressName}</td>
-                                    <th>收货人电话：</th>
-                                    <td colspan="5">${order.expressMobile}</td>
-                                </tr>
-                                <tr>
-                                    <th>收货人详细地址：</th>
-                                    <td colspan="5">${order.expressAddress}</td>
-                                </tr>
-                                <tr>
-                                    <th>运费：</th>
-                                    <td colspan="5">${order.freight}</td>
-                                </tr>
-                                <tr>
-                                    <th>使用优惠券：</th>
-                                    <td colspan="5">${couponDesc}</td>
-                                </tr>
-                                <tr>
-                                    <th>使用薏米：</th>
-                                    <td colspan="5">${order.ycoid}</td>
+                                    <th>预约开始时间：</th>
+                                    <td>${order.reserveStartTime}</td>
+                                    <th>预约结束时间：</th>
+                                    <td colspan="5">${order.reserveEndTime}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -121,21 +85,21 @@
                                 </tr>
                                 </thead>
                                 <tbody id="tbody">
-                                    <c:forEach var="d" items="${order.userOrderDetails}">
-                                    <tr data-id="${d.odid}">
+                                <c:forEach var="d" items="${order.reserveOrderDetails}">
+                                    <tr data-id="${d.rdid}">
                                         <td>
-                                            <img class="img-rounded" src="${d.itemImg}" width="100">
+                                            <img class="img-rounded" src="${d.resItemImg}" width="100">
                                         </td>
                                         <td>${d.cid}</td>
                                         <td>${d.sid}</td>
-                                        <td>${d.itemName}</td>
-                                        <td>${d.itemColor}</td>
-                                        <td>${d.itemSize}</td>
-                                        <td>${d.itemPrice}</td>
-                                        <td>${d.itemCount}</td>
-                                        <td>${d.itemPriceSum}</td>
+                                        <td>${d.resItemName}</td>
+                                        <td>${d.resItemColor}</td>
+                                        <td>${d.resItemSize}</td>
+                                        <td>${d.resItemPrice}</td>
+                                        <td>${d.resItemCount}</td>
+                                        <td>${d.resItemPriceSum}</td>
                                     </tr>
-                                    </c:forEach>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>

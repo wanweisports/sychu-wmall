@@ -62,7 +62,9 @@
                                 </thead>
                                     <c:forEach var="r" items="${page.list}">
                                         <tr>
-                                            <td>${r.rno}</td>
+                                            <td>
+                                                <a href="/admin/orders/reservation/detail?roid=${r.roid}">${r.rno}</a>
+                                            </td>
                                             <td>${r.deviceName}（${r.lockName}）</td>
                                             <td>${r.createTime}</td>
                                             <td>${r.reserveStartTime}</td>

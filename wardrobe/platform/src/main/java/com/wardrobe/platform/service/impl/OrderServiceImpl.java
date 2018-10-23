@@ -72,6 +72,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return userOrderInfo;
     }
 
+    private ReserveOrderInfo getUserOrderReserveInfoAndDetails(int roid){
+        ReserveOrderInfo userOrderInfo = getReserveOrderInfo(roid);
+        userOrderInfo.setReserveOrderDetails(getReserveOrderDetails(roid));
+        return userOrderInfo;
+    }
+
     private List<UserOrderDetail> getUserOrderDetails(int oid){
         return baseDao.queryByHql("FROM UserOrderDetail WHERE oid = ?1", oid);
     }
@@ -744,6 +750,20 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Map<String, Object> data = new HashMap<>(2, 1);
         data.put("order", userOrderInfo);
         data.put("couponDesc", userCouponService.getUserCouponDescIn(userOrderInfo.getCpid()));
+        return data;
+    }
+
+    @Override
+    public Map<String, Object> getUserOrderReservationDetailIn(int roid){
+        ReserveOrderInfo userOrderInfo = getUserOrderReserveInfoAndDetails(roid);
+        List<ReserveOrderDetail> userOrderDetails = userOrderInfo.getReserveOrderDetails();
+        userOrderDetails.parallelStream().forEach(userOrderDetail -> {
+            userOrderDetail.setResItemImg(resourceService.parseImgPath(userOrderDetail.getResItemImg()));
+        });
+        userOrderInfo.setStatus(dictService.getDictValue(IDBConstant.RESERVE_ORDER_STATUS, userOrderInfo.getStatus()));
+
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("order", userOrderInfo);
         return data;
     }
 
