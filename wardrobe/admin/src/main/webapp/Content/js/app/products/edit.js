@@ -298,11 +298,18 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
 
     /* img *************************************************/
     var $fileImages = $(".product-image-file");
+    var resourceIds = [];
     $fileImages.on("change", function (e) {
         e.preventDefault();
 
         var $this = $(this);
         var file = $this[0].files[0];
+
+        if ($this.prevAll(".product-image-remove").attr("data-id")) {
+            resourceIds.push($this.prevAll(".product-image-remove").attr("data-id"));
+            $this.prevAll(".product-image-remove").removeAttr("data-id");
+        }
+
         var fileReader = new FileReader();
         fileReader.onloadend = function () {
             if (fileReader.readyState == fileReader.DONE) {
@@ -313,7 +320,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         fileReader.readAsDataURL(file);
     });
 
-    var resourceIds = [];
     var $fileImagesRemove = $(".product-image-remove");
     $fileImagesRemove.on("click", function (e) {
         e.preventDefault();
