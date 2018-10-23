@@ -15,6 +15,9 @@ Page({
     toListPage:function(){
         app.redirect("/pages/goods/list/index", "switchTab");
     },
+    saveShopCartAdd: function (sid, num, success) {
+        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: 2, count: num}, success, function () {});
+    },
     // 获取购物车列表
     getShoppingCart: function () {
         let content = this;
@@ -219,25 +222,43 @@ Page({
 
         this.setGoodsList(this.getSaveHide(),this.totalPrice(),!currentAllSelect,this.noSelect(),list);
     },
-    jiaBtnTap:function(e){
-        var index = e.currentTarget.dataset.index;
-        var list = this.data.goodsList.list;
-        if(index!=="" && index != null){
-            if(list[parseInt(index)].number<10){
-                list[parseInt(index)].number++;
-                this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+    jiaBtnTap: function (e) {
+        let content = this;
+        let index = e.currentTarget.dataset.index;
+        let list = this.data.goodsList.list;
+
+        this.saveShopCartAdd(list[parseInt(index)].sid, 1, function (res) {
+            if (res.code == 1) {
+                if (index !== "" && index != null) {
+                    if (list[parseInt(index)].number < 10) {
+                        list[parseInt(index)].number++;
+                        content.setGoodsList(content.getSaveHide(), content.totalPrice(), content.allSelect(), content.noSelect(), list);
+                    }
+                }
             }
-        }
+            else {
+                app.showToast(res.message);
+            }
+        });
     },
-    jianBtnTap:function(e){
-        var index = e.currentTarget.dataset.index;
-        var list = this.data.goodsList.list;
-        if(index!=="" && index != null){
-            if(list[parseInt(index)].number>1){
-                list[parseInt(index)].number-- ;
-                this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
+    jianBtnTap: function (e) {
+        let content = this;
+        let index = e.currentTarget.dataset.index;
+        let list = this.data.goodsList.list;
+
+        this.saveShopCartAdd(list[parseInt(index)].sid, -1, function (res) {
+            if (res.code == 1) {
+                if (index !== "" && index != null) {
+                    if (list[parseInt(index)].number < 10) {
+                        list[parseInt(index)].number--;
+                        content.setGoodsList(content.getSaveHide(), content.totalPrice(), content.allSelect(), content.noSelect(), list);
+                    }
+                }
             }
-        }
+            else {
+                app.showToast(res.message);
+            }
+        });
     },
     editTap:function(){
         var list = this.data.goodsList.list;
