@@ -63,7 +63,7 @@
                 "pagePath": "pages/user/center/index",
                 "iconPath": "images/nav/my-off.png",
                 "selectedIconPath": "images/nav/my-on.png",
-                "text": "我的"
+                "text": "个人中心"
             }
         ]
     }
