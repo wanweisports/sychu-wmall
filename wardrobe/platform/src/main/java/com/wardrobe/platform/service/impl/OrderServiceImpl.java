@@ -320,11 +320,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Timestamp reserveEndTime = orderInfo.getReserveEndTime();
 
         Timestamp nowDate = DateUtil.getNowDate();
+        Date date = new Date(nowDate.getTime());
         //只能预约第二天，每天只能预约一单
         String startDateStr = DateUtil.dateToString(new Date(reserveStartTime.getTime()), DateUtil.YYYYMMDD);
-        Date tomorrow = DateUtil.addDate(new Date(nowDate.getTime()), 1);
-        String tomorrowStr = DateUtil.dateToString(tomorrow, DateUtil.YYYYMMDD);
-        if(!tomorrowStr.equals(startDateStr)) throw new MessageException("只能预约明天的试衣间！");
+        Date tomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 1)); //明天0点数据
+        Date after15 = DateUtil.initDateByDay(DateUtil.addDate(date, 15)); //之后15天
+        Date d = DateUtil.initDateByDay(date);
+        if(d.getTime() < tomorrow.getTime() || d.getTime() > after15.getTime()) throw new MessageException("只能预约明天及之后的14天！");
 
         ReserveOrderInfo existNowReserve = isExistNowReserve(startDateStr, uid);
         if(existNowReserve != null) throw new MessageException("您已经预约了" + DateUtil.dateToString(new Date(existNowReserve.getReserveStartTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "到" +  DateUtil.dateToString(new Date(existNowReserve.getReserveEndTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "，不能重复预约");
@@ -801,7 +803,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             whereSql.append(" AND roi.rno = :ono");
         }
 
-        whereSql.append(" ORDER BY roi.status, roi.createTime DESC");
+        whereSql.append(" ORDER BY roi.reserveStartTime DESC, roi.createTime DESC, roi.roid");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
 

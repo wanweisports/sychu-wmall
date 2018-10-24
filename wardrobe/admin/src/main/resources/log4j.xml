@@ -7,10 +7,10 @@
 	<!-- a rolling file appender -->
 	<!-- ================================================================= -->
 
-	<!-- A time/date based rolling appender -->
+	<!-- time/date based rolling appender -->
 	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="./laiqu.log" />
-		<param name="Append" value="false" />
+		<param name="File" value="./wardrobe_admin.log" />
+		<param name="Append" value="true" />
 		<param name="Threshold" value="ERROR" />
 		<!-- Rollover at midnight each day -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
@@ -35,68 +35,72 @@
 		</layout>
 	</appender>
 
-<category name="com.laiqu">
-  <priority value="ERROR"/>
-</category>
+	<category name="com.wardrobe">
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE" />
+	</category>
 
 
-<category name="io.netty">
-    <priority value="ERROR"/>
-</category>
-<category name="org.hibernate">
-    <priority value="INFO"/>
-</category>
-<category name="org.springframework">
-    <priority value="ERROR"/>
-</category>
-<category name="org.quartz">
-    <priority value="ERROR"/>
-</category>
-
-
-
-
-
-<!-- 
-
-
-	<logger name="org.hibernate">
+	<!--<category name="io.netty">
+		<priority value="ERROR"/>
+	</category>-->
+	<!--<category name="org.hibernate">
 		<level value="ERROR" />
-	</logger>
-	<logger name="org.springframework"> v
+		<appender-ref ref="CONSOLE" />
+	</category>
+	<category name="org.springframework">
 		<level value="ERROR" />
-	</logger>
-	<logger name="org.quartz">
-		<level value="ERROR" />
-	</logger>
+		<appender-ref ref="CONSOLE" />
+	</category>-->
+	<!--
+	<category name="org.quartz">
+		<priority value="ERROR"/>
+	</category>-->
 
-	<logger name="io.netty.buffer.ByteBufUtil" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.NetUtil" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.internal.logging.InternalLoggerFactory" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.internal.logging.InternalLogger" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.channel.MultithreadEventLoopGroup" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.internal.PlatformDependent0" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.internal.PlatformDependent" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.channel.nio.NioEventLoop" additivity="false">
-		<level value="OFF" />
-	</logger>
-	<logger name="io.netty.util.internal.ThreadLocalRandom" additivity="false">
-		<level value="OFF" />
-	</logger> -->
+
+
+
+
+	<!--
+
+
+        <logger name="org.hibernate">
+            <level value="ERROR" />
+        </logger>
+        <logger name="org.springframework">
+            <level value="ERROR" />
+        </logger>
+        <logger name="org.quartz">
+            <level value="ERROR" />
+        </logger>
+
+        <logger name="io.netty.buffer.ByteBufUtil" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.NetUtil" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.internal.logging.InternalLoggerFactory" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.internal.logging.InternalLogger" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.channel.MultithreadEventLoopGroup" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.internal.PlatformDependent0" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.internal.PlatformDependent" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.channel.nio.NioEventLoop" additivity="false">
+            <level value="OFF" />
+        </logger>
+        <logger name="io.netty.util.internal.ThreadLocalRandom" additivity="false">
+            <level value="OFF" />
+        </logger> -->
 
 	<!-- use this to turn on debug to a rolling file. -->
 	<root>

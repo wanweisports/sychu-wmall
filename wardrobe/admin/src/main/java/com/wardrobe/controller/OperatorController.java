@@ -6,6 +6,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.OperatorInfo;
 import com.wardrobe.platform.service.IOperatorService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("operator")
 @Controller
 public class OperatorController extends BaseController {
+
+    private static Logger log = Logger.getLogger(OperatorController.class);
 
     @Autowired
     private IOperatorService operatorService;

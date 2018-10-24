@@ -319,6 +319,26 @@ public class DateUtil {
 		return new Timestamp(new Date().getTime());
 	}
 
+	/**
+	 * 获得当天零时零分零秒
+	 * @return
+	 */
+	public static Date initDateByDay(){
+		return initDateByDay(new Date());
+	}
+
+	/**
+	 * 获得某天零时零分零秒
+	 * @return
+	 */
+	public static Date initDateByDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		return calendar.getTime();
+	}
 
 	/*
 	 * 注意事项：
