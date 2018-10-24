@@ -70,7 +70,8 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         }
     }
 
-    private synchronized void updateRank(int uid){
+    @Override
+    public synchronized void updateRank(int uid){
         UserAccount userAccount = getUserAccount(uid);
         Integer rank = sysRankService.getRank(userAccount.getScore(), userAccount.getRank());
         if(rank != null){

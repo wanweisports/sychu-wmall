@@ -78,31 +78,33 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(ui != null) throw new MessageException("手机号已被注册，请重新输入！");
 
         UserInfo userInfo = getUserInfo(userId);
-        String inviteCode = userPerfectBean.getInviteCode();
+        synchronized (userInfo.getOpenId().intern()) {
+            String inviteCode = userPerfectBean.getInviteCode();
 
-        //userInfo.setSex(userPerfectBean.getSex());
-        userInfo.setAge(userPerfectBean.getAge());
-        userInfo.setDressStyle(userPerfectBean.getDressStyle());
-        userInfo.setUsualSize(userPerfectBean.getUsualSize());
-        userInfo.setMobile(userPerfectBean.getMobile());
-        userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
+            //userInfo.setSex(userPerfectBean.getSex());
+            userInfo.setAge(userPerfectBean.getAge());
+            userInfo.setDressStyle(userPerfectBean.getDressStyle());
+            userInfo.setUsualSize(userPerfectBean.getUsualSize());
+            userInfo.setMobile(userPerfectBean.getMobile());
+            userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
 
+            if (StrUtil.isNotBlank(inviteCode)) { //有邀请人时, 并且不能是自己的邀请码
+                Integer inviteCodeUserId = checkInviteCode(inviteCode, userId);
+                userInfo.setInvitedBy(inviteCodeUserId);
+                //其他操作：如邀请人增加积分..等等
 
-        if(StrUtil.isNotBlank(inviteCode)){ //有邀请人时, 并且不能是自己的邀请码
-            Integer inviteCodeUserId = checkInviteCode(inviteCode, userId);
-            userInfo.setInvitedBy(inviteCodeUserId);
-            //其他操作：如邀请人增加积分..等等
-
+            }
+            //根据手机号查询是否是老用户
+            UserOldInfo userOldInfo = baseDao.queryByHqlFirst("FROM UserOldInfo WHERE mobile = ?1", userInfo.getMobile());
+            if (userOldInfo != null) {
+                UserAccount userAccount = userAccountService.getUserAccount(userId);
+                userAccount.setScore(userAccount.getScore() + userOldInfo.getScore());
+                baseDao.save(userAccount, userAccount.getUid());
+                //计算等级
+                userAccountService.updateRank(userId);
+            }
+            baseDao.save(userInfo, userInfo.getUid());
         }
-        //根据手机号查询是否是老用户
-        UserOldInfo userOldInfo = baseDao.queryByHqlFirst("FROM UserOldInfo WHERE mobile = ?1", userInfo.getMobile());
-        if(userOldInfo != null){
-            UserAccount userAccount = userAccountService.getUserAccount(userId);
-            userAccount.setScore(userAccount.getScore() + userOldInfo.getScore());
-            baseDao.save(userAccount, userAccount.getUid());
-        }
-
-        baseDao.save(userInfo, userInfo.getUid());
     }
 
     /*
@@ -209,7 +211,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
         StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
         if(StrUtil.isNotBlank(nickname)){
-            whereSql.append(" AND ui.nickname = :nickname");
+            whereSql.append(" AND ui.nickname LIKE :nickname");
+            userInputView.setNickname("%" + nickname + "%");
         }
         if (StrUtil.isNotBlank(mobile)) {
             whereSql.append(" AND ui.mobile = :mobile");

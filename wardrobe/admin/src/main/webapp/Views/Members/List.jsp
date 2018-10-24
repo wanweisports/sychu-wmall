@@ -35,7 +35,7 @@
                             <small>Members List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list" novalidate onsubmit="return false;">
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
                                         <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
