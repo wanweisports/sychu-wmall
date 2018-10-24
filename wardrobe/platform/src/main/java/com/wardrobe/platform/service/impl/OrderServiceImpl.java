@@ -801,7 +801,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             whereSql.append(" AND roi.rno = :ono");
         }
 
-        whereSql.append(" ORDER BY roi.status, roi.createTime DESC");
+        whereSql.append(" ORDER BY roi.reserveStartTime DESC, roi.createTime DESC, roi.roid");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
 
