@@ -325,11 +325,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         String startDateStr = DateUtil.dateToString(new Date(reserveStartTime.getTime()), DateUtil.YYYYMMDD);
         Date tomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 1)); //明天0点数据
         Date after15 = DateUtil.initDateByDay(DateUtil.addDate(date, 15)); //之后15天
-        Date d = DateUtil.initDateByDay(date);
-        if(d.getTime() < tomorrow.getTime() || d.getTime() > after15.getTime()) throw new MessageException("只能预约明天及之后的14天！");
+        Date rd = DateUtil.initDateByDay(new Date(reserveStartTime.getTime()));
+        System.out.println(rd.getTime());
+        System.out.println(tomorrow.getTime());
+        if(rd.getTime() < tomorrow.getTime() || rd.getTime() > after15.getTime()) throw new MessageException("只能预约明天及之后的14天！");
 
         ReserveOrderInfo existNowReserve = isExistNowReserve(startDateStr, uid);
-        if(existNowReserve != null) throw new MessageException("您已经预约了" + DateUtil.dateToString(new Date(existNowReserve.getReserveStartTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "到" +  DateUtil.dateToString(new Date(existNowReserve.getReserveEndTime().getTime()), DateUtil.YYYYMMDDHHMMSS) + "，不能重复预约");
+        if(existNowReserve != null) throw new MessageException("您已经预约了" + DateUtil.dateToString(new Date(existNowReserve.getReserveStartTime().getTime()), DateUtil.YYYYMMDDHHMM) + "到" +  DateUtil.dateToString(new Date(existNowReserve.getReserveEndTime().getTime()), DateUtil.YYYYMMDDHHMM) + "，不能重复预约");
 
         String startTime = sysDeviceInfo.getStartTime();
         String endTime = sysDeviceInfo.getEndTime();
@@ -337,7 +339,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Date endDTime = DateUtil.getHHMM(endTime);
         if(DateUtil.getHHMMSS(reserveStartTime).getTime() < startDTime.getTime() || DateUtil.getHHMMSS(reserveEndTime).getTime() > endDTime.getTime()) throw new MessageException("试衣间开启时间为：" + startTime + "到" + endTime);
 
-        if(isReserveByDate(reserveStartTime, reserveEndTime)) throw new MessageException("当前时间有冲突，请重新选择！");
+        ReserveOrderInfo reserveOrderInfo = isReserveByDate(reserveStartTime, reserveEndTime);
+        if(reserveOrderInfo != null) throw new MessageException(DateUtil.dateToString(reserveOrderInfo.getReserveStartTime(), DateUtil.YYYYMMDDHHMM)+"至"+DateUtil.dateToString(reserveOrderInfo.getReserveEndTime(), DateUtil.YYYYMMDDHHMM)+"已有其他用户预约使用该配衣间，请选择其他时间！");
 
         SysDeviceControl sysDeviceControl = sysDeviceService.getDistributionDeviceControl(did, reserveStartTime, reserveEndTime);
         if(sysDeviceControl == null) throw new MessageException("当前预约已满，请稍候再试！");
@@ -403,9 +406,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Desc("预约时间是否有交集")
-    private boolean isReserveByDate(Timestamp startDate, Timestamp endDate){
-        Object obj = baseDao.getUniqueObjectResult("SELECT 1 FROM reserve_order_info r WHERE NOT (r.reserveEndTime <= ?1 OR r.reserveStartTime >= ?2) AND r.status = ?3", startDate, endDate, IDBConstant.LOGIC_STATUS_YES);
-        return obj != null;
+    private ReserveOrderInfo isReserveByDate(Timestamp startDate, Timestamp endDate){
+        ReserveOrderInfo reserveOrderInfo = baseDao.queryByHqlFirst("FROM ReserveOrderInfo r WHERE NOT (r.reserveEndTime <= ?1 OR r.reserveStartTime >= ?2) AND r.status = ?3", startDate, endDate, IDBConstant.LOGIC_STATUS_YES);
+        return reserveOrderInfo;
     }
 
     @Desc("存在当前时间之前的预约，则不能进行预约")
