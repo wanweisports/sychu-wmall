@@ -75,7 +75,7 @@ Page({
             delBtnWidth: delBtnWidth
         });
     },
-    onLoad: function () {
+    onShow: function () {
         this.initEleWidth();
         this.getShoppingCart();
     },
