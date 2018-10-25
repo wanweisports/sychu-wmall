@@ -205,11 +205,11 @@ App({
                     content.redirect(redirectUrl, "navigateTo");
                 }
                 else {
-                    wx.showToast({title: '调起支付失败:' + res.message})
+                    content.showToast('调起支付失败:' + res.message)
                 }
             },
             function (err) {
-                wx.showToast({title: '调起支付错误:' + err})
+                content.showToast('调起支付错误:' + err)
             }
         );
     },
@@ -253,11 +253,17 @@ App({
     },
     // 显示提示
     showToast: function (message, type) {
-        wx.showToast({
-            title: message,
-            mask: true,
-            icon: type || "none"
-        });
+        setTimeout(function () {
+            wx.showToast({
+                title: message,
+                mask: true,
+                icon: type || "none"
+            });
+
+            setTimeout(function () {
+                wx.hideToast();  
+            }, 2000)
+        }, 0);
     },
     // 调试日志
     showLog: function (message) {
