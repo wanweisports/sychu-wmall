@@ -234,7 +234,7 @@
                         <div class="card-footer text-right"></div>
                         <div class="card-block row">
                             <c:forEach var="deviceControl" items="${deviceControlList}">
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-6 col-md-6">
                                 <div class="card">
                                     <div class="card-header">
                                         ${deviceControl.name}
@@ -244,11 +244,11 @@
                                         <table class="table table-striped table-sm distribution-list">
                                             <thead>
                                             <tr>
-                                                <th nowrap>衣服</th>
-                                                <th nowrap>尺码</th>
-                                                <th nowrap>射频编码</th>
-                                                <th nowrap>预约单号</th>
-                                                <th nowrap>状态</th>
+                                                <th>衣服</th>
+                                                <th>尺码</th>
+                                                <th>射频编码</th>
+                                                <th>预约单号</th>
+                                                <th>状态</th>
                                                 <th></th>
                                             </tr>
                                             </thead>

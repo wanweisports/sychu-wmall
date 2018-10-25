@@ -70,8 +70,16 @@
                 <c:when test="${param.subMenu == 'list'}">
                     <li class="breadcrumb-item active">订单列表</li>
                 </c:when>
+                <c:when test="${param.subMenu == 'detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/orders/list">订单列表</a></li>
+                    <li class="breadcrumb-item active">订单详情</li>
+                </c:when>
                 <c:when test="${param.subMenu == 'reservation'}">
                     <li class="breadcrumb-item active">预约单列表</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'reservation_detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/orders/reservation">预约单列表</a></li>
+                    <li class="breadcrumb-item active">预约单详情</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'refund'}">
                     <li class="breadcrumb-item active">退款订单</li>

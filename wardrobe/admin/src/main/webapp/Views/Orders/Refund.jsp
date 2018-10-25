@@ -11,7 +11,7 @@
             padding: 0.75rem;
         }
         .orders-list td {
-            padding: 0.3rem 0.75rem;
+            padding: 0.75rem;
         }
     </style>
 </layout:override>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm orders-list">
+                            <table class="table table-striped table-bordered table-sm orders-list">
                                 <thead>
                                 <tr>
                                     <th>订单编号</th>
@@ -55,7 +55,6 @@
                                     <th>订单金额</th>
                                     <th>会员姓名</th>
                                     <th>订单状态</th>
-                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -86,5 +85,5 @@
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="orders"/>
-    <c:param name="subMenu" value="list"/>
+    <c:param name="subMenu" value="refund"/>
 </c:import>

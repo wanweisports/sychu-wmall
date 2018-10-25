@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="com.wardrobe.layout.Blocks" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <%-- 方法表达式（字符串截取，替换） --%>
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
@@ -14,7 +15,7 @@
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
-            width: 2rem;
+            height: 2rem;
         }
     </style>
 </layout:override>
@@ -38,10 +39,10 @@
                             <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
+                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}" autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}">
+                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
                                     <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary members-query-btn">
@@ -53,21 +54,19 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm members-list">
+                            <table class="table table-striped table-bordered table-sm members-list">
                                 <thead>
                                 <tr>
                                     <th>用户头像</th>
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
-                                    <th>性别</th>
-                                    <th>年龄</th>
-                                    <th>余额（元）</th>
-                                    <th>衣橱币</th>
-                                    <th>积分</th>
+                                    <th>出生日期</th>
+                                    <th>账户余额</th>
+                                    <th>薏米</th>
                                     <th>等级</th>
                                     <th>邀请人</th>
                                     <th>注册时间</th>
-                                    <th></th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -80,20 +79,18 @@
                                             </a>
                                         </td>
                                         <td>${user.mobile}</td>
-                                        <td>${user.sexName}</td>
                                         <td>${user.age}</td>
                                         <td>
-                                            <a href="/admin/members/transactions/log?uid=${user.uid}" class="btn btn-sm btn-link" title="会员详情">
-                                                <i class="fa fa-money"></i> ${user.balance}
+                                            <a href="/admin/members/transactions/log?uid=${user.uid}" class="btn btn-sm btn-link" title="账户余额">
+                                                ￥${user.balance}
                                             </a>
                                         </td>
                                         <td>${user.ycoid}</td>
-                                        <td>${user.score}</td>
                                         <td>${user.rankName}</td>
                                         <td>${user.invitedByUserName}</td>
-                                        <td>${user.registerTime}</td>
+                                        <td><fmt:formatDate value="${user.registerTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-primary btn-sm member-stop">
+                                            <a href="javascript:;" class="btn btn-danger btn-sm member-stop">
                                                 <i class="fa fa-stop-circle-o"></i> 停用
                                             </a>
                                         </td>

@@ -342,7 +342,38 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment', 'jquery.
         }
     });
 
-    // enter
+    $(".set-seq-value").change(function () {
+        var cid = $(this).attr('data-id');
+
+        $.post("/admin/products/updateCommoditySeqNo", {cid: cid, seqNo: $(this).val()}, function (res) {
+            if (res.code == 1) {
+                window.location.reload();
+            }
+        });
+    });
+
+    $("#upload_excel").click(function () {
+        var content = this;
+
+        $(content).prop("disabled", true).text("正在上传..");
+
+        $("#upload_form").ajaxSubmit({
+            type: "post",
+            dataType: "json",
+            data: {},
+            url: "/commodity/excelCommoditys",
+            success: function (res) {
+                if (res.code == 1) {
+                    window.location.reload();
+                }else{
+                    alert(res.message);
+                    $(content).prop("disabled", false).text("立即上传");
+                }
+            }
+        });
+    });
+
+    // 放入
     $(".products-list").on("click", ".product-enter", function (e) {
         e.preventDefault();
 

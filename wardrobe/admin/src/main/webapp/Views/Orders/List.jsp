@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="com.wardrobe.layout.Blocks" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <%-- 方法表达式（字符串截取，替换） --%>
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
@@ -11,7 +12,7 @@
             padding: 0.75rem;
         }
         .orders-list td {
-            padding: 0.3rem 0.75rem;
+            padding: 0.75rem;
         }
     </style>
 </layout:override>
@@ -47,7 +48,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm orders-list">
+                            <table class="table table-striped table-bordered table-sm orders-list">
                                 <thead>
                                 <tr>
                                     <th>订单编号</th>
@@ -56,16 +57,15 @@
                                     <th>会员姓名</th>
                                     <th>支付状态</th>
                                     <th>订单状态</th>
-                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach var="o" items="${page.list}">
                                         <tr>
                                             <td>
-                                                <a href="/admin/orders/detail?oid=${o.oid}" target="_blank">${o.ono}</a>
+                                                <a href="/admin/orders/detail?oid=${o.oid}">${o.ono}</a>
                                             </td>
-                                            <td>${o.createTime}</td>
+                                            <td><fmt:formatDate value="${o.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                             <td>${o.priceSum}</td>
                                             <td>${o.nickname}</td>
                                             <td>${o.payStatusName}</td>

@@ -3,26 +3,22 @@
 <%@ page import="com.wardrobe.layout.Blocks" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <%-- 方法表达式（字符串截取，替换） --%>
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .product-image-file {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
         .size-list th {
             padding: 0.75rem;
         }
         .size-list td {
-            padding: 0.3rem 0.75rem;
+            padding: 0.75rem;
         }
         .product-info th {
             width: 9rem;
+        }
+        .img-rounded {
+            height: 2rem;
         }
     </style>
 </layout:override>
@@ -30,9 +26,6 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/orders/detail.js?v=${static_resource_version}"></script>
-    <script type="text/javascript">
-
-    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -50,15 +43,15 @@
                                 <tbody>
                                 <tr>
                                     <th>订单编号：</th>
-                                    <td colspan="5">${order.rno}</td>
-                                <tr>
+                                    <td>${order.rno}</td>
                                     <th>订单状态：</th>
                                     <td>${order.status}</td>
                                 </tr>
-                                    <th>预约开始时间：</th>
-                                    <td>${order.reserveStartTime}</td>
-                                    <th>预约结束时间：</th>
-                                    <td colspan="5">${order.reserveEndTime}</td>
+                                <tr>
+                                    <th>试衣开始时间：</th>
+                                    <td><fmt:formatDate value="${order.reserveStartTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                                    <th>试衣结束时间：</th>
+                                    <td><fmt:formatDate value="${order.reserveEndTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -70,7 +63,7 @@
                             <small>Commodity List</small>
                         </div>
                         <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered size-list">
+                            <table class="table table-striped table-sm table-bordered size-list">
                                 <thead>
                                 <tr>
                                     <th>商品图片</th>
@@ -88,7 +81,7 @@
                                 <c:forEach var="d" items="${order.reserveOrderDetails}">
                                     <tr data-id="${d.rdid}">
                                         <td>
-                                            <img class="img-rounded" src="${d.resItemImg}" width="100">
+                                            <img class="img-rounded" src="${d.resItemImg}">
                                         </td>
                                         <td>${d.cid}</td>
                                         <td>${d.sid}</td>
@@ -113,6 +106,6 @@
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
-    <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="detail"/>
+    <c:param name="menu" value="orders"/>
+    <c:param name="subMenu" value="reservation_detail"/>
 </c:import>

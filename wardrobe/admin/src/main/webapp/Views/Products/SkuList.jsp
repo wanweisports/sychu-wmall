@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="com.wardrobe.layout.Blocks" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%-- JSTL表达式（判断，循环，输出） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> <%-- 方法表达式（字符串截取，替换） --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <%-- 方法表达式（字符串截取，替换） --%>
 <%@ taglib uri="http://www.sychu.com/tags/tag" prefix="layout" %>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
@@ -14,7 +15,7 @@
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
-            width: 2rem;
+            height: 2rem;
         }
     </style>
 </layout:override>
@@ -63,7 +64,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm products-list">
+                            <table class="table table-striped table-bordered table-sm products-list">
                                 <thead>
                                 <tr>
                                     <th>商品图片</th>
@@ -85,16 +86,16 @@
                                     <td>颜色：${c.colorName}，尺码：${c.size}</td>
                                     <td>${c.typeName}</td>
                                     <c:if test="${c.type=='10'}">
-                                        <td class="text-success">+${c.num}</td>
+                                        <td class="text-success">+ ${c.num}件</td>
                                     </c:if>
                                     <c:if test="${c.type=='20'}">
-                                        <td class="text-danger">-${c.num}</td>
+                                        <td class="text-danger">- ${c.num}件</td>
                                     </c:if>
                                     <c:if test="${c.type=='30'}">
-                                        <td class="text-success">-${c.num}</td>
+                                        <td class="text-success">- ${c.num}件</td>
                                     </c:if>
-                                    <td>${c.operatorId}：${c.remark}</td>
-                                    <td>${c.createTime}</td>
+                                    <td>操作人：${c.operatorId}，备注：${c.remark}</td>
+                                    <td><fmt:formatDate value="${c.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
