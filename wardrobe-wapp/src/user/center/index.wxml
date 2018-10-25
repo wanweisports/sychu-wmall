@@ -38,7 +38,9 @@
         我的薏米<text class="right-text">{{userInfo.ycoid}}个</text>
     </view>
     <view class="my-item">
-        我的优惠券<text class="right-text">{{userInfo.couponCount}}张</text>
+        <navigator url="/pages/user/coupons/index" hover-class="navigator-hover">
+            我的优惠券<text class="right-text">{{userInfo.couponCount}}张</text>
+        </navigator>
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>

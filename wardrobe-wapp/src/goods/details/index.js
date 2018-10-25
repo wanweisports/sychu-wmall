@@ -188,7 +188,7 @@ Page({
 
         this.closePopupTap();
 
-        app.showToast("加入购物车成功", "success");
+        app.showToast("已加入购物车", "success");
     },
 
     /***** 加闪衣橱 *****/
@@ -252,7 +252,7 @@ Page({
         });
 
         this.closeShopOrderPopupTap();
-        app.showToast("加入配衣间成功", "success");
+        app.showToast("已加入配衣间", "success");
     },
 
     /**

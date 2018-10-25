@@ -15,7 +15,7 @@ Page({
         newlyGoods: [],
         hotGoods: []
     },
-    onLoad: function() {
+    onShow: function() {
         this.getBannerGoodsList();
         this.getHotGoodsList();
         this.getNewlyGoodsList();

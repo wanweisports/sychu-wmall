@@ -18,7 +18,7 @@ Page({
             });
         });
     },
-    onLoad: function () {
+    onShow: function () {
         this.getUserInfo();
     },
     inviteFriends : function () {

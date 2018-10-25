@@ -35,10 +35,10 @@
                             <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/transactions/log" <%--novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}">
+                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}" autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}">
+                                        <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
                                     <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary members-query-btn">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm user-list">
+                            <table class="table table-striped table-bordered table-sm user-list">
                                 <thead>
                                 <tr>
                                     <th>交易流水号</th>
