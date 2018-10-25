@@ -378,7 +378,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
             orderDetail.setResItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
             orderDetail.setRoid(oid);
-            orderDetail.setResItemImg(commodityService.getFmImg(cid));
+            orderDetail.setResItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(orderDetail, null);
 
             priceSum = Arith.add(priceSum, orderDetail.getResItemPriceSum().doubleValue());
