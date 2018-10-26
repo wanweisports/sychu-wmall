@@ -8,6 +8,7 @@ import com.wardrobe.common.po.UserInfo;
 import com.wardrobe.common.util.RequestUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IUserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +22,8 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 
     @Autowired
     private IUserService userService;
+
+    private Logger logger = Logger.getLogger(AuthorizationHandlerInterceptor.class);
 	
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -37,6 +40,7 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
     	NotProtected methodAnnotation = handlerMethod.getMethod().getAnnotation(NotProtected.class);
         if (classAnnotation == null && methodAnnotation == null) { //如果受保护
             if (userInfo == null) {
+                logger.error("=========未登录，跳到/notLogin接口===========：访问：" + request.getRequestURI() + ":" + request.getQueryString());
                 request.getRequestDispatcher("/notLogin").forward(request, response); //未登录---跳到统一接口：返回未登录状态10
                 return false;
             }
@@ -50,6 +54,7 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
             NotPerfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(NotPerfect.class);
             if (classAnnotation2 == null && methodAnnotation2 == null) { //如果受保护
                 if (!userService.userIsPerfect(((UserInfo) userInfo).getUid())) {
+                    logger.error("=========未完善资料，跳到/notPerfect接口===========：访问：" + request.getRequestURI() + ":" + request.getQueryString());
                     request.getRequestDispatcher("/notPerfect").forward(request, response); //未完善资料---跳到统一接口：返回未完善资料状态20
                     return false;
                 }
