@@ -3,6 +3,7 @@ package com.wardrobe.platform.service;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.po.UserOrderDetail;
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.view.OrderInputView;
 
@@ -19,6 +20,8 @@ public interface IOrderService {
     Integer saveRechargeOrderInfo(UserOrderInfo userOrderInfo, SysDict sysDict, int uid);
 
     Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException;
+
+    List<UserOrderDetail> getUserOrderDetails(int oid);
 
     Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException;
 
