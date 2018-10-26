@@ -222,6 +222,13 @@ swiper-item image {
     top: -26rpx;
 }
 
+.shop-num text {
+    background-color: #ff6850;
+    color: #fff;
+    border-radius: 10rpx;
+    padding: 4rpx 8rpx;
+}
+
 .footer-box .join-shop-cart {
     text-align: center;
     width: 250rpx;
