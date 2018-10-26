@@ -57,13 +57,13 @@
     <view class="footer-box">
         <view class="shop-syj-btn" bindtap="goShopOrderCart">
             <view class="shop-num">
-                <text wx:if="{{shopOrderNum > 0}}">({{shopOrderNum}})</text>
+                <text wx:if="{{shopOrderNum > 0}}">{{shopOrderNum}}</text>
             </view>
             <text>配衣间</text>
         </view>
         <view class="shop-cart-btn" bindtap="goShopCart">
             <view class="shop-num">
-                <text wx:if="{{shopCartNum > 0}}">({{shopCartNum}})</text>
+                <text wx:if="{{shopCartNum > 0}}">{{shopCartNum}}</text>
             </view>
             <text>购物车</text>
         </view>
