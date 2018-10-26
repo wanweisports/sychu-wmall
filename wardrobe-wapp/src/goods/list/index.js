@@ -184,7 +184,7 @@ Page({
 
         this.getGoodsList(++this.data.currentPage);
     },
-    onShow: function () {
+    onLoad: function () {
         this.getCategoryList();
         this.getStyleList();
         this.getMaterialList();
