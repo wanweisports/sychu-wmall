@@ -78,7 +78,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return userOrderInfo;
     }
 
-    private List<UserOrderDetail> getUserOrderDetails(int oid){
+    @Override
+    public List<UserOrderDetail> getUserOrderDetails(int oid){
         return baseDao.queryByHql("FROM UserOrderDetail WHERE oid = ?1", oid);
     }
 
@@ -698,7 +699,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         PageBean pageBean = getUserOrders(orderInputView);
         List<Map<String, Object>> list = pageBean.getList();
         for(Map<String, Object> map : list){
-            map.put("orderDetails", getUserOrderDetail(StrUtil.objToInt(map.get("oid"))));
+            List<UserOrderDetail> userOrderDetails = getUserOrderDetails(StrUtil.objToInt(map.get("oid")));
+            userOrderDetails.parallelStream().forEach(userOrderDetail -> {
+                userOrderDetail.setItemImg(resourceService.parseImgPath(userOrderDetail.getItemImg()));
+            });
+            map.put("orderDetails", userOrderDetails);
         }
         return pageBean;
     }
@@ -707,11 +712,14 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     public Map<String, Object> getUserOrderDetail(int oid, int uid){
         UserOrderInfo userOrderInfo = getUserOrderInfo(oid);
         if(userOrderInfo.getUid() != uid) throw new MessageException("操作错误!!!");
-        List<Map<String, Object>> userOrderDetail = getUserOrderDetail(oid);
+        List<UserOrderDetail> userOrderDetails = getUserOrderDetails(oid);
+        userOrderDetails.parallelStream().forEach(userOrderDetail -> {
+            userOrderDetail.setItemImg(resourceService.parseImgPath(userOrderDetail.getItemImg()));
+        });
 
         Map<String, Object> data = new HashMap<>(2, 1);
         data.put("order", userOrderInfo);
-        data.put("orderDetails", userOrderDetail);
+        data.put("orderDetails", userOrderDetails);
         return data;
     }
 
