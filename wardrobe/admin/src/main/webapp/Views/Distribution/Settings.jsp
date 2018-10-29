@@ -249,7 +249,7 @@
                                                 <th>射频编码</th>
                                                 <th>预约单号</th>
                                                 <th>状态</th>
-                                                <th></th>
+                                                <th>&nbsp;</th>
                                             </tr>
                                             </thead>
                                             <tbody>

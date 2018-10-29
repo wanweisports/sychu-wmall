@@ -5,10 +5,7 @@ import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
-import com.wardrobe.common.util.Arith;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,6 +203,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         String nickname = userInputView.getNickname();
         String mobile = userInputView.getMobile();
+        String invitedBy = userInputView.getInvitedBy();
 
         StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score, ua.rank");
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
@@ -216,6 +214,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         if (StrUtil.isNotBlank(mobile)) {
             whereSql.append(" AND ui.mobile = :mobile");
+        }
+        if(StrUtil.isNotBlank(invitedBy)){
+            whereSql.append(" AND EXISTS(SELECT 1 FROM user_info uin WHERE uin.uid = ui.invitedBy AND uin.nickname LIKE :invitedBy)");
+            userInputView.setInvitedBy("%" + invitedBy + "%");
         }
         return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }
