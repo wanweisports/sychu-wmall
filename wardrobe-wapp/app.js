@@ -67,14 +67,10 @@ App({
                             if (res.code == 1) {
                                 content.globalData.sessionId = res.data.sessionId;
                                 if (res.data.perfect == 2) {
-                                    wx.redirectTo({
-                                        url: "/pages/user/complete/index"
-                                    });
+                                    content.redirect("/pages/user/complete/index");
                                 }
                                 else {
-                                    wx.switchTab({
-                                        url: "/pages/index/index"
-                                    });
+                                    content.redirect("/pages/index/index", "switchTab");
                                 }
                             } else {
                                 content.showToast("授权登录失败", "none");
@@ -162,9 +158,16 @@ App({
             data   : data,
             header : header,
             success: function (res) {
-                success(res.data);
-
                 wx.hideLoading();
+
+                if (res.data.code == 1) {
+                    success(res.data);
+                }
+                else if (res.data.code == 10) {
+                    content.showToast("授信登录过期，请重新登录");
+
+                    content.redirect("/pages/landing/index", "reLaunch");
+                }
             },
             fail: function (err) {
                 content.showLog("[F][" + url + "]：" + JSON.stringify(err));
