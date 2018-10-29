@@ -160,13 +160,13 @@ App({
             success: function (res) {
                 wx.hideLoading();
 
-                if (res.data.code == 1) {
-                    success(res.data);
-                }
-                else if (res.data.code == 10) {
+                if (res.data.code == 10) {
                     content.showToast("授信登录过期，请重新登录");
 
                     content.redirect("/pages/landing/index", "reLaunch");
+                }
+                else {
+                    success(res.data);
                 }
             },
             fail: function (err) {
@@ -271,7 +271,7 @@ App({
     // 调试日志
     showLog: function (message) {
         let now = (new Date()).getTime();
-        if (this.isDebug) {
+        if (this.config.isDebug) {
             console.log(`[${now}]：${message}`);
         }
     },
