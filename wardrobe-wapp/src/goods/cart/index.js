@@ -246,6 +246,10 @@ Page({
         let index = e.currentTarget.dataset.index;
         let list = this.data.goodsList.list;
 
+        if (list[parseInt(index)].number <= 1) {
+            return;
+        }
+
         this.saveShopCartAdd(list[parseInt(index)].sid, -1, function (res) {
             if (res.code == 1) {
                 if (index !== "" && index != null) {

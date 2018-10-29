@@ -94,7 +94,7 @@ App({
     checkUserComplete: function (success, fail) {
         let content = this;
 
-        content.wxRequest(content.config.getApiHost() + '/user/isPerfect', {}, function (res) {
+        content.wxRequest('/user/isPerfect', {}, function (res) {
             if (res.data.isPerfect == 2) {
                 wx.redirectTo({
                     url: "/pages/user/complete/index"
@@ -110,10 +110,10 @@ App({
     },
 
     sendTempleMsg: function (orderId, trigger, template_id, form_id, page, postJsonString){
-        var that = this;
+        let content = this;
 
         wx.request({
-            url: that.config.getApiHost() + '/template-msg/put',
+            url: content.config.getApiHost() + '/template-msg/put',
             method:'POST',
             header: {
                 'content-type': 'application/x-www-form-urlencoded'
@@ -160,13 +160,13 @@ App({
             success: function (res) {
                 wx.hideLoading();
 
-                if (res.data.code == 1) {
-                    success(res.data);
-                }
-                else if (res.data.code == 10) {
+                if (res.data.code == 10) {
                     content.showToast("授信登录过期，请重新登录");
-
+                    content.globalData.sessionId = "";
                     content.redirect("/pages/landing/index", "reLaunch");
+                }
+                else {
+                    success(res.data);
                 }
             },
             fail: function (err) {
@@ -271,7 +271,7 @@ App({
     // 调试日志
     showLog: function (message) {
         let now = (new Date()).getTime();
-        if (this.isDebug) {
+        if (this.config.isDebug) {
             console.log(`[${now}]：${message}`);
         }
     },
