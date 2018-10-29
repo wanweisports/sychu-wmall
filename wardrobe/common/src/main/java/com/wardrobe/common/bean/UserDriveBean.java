@@ -14,6 +14,7 @@ public class UserDriveBean {
     private int driveId;
     private int uid;
     private int roid;
+    private int did;
     private SysDeviceInfo sysDeviceInfo;
 
     public int getDriveId() {
@@ -38,6 +39,14 @@ public class UserDriveBean {
 
     public void setRoid(int roid) {
         this.roid = roid;
+    }
+
+    public int getDid() {
+        return did;
+    }
+
+    public void setDid(int did) {
+        this.did = did;
     }
 
     public SysDeviceInfo getSysDeviceInfo() {

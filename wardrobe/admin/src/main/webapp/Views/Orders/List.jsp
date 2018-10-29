@@ -68,7 +68,17 @@
                                             <td><fmt:formatDate value="${o.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                             <td>${o.priceSum}</td>
                                             <td>${o.nickname}</td>
-                                            <td>${o.payStatusName}</td>
+                                            <td>
+                                                <c:if test="${o.payStatus=='1'}">
+                                                    <span class="badge badge-success">${o.payStatusName}</span>
+                                                </c:if>
+                                                <c:if test="${o.payStatus=='2'}">
+                                                    <span class="badge badge-danger" style="background-color: burlywood;">${o.payStatusName}</span>
+                                                </c:if>
+                                                <c:if test="${o.payStatus=='3'}">
+                                                    <span class="badge badge-danger">${o.payStatusName}</span>
+                                                </c:if>
+                                            </td>
                                             <td>${o.statusName}</td>
                                         </tr>
                                     </c:forEach>
