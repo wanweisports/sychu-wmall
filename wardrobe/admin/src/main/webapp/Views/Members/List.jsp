@@ -44,7 +44,10 @@
                                     <div class="col-md-2">
                                         <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-2">
+                                        <input type="text" name="invitedBy" class="form-control" placeholder="邀请人" value="${invitedBy}" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>

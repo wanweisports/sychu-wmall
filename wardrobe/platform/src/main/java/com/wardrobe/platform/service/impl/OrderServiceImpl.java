@@ -327,8 +327,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Date tomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 1)); //明天0点数据
         Date after15 = DateUtil.initDateByDay(DateUtil.addDate(date, 15)); //之后15天
         Date rd = DateUtil.initDateByDay(new Date(reserveStartTime.getTime()));
-        System.out.println(rd.getTime());
-        System.out.println(tomorrow.getTime());
+
         if(rd.getTime() < tomorrow.getTime() || rd.getTime() > after15.getTime()) throw new MessageException("只能预约明天及之后的14天！");
 
         ReserveOrderInfo existNowReserve = isExistNowReserve(startDateStr, uid);
@@ -354,7 +353,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         orderInfo.setRno(getRno()); //预约单编号
         baseDao.save(orderInfo, null);
 
-        java.sql.Date dbTime = new java.sql.Date(tomorrow.getTime());
+        java.sql.Date dbDate = new java.sql.Date(DateUtil.initDateByDay(new Date(reserveStartTime.getTime())).getTime());
         int oid = orderInfo.getRoid();
         String[] scidArr = scids.split(",");
         double priceSum = 0;
@@ -394,9 +393,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             commodityDistribution.setCid(cid);
             commodityDistribution.setSid(commoditySize.getSid());
             commodityDistribution.setDcid(orderInfo.getDcid());
-            commodityDistribution.setDbTime(dbTime);
+            commodityDistribution.setDbTime(dbDate);
             commodityDistribution.setRoid(oid);
             commodityDistribution.setStatus(IDBConstant.LOGIC_STATUS_YES);
+            commodityDistribution.setCreateTime(nowDate);
             baseDao.save(commodityDistribution, null);
         }
 
@@ -441,6 +441,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         List<Map<String, Object>> list = baseDao.queryBySql("SELECT rod.* FROM reserve_order_detail rod, reserve_order_info r  WHERE rod.roid = r.roid AND r.uid = ?1 AND rod.roid = ?2", new Integer[]{uid, roid});
         double sumPrice = 0;
         for(Map<String, Object> map : list){
+            map.put("resItemImg", resourceService.parseImgPath(StrUtil.objToStr(map.get("resItemImg"))));
             sumPrice = Arith.add(sumPrice, StrUtil.objToDouble(map.get("resItemPriceSum")));
         }
         data.put("sumPrice", sumPrice);
