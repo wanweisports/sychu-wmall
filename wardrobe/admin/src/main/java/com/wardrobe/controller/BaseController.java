@@ -1,6 +1,7 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.bean.PageBean;
+import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.BaseInputView;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 public class BaseController {
 	public static final String REQUEST_HEAD = "text/html; charset=UTF-8";
@@ -32,8 +34,8 @@ public class BaseController {
     protected HttpServletRequest getRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     }
-	
-    protected void setPageInfo(Model model, PageBean pageBean, String pageURL, BaseInputView baseInputView){
+
+	protected void setPageInfo(Model model, PageBean pageBean, String pageURL, Map param){
 		model.addAttribute("page", pageBean);
 
 		int splitPage = 5;
@@ -53,7 +55,11 @@ public class BaseController {
 		model.addAttribute("endPage", endPage);
 
 		//参数
-		model.addAttribute("pageURL", pageURL + "?syc=" + StrUtil.objToHtmlParams(baseInputView));
+		model.addAttribute("pageURL", pageURL + "?syc=" + StrUtil.objToHtmlParams(param));
+	}
+	
+    protected void setPageInfo(Model model, PageBean pageBean, String pageURL, BaseInputView baseInputView){
+		setPageInfo(model, pageBean, pageURL, JsonUtils.fromJsonDF(baseInputView));
     }
 
     protected String getStreamResult(HttpServletRequest request, HttpServletResponse response) throws Exception{

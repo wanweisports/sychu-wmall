@@ -30,7 +30,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("openDoor")
     public ResponseBean openDoor(int did) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId="+did);
+        //String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId="+did); //射频版
+        String response = HttpUtil.sendGet(relayUrl + "/openDrive?driveId="+did);  //直接开门版
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
@@ -57,7 +58,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("closeDoor")
     public ResponseBean closeDoor(int did) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId="+did);
+        //String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId="+did); //射频版
+        String response = HttpUtil.sendGet(relayUrl + "/closeDrive?driveId="+did); //直接关门版
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }

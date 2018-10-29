@@ -82,9 +82,10 @@ public class ProductsController extends BaseController {
     @Desc("商品管理列表")
     @RequestMapping(value = "/list")
     public String renderProductsList(CommodityInputView commodityInputView, Model model) {
-        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        Map<String, Object> params = JsonUtils.fromJsonDF(commodityInputView);
+        model.addAllAttributes(params);
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/list", params);
         return "Products/List";
     }
 

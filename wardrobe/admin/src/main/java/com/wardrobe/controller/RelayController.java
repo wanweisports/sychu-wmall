@@ -22,6 +22,8 @@ import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
+ *  开大门：大门：https://mystore.yifoutech.com/relay/openDrive?driveId=1
+    关大门：大门：https://mystore.yifoutech.com/relay/closeDrive?driveId=1
  */
 @Controller
 @RequestMapping("relay")
@@ -145,7 +147,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userOpenDrive")
     public ResponseBean userOpenDrive(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserOpenServerDrive(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -159,7 +161,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userOpenLock")
     public ResponseBean userOpenLock(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserOpenServerLock(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -173,7 +175,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userCloseLock")
     public ResponseBean userCloseLock(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerLock(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -187,7 +189,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userCloseDrive")
     public ResponseBean userCloseDrive(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerDrive(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){

@@ -66,6 +66,7 @@
                                     <th>出生日期</th>
                                     <th>账户余额</th>
                                     <th>薏米</th>
+                                    <th>积分</th>
                                     <th>等级</th>
                                     <th>邀请人</th>
                                     <th>注册时间</th>
@@ -89,6 +90,7 @@
                                             </a>
                                         </td>
                                         <td>${user.ycoid}</td>
+                                        <td>${user.score}</td>
                                         <td>${user.rankName}</td>
                                         <td>${user.invitedByUserName}</td>
                                         <td><fmt:formatDate value="${user.registerTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
