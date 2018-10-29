@@ -67,6 +67,9 @@ Page({
                     isFavorite: res.data.collection == 1
                 });
             }
+            else {
+                app.showToast(res.message || "获取商品详情失败");
+            }
         });
     },
     goShopCart: function() {
@@ -84,6 +87,9 @@ Page({
                     isFavorite: true
                 });
             }
+            else {
+                app.showToast(res.message || "收藏商品失败");
+            }
         });
     },
     removeShopFavorite: function () {
@@ -94,6 +100,9 @@ Page({
                 content.setData({
                     isFavorite: false
                 });
+            }
+            else {
+                app.showToast(res.message || "移除收藏商品失败");
             }
         });
     },
@@ -129,10 +138,17 @@ Page({
                     goodDetailSize: res.data
                 });
             }
+            else {
+                app.showToast(res.message || "获取商品详情尺码失败");
+            }
         });
     },
     saveShopCartAdd: function (sid, num, type) {
-        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function () {}, function () {});
+        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function (res) {
+            if (res.code != 1) {
+                app.showToast(res.message || "添加购物车失败");
+            }
+        });
     },
 
     /***** 加购物车 *****/

@@ -43,9 +43,14 @@ Page({
         app.wxRequest("/dict/getDicts", {
             dictName: "COMM_STYLE"
         }, function (res) {
-            content.setData({
-                styleList: res.data.dicts
-            });
+            if (res.code == 1) {
+                content.setData({
+                    styleList: res.data.dicts
+                });
+            }
+            else {
+                app.showToast(res.message || "获取字典失败");
+            }
         });
     },
     bindStyleTap: function (e) {
@@ -66,9 +71,14 @@ Page({
         app.wxRequest("/dict/getDicts", {
             dictName: "COMM_CATEGORY"
         }, function (res) {
-            content.setData({
-                categoryList: res.data.dicts
-            });
+            if (res.code == 1) {
+                content.setData({
+                    categoryList: res.data.dicts
+                });
+            }
+            else {
+                app.showToast(res.message || "获取字典失败");
+            }
         });
     },
     bindCategoryTap: function (e) {
@@ -90,9 +100,14 @@ Page({
         app.wxRequest("/dict/getDicts", {
             dictName: "COMM_MATERIAL"
         }, function (res) {
-            content.setData({
-                materialList: res.data.dicts
-            });
+            if (res.code == 1) {
+                content.setData({
+                    materialList: res.data.dicts
+                });
+            }
+            else {
+                app.showToast(res.message || "获取字典失败");
+            }
         });
     },
     bindMaterialTap: function (e) {
@@ -130,9 +145,9 @@ Page({
         }
 
         return {
-            category : categoryIds.length > 0 ? "," + categoryIds.join(",") + "," : "",
-            style    : styleIds.length > 0 ? "," + styleIds.join(",") + "," : "",
-            material : materialIds.length > 0 ? "," + materialIds.join(",") + "," : ""
+            category : categoryIds.length > 0 ? "," + categoryIds.join(",|,") + "," : "",
+            style    : styleIds.length > 0 ? "," + styleIds.join(",|,") + "," : "",
+            material : materialIds.length > 0 ? "," + materialIds.join(",|,") + "," : ""
         };
     },
     clearSelectedItems: function () {
@@ -206,6 +221,9 @@ Page({
                     goods: content.data.goods
                 });
             }
+            else {
+                app.showToast(res.message || "添加收藏失败");
+            }
         });
     },
     removeShopFavorite: function (e) {
@@ -222,6 +240,9 @@ Page({
                 content.setData({
                     goods: content.data.goods
                 });
+            }
+            else {
+                app.showToast(res.message || "移除收藏失败");
             }
         });
     },
@@ -257,6 +278,7 @@ Page({
                     lastPage: 0,
                     currentPage: 1
                 });
+                app.showToast(res.message || "获取商品列表失败");
             }
         });
     }
