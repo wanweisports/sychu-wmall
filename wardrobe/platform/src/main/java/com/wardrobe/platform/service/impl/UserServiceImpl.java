@@ -134,7 +134,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserAccount userAccount = userAccountService.getUserAccount(uid);
         data.put("balance", userAccount.getBalance().doubleValue());
         data.put("ycoid", userAccount.getYcoid());
-        data.put("rank", userAccount.getRank());
+        data.put("rankName", sysRankService.getRankInfoByRank(userAccount.getRank()).getRankName());
         data.put("point", userAccount.getScore());
 
         data.put("couponCount", userCouponService.getUserCouponCount(uid));
