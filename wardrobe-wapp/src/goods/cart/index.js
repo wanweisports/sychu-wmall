@@ -48,11 +48,18 @@ Page({
 
                 content.setGoodsList(content.getSaveHide(), content.totalPrice(), content.allSelect(), content.noSelect(), data.list);
             }
+            else {
+                app.showToast(res.message || "获取购物车列表失败", "none");
+            }
         });
     },
     // 删除购物车列表
     deleteShoppingCart: function (scid) {
-        app.wxRequest("/commodity/delShoppingCart", {scids: scid}, function (res) {});
+        app.wxRequest("/commodity/delShoppingCart", {scids: scid}, function (res) {
+            if (res.code != 1) {
+                app.showToast(res.message || "删除购物车列表失败", "none");
+            }
+        });
     },
     //获取元素自适应后的实际宽度
     getEleWidth: function (w) {
@@ -237,7 +244,7 @@ Page({
                 }
             }
             else {
-                app.showToast(res.message);
+                app.showToast(res.message || "增加商品数量失败");
             }
         });
     },
@@ -260,7 +267,7 @@ Page({
                 }
             }
             else {
-                app.showToast(res.message);
+                app.showToast(res.message || "增加商品数量失败");
             }
         });
     },

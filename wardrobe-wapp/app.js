@@ -8,9 +8,14 @@ App({
     },
 
     toLogin: function () {
+        let content = this;
         let sessionId = this.globalData.sessionId;
+
         if (!!sessionId) {
-            return this.checkSession(this.checkUserComplete, this.login);
+            return this.checkSession(this.checkUserComplete, function () {
+                content.globalData.sessionId = "";
+                content.login();
+            });
         }
 
         this.login();
@@ -84,7 +89,7 @@ App({
                         wx.hideLoading();
 
                         content.showLog("[F][wx.getUserInfo]：" + JSON.stringify(err));
-                        //content.showToast("用户授权失败", "none");
+                        content.showToast("用户授权失败", "none");
                     }
                 });
             }
@@ -95,13 +100,13 @@ App({
         let content = this;
 
         content.wxRequest('/user/isPerfect', {}, function (res) {
-            if (res.data.isPerfect == 2) {
-                wx.redirectTo({
-                    url: "/pages/user/complete/index"
-                });
-            }
-            else {
-                success(res);
+            if (res.code == 1) {
+                if (res.data.perfect == 2) {
+                    content.redirect("/pages/user/complete/index");
+                }
+                else {
+                    content.redirect("/pages/index/index", "switchTab");
+                }
             }
         }, function (err) {
             content.showLog("[F][/user/isPerfect]：" + JSON.stringify(err));
@@ -161,7 +166,7 @@ App({
                 wx.hideLoading();
 
                 if (res.data.code == 10) {
-                    content.showToast("授信登录过期，请重新登录");
+                    content.showToast("授信登录过期，请重新登录！");
                     content.globalData.sessionId = "";
                     content.redirect("/pages/landing/index", "reLaunch");
                 }
