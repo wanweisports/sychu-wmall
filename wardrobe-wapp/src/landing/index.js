@@ -9,6 +9,7 @@ Page({
     },
     onGetUserInfo: function (event) {
         if (event.type.toLowerCase() == "getuserinfo" && event.detail.errMsg.toLowerCase() == "getuserinfo:ok") {
+            app.globalData.sessionId = "";
             app.toLogin();
         }
         else {
