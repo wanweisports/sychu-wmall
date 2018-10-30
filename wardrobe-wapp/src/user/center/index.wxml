@@ -4,7 +4,7 @@
         <view class="userinfo-info">
             <text class="userinfo-nickname">{{ userInfo.nickname }}</text>
             <button class="weui-btn" type="primary" size="mini">
-                <text class="userinfo-rank">Lv{{ userInfo.rank }} 会员 ></text>
+                <text class="userinfo-rank">{{ userInfo.rankName }} ></text>
             </button>
         </view>
     </view>
