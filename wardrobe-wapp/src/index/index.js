@@ -15,6 +15,13 @@ Page({
         newlyGoods: [],
         hotGoods: []
     },
+    onShareAppMessage: function () {
+        return app.onShareAppMessage({
+            path: '/pages/index/index',
+            title: "衣否",
+            imgUrl: this.data.banners[this.data.swiperCurrent].resourcePath
+        });
+    },
     onShow: function() {
         this.getBannerGoodsList();
         this.getHotGoodsList();

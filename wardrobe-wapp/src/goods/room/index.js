@@ -12,6 +12,7 @@ Page({
         },
         delBtnWidth: 120    //删除按钮宽度单位（rpx）
     },
+    onShareAppMessage: null,
     toListPage:function(){
         app.redirect("/pages/goods/list/index", "switchTab");
     },

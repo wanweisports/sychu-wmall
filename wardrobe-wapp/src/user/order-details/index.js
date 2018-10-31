@@ -7,6 +7,7 @@ Page({
         orderGoods: []
     },
 
+    onShareAppMessage: null,
     toPayTap: function (e) {
         let orderId = e.currentTarget.dataset.id;
 

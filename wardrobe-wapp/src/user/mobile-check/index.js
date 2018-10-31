@@ -12,6 +12,7 @@ Page({
         mobile: "",
         code: ""
     },
+    onShareAppMessage: null,
     bindMobileBlur: function (e) {
         this.setData({
             mobile: e.detail.value

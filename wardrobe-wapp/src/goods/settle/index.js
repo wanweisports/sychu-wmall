@@ -28,6 +28,8 @@ Page({
         userInfo: {}
     },
 
+    onShareAppMessage: null,
+
     getCartSettle: function () {
         let content = this;
 

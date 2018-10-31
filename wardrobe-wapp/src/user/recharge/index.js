@@ -6,6 +6,7 @@ Page({
         dictId: "",
         rechargeList  : []
     },
+    onShareAppMessage: null,
     getUserRechargeList: function () {
         var that = this;
 

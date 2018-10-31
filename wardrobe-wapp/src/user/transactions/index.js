@@ -4,6 +4,7 @@ Page({
     data: {
         transactions: {}
     },
+    onShareAppMessage: null,
     getUserTransactionsList: function () {
         var that = this;
 

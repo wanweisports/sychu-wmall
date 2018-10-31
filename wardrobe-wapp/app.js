@@ -221,11 +221,17 @@ App({
             }
         );
     },
-    onShareAppMessage: function () {
+    onShareAppMessage: function (option) {
+        option = option || {};
+
+        option.title = option.title || this.config.shareProfile;
+        option.path = option.path || '/pages/index/index';
+        option.imgUrl = option.imgUrl || '';
+
         return {
-            title : this.getCookie('syc_appName') + '——' + this.config.shareProfile,
-            path  : '/pages/landing/index',
-            withShareTicket: true,
+            title : option.title,
+            path  : option.path,
+            imgUrl: option.imgUrl,
             success: function(res) {
                 // 转发成功
             },

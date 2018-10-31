@@ -21,7 +21,7 @@ Page({
         reserveTimeEndIndex: [0, 0],
         reserveTimeEndValue: ""
     },
-
+    onShareAppMessage: null,
     initDate: function (startTime, endTime) {
         let today = new Date();
 

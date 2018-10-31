@@ -37,6 +37,13 @@ Page({
         // 显示
         isShowFilter   : false
     },
+    onShareAppMessage: function () {
+        return app.onShareAppMessage({
+            path: '/pages/index/index',
+            title: app.getCookie("syc_appName"),
+            imgUrl: this.data.goods[0].resourcePath
+        });
+    },
     getStyleList: function () {
         let content = this;
 

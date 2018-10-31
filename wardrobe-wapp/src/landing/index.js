@@ -4,6 +4,7 @@ Page({
     data: {
         isSupported: wx.canIUse('button.open-type.getUserInfo')
     },
+    onShareAppMessage: null,
     onLoad: function () {
         //app.toLogin();
     },

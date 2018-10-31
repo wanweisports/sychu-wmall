@@ -9,6 +9,7 @@ Page({
 
         userInfo: {}
     },
+    onShareAppMessage: null,
     getUserInfo: function () {
         let content = this;
 

@@ -24,6 +24,7 @@ Page({
         birthday      : "选择生日"
 
     },
+    onShareAppMessage: null,
     getUserSizeDicts: function () {
         let content = this;
 

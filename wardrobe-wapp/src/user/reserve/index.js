@@ -11,6 +11,8 @@ Page({
         hasWardrobeInfo: false
     },
 
+    onShareAppMessage: null,
+
     getWardrobeOrder: function () {
         let content = this;
 

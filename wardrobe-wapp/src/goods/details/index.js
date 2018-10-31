@@ -37,7 +37,13 @@ Page({
         goodDetail: {},
         goodDetailSize: {}
     },
-
+    onShareAppMessage: function () {
+        return app.onShareAppMessage({
+            path: '/pages/goods/details/index?id=' + this.data.goodId,
+            title: "[" + this.data.goodsDetail.brandName + "] " + this.data.goodsDetail.commName,
+            imgUrl: this.data.goodsDetail.resources[0]
+        });
+    },
     //事件处理函数
     swiperchange: function(e) {
         this.setData({
