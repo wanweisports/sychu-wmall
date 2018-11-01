@@ -31,9 +31,9 @@ public interface IDBConstant {
     String USER_SIZE = "USER_SIZE"; //尺码偏好
 
     String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
-    String TRANSACTIONS_TYPE_ZF = "10"; //支付
-    String TRANSACTIONS_TYPE_CZ = "20"; //充值
-    String TRANSACTIONS_TYPE_TK = "30"; //退款
+    String TRANSACTIONS_TYPE_ZF = "1"; //支付
+    String TRANSACTIONS_TYPE_CZ = "2"; //充值
+    String TRANSACTIONS_TYPE_TK = "3"; //退款
 
 
     String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小

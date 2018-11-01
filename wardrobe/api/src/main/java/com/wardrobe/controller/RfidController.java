@@ -33,7 +33,7 @@ public class RfidController extends BaseController {
         Map map = JsonUtils.fromJson(response, Map.class);
         String code = map.get("code").toString();
         if(IPlatformConstant.SUCCESS_CODE.equals(code)) {
-            map = orderService.getRfidSettlemrnt(map, getUserInfo().getUid());
+            map = orderService.getRfidSettlement(map, getUserInfo().getUid());
             return new ResponseBean(map);
         }
         return new ResponseBean(code, map.get("message").toString());

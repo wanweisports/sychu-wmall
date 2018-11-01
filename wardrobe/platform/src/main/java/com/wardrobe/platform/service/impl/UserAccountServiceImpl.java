@@ -4,10 +4,7 @@ import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
-import com.wardrobe.common.po.SysDict;
-import com.wardrobe.common.po.UserAccount;
-import com.wardrobe.common.po.UserInfo;
-import com.wardrobe.common.po.UserOrderInfo;
+import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.*;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +43,13 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
     }
 
     @Override
+    public synchronized void addUserScoreAndBalance(int uid, double priceSum){
+        setBalance(uid, priceSum);
+        setUserScore(uid, priceSum);
+        updateRank(uid);
+    }
+
+    @Override
     public synchronized void addUserScore(int uid, double priceSum){
         setUserScore(uid, priceSum);
         updateRank(uid);
@@ -59,6 +64,14 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
                 userAccount.setYcoid(userAccount.getYcoid() + (ycoid * IPlatformConstant.ADD_USER_YCOID));
                 baseDao.save(userAccount, uid);
             }
+        }
+    }
+
+    private synchronized void setBalance(int uid, double priceSum){
+        UserAccount userAccount = getUserAccount(uid);
+        if(userAccount != null) {
+            userAccount.setBalance(Arith.conversion(Arith.add(userAccount.getBalance().doubleValue(), priceSum)));
+            baseDao.save(userAccount, uid);
         }
     }
 
@@ -109,7 +122,6 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         SysDict sysDict = dictService.getDictById(dictId);
         if(sysDict == null || !IDBConstant.RECHARGE_TYPE.equals(sysDict.getDictName())) throw new MessageException("操作失败，请刷新页面重试！");
 
-        UserAccount userAccount = getUserAccount(uid);
         Double rechargePrice = StrUtil.objToDouble(sysDict.getDictValue());
         if(rechargePrice.doubleValue() != price) throw new MessageException("操作失败，请刷新页面重试！");
 
@@ -120,20 +132,14 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
     @Desc("充值成功后，回调累计金额")
     @Override
-    public synchronized void addRechargePrice(UserOrderInfo userOrderInfo){
-
-        /*Double additionalPrice = StrUtil.objToDouble(sysDict.getDictAdditional());
-
-        //累计用户金额
-        BigDecimal rechargePriceSum = Arith.conversion(Arith.add(rechargePrice, additionalPrice));
-        userAccount.setBalance(rechargePriceSum);
-        baseDao.save(userAccount, uid);
-
-        //保存流水
-        userTransactionsService.addUserTransactions(uid, 0, IDBConstant.TRANSACTIONS_TYPE_CZ, rechargePriceSum);
-
-        //积分累计
-        this.addUserScore(uid, rechargePrice);*/
+    public synchronized void updateRechargePrice(UserOrderInfo userOrderInfo){
+        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+        double rechargePriceSum = 0;
+        for(UserOrderDetail userOrderDetail : userOrderDetails){
+            Arith.add(rechargePriceSum, userOrderDetail.getItemPriceSum().doubleValue());
+        }
+        //积分累计并检测是否升级
+        this.addUserScoreAndBalance(userOrderInfo.getUid(), rechargePriceSum);
     }
 
     @Override

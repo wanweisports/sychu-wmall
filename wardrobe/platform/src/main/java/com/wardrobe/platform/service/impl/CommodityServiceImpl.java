@@ -68,7 +68,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String hot = commodityInputView.getHot();
         Integer groupId = commodityInputView.getGroupId();
 
-        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
+        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE ci.status = '").append(IDBConstant.LOGIC_STATUS_YES).append("'"); //小程序前端只查询上架商品
         if(StrUtil.isNotBlank(category)){
@@ -96,13 +96,14 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> getCommodityDetail(int cid, int uid){
-        Map<String, Object> data = new HashMap<>(8, 1);
+        Map<String, Object> data = new HashMap<>(9, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeNames(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
         data.put("commName", commodityInfo.getCommName());
         data.put("brandName", commodityInfo.getBrandName());
         data.put("price", commodityInfo.getPrice());
+        data.put("couPrice", commodityInfo.getCouPrice());
         data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
         data.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
@@ -111,12 +112,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> getCommodityDetailSelected(int cid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+        Map<String, Object> data = new HashMap<>(7, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeList(cid));
         data.put("cid", commodityInfo.getCid());
         data.put("commName", commodityInfo.getCommName());
         data.put("price", commodityInfo.getPrice());
+        data.put("couPrice", commodityInfo.getCouPrice());
         data.put("resourcePath", getFmImg(commodityInfo.getCid())); //0表示封面图
         return data;
     }

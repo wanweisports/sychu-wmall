@@ -23,7 +23,7 @@ public interface IOrderService {
 
     List<UserOrderDetail> getUserOrderDetails(int oid);
 
-    Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException;
+    Map<String, Object> getRfidSettlement(Map<String, Object> data, int uid) throws ParseException;
 
     Integer saveRfidOrderInfo(UserOrderInfo userOrderInfo, String dbids, int uid) throws ParseException;
 

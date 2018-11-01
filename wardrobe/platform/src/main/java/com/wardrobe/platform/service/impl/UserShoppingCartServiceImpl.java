@@ -79,7 +79,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         double sumPrice = 0;
         for(Map<String, Object> map : list){
             map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
         }
 
         data.put("pageBean", pageBean);
@@ -91,7 +91,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         Integer uid = commodityInputView.getUid();
         String shoppingType = commodityInputView.getShoppingType();
 
-        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.sid, cs.size, ci.cid");
+        StringBuilder headSql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, ci.couPrice, cc.colorName, cs.sid, cs.size, ci.cid");
         StringBuilder bodySql = new StringBuilder(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid");
         if(uid != null){
@@ -124,12 +124,14 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         List<Map<String, Object>> settlement = getSettlement(scids, uid);
         double sumPrice = countSumPrice(settlement);
         UserAccount userAccount = userAccountService.getUserAccount(uid);
-        Map<String, Object> data = new HashMap(10, 1);
+        Map<String, Object> data = new HashMap(16, 1);
         data.put("list", settlement);
         //用户总衣橱币
         data.put("ycoid", userAccount.getYcoid());
         //乘以折扣(四舍五入)
         DiscountBean discountBean = concessionalPrice(sumPrice, null, null, uid, orderService.getOrderCommodityCount(settlement));
+        //用户总余额
+        data.put("balance", userAccount.getBalance().doubleValue());
         //用户优惠券列表
         data.put("coupons", userCouponService.getUserEffectiveCoupons(uid, discountBean.getSumOldDisPrice()));
         data.putAll(JsonUtils.fromJson(discountBean));
@@ -141,13 +143,13 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         double sumPrice = 0;
         for(Map<String, Object> map : list){
             map.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(map.get("cid"))));
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
         }
         return sumPrice;
     }
 
     private List<Map<String, Object>> getSettlement(final String scids, final int uid) {
-        StringBuilder sql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, cc.colorName, cs.size, ci.cid");
+        StringBuilder sql = new StringBuilder("SELECT usc.scid, usc.count, ci.commName, ci.price, ci.couPrice, cc.colorName, cs.size, ci.cid");
         sql.append(" FROM user_shopping_cart usc, commodity_size cs, commodity_color cc, commodity_info ci");
         sql.append(" WHERE usc.sid = cs.sid AND cs.coid = cc.coid AND cc.cid = ci.cid AND usc.uid = :uid");
         sql.append(" AND usc.scid IN(:scids)");
@@ -162,10 +164,10 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         List<Map<String, Object>> settlement = getSettlement(userCouponInputView.getScids(), uid);
         double sumPrice = 0;
         for(Map<String, Object> map : settlement){
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
         }
 
-        Map<String, Object> data = new HashMap<>(10, 1);
+        Map<String, Object> data = new HashMap<>(16, 1);
         //乘以折扣(四舍五入)
         DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid,  orderService.getOrderCommodityCount(settlement));
         data.putAll(JsonUtils.fromJson(discountBean));
@@ -174,7 +176,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
     @Override
     public Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException{
-        StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
+        StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
         sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND cd.dbid IN(:dbids)");
         String dbids = userCouponInputView.getDbids();
         List<Map<String, Object>> settlement = baseDao.queryBySql(sql.toString(), new HashMap() {{
@@ -182,7 +184,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         }});
         double sumPrice = 0;
         for(Map<String, Object> map : settlement){
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("price")), StrUtil.objToInt(map.get("count"))));
+            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
         }
 
         Map<String, Object> data = new HashMap<>(10, 1);
@@ -197,7 +199,7 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         DiscountBean discountBean = new DiscountBean();
         UserAccount userAccount = userAccountService.getUserAccount(uid);
 
-        int freight = commodityCount != null && commodityCount < 2 ? IPlatformConstant.FREIGHT : 0;//运费（满两件包邮，只买一件商品的运费写￥12）
+        int freight = commodityCount != null && commodityCount < 2 ? IPlatformConstant.FREIGHT : 0;//运费（满两件包邮，只买一件商品的运费写￥13）
         discountBean.setFreight(freight);
         discountBean.setSumOldPrice(StrUtil.roundKeepTwo(sumPrice));
 
@@ -230,6 +232,9 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         discountBean.setSumPrice(StrUtil.roundKeepTwo(sumPrice + freight)); //支付总金额
 
         discountBean.countUserDiscountSubPrice(); //计算用户等级折扣减去多少金额
+
+        //能否使用余额支付（余额需要大于支付金额，包括运费）：1：是  2：否
+        discountBean.setUseBalance(userAccount.getBalance().doubleValue() >= discountBean.getSumPrice() ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
         return discountBean;
     }
 

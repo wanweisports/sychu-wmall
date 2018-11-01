@@ -1,5 +1,7 @@
 package com.wardrobe.common.po;
 
+import com.wardrobe.common.constant.IDBConstant;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -19,6 +21,7 @@ public class UserOrderInfo {
     private BigDecimal payPrice;
     private String payStatus;
     private String status;
+    private String payType = IDBConstant.LOGIC_STATUS_YES; //1：微信支付  2：余额支付
     private Timestamp payTime;
     private String expressName;
     private String expressMobile;
@@ -33,6 +36,7 @@ public class UserOrderInfo {
     private String serviceType;
     private Integer cpid;
     private Integer ycoid;
+    private String useBalance; //使用余额支付（可同时使用衣橱币与优惠券，优先扣除衣橱币）
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -123,6 +127,16 @@ public class UserOrderInfo {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "payType")
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     @Basic
@@ -252,6 +266,15 @@ public class UserOrderInfo {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    @Transient
+    public String getUseBalance() {
+        return useBalance;
+    }
+
+    public void setUseBalance(String useBalance) {
+        this.useBalance = useBalance;
     }
 
     @Override

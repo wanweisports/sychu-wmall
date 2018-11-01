@@ -14,6 +14,8 @@ public interface IUserAccountService {
 
     void addUserScoreAndYcoid(int uid, double priceSum);
 
+    void addUserScoreAndBalance(int uid, double priceSum);
+
     void addUserScore(int uid, double priceSum);
 
     void updateRank(int uid);
@@ -26,7 +28,7 @@ public interface IUserAccountService {
 
     int addRechargeOrderInfo(int uid, int dictId, double price);
 
-    void addRechargePrice(UserOrderInfo userOrderInfo);
+    void updateRechargePrice(UserOrderInfo userOrderInfo);
 
     Map<String, Object> getScore(int uid);
 

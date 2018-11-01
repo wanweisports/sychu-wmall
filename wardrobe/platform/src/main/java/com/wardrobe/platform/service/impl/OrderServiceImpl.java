@@ -112,7 +112,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderDetail.setCreateTime(nowDate);
         userOrderDetail.setItemCount(1);
         userOrderDetail.setItemName("赠送金额");
-        userOrderDetail.setItemPrice(Arith.conversion(StrUtil.objToDouble(sysDict.getDictValue())));
+        userOrderDetail.setItemPrice(Arith.conversion(StrUtil.objToDoubleDef0(sysDict.getDictAdditional())));
         userOrderDetail.setItemPriceSum(userOrderDetail.getItemPrice());
         userOrderDetail.setOid(oid);
         baseDao.save(userOrderDetail, null);
@@ -159,7 +159,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
             userOrderDetail.setItemCount(userShoppingCart.getCount());
             userOrderDetail.setItemName(commodityInfo.getCommName());
-            userOrderDetail.setItemPrice(commodityInfo.getPrice());
+            userOrderDetail.setItemPrice(commodityInfo.getCouPrice());
 
             CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
             userOrderDetail.setItemColor(commodityColor.getColorName());
@@ -168,7 +168,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
-            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
+            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getCouPrice().doubleValue(), userShoppingCart.getCount())));
             userOrderDetail.setOid(oid);
             userOrderDetail.setItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(userOrderDetail, null);
@@ -197,22 +197,13 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderInfo.setPayPrice(Arith.conversion(discountBean.getSumPrice())); //支付金额
         baseDao.save(userOrderInfo, oid);
 
-        //优惠券置为使用状态
-        userCouponService.updateUseUserCouponInfo(discountBean.getCpid());
+        updateUserBelongings(userOrderInfo, discountBean); //下单时，处理用户衣橱币，优惠券，余额等信息
 
-        //衣橱币减去
-        int userYcoid = discountBean.getUseYcoid();
-        //减去用户衣橱币
-        userAccountService.updateUserYcoid(userYcoid, uid);
-        if(discountBean.getUseYcoid() > 0) {
-            userOrderInfo.setYcoid(userYcoid);
-            baseDao.save(userOrderInfo, userOrderInfo.getOid());
-        }
         return oid;
     }
 
     @Override
-    public Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException{
+    public Map<String, Object> getRfidSettlement(Map<String, Object> data, int uid) throws ParseException{
         Double sumPrice = StrUtil.objToDouble(data.get("sumPrice"));
         DiscountBean discountBean = userShoppingCartService.concessionalPrice(sumPrice, null, null, uid, null);
         data.putAll(JsonUtils.fromJson(discountBean));
@@ -247,7 +238,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
             userOrderDetail.setItemCount(1);
             userOrderDetail.setItemName(commodityInfo.getCommName());
-            userOrderDetail.setItemPrice(commodityInfo.getPrice());
+            userOrderDetail.setItemPrice(commodityInfo.getCouPrice());
 
             CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
             userOrderDetail.setItemColor(commodityColor.getColorName());
@@ -256,7 +247,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             userOrderDetail.setSid(commoditySize.getSid());
             userOrderDetail.setItemSize(commoditySize.getSize());
 
-            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), 1)));
+            userOrderDetail.setItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getCouPrice().doubleValue(), 1)));
             userOrderDetail.setOid(oid);
             userOrderDetail.setItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(userOrderDetail, null);
@@ -279,18 +270,28 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         userOrderInfo.setPayPrice(Arith.conversion(discountBean.getSumPrice()));
         baseDao.save(userOrderInfo, oid);
 
+        updateUserBelongings(userOrderInfo, discountBean); //下单时，处理用户衣橱币，优惠券，余额等信息
+
+
+        return oid;
+    }
+
+    @Desc("下单时，处理用户衣橱币，优惠券，余额等信息")
+    private void updateUserBelongings(UserOrderInfo userOrderInfo, DiscountBean discountBean) throws ParseException {
         //优惠券置为使用状态
         userCouponService.updateUseUserCouponInfo(discountBean.getCpid());
 
         //衣橱币减去
         int userYcoid = discountBean.getUseYcoid();
         //减去用户衣橱币
-        userAccountService.updateUserYcoid(userYcoid, uid);
+        userAccountService.updateUserYcoid(userYcoid, userOrderInfo.getUid());
         if(discountBean.getUseYcoid() > 0) {
             userOrderInfo.setYcoid(userYcoid);
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
         }
-        return oid;
+        //再次判断余额是否足够
+        UserAccount userAccount = userAccountService.getUserAccount(userOrderInfo.getUid());
+        if(userAccount.getBalance().doubleValue() < userOrderInfo.getPayPrice().doubleValue()) throw new MessageException("余额不足，请选择微信支付或充值足够后再试~");
     }
 
     private boolean existReserveOrderByNo(String rno){
@@ -367,7 +368,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             CommodityInfo commodityInfo = commodityService.getCommodityInfo(cid);
             orderDetail.setResItemCount(userShoppingCart.getCount());
             orderDetail.setResItemName(commodityInfo.getCommName());
-            orderDetail.setResItemPrice(commodityInfo.getPrice());
+            orderDetail.setResItemPrice(commodityInfo.getCouPrice());
 
             CommodityColor commodityColor = commodityService.getCommodityColorByCid(cid);
             orderDetail.setResItemColor(commodityColor.getColorName());
@@ -376,7 +377,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             orderDetail.setSid(commoditySize.getSid());
             orderDetail.setResItemSize(commoditySize.getSize());
 
-            orderDetail.setResItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getPrice().doubleValue(), userShoppingCart.getCount())));
+            orderDetail.setResItemPriceSum(Arith.conversion(Arith.mul(commodityInfo.getCouPrice().doubleValue(), userShoppingCart.getCount())));
             orderDetail.setRoid(oid);
             orderDetail.setResItemImg(commodityService.getFmImg(cid, false));
             baseDao.save(orderDetail, null);
@@ -497,90 +498,103 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Integer oId = orderInputView.getOrderId();
 
         UserOrderInfo orderInfo = getUserOrderInfo(oId); //openId = "oTK5utzXi_A2q8aus80Y60__LzY0";
-        // 1 参数
-        // 订单号
-        String orderId = orderInfo.getOid() + "_" + System.currentTimeMillis();
-        // 附加数据 原样返回
-        String attach = "cxs";
-        // 总金额以分为单位，不带小数点
-        if(orderInfo.getPayPrice().doubleValue() <= 0) { //无需支付
-            orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
-            orderInfo.setPayTime(DateUtil.getNowDate());
-            baseDao.save(orderInfo, oId);
-            return new HashMap(){{put("ok", IDBConstant.LOGIC_STATUS_YES);}};
-        }
-        String totalFee = StrUtil.getMoney(StrUtil.objToStr(orderInfo.getPayPrice().doubleValue())); //这里是支付金额
+        Integer uid = orderInfo.getUid();
+        synchronized (orderInfo.getOno().intern()) {
+            // 1 参数
+            // 订单号
+            String orderId = orderInfo.getOid() + "_" + System.currentTimeMillis();
+            // 附加数据 原样返回
+            String attach = "cxs";
+            // 总金额以分为单位，不带小数点
+            if (orderInfo.getPayPrice().doubleValue() <= 0 || IDBConstant.LOGIC_STATUS_NO.equals(orderInfo.getPayType())) { //无需支付
+                if (IDBConstant.LOGIC_STATUS_NO.equals(orderInfo.getPayType())) { //余额支付
+                    //再次判断余额是否足够
+                    UserAccount userAccount = userAccountService.getUserAccount(uid);
+                    if(userAccount.getBalance().doubleValue() < orderInfo.getPayPrice().doubleValue()) throw new MessageException("余额不足，请选择微信支付或充值足够后再试。");
+                    userAccount.setBalance(Arith.conversion(Arith.sub(userAccount.getBalance().doubleValue(), orderInfo.getPayPrice().doubleValue())));
+                    baseDao.save(userAccount, userAccount.getUid());
+                }
+                orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
+                orderInfo.setPayTime(DateUtil.getNowDate());
+                baseDao.save(orderInfo, oId);
+                return new HashMap() {{
+                    put("ok", IDBConstant.LOGIC_STATUS_YES);
+                }};
+            }
 
-        // 订单生成的机器 IP
-        String spbill_create_ip = "127.0.0.1";
-        // 这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
-        String notify_url = ConfigUtil.NOTIFY_URL;
-        String trade_type = "JSAPI";
+            String totalFee = StrUtil.getMoney(StrUtil.objToStr(orderInfo.getPayPrice().doubleValue())); //这里是支付金额
 
-        // ---必须参数
-        // 随机字符串
-        String nonce_str = StrUtil.getNonceStr();
+            // 订单生成的机器 IP
+            String spbill_create_ip = "127.0.0.1";
+            // 这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
+            String notify_url = ConfigUtil.NOTIFY_URL;
+            String trade_type = "JSAPI";
 
-        // 商品描述根据情况修改
-        String body = IDBConstant.TRANSACTIONS_TYPE_ZF.equals(orderInfo.getOrderType()) ? "商品购买" : "充值";
+            // ---必须参数
+            // 随机字符串
+            String nonce_str = StrUtil.getNonceStr();
 
-        // 商户订单号
-        String out_trade_no = orderId;
+            // 商品描述根据情况修改
+            String body = IDBConstant.TRANSACTIONS_TYPE_ZF.equals(orderInfo.getOrderType()) ? "商品购买" : "充值";
 
-        SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-        packageParams.put("appid", ConfigUtil.APPID);
-        packageParams.put("mch_id", ConfigUtil.MCH_ID);  //商户号
-        packageParams.put("nonce_str", nonce_str);
-        packageParams.put("body", body);
-        packageParams.put("attach", attach);
-        packageParams.put("out_trade_no", out_trade_no);
+            // 商户订单号
+            String out_trade_no = orderId;
 
-        // 这里写的金额为1 分到时修改
-        packageParams.put("total_fee", totalFee);
-        packageParams.put("spbill_create_ip", spbill_create_ip);
-        packageParams.put("notify_url", notify_url);
+            SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
+            packageParams.put("appid", ConfigUtil.APPID);
+            packageParams.put("mch_id", ConfigUtil.MCH_ID);  //商户号
+            packageParams.put("nonce_str", nonce_str);
+            packageParams.put("body", body);
+            packageParams.put("attach", attach);
+            packageParams.put("out_trade_no", out_trade_no);
 
-        packageParams.put("trade_type", trade_type);
-        packageParams.put("openid", openId);
-        String sign = PayCommonUtil.createSign("UTF-8", packageParams);
-        packageParams.put("sign", sign);
+            // 这里写的金额为1 分到时修改
+            packageParams.put("total_fee", totalFee);
+            packageParams.put("spbill_create_ip", spbill_create_ip);
+            packageParams.put("notify_url", notify_url);
 
-        String requestXML = PayCommonUtil.getRequestXml(packageParams);
-        logger.info("requestXML：" + requestXML);
-        Map map = XMLUtil.doXMLParse(HttpConnect.httpsRequestStr(ConfigUtil.UNIFIED_ORDER_URL, "POST", requestXML));
+            packageParams.put("trade_type", trade_type);
+            packageParams.put("openid", openId);
+            String sign = PayCommonUtil.createSign("UTF-8", packageParams);
+            packageParams.put("sign", sign);
 
-        String prepay_id = map.get("prepay_id").toString();
-        logger.info("获取到的预支付ID：" + prepay_id);
+            String requestXML = PayCommonUtil.getRequestXml(packageParams);
+            logger.info("requestXML：" + requestXML);
+            Map map = XMLUtil.doXMLParse(HttpConnect.httpsRequestStr(ConfigUtil.UNIFIED_ORDER_URL, "POST", requestXML));
 
-        //获取prepay_id后，拼接最后请求支付所需要的package
+            String prepay_id = map.get("prepay_id").toString();
+            logger.info("获取到的预支付ID：" + prepay_id);
 
-        SortedMap<Object, Object> finalpackage = new TreeMap<Object, Object>();
-        String timestamp = SignUtil.getTimeStamp();
-        String packages = "prepay_id="+prepay_id;
-        finalpackage.put("appId", ConfigUtil.APPID);
-        finalpackage.put("timeStamp", timestamp);
-        finalpackage.put("nonceStr", nonce_str);
-        finalpackage.put("package", packages);
-        finalpackage.put("signType", ConfigUtil.SIGN_TYPE);
+            //获取prepay_id后，拼接最后请求支付所需要的package
 
-        //要签名
-        String finalsign = PayCommonUtil.createSign("UTF-8", finalpackage);
-        finalpackage.put("paySign", finalsign);
+            SortedMap<Object, Object> finalpackage = new TreeMap<Object, Object>();
+            String timestamp = SignUtil.getTimeStamp();
+            String packages = "prepay_id=" + prepay_id;
+            finalpackage.put("appId", ConfigUtil.APPID);
+            finalpackage.put("timeStamp", timestamp);
+            finalpackage.put("nonceStr", nonce_str);
+            finalpackage.put("package", packages);
+            finalpackage.put("signType", ConfigUtil.SIGN_TYPE);
 
-        String finaPackage = "\"appId\":\"" + ConfigUtil.APPID + "\",\"timeStamp\":\"" + timestamp
-                + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""
-                + packages + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
-                + finalsign + "\"";
+            //要签名
+            String finalsign = PayCommonUtil.createSign("UTF-8", finalpackage);
+            finalpackage.put("paySign", finalsign);
+
+            String finaPackage = "\"appId\":\"" + ConfigUtil.APPID + "\",\"timeStamp\":\"" + timestamp
+                    + "\",\"nonceStr\":\"" + nonce_str + "\",\"package\":\""
+                    + packages + "\",\"signType\" : \"MD5" + "\",\"paySign\":\""
+                    + finalsign + "\"";
        /* timeStamp: param.data.timeStamp,//记住，这边的timeStamp一定要是字符串类型的，不然会报错，我这边在java后端包装成了字符串类型了
                 nonceStr: param.data.nonceStr,
         package: param.data.package,
         signType: 'MD5',
                 paySign: param.data.paySign,*/
-        logger.info("V3 jsApi package:" + finaPackage);
-        finalpackage.put("finaPackage", finaPackage);
-        return finalpackage;
-        //logger.info("V3 jsApi package:"+finaPackage);
-        //return finaPackage;
+            logger.info("V3 jsApi package:" + finaPackage);
+            finalpackage.put("finaPackage", finaPackage);
+            return finalpackage;
+            //logger.info("V3 jsApi package:"+finaPackage);
+            //return finaPackage;
+        }
     }
 
     @Override
@@ -641,43 +655,42 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
                     userOrderInfo.setPayTime(DateUtil.getNowDate());
                     baseDao.save(userOrderInfo, userOrderInfo.getOid());
-                    //交易流水
-                    userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, userOrderInfo.getOrderType(), userOrderInfo.getPayPrice());
-                    //累加积分与衣橱币(衣米)
-                    //每消费或充值1元，获得1积分。消费金额按照商品订单实际支付金额（仅微信支付）计算，舍弃订单金额小数位。
-                    //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
-                    //1衣米 = 1元。使用衣米支付时，订单元以下金额 = 1衣米。
-                    userAccountService.addUserScoreAndYcoid(userOrderInfo.getUid(), userOrderInfo.getPayPrice().doubleValue());
 
-                    //处理配送改为已售出
-                    if(IDBConstant.LOGIC_STATUS_OTHER.equals(userOrderInfo.getOrderType())){
-                        List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
-                        if(userOrderDetails != null) {
-                            for (UserOrderDetail ud : userOrderDetails) {
-                                if (ud != null) {
-                                    SysCommodityDistribution commodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, ud.getDbid());
-                                    if (commodityDistribution != null) {
-                                        commodityDistribution.setStatus(IDBConstant.LOGIC_STATUS_NO);
-                                        baseDao.save(commodityDistribution, commodityDistribution.getDcid());
+                    String orderType = userOrderInfo.getOrderType();
+                    //交易流水
+                    userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, orderType, userOrderInfo.getPayPrice());
+                    //普通订单或射频订单
+                    if(IDBConstant.LOGIC_STATUS_YES.equals(orderType) || IDBConstant.LOGIC_STATUS_OTHER.equals(orderType)) {
+                        //累加积分与衣橱币(衣米)
+                        //每消费或充值1元，获得1积分。消费金额按照商品订单实际支付金额（仅微信支付）计算，舍弃订单金额小数位。
+                        //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
+                        //1衣米 = 1元。使用衣米支付时，订单元以下金额 = 1衣米。
+                        userAccountService.addUserScoreAndYcoid(userOrderInfo.getUid(), userOrderInfo.getPayPrice().doubleValue());
+
+                        //写入库存日志
+                        commodityService.saveOrderSubStock(userOrderInfo);
+
+                        //写入商品已售多少件
+                        commodityService.saveCommoditySaleCount(userOrderInfo);
+
+                        //处理配送改为已售出
+                        if(IDBConstant.LOGIC_STATUS_OTHER.equals(orderType)){
+                            List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
+                            if(userOrderDetails != null) {
+                                for (UserOrderDetail ud : userOrderDetails) {
+                                    if (ud != null) {
+                                        SysCommodityDistribution commodityDistribution = baseDao.getToEvict(SysCommodityDistribution.class, ud.getDbid());
+                                        if (commodityDistribution != null) {
+                                            commodityDistribution.setStatus(IDBConstant.LOGIC_STATUS_NO);
+                                            baseDao.save(commodityDistribution, commodityDistribution.getDcid());
+                                        }
                                     }
                                 }
                             }
                         }
+                    }else if(IDBConstant.LOGIC_STATUS_NO.equals(orderType)){ //充值订单
+                        userAccountService.updateRechargePrice(userOrderInfo);
                     }
-
-                    //写入库存日志
-                    commodityService.saveOrderSubStock(userOrderInfo);
-
-                    //写入商品已售多少件
-                    commodityService.saveCommoditySaleCount(userOrderInfo);
-
-                    //userOrderInfo.setPayPrice(userOrderInfo.getPriceSum());
-                    //充值类型需要处理用户账户金额
-                    /*synchronized (OrderServiceImpl.class) {
-                        if (IDBConstant.TRANSACTIONS_TYPE_ZF.equals(userOrderInfo.getOrderType())) {
-                            //userAccountService.addRechargePrice(userOrderInfo.getUid(), userOrderInfo.getPayPrice());
-                        }
-                    }*/
                 }
             }else{
                 System.out.println("qianming_1_fail");
@@ -732,6 +745,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         if(uid != null){
             whereSql.append(" AND uoi.uid = :uid");
         }
+        whereSql.append(" AND uoi.orderType != '").append(IDBConstant.LOGIC_STATUS_NO).append("'"); //只查询购物的订单(1：普通订单，2：充值，3：射频订单)
         whereSql.append(" ORDER BY uoi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
