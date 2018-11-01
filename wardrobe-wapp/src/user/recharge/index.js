@@ -68,17 +68,30 @@ Page({
         });
     },
     bindSave: function () {
+        let content = this;
         let price = this.data.balance;
+        let dictId = this.data.dictId;
 
-        if (price == "" || price * 1 < 0) {
+        if (price == "" || price <= 0) {
             wx.showModal({
-                title: '错误',
+                title: '提 示',
                 content: '请填写正确的充值金额',
                 showCancel: false
             });
             return;
         }
 
-        //wxpay.wxpay(app, price, 0, "/pages/my/index");
+        app.wxRequest("/user/userRecharge", {dictId: dictId, price: price}, function (res) {
+            if (res.code == 1) {
+                let oid = res.data.oid;
+
+                app.wxPay(oid, "/pages/user/transactions/index");
+            }
+            else {
+                app.showToast("创建充值订单失败", "none");
+            }
+        }, function () {
+            app.showToast("创建充值订单错误", "none");
+        });
     }
 });
