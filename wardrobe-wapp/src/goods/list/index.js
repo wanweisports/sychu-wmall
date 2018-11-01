@@ -40,8 +40,8 @@ Page({
     onShareAppMessage: function () {
         return app.onShareAppMessage({
             path: '/pages/index/index',
-            title: app.getCookie("syc_appName"),
-            imgUrl: this.data.goods[0].resourcePath
+            title: app.getCookie("syc_appName") || "衣否",
+            imgUrl: "/images/logo.jpg"
         });
     },
     getStyleList: function () {

@@ -16,11 +16,13 @@
         "pages/user/favorite/index",
         "pages/user/recharge/index",
         "pages/user/transactions/index",
+        "pages/user/transactions-ycoid/index",
         "pages/user/coupons/index",
         "pages/user/order-list/index",
         "pages/user/order-details/index",
         "pages/user/reserve/index",
-        "pages/user/protocols/user"
+        "pages/user/protocols/user",
+        "pages/wuliu/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
