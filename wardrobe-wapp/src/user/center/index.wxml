@@ -32,10 +32,14 @@
     <view style="height:20rpx;background: #eee;width:100%;"></view>
 
     <view class="my-item">
-        账户余额<text class="right-text">{{userInfo.balance}}元</text>
+        <navigator url="/pages/user/recharge/index" hover-class="navigator-hover">
+            账户余额<text class="right-text">{{userInfo.balance}}元</text>
+        </navigator>
     </view>
     <view class="my-item">
-        我的薏米<text class="right-text">{{userInfo.ycoid}}个</text>
+        <navigator url="/pages/user/transactions-ycoid/index" hover-class="navigator-hover">
+            我的薏米<text class="right-text">{{userInfo.ycoid}}个</text>
+        </navigator>
     </view>
     <view class="my-item">
         <navigator url="/pages/user/coupons/index" hover-class="navigator-hover">

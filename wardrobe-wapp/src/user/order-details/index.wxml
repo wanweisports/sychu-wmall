@@ -44,5 +44,6 @@
             <view class="total">合计：¥ {{orderDetail.payPrice}}</view>
         </view>
         <view class="btn to-pay-btn" hidden="{{orderDetail.payStatus == 2 ? false : true}}" bindtap="toPayTap" data-id="{{item.oid}}">马上付款</view>
+        <view class="btn to-pay-btn" hidden="{{orderDetail.payStatus != 2 ? false : true}}" bindtap="toWuliuTap" data-id="{{item.oid}}">查看物流</view>
     </view> 
 </view>

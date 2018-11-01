@@ -35,14 +35,18 @@
             <view class="row-box" wx:if="{{hasYcoid}}">
                 <view class="row-label">使用薏米</view>
                 <picker bindchange="bindYcoidChange" value="{{ycoidIndex}}" range="{{ycoidList}}" range-key="{{'textShow'}}">
-                        <view class="right-text">{{ycoidList[ycoidIndex].textShow}}</view>
+                    <view class="right-text">{{ycoidList[ycoidIndex].textShow}}</view>
                 </picker>
             </view>
             <view class="row-box" wx:if="{{hasCoupons}}">
                 <view class="row-label">优惠券</view>
                 <picker bindchange="bindCouponsChange" value="{{couponsIndex}}" range="{{coupons}}" range-key="{{'textShow'}}">
-                        <view class="right-text">{{coupons[couponsIndex].textShow}}</view>
+                    <view class="right-text">{{coupons[couponsIndex].textShow}}</view>
                 </picker>
+            </view>
+            <view class="row-box">
+                <view class="row-label">支付方式</view>
+                <view class="right-text">微信支付</view>
             </view>
         </view>
         <view class="goods-info">

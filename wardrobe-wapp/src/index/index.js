@@ -18,8 +18,8 @@ Page({
     onShareAppMessage: function () {
         return app.onShareAppMessage({
             path: '/pages/index/index',
-            title: "衣否",
-            imgUrl: this.data.banners[this.data.swiperCurrent].resourcePath
+            title: app.getCookie("syc_appName") || "衣否",
+            imgUrl: "/images/logo.jpg"
         });
     },
     onShow: function() {

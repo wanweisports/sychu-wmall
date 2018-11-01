@@ -1,35 +1,28 @@
 //index.js
 //获取应用实例
-var app = getApp()
+const app = getApp()
+
 Page({
-  data: {},
-  onLoad: function (e) {
-    var orderId = e.id;
-    this.data.orderId = orderId;
-  },
-  onShow: function () {
-    var that = this;
-    wx.request({
-      url: '',
-      data: {
-        token: app.globalData.token,
-        id: that.data.orderId
-      },
-      success: (res) => {
-        wx.hideLoading();
-        if (res.data.code != 0) {
-          wx.showModal({
-            title: '错误',
-            content: res.data.msg,
-            showCancel: false
-          })
-          return;
-        }
-        that.setData({
-          orderDetail: res.data.data,
-          logisticsTraces: res.data.data.logisticsTraces.reverse()
-        });
-      }
-    })
-  }
-})
+    data: {
+        orderId: "",
+        logisticsTraces: [{
+            acceptTime: "2018-11-01 15:10:12",
+            acceptStation: "货物已到达 上海千阳站"
+        }, {
+            acceptTime: "2018-11-01 15:10:12",
+            acceptStation: "货物已到达 上海千阳站"
+        }, {
+            acceptTime: "2018-11-01 15:10:12",
+            acceptStation: "货物已到达 上海千阳站"
+        }, {
+            acceptTime: "2018-11-01 15:10:12",
+            acceptStation: "货物已到达 上海千阳站"
+        }, {
+            acceptTime: "2018-11-01 15:10:12",
+            acceptStation: "货物已到达 上海千阳站"
+        }]
+    },
+    onShow: function (e) {
+        this.data.orderId = e.id;
+    }
+});

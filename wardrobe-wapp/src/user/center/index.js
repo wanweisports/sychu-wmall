@@ -9,7 +9,22 @@ Page({
 
         userInfo: {}
     },
-    onShareAppMessage: null,
+    onShareAppMessage: function (e) {
+        if (e.from === 'menu') {
+            return app.onShareAppMessage({
+                path: '/pages/index/index',
+                title: app.getCookie("syc_appName") || "衣否",
+                imgUrl: "/images/logo.jpg"
+            });
+        }
+        else if (e.from === 'button') {
+            return app.onShareAppMessage({
+                path: '/pages/index/index?inviteCode=' + this.data.userInfo.inviteCode,
+                title: app.getCookie("syc_appName") || "衣否",
+                imgUrl: "/images/logo.jpg"
+            });
+        }
+    },
     getUserInfo: function () {
         let content = this;
 
@@ -23,8 +38,9 @@ Page({
         this.getUserInfo();
     },
     inviteFriends : function () {
+        //<button open-type="share" class="item-share">邀请好友</button>
         wx.showModal({
-            content: '您的邀请码：' + this.data.userInfo.inviteCode || "66666",
+            content: ('您的邀请码：' + this.data.userInfo.inviteCode || "66666"),
             showCancel: false
         });
     },

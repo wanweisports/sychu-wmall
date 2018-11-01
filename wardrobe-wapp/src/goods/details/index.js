@@ -51,7 +51,7 @@ Page({
         })
     },
     bindColorTap: function (e) {
-        app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "navigateTo");
+        app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "redirectTo");
     },
     getGoodsDetail: function () {
         let content = this;

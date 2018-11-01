@@ -28,6 +28,7 @@ page{
     width: 100%;
     margin-top: 40rpx;
     overflow: hidden;
+    padding-top: 20rpx;
 }
 .details-info .a-row{
     margin-left: 40rpx;
