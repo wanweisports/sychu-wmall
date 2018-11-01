@@ -97,6 +97,13 @@
     margin-left: 24rpx;
 }
 
+.goods-box .goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
+}
+
 .favorite {
     position: absolute;
     width: 44rpx;
