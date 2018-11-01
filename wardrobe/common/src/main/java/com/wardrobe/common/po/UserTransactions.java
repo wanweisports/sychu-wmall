@@ -11,9 +11,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class UserTransactions {
     private int tid;
     private Integer uid;
-    private String serviceType;
+    private String serviceType; //1：支付 2：充值 3：退款  4:奖励
     private Integer serviceId;
+    private String type;        //1：微信支付  2：余额支付  3：奖励薏米
     private BigDecimal price;
+    private String remark;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -36,6 +38,16 @@ public class UserTransactions {
 
     public void setUid(Integer uid) {
         this.uid = uid;
+    }
+
+    @Basic
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Basic
@@ -66,6 +78,17 @@ public class UserTransactions {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+
+    @Basic
+    @Column(name = "remark")
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Basic

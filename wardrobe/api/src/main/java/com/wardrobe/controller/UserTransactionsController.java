@@ -24,6 +24,7 @@ public class UserTransactionsController extends BaseController {
     @ResponseBody
     @RequestMapping("index")
     public ResponseBean index(UserTransactionsInputView userTransactionsInputView){
+        userTransactionsInputView.setUid(getUserInfo().getUid());
         return new ResponseBean(setPageInfo(userTransactionsService.getUserTransactionsList(userTransactionsInputView)));
     }
 

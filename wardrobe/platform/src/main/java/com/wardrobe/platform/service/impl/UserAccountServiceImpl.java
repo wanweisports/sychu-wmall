@@ -11,8 +11,6 @@ import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +61,8 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
             if(ycoid > 0) {
                 userAccount.setYcoid(userAccount.getYcoid() + (ycoid * IPlatformConstant.ADD_USER_YCOID));
                 baseDao.save(userAccount, uid);
+                //交易流水(奖励)
+                userTransactionsService.addUserTransactions(uid, ycoid, IDBConstant.TRANSACTIONS_SERVICE_TYPE_JL, IDBConstant.TRANSACTIONS_TYPE_YCOID); //奖励衣橱币
             }
         }
     }
