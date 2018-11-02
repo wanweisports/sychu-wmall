@@ -28,6 +28,7 @@ public class CommodityInfo {
     private Integer groupId;
     private String commNo;
     private String brandName;
+    private Integer clickRate = 0;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -194,6 +195,17 @@ public class CommodityInfo {
 
     public void setBrandName(String brandName) {
         this.brandName = brandName;
+    }
+
+
+    @Basic
+    @Column(name = "clickRate")
+    public Integer getClickRate() {
+        return clickRate;
+    }
+
+    public void setClickRate(Integer clickRate) {
+        this.clickRate = clickRate;
     }
 
     @Basic

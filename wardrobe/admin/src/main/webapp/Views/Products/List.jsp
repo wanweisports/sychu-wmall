@@ -103,6 +103,7 @@
                             <table class="table table-striped table-sm table-bordered products-list">
                                 <thead>
                                 <tr>
+                                    <th>商品ID</th>
                                     <th>商品编号</th>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
@@ -110,7 +111,9 @@
                                     <th>商品材质</th>
                                     <th>商品价格</th>
                                     <th>已售</th>
+                                    <th>点击量</th>
                                     <th>已收藏</th>
+                                    <th>总库存</th>
                                     <th>排序</th>
                                     <th>操作</th>
                                 </tr>
@@ -118,6 +121,7 @@
                                 <tbody>
                                 <c:forEach var="c" items="${page.list}" varStatus="status">
                                 <tr data-id="">
+                                    <td>${c.cid}</td>
                                     <td>${c.commNo}</td>
                                     <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
                                     <td>
@@ -128,7 +132,9 @@
                                     <td>￥${c.price}</td>
                                     <%--<td>￥399</td>--%>
                                     <td>${c.saleCount}件</td>
+                                    <td>${c.clickRate}次</td>
                                     <td>${c.collectionCount}人</td>
+                                    <td>${c.sizeStockSum}</td>
                                     <td>
                                         <input type="text" class="set-seq-value" value="${c.seqNo}" data-id="${c.cid}" />
                                     </td>

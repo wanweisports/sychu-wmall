@@ -2,17 +2,15 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.po.UserTransactions;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserTransactionsInputView;
-import com.wardrobe.platform.service.IDictService;
 import com.wardrobe.platform.service.IUserTransactionsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -28,7 +26,9 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         ListIterator<Map<String, Object>> listIterator = pageBean.getList().listIterator();
         while (listIterator.hasNext()){
             Map<String, Object> map = listIterator.next();
-            map.put("serviceTypeName",  dictService.getDictValue(IDBConstant.TRANSACTIONS_TYPE, StrUtil.objToStr(map.get("serviceType"))));
+            String serviceType = dictService.getDictValue(IDBConstant.TRANSACTIONS_SERVICE_TYPE, StrUtil.objToStr(map.get("serviceType")));
+            String type = dictService.getDictValue(IDBConstant.TRANSACTIONS_TYPE, StrUtil.objToStr(map.get("type")));
+            map.put("serviceTypeName",  StrUtil.objToStrDefEmpty(type) + serviceType);
         }
         return pageBean;
     }
@@ -51,16 +51,44 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         if(StrUtil.isNotBlank(mobile)){
             whereSql.append(" AND ui.mobile = :mobile");
         }
+        whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
+        whereSql.append(" ORDER BY ut.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
     }
 
     @Override
-    public void addUserTransactions(int uid, int serviceId, String serviceType, BigDecimal price){
+    public void addOrderUserTransactions(UserOrderInfo userOrderInfo, String serviceType, String type){
+        //微信或余额支付
+        UserTransactions userTransactions = new UserTransactions();
+        userTransactions.setUid(userOrderInfo.getUid());
+        userTransactions.setServiceId(userOrderInfo.getOid());
+        userTransactions.setServiceType(serviceType);
+        userTransactions.setType(type);
+        userTransactions.setPrice(userOrderInfo.getPayPrice());
+        userTransactions.setCreateTime(DateUtil.getNowDate());
+        baseDao.save(userTransactions, null);
+
+        if(userOrderInfo.getYcoid() != null){ //订单衣橱币流水记录
+            userTransactions = new UserTransactions();
+            userTransactions.setUid(userOrderInfo.getUid());
+            userTransactions.setServiceId(userOrderInfo.getOid());
+            userTransactions.setServiceType(serviceType);
+            userTransactions.setType(IDBConstant.TRANSACTIONS_TYPE_YCOID); //衣橱币
+            userTransactions.setPrice(Arith.conversion(userOrderInfo.getYcoid()));
+            userTransactions.setCreateTime(DateUtil.getNowDate());
+            baseDao.save(userTransactions, null);
+        }
+    }
+
+    @Override
+    public void addUserTransactions(int uid, double price, String serviceType, String type){
+        //微信或余额支付
         UserTransactions userTransactions = new UserTransactions();
         userTransactions.setUid(uid);
-        userTransactions.setServiceId(serviceId);
+        userTransactions.setServiceId(uid);
         userTransactions.setServiceType(serviceType);
-        userTransactions.setPrice(price);
+        userTransactions.setType(type);
+        userTransactions.setPrice(Arith.conversion(price));
         userTransactions.setCreateTime(DateUtil.getNowDate());
         baseDao.save(userTransactions, null);
     }

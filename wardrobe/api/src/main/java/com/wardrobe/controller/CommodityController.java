@@ -96,4 +96,11 @@ public class CommodityController extends BaseController {
         return new ResponseBean(commodityService.getCommodityBanners());
     }
 
+    @ResponseBody
+    @RequestMapping("clickRate")
+    public ResponseBean clickRate(int cid){
+        commodityService.updateClickRate(cid);
+        return new ResponseBean(true);
+    }
+
 }

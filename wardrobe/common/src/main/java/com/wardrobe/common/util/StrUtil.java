@@ -54,6 +54,11 @@ public class StrUtil extends StringUtils {
         return String.valueOf(objStr);
     }
 
+    public static String objToStrDefEmpty(Object objStr){
+        if(objStr == null) return EMPTY;
+        return objToStr(objStr);
+    }
+
     public static String leftFillToLenth(String param, int requestLength, char fillUnit){
         while(param.length() < requestLength){
             param = String.valueOf(fillUnit) + param;

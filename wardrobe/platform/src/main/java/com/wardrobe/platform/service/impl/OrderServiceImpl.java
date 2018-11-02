@@ -40,6 +40,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     private IUserAccountService userAccountService;
 
     @Autowired
+    private IUserService userService;
+
+    @Autowired
     private IUserShoppingCartService userShoppingCartService;
 
     @Autowired
@@ -513,6 +516,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                     if(userAccount.getBalance().doubleValue() < orderInfo.getPayPrice().doubleValue()) throw new MessageException("余额不足，请选择微信支付或充值足够后再试。");
                     userAccount.setBalance(Arith.conversion(Arith.sub(userAccount.getBalance().doubleValue(), orderInfo.getPayPrice().doubleValue())));
                     baseDao.save(userAccount, userAccount.getUid());
+
+                    //交易流水
+                    userTransactionsService.addOrderUserTransactions(orderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF, IDBConstant.LOGIC_STATUS_NO); //余额支付
                 }
                 orderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
                 orderInfo.setPayTime(DateUtil.getNowDate());
@@ -535,7 +541,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             String nonce_str = StrUtil.getNonceStr();
 
             // 商品描述根据情况修改
-            String body = IDBConstant.TRANSACTIONS_TYPE_ZF.equals(orderInfo.getOrderType()) ? "商品购买" : "充值";
+            String body = IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF.equals(orderInfo.getOrderType()) ? "商品购买" : "充值";
 
             // 商户订单号
             String out_trade_no = orderId;
@@ -651,27 +657,38 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 logger.info("支付成功!");
                 Integer oId = StrUtil.objToInt(out_trade_no.substring(0, out_trade_no.indexOf("_")));
                 UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oId);
+                Date nowDate = new Date();
                 if(!IDBConstant.LOGIC_STATUS_YES.equals(userOrderInfo.getPayStatus())){ //未支付状态
                     userOrderInfo.setPayStatus(IDBConstant.LOGIC_STATUS_YES);
                     userOrderInfo.setPayTime(DateUtil.getNowDate());
                     baseDao.save(userOrderInfo, userOrderInfo.getOid());
 
+                    Integer uid = userOrderInfo.getUid();
                     String orderType = userOrderInfo.getOrderType();
-                    //交易流水
-                    userTransactionsService.addUserTransactions(userOrderInfo.getUid(), oId, orderType, userOrderInfo.getPayPrice());
                     //普通订单或射频订单
                     if(IDBConstant.LOGIC_STATUS_YES.equals(orderType) || IDBConstant.LOGIC_STATUS_OTHER.equals(orderType)) {
                         //累加积分与衣橱币(衣米)
                         //每消费或充值1元，获得1积分。消费金额按照商品订单实际支付金额（仅微信支付）计算，舍弃订单金额小数位。
                         //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
                         //1衣米 = 1元。使用衣米支付时，订单元以下金额 = 1衣米。
-                        userAccountService.addUserScoreAndYcoid(userOrderInfo.getUid(), userOrderInfo.getPayPrice().doubleValue());
+                        double payPrice = userOrderInfo.getPayPrice().doubleValue();
+                        userAccountService.addUserScoreAndYcoid(uid, payPrice);
 
                         //写入库存日志
                         commodityService.saveOrderSubStock(userOrderInfo);
 
                         //写入商品已售多少件
                         commodityService.saveCommoditySaleCount(userOrderInfo);
+
+                        //交易流水(支付普通)
+                        userTransactionsService.addOrderUserTransactions(userOrderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF, userOrderInfo.getPayType());
+
+                        //邀请好友注册一个月以内第一笔消费，给推荐人赠送1%薏米（消费1000元，送推荐人10薏米）
+                        UserInfo userInfo = userService.getUserInfo(uid);
+                        Date dateBefore30 = DateUtil.addDate(nowDate, -30);
+                        if(userInfo.getInvitedBy() != null && userInfo.getRegisterTime().getTime() >= dateBefore30.getTime() && getUserPayOrderCount(uid) == 1){ //有邀请人，并且申请时间在30天之内
+                            userAccountService.setUserYcoid(userInfo.getInvitedBy(), payPrice);
+                        }
 
                         //处理配送改为已售出
                         if(IDBConstant.LOGIC_STATUS_OTHER.equals(orderType)){
@@ -690,6 +707,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                         }
                     }else if(IDBConstant.LOGIC_STATUS_NO.equals(orderType)){ //充值订单
                         userAccountService.updateRechargePrice(userOrderInfo);
+                        //交易流水(充值)
+                        userTransactionsService.addOrderUserTransactions(userOrderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ, null); //充值不拼接type
                     }
                 }
             }else{
@@ -706,6 +725,11 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 
     private String setXML(String return_code, String return_msg) {
         return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
+    }
+
+    @Desc("用户已支付订单数量")
+    private int getUserPayOrderCount(int uid){
+        return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_order_info WHERE uid = ? AND payStatus = ?", uid, IDBConstant.LOGIC_STATUS_YES).intValue();
     }
 
     @Override
