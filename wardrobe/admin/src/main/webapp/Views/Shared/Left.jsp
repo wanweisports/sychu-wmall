@@ -33,14 +33,19 @@
                             <i class="icon-arrow-right"></i> 商品添加
                         </a>
                     </li>
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'skuTotal')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'skuTotal')}">active</c:if>" href="/admin/products/sku/total">
+                            <i class="icon-arrow-right"></i> 库存汇总
+                        </a>
+                    </li>
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'sku')}">active</c:if>" href="/admin/products/sku/list">
-                            <i class="icon-arrow-right"></i> 库存变更记录
+                            <i class="icon-arrow-right"></i> 库存日志
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/products/settings">
-                            <i class="icon-arrow-right"></i> 商品标签设置
+                            <i class="icon-arrow-right"></i> 商品设置
                         </a>
                     </li>
                 </ul>
@@ -136,6 +141,11 @@
                     <li class="nav-item <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">active</c:if>" href="/admin/coupon/list">
                             <i class="icon-arrow-right"></i> 礼券设置
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'active' && param.subMenu == 'coupon'}">active</c:if>" href="/admin/coupon/list">
+                            <i class="icon-arrow-right"></i> 礼券统计
                         </a>
                     </li>
                 </ul>

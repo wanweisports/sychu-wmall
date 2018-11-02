@@ -74,7 +74,7 @@ public class MembersController extends BaseController {
         return new ResponseBean(true);
     }
 
-    @Desc("会员充值流水")
+    @Desc("会员交易流水")
     @NotProtected
     @RequestMapping(value = "/transactions/log")
     public String renderMembersTransactionsLog(UserTransactionsInputView userTransactionsInputView, Model model) {

@@ -33,19 +33,11 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>商品库存日志</strong>
+                            <strong>商品库存汇总<span class="text-danger">--开发中</span></strong>
                         </div>
                         <div class="card-block">
-                            <form id="products_query_form" method="get" class="form-horizontal" action="/admin/products/sku/list" <%--novalidate onsubmit="return false;"--%>>
+                            <form id="products_query_form" method="get" class="form-horizontal" action="/admin/products/sku/total" <%--novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
-                                    <div class="col-md-2">
-                                        <select class="form-control" name="type">
-                                            <option value="">全部类型</option>
-                                            <c:forEach var="d" items="${types}">
-                                                <option value="${d.dictKey}" <c:if test="${d.dictKey == type}">selected</c:if>>${d.dictValue}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
                                     <div class="col-md-2">
                                         <!--年-月-日 小时:分钟:秒-->
                                         <input type="text" id="startTime" name="startTime" class="form-control" placeholder="开始时间" value="${startTime}" autocomplete="off">
@@ -54,7 +46,7 @@
                                         <!--年-月-日 小时:分钟:秒-->
                                         <input type="text" id="endTime" name="endTime" class="form-control" placeholder="结束时间" value="${endTime}" autocomplete="off">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary products-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
@@ -62,7 +54,15 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="card-footer text-right"></div>
+                        <div class="card-footer text-right">
+                            <div>
+                                <i class="fa fa-bookmark"></i>&nbsp;商品总数：<span class="badge badge-info">1000件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品入库：<span class="badge badge-success">+ 1000件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品售卖：<span class="badge badge-danger">- 1000件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品出库：<span class="badge badge-warning">- 10件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;剩余库存：<span class="badge badge-info">1000件</span>
+                            </div>
+                        </div>
                         <div class="card-block">
                             <table class="table table-striped table-bordered table-sm products-list">
                                 <thead>
@@ -70,11 +70,11 @@
                                     <th>商品图片</th>
                                     <th>商品名称</th>
                                     <th>商品规格</th>
-                                    <th>变更类型</th>
-                                    <th>变更数量</th>
-                                    <th>变更备注</th>
-                                    <th>变更人</th>
-                                    <th>变更时间</th>
+                                    <th>商品入库</th>
+                                    <th>商品售卖</th>
+                                    <th>商品出库</th>
+                                    <th>剩余库存</th>
+                                    <td>操作</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -85,21 +85,15 @@
                                         <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
                                     <td>颜色：${c.colorName}，尺码：${c.size}</td>
-                                    <td>${c.typeName}</td>
+                                    <td><span class="badge badge-success">+ 1000件</span></td>
+                                    <td><span class="badge badge-danger">- 990件</span></td>
+                                    <td><span class="badge badge-warning">- 0件</span></td>
+                                    <td><span class="badge badge-info">10件</span></td>
                                     <td>
-                                        <c:if test="${c.type=='10'}">
-                                            <span class="badge badge-success">+ ${c.num}件</span>
-                                        </c:if>
-                                        <c:if test="${c.type=='20'}">
-                                            <span class="badge badge-warning">- ${c.num}件</span>
-                                        </c:if>
-                                        <c:if test="${c.type=='30'}">
-                                            <span class="badge badge-danger">- ${c.num}件</span>
-                                        </c:if>
+                                        <a href="/admin/products/sku/list?id=${c.cid}" class="btn btn-sm btn-primary" title="变更记录" data-id="${c.cid}">
+                                            <i class="fa fa-list"></i> 变更记录
+                                        </a>
                                     </td>
-                                    <td>${c.remark}</td>
-                                    <td>${c.operatorId}</td>
-                                    <td><fmt:formatDate value="${c.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>
@@ -114,10 +108,11 @@
             </div>
             <!--/.row-->
         </div>
+
     </div>
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
     <c:param name="menu" value="products"/>
-    <c:param name="subMenu" value="sku"/>
+    <c:param name="subMenu" value="skuTotal"/>
 </c:import>

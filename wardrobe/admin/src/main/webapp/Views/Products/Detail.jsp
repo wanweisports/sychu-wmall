@@ -108,7 +108,6 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>商品详情</strong>
-                            <small>Products Information</small>
                         </div>
                         <div class="card-block">
                             <table class="table table-responsive-sm table-bordered product-info">
@@ -116,14 +115,12 @@
                                 <tr>
                                     <th>商品名称：</th>
                                     <td>${product.commName}</td>
+                                    <th>商品品牌：</th>
+                                    <td>${product.brandName}</td>
                                     <th>商品标签：</th>
                                     <td>
                                         <c:if test="${product.hot=='1'}"><span class="badge badge-danger mr-1">热门</span></c:if>
                                         <c:if test="${product.newly=='1'}"><span class="badge badge-danger mr-1">最新</span></c:if>
-                                    </td>
-                                    <th>销售数量：</th>
-                                    <td>
-                                        <a href="/admin/products/sku/list?cid=${product.cid}">${product.saleCount}</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -136,11 +133,23 @@
                                 </tr>
                                 <tr>
                                     <th>商品原价：</th>
-                                    <td>${product.price}</td>
+                                    <td>${product.price}元</td>
                                     <th>商品优惠价：</th>
-                                    <td>${product.couPrice}</td>
-                                    <th>其他颜色：</th>
                                     <td>
+                                        <span class="badge badge-danger">${product.couPrice}元</span>
+                                    </td>
+                                    <th>销售数量：</th>
+                                    <td>
+                                        <a href="/admin/products/sku/list?cid=${product.cid}">${product.saleCount}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>浏览量：</th>
+                                    <td>
+                                        <span class="badge badge-danger">1000人次</span>
+                                    </td>
+                                    <th>其他颜色：</th>
+                                    <td colspan="3">
                                         <a href="/admin/products/list?groupId=${product.groupId}">
                                             <c:forEach var="gs" items="${groupCommodityColorList}" varStatus="status">
                                                 <c:if test="${status.index gt 0}">、</c:if>${gs.colorName}
@@ -149,15 +158,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>商品品牌：</th>
-                                    <td colspan="5">${product.brandName}</td>
-                                </tr>
-                                <tr>
                                     <th>商品描述：</th>
                                     <td colspan="5">${product.productDesc}</td>
                                 </tr>
                                 <tr>
-                                    <th>商品图片：</th>
+                                    <th>轮播图片：</th>
                                     <td colspan="5">
                                         <img src="${coverImg.resourcePath}" style="width: 100px; height: 100px;" alt="封面图">
                                         <c:forEach var="b" items="${broadImgList}" varStatus="status">
@@ -175,6 +180,15 @@
                                         <td colspan="3">${commodityBanner.seqNo}</td>
                                     </tr>
                                 </c:if>
+                                <tr>
+                                    <th>详情图片：</th>
+                                    <td colspan="5">
+                                        <img src="${coverImg.resourcePath}" style="width: 100px; height: 100px;" alt="封面图">
+                                        <c:forEach var="b" items="${broadImgList}" varStatus="status">
+                                            <img src="${b.resourcePath}" style="width: 100px; height: 100px;" alt="轮播图${status.index+1}">
+                                        </c:forEach>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -240,15 +254,15 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>尺码列表</strong>
-                            <small>Size List</small>
                         </div>
                         <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered size-list">
+                            <table class="table table-striped table-sm table-bordered size-list">
                                 <thead>
                                 <tr>
-                                    <th>##</th>
+                                    <th>序号</th>
                                     <th>尺码大小</th>
                                     <th>初始库存</th>
+                                    <th>当前库存</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -257,7 +271,8 @@
                                     <tr data-id="${s.sid}">
                                         <td>${status.index+1}</td>
                                         <td>${s.size}</td>
-                                        <td>${s.stock}</td>
+                                        <td>${s.stock}件</td>
+                                        <td>${s.stock}件</td>
                                         <td>
                                             <a href="#product_sku_dialog" class="btn btn-sm btn-primary sku-add" data-toggle="modal">
                                                 <i class="fa fa-plus"></i> 增加库存
@@ -271,12 +286,46 @@
                                         </td>
                                     </tr>
                                     </c:forEach>
+                                    <tr data-id="${s.sid}">
+                                        <td>--</td>
+                                        <td>合计</td>
+                                        <td>11件</td>
+                                        <td>11件</td>
+                                        <td>--</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="card-footer">
                             <a href="#product_size_dialog" class="btn btn-primary size-add" data-toggle="modal">
                                 <i class="fa fa-plus"></i> 增加尺码
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>推荐商品</strong>
+                        </div>
+                        <div class="card-block">
+                            <table class="table table-striped table-sm table-bordered size-list">
+                                <thead>
+                                <tr>
+                                    <th>商品编号</th>
+                                    <th>商品图片</th>
+                                    <th>商品名称</th>
+                                    <th>商品品类</th>
+                                    <th>商品材质</th>
+                                    <th>商品价格</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fa fa-star"></i> 设置推荐
                             </a>
                         </div>
                     </div>

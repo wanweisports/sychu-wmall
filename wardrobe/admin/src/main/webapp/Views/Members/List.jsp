@@ -33,21 +33,17 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>会员列表</strong>
-                            <small>Members List</small>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
+                            <form id="members_query_form" method="get" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
-                                    <div class="col-md-2">
-                                        <input type="text" name="nickname" class="form-control" placeholder="会员昵称" value="${nickname}" autocomplete="off">
-                                    </div>
                                     <div class="col-md-2">
                                         <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
                                         <input type="text" name="invitedBy" class="form-control" placeholder="邀请人" value="${invitedBy}" autocomplete="off">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
@@ -63,11 +59,9 @@
                                     <th>用户头像</th>
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
-                                    <th>出生日期</th>
                                     <th>账户余额</th>
                                     <th>薏米</th>
-                                    <th>积分</th>
-                                    <th>等级</th>
+                                    <th>用户等级</th>
                                     <th>邀请人</th>
                                     <th>注册时间</th>
                                     <th>操作</th>
@@ -83,14 +77,12 @@
                                             </a>
                                         </td>
                                         <td>${user.mobile}</td>
-                                        <td>${user.age}</td>
                                         <td>
                                             <a href="/admin/members/transactions/log?uid=${user.uid}" class="btn btn-sm btn-link" title="账户余额">
                                                 ￥${user.balance}
                                             </a>
                                         </td>
                                         <td>${user.ycoid}</td>
-                                        <td>${user.score}</td>
                                         <td>${user.rankName}</td>
                                         <td>${user.invitedByUserName}</td>
                                         <td><fmt:formatDate value="${user.registerTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>

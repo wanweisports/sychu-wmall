@@ -10362,6 +10362,22 @@ body {
     margin-top: -0.5rem;
 }
 
+.card-header-actions {
+    display: inline-block;
+    float: right;
+    margin-right: -.25rem
+}
+
+.card-header-action {
+    padding: 0 .25rem;
+    color: #73818f
+}
+
+.card-header-action:hover {
+    color: #23282c;
+    text-decoration: none
+}
+
 .card-footer ul {
     display: table;
     width: 100%;

@@ -28,7 +28,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>会员交易记录</strong>
+                            <strong>交易记录</strong>
                             <small>Members Transactions Log</small>
                         </div>
                         <div class="card-block">
@@ -40,7 +40,14 @@
                                     <div class="col-md-2">
                                         <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-2">
+                                        <select class="form-control">
+                                            <option>全部交易</option>
+                                            <option>充值交易</option>
+                                            <option>购买交易</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
@@ -48,7 +55,12 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="card-footer text-right"></div>
+                        <div class="card-footer text-right">
+                            <div>
+                                <i class="fa fa-bookmark"></i>&nbsp;充值金额：<span class="badge badge-success">1000元</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;售卖金额：<span class="badge badge-danger">1000元</span>
+                            </div>
+                        </div>
                         <div class="card-block">
                             <table class="table table-striped table-bordered table-sm user-list">
                                 <thead>
@@ -56,7 +68,7 @@
                                     <th>交易流水号</th>
                                     <th>交易业务类型</th>
                                     <th>交易业务ID</th>
-                                    <th>交易余额（元）</th>
+                                    <th>交易余额</th>
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
                                     <th>交易时间</th>
@@ -68,7 +80,9 @@
                                     <td>${t.tid}</td>
                                     <td>${t.serviceTypeName}</td>
                                     <td>${t.serviceId}</td>
-                                    <td>${t.price}</td>
+                                    <td>
+                                        <span class="badge badge-success">${t.price}元</span>
+                                    </td>
                                     <td>${t.nickname}</td>
                                     <td>${t.mobile}</td>
                                     <td>${t.createTime}</td>

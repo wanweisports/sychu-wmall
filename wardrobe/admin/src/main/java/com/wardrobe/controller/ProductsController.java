@@ -221,6 +221,16 @@ public class ProductsController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("商品管理列表 -- 库存汇总")
+    @RequestMapping(value = "/sku/total")
+    public String renderProductsSkuTotal(CommodityInputView commodityInputView, Model model) {
+        PageBean pageBean = commodityService.getStockListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/sku/list", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        model.addAttribute("types", dictService.getDicts(IDBConstant.COMM_STOCK_TYPE));
+        return "Products/SkuTotal";
+    }
+
     @Desc("商品管理列表 -- 库存变更记录")
     @RequestMapping(value = "/sku/list")
     public String renderProductsSkuList(CommodityInputView commodityInputView, Model model) {

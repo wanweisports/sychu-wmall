@@ -46,6 +46,15 @@
                     <li class="breadcrumb-item"><a href="/admin/products/list">商品列表</a></li>
                     <li class="breadcrumb-item active">商品编辑</li>
                 </c:when>
+                <c:when test="${param.subMenu == 'sku'}">
+                    <li class="breadcrumb-item active">库存日志</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'skuTotal'}">
+                    <li class="breadcrumb-item active">库存汇总</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'settings'}">
+                    <li class="breadcrumb-item active">商品设置</li>
+                </c:when>
             </c:choose>
         </c:when>
 
