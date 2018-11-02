@@ -187,12 +187,17 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
             commodity.put("resourcePath", getFmImg(cid));//0表示封面图
             commodity.put("collectionCount", getCollectionCount(cid));
+            commodity.put("sizeStockSum", getSizeStockSum(cid));
         });
         return pageBean;
     }
 
     private int getCollectionCount(int cid){
         return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_collection uc WHERE uc.cid = ?1", cid).intValue();
+    }
+
+    private int getSizeStockSum(int cid){
+        return baseDao.getUniqueResult("SELECT SUM(stock) FROM commodity_size WHERE cid = ?", cid).intValue();
     }
 
     private Map<String, Object> getType(Map<String, Object> commodity){
@@ -559,6 +564,15 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         Map<String, Object> data = new HashMap<>(1, 1);
         data.put("list", list);
         return data;
+    }
+
+    @Override
+    public synchronized void updateClickRate(int cid){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        if(commodityInfo != null) {
+            commodityInfo.setClickRate(commodityInfo.getClickRate() + 1);
+            baseDao.save(commodityInfo, cid);
+        }
     }
 
     @Override

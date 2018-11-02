@@ -68,6 +68,8 @@ public interface ICommodityService {
 
     Map<String, Object> getCommodityBanners();
 
+    void updateClickRate(int cid);
+
     PageBean getBannerCommodityListIn(CommodityInputView commodityInputView);
 
     void saveExcelCommoditys(MultipartHttpServletRequest multipartRequest) throws IOException;
