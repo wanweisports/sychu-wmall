@@ -67,6 +67,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String newly = commodityInputView.getNewly();
         String hot = commodityInputView.getHot();
         Integer groupId = commodityInputView.getGroupId();
+        String orderBy = commodityInputView.getOrderBy();
 
         StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
@@ -89,8 +90,12 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
-
+        whereSql.append(" ORDER BY ");
+        if(StrUtil.isNotBlank(orderBy)){
+            whereSql.append(orderBy).append(",");
+        }else {
+            whereSql.append(" ci.seqNo DESC, ci.createTime DESC");
+        }
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 

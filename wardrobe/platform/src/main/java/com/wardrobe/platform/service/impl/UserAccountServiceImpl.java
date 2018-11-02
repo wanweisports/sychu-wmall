@@ -54,7 +54,8 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
     }
 
     //每消费100元，获得1衣米。消费金额按照商品订单实际支付金额（仅微信支付）计算，按照订单金额向下取整，如：支付199元，获得1衣米。
-    private synchronized void setUserYcoid(int uid, double priceSum){
+    @Override
+    public synchronized void setUserYcoid(int uid, double priceSum){
         UserAccount userAccount = getUserAccount(uid);
         if(userAccount != null) {
             int ycoid = (int) priceSum / 100;

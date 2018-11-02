@@ -18,6 +18,8 @@ public interface IUserAccountService {
 
     void addUserScore(int uid, double priceSum);
 
+    void setUserYcoid(int uid, double priceSum);
+
     void updateRank(int uid);
 
     void initUserAccount(UserInfo userInfo);

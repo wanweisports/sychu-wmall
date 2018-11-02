@@ -52,6 +52,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
             whereSql.append(" AND ui.mobile = :mobile");
         }
         whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
+        whereSql.append(" ORDER BY ut.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
     }
 
