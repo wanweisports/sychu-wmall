@@ -76,7 +76,8 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         }
     }
 
-    private synchronized void setUserScore(int uid, double priceSum){
+    @Override
+    public synchronized void setUserScore(int uid, double priceSum){
         UserAccount userAccount = getUserAccount(uid);
         if(userAccount != null) {
             userAccount.setScore(userAccount.getScore() + (int) priceSum * IPlatformConstant.ADD_USER_SCORE);
@@ -128,6 +129,7 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
 
         UserOrderInfo userOrderInfo = new UserOrderInfo();
         userOrderInfo.setPriceSum(Arith.conversion(rechargePrice));
+        userOrderInfo.setPayPrice(userOrderInfo.getPriceSum()); //充值：总金额等于支付金额
         return orderService.saveRechargeOrderInfo(userOrderInfo, sysDict, uid);
     }
 
@@ -137,8 +139,9 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
         List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
         double rechargePriceSum = 0;
         for(UserOrderDetail userOrderDetail : userOrderDetails){
-            Arith.add(rechargePriceSum, userOrderDetail.getItemPriceSum().doubleValue());
+            rechargePriceSum = Arith.add(rechargePriceSum, userOrderDetail.getItemPriceSum().doubleValue());
         }
+
         //积分累计并检测是否升级
         this.addUserScoreAndBalance(userOrderInfo.getUid(), rechargePriceSum);
     }

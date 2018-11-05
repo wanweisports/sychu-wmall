@@ -39,7 +39,7 @@ public interface IOrderService {
 
     void saveCancelReserveOrder(int roid, int uid);
 
-    Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
+    Map<Object, Object> saveWxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 
     void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception;
 

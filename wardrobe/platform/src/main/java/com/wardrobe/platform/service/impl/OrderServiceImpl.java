@@ -288,13 +288,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         int userYcoid = discountBean.getUseYcoid();
         //减去用户衣橱币
         userAccountService.updateUserYcoid(userYcoid, userOrderInfo.getUid());
-        if(discountBean.getUseYcoid() > 0) {
+        if (discountBean.getUseYcoid() > 0) {
             userOrderInfo.setYcoid(userYcoid);
             baseDao.save(userOrderInfo, userOrderInfo.getOid());
         }
-        //再次判断余额是否足够
-        UserAccount userAccount = userAccountService.getUserAccount(userOrderInfo.getUid());
-        if(userAccount.getBalance().doubleValue() < userOrderInfo.getPayPrice().doubleValue()) throw new MessageException("余额不足，请选择微信支付或充值足够后再试~");
+        if (IDBConstant.LOGIC_STATUS_NO.equals(userOrderInfo.getPayType())) { //余额支付：//再次判断余额是否足够
+            UserAccount userAccount = userAccountService.getUserAccount(userOrderInfo.getUid());
+            if (userAccount.getBalance().doubleValue() < userOrderInfo.getPayPrice().doubleValue())
+                throw new MessageException("余额不足，请选择微信支付或充值足够后再试~");
+        }
     }
 
     private boolean existReserveOrderByNo(String rno){
@@ -497,10 +499,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     }
 
     @Override
-    public Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception {
+    public Map<Object, Object> saveWxPayPackage(OrderInputView orderInputView, String openId) throws Exception {
         Integer oId = orderInputView.getOrderId();
 
         UserOrderInfo orderInfo = getUserOrderInfo(oId); //openId = "oTK5utzXi_A2q8aus80Y60__LzY0";
+        if(orderInfo == null || IDBConstant.LOGIC_STATUS_YES.equals(orderInfo.getPayStatus())) return null; //订单不存在或者已经支付的状态，则直接返回
+
         Integer uid = orderInfo.getUid();
         synchronized (orderInfo.getOno().intern()) {
             // 1 参数
@@ -508,15 +512,17 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             String orderId = orderInfo.getOid() + "_" + System.currentTimeMillis();
             // 附加数据 原样返回
             String attach = "cxs";
+            double payPrice = orderInfo.getPayPrice().doubleValue();
             // 总金额以分为单位，不带小数点
-            if (orderInfo.getPayPrice().doubleValue() <= 0 || IDBConstant.LOGIC_STATUS_NO.equals(orderInfo.getPayType())) { //无需支付
+            if (payPrice <= 0 || IDBConstant.LOGIC_STATUS_NO.equals(orderInfo.getPayType())) { //无需支付
                 if (IDBConstant.LOGIC_STATUS_NO.equals(orderInfo.getPayType())) { //余额支付
                     //再次判断余额是否足够
                     UserAccount userAccount = userAccountService.getUserAccount(uid);
-                    if(userAccount.getBalance().doubleValue() < orderInfo.getPayPrice().doubleValue()) throw new MessageException("余额不足，请选择微信支付或充值足够后再试。");
-                    userAccount.setBalance(Arith.conversion(Arith.sub(userAccount.getBalance().doubleValue(), orderInfo.getPayPrice().doubleValue())));
+                    if(userAccount.getBalance().doubleValue() < payPrice) throw new MessageException("余额不足，请选择微信支付或充值足够后再试。");
+                    userAccount.setBalance(Arith.conversion(Arith.sub(userAccount.getBalance().doubleValue(), payPrice)));
                     baseDao.save(userAccount, userAccount.getUid());
-
+                    //增加支付金额的衣橱币与积分
+                    userAccountService.addUserScoreAndYcoid(uid, payPrice);
                     //交易流水
                     userTransactionsService.addOrderUserTransactions(orderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF, IDBConstant.LOGIC_STATUS_NO); //余额支付
                 }
@@ -528,7 +534,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 }};
             }
 
-            String totalFee = StrUtil.getMoney(StrUtil.objToStr(orderInfo.getPayPrice().doubleValue())); //这里是支付金额
+            String totalFee = StrUtil.getMoney(StrUtil.objToStr(payPrice)); //这里是支付金额
 
             // 订单生成的机器 IP
             String spbill_create_ip = "127.0.0.1";
@@ -706,6 +712,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                             }
                         }
                     }else if(IDBConstant.LOGIC_STATUS_NO.equals(orderType)){ //充值订单
+                        //增加用户账号余额与积分
                         userAccountService.updateRechargePrice(userOrderInfo);
                         //交易流水(充值)
                         userTransactionsService.addOrderUserTransactions(userOrderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ, null); //充值不拼接type
