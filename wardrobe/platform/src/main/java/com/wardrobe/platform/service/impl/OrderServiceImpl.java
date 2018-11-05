@@ -712,7 +712,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                             }
                         }
                     }else if(IDBConstant.LOGIC_STATUS_NO.equals(orderType)){ //充值订单
-                        //增加用户账号余额与积分
+                        //增加用户账号余额
                         userAccountService.updateRechargePrice(userOrderInfo);
                         //交易流水(充值)
                         userTransactionsService.addOrderUserTransactions(userOrderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ, null); //充值不拼接type

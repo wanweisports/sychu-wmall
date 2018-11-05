@@ -43,8 +43,8 @@ public class UserAccountServiceImpl extends BaseService implements IUserAccountS
     @Override
     public synchronized void addUserScoreAndBalance(int uid, double priceSum){
         setBalance(uid, priceSum);
-        setUserScore(uid, priceSum);
-        updateRank(uid);
+        /*setUserScore(uid, priceSum); //购买时会增加积分，充值时暂不获取
+        updateRank(uid);*/
     }
 
     @Override
