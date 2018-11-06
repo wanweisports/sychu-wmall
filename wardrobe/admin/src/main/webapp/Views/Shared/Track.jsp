@@ -21,7 +21,10 @@
                     <li class="breadcrumb-item active">会员详情</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'balance'}">
-                    <li class="breadcrumb-item active">充值金额设置</li>
+                    <li class="breadcrumb-item active">充值设置</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'against'}">
+                    <li class="breadcrumb-item active">额度冲抵</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'transactions'}">
                     <li class="breadcrumb-item active">交易记录</li>
@@ -54,6 +57,9 @@
                 </c:when>
                 <c:when test="${param.subMenu == 'settings'}">
                     <li class="breadcrumb-item active">商品设置</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'banner'}">
+                    <li class="breadcrumb-item active">轮播设置</li>
                 </c:when>
             </c:choose>
         </c:when>

@@ -116,4 +116,11 @@ public class MembersController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("额度冲抵")
+    @NotProtected
+    @RequestMapping(value = "/data/against")
+    public String renderMembersDataAgainst(Model model) {
+        return "Members/DataAgainst";
+    }
+
 }

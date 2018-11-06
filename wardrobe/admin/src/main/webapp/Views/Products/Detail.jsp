@@ -239,16 +239,16 @@
                                 </a>
                             </c:if>
 
-                            <c:if test="${commodityBanner == null}">
-                                <a href="#banner_settings" class="btn btn-primary" title="设置banner" data-id="${product.cid}" data-toggle="modal">
-                                    <i class="fa fa-photo"></i> 设置banner
-                                </a>
-                            </c:if>
-                            <c:if test="${commodityBanner != null}">
-                                <a href="javascript:;" class="btn btn-danger" title="取消banner" data-id="${product.cid}" onclick="delCommodityBanner('${product.cid}')">
-                                    <i class="fa fa-photo"></i> 取消banner
-                                </a>
-                            </c:if>
+                            <%--<c:if test="${commodityBanner == null}">--%>
+                                <%--<a href="#banner_settings" class="btn btn-primary" title="设置banner" data-id="${product.cid}" data-toggle="modal">--%>
+                                    <%--<i class="fa fa-photo"></i> 设置banner--%>
+                                <%--</a>--%>
+                            <%--</c:if>--%>
+                            <%--<c:if test="${commodityBanner != null}">--%>
+                                <%--<a href="javascript:;" class="btn btn-danger" title="取消banner" data-id="${product.cid}" onclick="delCommodityBanner('${product.cid}')">--%>
+                                    <%--<i class="fa fa-photo"></i> 取消banner--%>
+                                <%--</a>--%>
+                            <%--</c:if>--%>
                         </div>
                     </div>
                     <div class="card">

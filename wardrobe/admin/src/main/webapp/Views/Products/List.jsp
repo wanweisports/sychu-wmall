@@ -63,8 +63,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>商品列表</strong>
-                            <small>Products List</small>
+                            <strong>商品列表</strong>=
                         </div>
                         <div class="card-block">
                             <form id="products_query_form" method="post" class="form-horizontal" action="/admin/products/list">
@@ -113,7 +112,6 @@
                                     <th>已售</th>
                                     <th>点击量</th>
                                     <th>已收藏</th>
-                                    <th>总库存</th>
                                     <th>排序</th>
                                     <th>操作</th>
                                 </tr>
@@ -134,7 +132,6 @@
                                     <td>${c.saleCount}件</td>
                                     <td>${c.clickRate}次</td>
                                     <td>${c.collectionCount}人</td>
-                                    <td>${c.sizeStockSum}</td>
                                     <td>
                                         <input type="text" class="set-seq-value" value="${c.seqNo}" data-id="${c.cid}" />
                                     </td>

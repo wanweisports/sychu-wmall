@@ -36,18 +36,10 @@
                                     <li class="breadcrumb-item">
                                         <i class="icon-tag"></i>
                                         <strong>热门商品</strong>
-                                        <small>Hot Products</small>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <a href="/admin/products/hot/list?newly=1">
                                             <strong>最新商品</strong>
-                                            <small>Users Products</small>
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/banner/list">
-                                            <strong>banner商品</strong>
-                                            <small>Banner Products</small>
                                         </a>
                                     </li>
                                 </c:if>
@@ -55,19 +47,11 @@
                                     <li class="breadcrumb-item">
                                         <a href="/admin/products/hot/list?hot=1">
                                             <strong>热门商品</strong>
-                                            <small>Hot Products</small>
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <i class="icon-tag"></i>
                                         <strong>最新商品</strong>
-                                        <small>Users Products</small>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/banner/list">
-                                            <strong>banner商品</strong>
-                                            <small>Banner Products</small>
-                                        </a>
                                     </li>
                                 </c:if>
                             </ol>

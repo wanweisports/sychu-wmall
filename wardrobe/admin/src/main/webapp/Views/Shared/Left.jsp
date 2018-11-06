@@ -25,7 +25,7 @@
                     </li>
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'hot')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'hot')}">active</c:if>" href="/admin/products/hot/list?hot=1">
-                            <i class="icon-arrow-right"></i> 人气/热门商品
+                            <i class="icon-arrow-right"></i> 人气/热门
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'add')}">open</c:if>">
@@ -46,6 +46,11 @@
                     <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'settings')}">active</c:if>" href="/admin/products/settings">
                             <i class="icon-arrow-right"></i> 商品设置
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.menu == 'products' && (param.subMenu == 'banner')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'products' && (param.subMenu == 'banner')}">active</c:if>" href="/admin/products/banner/list">
+                            <i class="icon-arrow-right"></i> 轮播设置
                         </a>
                     </li>
                 </ul>
@@ -120,14 +125,19 @@
                             <i class="icon-arrow-right"></i> 会员列表
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">active</c:if>" href="/admin/members/recharge/settings">
-                            <i class="icon-arrow-right"></i> 充值金额设置
-                        </a>
-                    </li>
                     <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'transactions')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'transactions')}">active</c:if>" href="/admin/members/transactions/log">
                             <i class="icon-arrow-right"></i> 交易记录
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'against')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'against')}">active</c:if>" href="/admin/members/data/against">
+                            <i class="icon-arrow-right"></i> 额度冲抵
+                        </a>
+                    </li>
+                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">open</c:if>">
+                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">active</c:if>" href="/admin/members/recharge/settings">
+                            <i class="icon-arrow-right"></i> 充值设置
                         </a>
                     </li>
                 </ul>

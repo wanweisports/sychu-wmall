@@ -3,8 +3,6 @@
 App({
     onLaunch: function () {
         this.setCookie('syc_appName', "衣否");
-
-        this.toLogin();
     },
 
     toLogin: function () {
@@ -71,12 +69,14 @@ App({
                         }, function (res) {
                             if (res.code == 1) {
                                 content.globalData.sessionId = res.data.sessionId;
-                                if (res.data.perfect == 2) {
-                                    content.redirect("/pages/user/complete/index");
-                                }
-                                else {
-                                    content.redirect("/pages/index/index", "switchTab");
-                                }
+                                content.redirect(content.getCookie("syc_target"), content.getCookie("syc_redirect"));
+
+                                // if (res.data.perfect == 2) {
+                                //     content.redirect("/pages/user/complete/index");
+                                // }
+                                // else {
+                                //     content.redirect("/pages/index/index", "switchTab");
+                                // }
                             } else {
                                 content.showToast("授权登录失败", "none");
                             }
@@ -166,9 +166,12 @@ App({
                 wx.hideLoading();
 
                 if (res.data.code == 10) {
-                    content.showToast("授信登录过期，请重新登录！");
+                    //content.showToast("授信登录过期，请重新登录！");
                     content.globalData.sessionId = "";
                     content.redirect("/pages/landing/index", "reLaunch");
+                }
+                else if (res.data.code == 20) {
+                    content.redirect("/pages/user/complete/index", "navigateTo");
                 }
                 else {
                     success(res.data);
