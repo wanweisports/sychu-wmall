@@ -1,6 +1,7 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.annotation.Perfect;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysDeviceInfo;
@@ -27,6 +28,7 @@ public class RelayController extends BaseController {
     private IRelayService relayService;
 
     @Desc("开启门")
+    @Perfect //必须完善资料
     @ResponseBody
     @RequestMapping("openDoor")
     public ResponseBean openDoor(int did) throws Exception{

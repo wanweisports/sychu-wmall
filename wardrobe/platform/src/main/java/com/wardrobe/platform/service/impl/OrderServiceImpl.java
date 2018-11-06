@@ -840,6 +840,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         if(StrUtil.isNotBlank(ono)){
             whereSql.append(" AND uoi.ono = :ono");
         }
+        whereSql.append(" AND uoi.orderType != '").append(IDBConstant.LOGIC_STATUS_NO).append("'");
         whereSql.append(" ORDER BY uoi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView, inMap);
     }
@@ -872,7 +873,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
     @Override
     public List<UserOrderInfo> getOvertimeOrders(){
         Date minute30Before = DateUtil.addDateByType(new Date(), Calendar.MINUTE, -30);
-        List<UserOrderInfo> userOrderInfos = baseDao.queryByHql("FROM UserOrderInfo oi WHERE oi.payStatus = ?1 AND oi.createTime <= ?2", IDBConstant.LOGIC_STATUS_NO, minute30Before);
+        List<UserOrderInfo> userOrderInfos = baseDao.queryByHql("FROM UserOrderInfo oi WHERE oi.orderType != ?1 AND oi.payStatus = ?2 AND oi.createTime <= ?3", IDBConstant.LOGIC_STATUS_NO, IDBConstant.LOGIC_STATUS_NO, minute30Before);
         userOrderInfos.stream().forEach(userOrderInfo -> {
             userOrderInfo.setUserOrderDetails(getUserOrderDetails(userOrderInfo.getOid()));
         });

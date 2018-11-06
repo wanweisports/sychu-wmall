@@ -108,7 +108,7 @@
                                         </td>
                                         <td>${d.cid}</td>
                                         <td>${d.sid}</td>
-                                        <td>${d.itemName}</td>
+                                        <td><a href="/admin/products/detail?cid=${d.cid}" class="btn btn-sm btn-link" title="${d.itemName}">${d.itemName}</a></td>
                                         <td>${d.itemColor}</td>
                                         <td>${d.itemSize}</td>
                                         <td>${d.itemPrice}</td>

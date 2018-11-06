@@ -51,6 +51,7 @@
                             <table class="table table-striped table-bordered table-sm orders-list">
                                 <thead>
                                 <tr>
+                                    <th>预约单ID</th>
                                     <th>预约单编号</th>
                                     <th>预约试衣间</th>
                                     <th>试衣开始时间</th>
@@ -63,6 +64,7 @@
                                 </thead>
                                     <c:forEach var="r" items="${page.list}">
                                         <tr>
+                                            <td>${r.roid}</td>
                                             <td>
                                                 <a href="/admin/orders/reservation/detail?roid=${r.roid}">${r.rno}</a>
                                             </td>

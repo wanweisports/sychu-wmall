@@ -1,12 +1,9 @@
 package com.wardrobe.interceptor;
 
-import com.wardrobe.common.annotation.NotPerfect;
 import com.wardrobe.common.annotation.NotProtected;
-import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.annotation.Perfect;
 import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.po.UserInfo;
-import com.wardrobe.common.util.RequestUtil;
-import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 
 public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 
@@ -50,9 +46,9 @@ public class AuthorizationHandlerInterceptor implements HandlerInterceptor {
 
         //未完善资料
         if(userInfo != null) {
-            NotPerfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(NotPerfect.class);
-            NotPerfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(NotPerfect.class);
-            if (classAnnotation2 == null && methodAnnotation2 == null) { //如果受保护
+            Perfect classAnnotation2 = handlerMethod.getBeanType().getAnnotation(Perfect.class);
+            Perfect methodAnnotation2 = handlerMethod.getMethod().getAnnotation(Perfect.class);
+            if (classAnnotation2 != null || methodAnnotation2 != null) { //如果受保护
                 if (!userService.userIsPerfect(((UserInfo) userInfo).getUid())) {
                     logger.error("=========未完善资料，跳到/notPerfect接口===========：访问：" + request.getRequestURI() + ":" + request.getQueryString());
                     request.getRequestDispatcher("/notPerfect").forward(request, response); //未完善资料---跳到统一接口：返回未完善资料状态20
