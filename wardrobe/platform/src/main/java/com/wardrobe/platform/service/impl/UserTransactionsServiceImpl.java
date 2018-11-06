@@ -30,6 +30,9 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
             String serviceType = dictService.getDictValue(IDBConstant.TRANSACTIONS_SERVICE_TYPE, StrUtil.objToStr(map.get("serviceType")));
             String type = dictService.getDictValue(IDBConstant.TRANSACTIONS_TYPE, StrUtil.objToStr(map.get("type")));
             map.put("serviceTypeName",  StrUtil.objToStrDefEmpty(type) + serviceType);
+            if(IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ.equals(map.get("serviceType"))){ //充值类型：小程序不需要进入详情
+                map.remove("serviceId");
+            }
         }
         return pageBean;
     }
