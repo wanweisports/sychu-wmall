@@ -11,6 +11,7 @@ import com.wardrobe.common.view.UserTransactionsInputView;
 import com.wardrobe.platform.service.IUserTransactionsService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -29,6 +30,9 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
             String serviceType = dictService.getDictValue(IDBConstant.TRANSACTIONS_SERVICE_TYPE, StrUtil.objToStr(map.get("serviceType")));
             String type = dictService.getDictValue(IDBConstant.TRANSACTIONS_TYPE, StrUtil.objToStr(map.get("type")));
             map.put("serviceTypeName",  StrUtil.objToStrDefEmpty(type) + serviceType);
+            if(IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ.equals(map.get("serviceType"))){ //充值类型：小程序不需要进入详情
+                map.remove("serviceId");
+            }
         }
         return pageBean;
     }
@@ -58,6 +62,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
 
     @Override
     public void addOrderUserTransactions(UserOrderInfo userOrderInfo, String serviceType, String type){
+        Timestamp nowDate = DateUtil.getNowDate();
         //微信或余额支付
         UserTransactions userTransactions = new UserTransactions();
         userTransactions.setUid(userOrderInfo.getUid());
@@ -65,7 +70,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         userTransactions.setServiceType(serviceType);
         userTransactions.setType(type);
         userTransactions.setPrice(userOrderInfo.getPayPrice());
-        userTransactions.setCreateTime(DateUtil.getNowDate());
+        userTransactions.setCreateTime(nowDate);
         baseDao.save(userTransactions, null);
 
         if(userOrderInfo.getYcoid() != null){ //订单衣橱币流水记录
@@ -75,7 +80,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
             userTransactions.setServiceType(serviceType);
             userTransactions.setType(IDBConstant.TRANSACTIONS_TYPE_YCOID); //衣橱币
             userTransactions.setPrice(Arith.conversion(userOrderInfo.getYcoid()));
-            userTransactions.setCreateTime(DateUtil.getNowDate());
+            userTransactions.setCreateTime(nowDate);
             baseDao.save(userTransactions, null);
         }
     }

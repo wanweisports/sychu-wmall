@@ -1,8 +1,8 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
-import com.wardrobe.common.annotation.NotPerfect;
 import com.wardrobe.common.annotation.NotProtected;
+import com.wardrobe.common.annotation.Perfect;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.ReserveOrderInfo;
@@ -30,6 +30,7 @@ public class OrderController extends BaseController {
     private IOrderService orderService;
 
     @Desc("保存订单，等待支付")
+    @Perfect //必须完善资料
     @ResponseBody
     @RequestMapping("saveOrder")
     public ResponseBean saveOrder(UserOrderInfo userOrderInfo, String scids) throws Exception{
@@ -38,6 +39,7 @@ public class OrderController extends BaseController {
     }
 
     @Desc("保存预约订单")
+    @Perfect //必须完善资料
     @ResponseBody
     @RequestMapping("saveReserveOrder")
     public ResponseBean saveOrder(ReserveOrderInfo orderInfo, String scids) throws Exception{
@@ -89,7 +91,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @RequestMapping("wxPayPackage")
     public ResponseBean wxPayPackage(OrderInputView orderInputView) throws Exception{
-        Map<Object, Object> payPackage = orderService.wxPayPackage(orderInputView, getUserInfo().getOpenId());
+        Map<Object, Object> payPackage = orderService.saveWxPayPackage(orderInputView, getUserInfo().getOpenId());
         if(IDBConstant.LOGIC_STATUS_YES.equals(payPackage.get("ok"))){
             return new ResponseBean(IDBConstant.LOGIC_STATUS_NO, null);
         }else {
@@ -101,7 +103,6 @@ public class OrderController extends BaseController {
      * 订单支付回调
      */
     @NotProtected
-    @NotPerfect
     @ResponseBody
     @RequestMapping("asynNotify")
     public ResponseBean asynNotify(HttpServletRequest request, HttpServletResponse response) throws Exception{

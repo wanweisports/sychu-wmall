@@ -20,6 +20,8 @@ public interface IUserAccountService {
 
     void setUserYcoid(int uid, double priceSum);
 
+    void setUserScore(int uid, double priceSum);
+
     void updateRank(int uid);
 
     void initUserAccount(UserInfo userInfo);

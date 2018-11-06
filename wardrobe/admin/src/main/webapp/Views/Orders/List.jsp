@@ -51,6 +51,7 @@
                             <table class="table table-striped table-bordered table-sm orders-list">
                                 <thead>
                                 <tr>
+                                    <th>订单ID</th>
                                     <th>订单编号</th>
                                     <th>订单时间</th>
                                     <th>订单金额</th>
@@ -62,6 +63,7 @@
                                 <tbody>
                                     <c:forEach var="o" items="${page.list}">
                                         <tr>
+                                            <td>${o.oid}</td>
                                             <td>
                                                 <a href="/admin/orders/detail?oid=${o.oid}">${o.ono}</a>
                                             </td>
