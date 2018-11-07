@@ -313,6 +313,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         return rno;
     }
 
+    @Desc("规则是每天17点之前下单，可以约次日以后，17点以后下单可以约隔日以后")
     @Override
     public synchronized Integer saveReserveOrderInfo(ReserveOrderInfo orderInfo, String scids, int uid) throws ParseException{ //购物车ids，多个逗号分隔
         if(StrUtil.isBlank(scids)) throw new MessageException("操作错误!");
@@ -330,12 +331,18 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         Date date = new Date(nowDate.getTime());
         //只能预约第二天，每天只能预约一单
         String startDateStr = DateUtil.dateToString(new Date(reserveStartTime.getTime()), DateUtil.YYYYMMDD);
-        Date tomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 1)); //明天0点数据
-        Date after15 = DateUtil.initDateByDay(DateUtil.addDate(date, 15)); //之后15天
+        int startDateHouse = StrUtil.objToInt(DateUtil.dateToString(new Date(reserveStartTime.getTime()), DateUtil.HH));
         Date rd = DateUtil.initDateByDay(new Date(reserveStartTime.getTime()));
 
-        if(rd.getTime() < tomorrow.getTime() || rd.getTime() > after15.getTime()) throw new MessageException("只能预约明天及之后的14天！");
-
+        if(startDateHouse < 17) { //每天17点之前下单，可以约次日以后
+            Date tomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 1)); //明天0点数据
+            Date after15 = DateUtil.initDateByDay(DateUtil.addDate(date, 15)); //之后15天
+            if (rd.getTime() < tomorrow.getTime() || rd.getTime() > after15.getTime()) throw new MessageException("预约17点之前的只能预约明天及之后的14天！");
+        }else{ //17点以后下单可以约隔日以后
+            Date afterTomorrow = DateUtil.initDateByDay(DateUtil.addDate(date, 2)); //后天0点数据
+            Date after16 = DateUtil.initDateByDay(DateUtil.addDate(date, 16)); //之后16天
+            if (rd.getTime() < afterTomorrow.getTime() || rd.getTime() > after16.getTime()) throw new MessageException("预约17点以后的只能预约后天及之后的15天！");
+        }
         ReserveOrderInfo existNowReserve = isExistNowReserve(startDateStr, uid);
         if(existNowReserve != null) throw new MessageException("您已经预约了" + DateUtil.dateToString(new Date(existNowReserve.getReserveStartTime().getTime()), DateUtil.YYYYMMDDHHMM) + "到" +  DateUtil.dateToString(new Date(existNowReserve.getReserveEndTime().getTime()), DateUtil.YYYYMMDDHHMM) + "，不能重复预约");
 

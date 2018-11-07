@@ -16,6 +16,7 @@ import java.util.List;
 public class DateUtil {
 	public static final String YYYYMMDD_S = "yyyyMMdd";
 	public static final String YYYYMMDD_HMS = "yyyyMMddHHmmss";
+	public static final String HH = "HH";
 	public static final String HHMM = "HH:mm";
     public static final String YYYY = "yyyy";
     public static final String YYYYMM = "yyyy-MM";
