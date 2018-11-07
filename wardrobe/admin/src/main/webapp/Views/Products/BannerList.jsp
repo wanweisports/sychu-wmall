@@ -22,6 +22,41 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/products/hotList.js?v=${static_resource_version}"></script>
+
+    <script type="text/javascript">
+        function saveBanner(btn){
+            if (window.confirm("确定保存吗？")) {
+                $(btn).html('<i class="fa fa-ok"></i> 保存中...').prop("disabled", true);
+                $("#banner_form").ajaxSubmit({
+                    type: "post",
+                    dataType: "json",
+                    data: $("#banner_form").serialize(),
+                    url: "/commodity/saveCommodityBanner",
+                    success: function (res) {
+                        if (res.code == 1) {
+                            window.location.reload();
+                        }else{
+                            alert(res.message);
+                            $(btn).html('<i class="fa fa-ok"></i> 确 认').prop("disabled", false);
+                        }
+                    }
+                });
+            }
+        }
+
+        function delBanner(cbid){
+            if (window.confirm("确定删除吗？(不可恢复)")) {
+                $.post('/commodity/delCommodityBanner', {cbid: cbid}, function (res) {
+                    if (res.code == 1) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(res.message);
+                    }
+                });
+            }
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -29,7 +64,7 @@
         <div class="modal-dialog modal-default" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="banner_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                    <form id="banner_form" method="post" class="form-horizontal" novalidate onsubmit="return false;" enctype="multipart/form-data">
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label">
                                 <span class="text-danger">*</span> 轮播图片
@@ -47,7 +82,7 @@
                             </label>
                             <div class="col-md-9 col-form-label">
                                 <div style="width: 100%; position: relative">
-                                    <input type="text" class="form-control" id="seqNo" name="seqNo" placeholder="">
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -57,7 +92,7 @@
                             </label>
                             <div class="col-md-9 col-form-label">
                                 <div style="width: 100%; position: relative">
-                                    <input type="text" class="form-control" id="seqNo" name="seqNo" placeholder="">
+                                    <input type="text" class="form-control" id="url" name="url" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -77,7 +112,7 @@
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
                         <i class="fa fa-close"></i> 取 消
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="saveBanner(this)">
                         <i class="fa fa-ok"></i> 确 认
                     </button>
                 </div>
@@ -107,59 +142,27 @@
                                     <th>轮播图片</th>
                                     <th>轮播标题</th>
                                     <th>轮播链接</th>
-                                    <th>轮播状态</th>
                                     <th>操作时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
+                                <c:forEach var="b" items="${list}">
                                 <tr data-id="">
-                                    <td>1</td>
-                                    <td>--</td>
-                                    <td>标题标题标题标题标题标题标题标题</td>
-                                    <td>www.baidu.com</td>
-                                    <td>已上线</td>
-                                    <td>2018-11-12 11:11:11</td>
+                                    <td>${b.cbid}</td>
+                                    <td><img src="${b.resourcePath}" alt="轮播图" class="img-rounded"></td>
+                                    <td>${b.title}</td>
+                                    <td>${b.url}</td>
+                                    <td>${b.createTime}</td>
                                     <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="轮播下线">
-                                            <i class="fa fa-level-down"></i> 下线
+                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="轮播删除" onclick="delBanner('${b.cbid}')">
+                                            <i class="fa fa-level-down"></i> 删除
                                         </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="轮播上线">
+                                        <%--<a href="javascript:;" class="btn btn-sm btn-primary" title="轮播上线">
                                             <i class="fa fa-level-up"></i> 上线
-                                        </a>
+                                        </a>--%>
                                     </td>
                                 </tr>
-                                <tr data-id="">
-                                    <td>1</td>
-                                    <td>--</td>
-                                    <td>标题标题标题标题标题标题标题标题</td>
-                                    <td>www.baidu.com</td>
-                                    <td>已上线</td>
-                                    <td>2018-11-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="轮播下线">
-                                            <i class="fa fa-level-down"></i> 下线
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="轮播上线">
-                                            <i class="fa fa-level-up"></i> 上线
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-id="">
-                                    <td>1</td>
-                                    <td>--</td>
-                                    <td>标题标题标题标题标题标题标题标题</td>
-                                    <td>www.baidu.com</td>
-                                    <td>已上线</td>
-                                    <td>2018-11-12 11:11:11</td>
-                                    <td>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger" title="轮播下线">
-                                            <i class="fa fa-level-down"></i> 下线
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-sm btn-primary" title="轮播上线">
-                                            <i class="fa fa-level-up"></i> 上线
-                                        </a>
-                                    </td>
-                                </tr>
+                                </c:forEach>
                             </table>
                         </div>
                     </div>

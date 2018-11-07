@@ -10,7 +10,8 @@ requirejs.config({
 
         "base"      : 'js/widgets/base',
         "override"  : 'js/widgets/override',
-        "payment"   : 'js/widgets/payment'
+        "payment"   : 'js/widgets/payment',
+        "jquery.form": 'lib/jquery-form'
     },
     shim: {
         "bootstrap": {
@@ -24,7 +25,7 @@ requirejs.config({
     urlArgs: '_=' + new Date().getTime()
 });
 
-require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment'], function ($, jqueryAlert) {
+require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment', 'jquery.form'], function ($, jqueryAlert) {
     'use strict';
 
     $(".products-list").on("click", ".product-hot-cancel", function () {

@@ -415,7 +415,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
-        data.put("productSizeList", getCommoditySizeList(cid));
         data.put("coverImg", getFmImgObj(cid));
         data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         if(groupId != null) {
@@ -423,11 +422,18 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
 
-        CommodityBanner commodityBanner = getCommodityBanner(cid);
+        List<CommoditySize> commoditySizeList = getCommoditySizeList(cid);
+        int stockSum = 0;
+        for(CommoditySize commoditySize : commoditySizeList){
+            stockSum += commoditySize.getStock();
+        }
+        data.put("productSizeList", commoditySizeList);
+        data.put("stockSum", stockSum);
+        /*CommodityBanner commodityBanner = getCommodityBanner(cid);
         if(commodityBanner != null) {
             data.put("commodityBanner", commodityBanner);
             data.put("bannerImg", resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
-        }
+        }*/
         return data;
     }
 
@@ -522,7 +528,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException{
-        if(getCommodityBanner(commodityBanner.getCid()) != null) return;
         commodityBanner.setCreateTime(DateUtil.getNowDate());
         baseDao.save(commodityBanner, null);
 
@@ -533,8 +538,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             OssClient.putInputStream(sysResource.getInputStream(), sysResource.getResourcePath());
             //保存到数据库
             sysResource.setResourceSeq(commodityBanner.getSeqNo());
-            sysResource.setResourceServiceParentId(commodityBanner.getCid());
-            sysResource.setResourceServiceId(commodityBanner.getCid());
+            sysResource.setResourceServiceParentId(commodityBanner.getCbid());
+            sysResource.setResourceServiceId(commodityBanner.getCbid());
             sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
             sysResource.setResourceType(IDBConstant.RESOURCE_COMMODITY_IMG);
             baseDao.save(sysResource, null);
@@ -543,16 +548,16 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void deleteCommodityBanner(int cid){
-        baseDao.delete(getCommodityBanner(cid));
-        SysResources resource = resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
+    public void deleteCommodityBanner(int cbid){
+        baseDao.delete(getCommodityBanner(cbid));
+        SysResources resource = resourceService.getResource(cbid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
         if(resource != null){
             baseDao.delete(resource);
         }
     }
 
-    private CommodityBanner getCommodityBanner(int cid){
-        return baseDao.queryByHqlFirst("FROM CommodityBanner WHERE cid = ?1", cid);
+    private CommodityBanner getCommodityBanner(int cbid){
+        return baseDao.getToEvict(CommodityBanner.class, cbid);
     }
 
     @Override
@@ -564,6 +569,15 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         Map<String, Object> data = new HashMap<>(1, 1);
         data.put("list", list);
         return data;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommodityBannersIn(){
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT cb.* FROM commodity_banner cb ORDER BY cb.seqNo DESC, cb.createTime DESC");
+        list.parallelStream().forEach(map -> {
+            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cbid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+        });
+        return list;
     }
 
     @Override
