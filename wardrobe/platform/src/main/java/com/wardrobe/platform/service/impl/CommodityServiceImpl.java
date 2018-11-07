@@ -562,9 +562,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> getCommodityBanners(){
-        List<Map<String, Object>> list = baseDao.queryBySql("SELECT ci.cid, ci.commName FROM commodity_banner cb, commodity_info ci WHERE cb.cid = ci.cid ORDER BY cb.seqNo DESC, cb.createTime DESC");
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT cb.* FROM commodity_banner cb ORDER BY cb.seqNo DESC, cb.createTime DESC");
         list.parallelStream().forEach(map -> {
-            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cbid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
         });
         Map<String, Object> data = new HashMap<>(1, 1);
         data.put("list", list);
