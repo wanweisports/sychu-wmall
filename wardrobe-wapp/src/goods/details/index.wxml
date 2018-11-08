@@ -3,7 +3,7 @@
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
             <block wx:for="{{goodsDetail.resources}}" wx:key="*this">
                 <swiper-item>
-                    <image src="{{item}}" class="slide-image" width="355" height="150" mode="aspectFit" lazy-load="true"/>
+                    <image src="{{item}}" class="slide-image" width="355" height="150" mode="aspectFit" lazy-load="true" bindtap="previewImage"/>
                 </swiper-item>
             </block>
         </swiper>

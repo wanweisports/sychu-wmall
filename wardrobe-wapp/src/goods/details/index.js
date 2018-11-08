@@ -44,6 +44,12 @@ Page({
             imgUrl: this.data.goodsDetail.resources[0]
         });
     },
+    previewImage: function () {
+        wx.previewImage({
+            current: this.data.goodsDetail.resources[this.data.swiperCurrent],
+            urls: this.data.goodsDetail.resources
+        });
+    },
     //事件处理函数
     swiperchange: function(e) {
         this.setData({
