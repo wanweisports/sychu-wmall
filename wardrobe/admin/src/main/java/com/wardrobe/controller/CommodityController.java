@@ -84,8 +84,8 @@ public class CommodityController extends BaseController {
 
     @ResponseBody
     @RequestMapping("delCommodityBanner")
-    public ResponseBean delCommodityBanner(int cid){
-        commodityService.deleteCommodityBanner(cid);
+    public ResponseBean delCommodityBanner(int cbid){
+        commodityService.deleteCommodityBanner(cbid);
         return new ResponseBean(true);
     }
 

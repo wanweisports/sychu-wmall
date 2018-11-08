@@ -225,7 +225,7 @@ public class ProductsController extends BaseController {
     @RequestMapping(value = "/sku/total")
     public String renderProductsSkuTotal(CommodityInputView commodityInputView, Model model) {
         PageBean pageBean = commodityService.getStockListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/sku/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/sku/total", commodityInputView);
         model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
         model.addAttribute("types", dictService.getDicts(IDBConstant.COMM_STOCK_TYPE));
         return "Products/SkuTotal";
@@ -255,11 +255,8 @@ public class ProductsController extends BaseController {
 
     @Desc("商品管理列表 -- banner")
     @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
-    public String renderProductsBannerList(CommodityInputView commodityInputView, Model model) {
-        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
-        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
-        PageBean pageBean = commodityService.getBannerCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/banner/list", commodityInputView);
+    public String renderProductsBannerList(Model model) {
+        model.addAttribute("list", commodityService.getCommodityBannersIn());
         return "Products/BannerList";
     }
 

@@ -109,6 +109,7 @@
                                     <th>商品品类</th>
                                     <th>商品材质</th>
                                     <th>商品价格</th>
+                                    <th>商品优惠价</th>
                                     <th>已售</th>
                                     <th>点击量</th>
                                     <th>已收藏</th>
@@ -128,6 +129,7 @@
                                     <td>${c.styleName}</td>
                                     <td>${c.materialName}</td>
                                     <td>￥${c.price}</td>
+                                    <td>￥${c.couPrice}</td>
                                     <%--<td>￥399</td>--%>
                                     <td>${c.saleCount}件</td>
                                     <td>${c.clickRate}次</td>

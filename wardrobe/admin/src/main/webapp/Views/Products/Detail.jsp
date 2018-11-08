@@ -261,7 +261,7 @@
                                 <tr>
                                     <th>序号</th>
                                     <th>尺码大小</th>
-                                    <th>初始库存</th>
+                                    <%--<th>初始库存</th>--%>
                                     <th>当前库存</th>
                                     <th>操作</th>
                                 </tr>
@@ -271,7 +271,7 @@
                                     <tr data-id="${s.sid}">
                                         <td>${status.index+1}</td>
                                         <td>${s.size}</td>
-                                        <td>${s.stock}件</td>
+                                        <%--<td>${s.stock}件</td>--%>
                                         <td>${s.stock}件</td>
                                         <td>
                                             <a href="#product_sku_dialog" class="btn btn-sm btn-primary sku-add" data-toggle="modal">
@@ -286,11 +286,11 @@
                                         </td>
                                     </tr>
                                     </c:forEach>
-                                    <tr data-id="${s.sid}">
+                                    <tr data-id="">
                                         <td>--</td>
                                         <td>合计</td>
-                                        <td>11件</td>
-                                        <td>11件</td>
+                                        <%--<td>11件</td>--%>
+                                        <td>${stockSum}件</td>
                                         <td>--</td>
                                     </tr>
                                 </tbody>

@@ -13,6 +13,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class CommodityBanner {
     private int cbid;
     private Integer cid;
+    private String title;
+    private String url;
     private Integer seqNo;
     private Timestamp createTime;
 
@@ -35,6 +37,26 @@ public class CommodityBanner {
 
     public void setCid(Integer cid) {
         this.cid = cid;
+    }
+
+    @Basic
+    @Column(name = "title")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Basic
+    @Column(name = "url")
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Basic

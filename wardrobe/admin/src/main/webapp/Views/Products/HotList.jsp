@@ -60,12 +60,14 @@
                             <table class="table table-striped table-sm table-bordered products-list">
                                 <thead>
                                 <tr>
+                                    <th>商品ID</th>
                                     <th>商品编号</th>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
                                     <th>商品品类</th>
                                     <th>商品材质</th>
                                     <th>原价</th>
+                                    <th>优惠价</th>
                                     <th>已售</th>
                                     <th>商品状态</th>
                                     <th>操作</th>
@@ -73,6 +75,7 @@
                                 </thead>
                                 <c:forEach var="c" items="${page.list}" varStatus="status">
                                     <tr data-id="">
+                                        <td>${c.cid}</td>
                                         <td>${c.commNo}</td>
                                         <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                         <td>
@@ -81,6 +84,7 @@
                                         <td>${c.styleName}</td>
                                         <td>${c.materialName}</td>
                                         <td>￥${c.price}</td>
+                                        <td>￥${c.couPrice}</td>
                                         <td>${c.saleCount}件</td>
                                         <td>
                                             <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
