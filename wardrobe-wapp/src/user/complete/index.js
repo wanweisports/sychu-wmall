@@ -21,7 +21,9 @@ Page({
         code          : "",
         inviteCode    : "",
         usualSize     : "",
-        birthday      : "选择生日"
+        birthday      : "选择生日",
+
+        nextStep      : ""
 
     },
     onShareAppMessage: null,
@@ -46,7 +48,11 @@ Page({
             app.showToast("获取尺码偏好字典错误", "none");
         });
     },
-    onLoad: function () {
+    onLoad: function (options) {
+        this.setData({
+            nextStep: options.next || ""
+        });
+
         this.getUserSizeDicts();
     },
 
@@ -184,7 +190,18 @@ Page({
             },
             function (res) {
                 if (res.code == 1) {
-                    app.redirect("/pages/index/index", "switchTab");
+                    if (content.data.nextStep == "cart") {
+                        app.redirect("/pages/goods/cart/index", "switchTab");
+                    }
+                    else if (content.data.nextStep == "room") {
+                        app.redirect("/pages/goods/room/index", "switchTab");
+                    }
+                    else if (content.data.nextStep == "center") {
+                        app.redirect("/pages/user/center/index", "switchTab");
+                    }
+                    else {
+                        app.redirect("/pages/index/index", "switchTab");
+                    }
                 }
                 else {
                     app.showToast(res.message || "保存完善信息失败");

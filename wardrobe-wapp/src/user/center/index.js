@@ -25,6 +25,23 @@ Page({
             });
         }
     },
+    scanCode: function () {
+        wx.scanCode({
+            onlyFromCamera: true,
+            success: function (res) {
+                if (res.result.indexOf("/relay/openDoor") > -1) {
+                    app.wxRequest(res.result, {}, function (res) {
+                        if (res.code == 1) {
+                            app.showToast("扫码开门成功");
+                        }
+                        else {
+                            app.showToast(res.message || "扫码开门失败");
+                        }
+                    });
+                }
+            }
+        });
+    },
     getUserInfo: function () {
         let content = this;
 

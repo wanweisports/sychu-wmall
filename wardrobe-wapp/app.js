@@ -158,8 +158,10 @@ App({
             'Cookie': 'JSESSIONID=' + content.globalData.sessionId
         };
 
+        url = url.indexOf(content.config.getApiHost()) == -1 ? content.config.getApiHost() + url : url;
+
         wx.request({
-            url    : content.config.getApiHost() + url,
+            url    : url,
             data   : data,
             header : header,
             success: function (res) {
@@ -171,7 +173,27 @@ App({
                     content.redirect("/pages/landing/index", "reLaunch");
                 }
                 else if (res.data.code == 20) {
-                    content.redirect("/pages/user/complete/index", "navigateTo");
+                    wx.showModal({
+                        title: '提 示',
+                        content: '请先完善信息！',
+                        showCancel: false,
+                        success: function (res) {
+                            if (res.confirm) {
+                                if (url.indexOf("/order/saveOrder") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=cart", "navigateTo");
+                                }
+                                else if (url.indexOf("/order/saveReserveOrder") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=room", "navigateTo");
+                                }
+                                 else if (url.indexOf("/relay/openDoor") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=center", "navigateTo");
+                                }
+                                else {
+                                    content.redirect("/pages/user/complete/index", "navigateTo");
+                                }
+                            }
+                        }
+                    });
                 }
                 else {
                     success(res.data);
@@ -316,8 +338,8 @@ App({
     config: {
         getApiHost: function () {
             //return "http://127.0.0.1:8070";
-            //return "https://mystore.yifoutech.com/api";
-            return "https://mystore.yifoutech.cn/api";
+            return "https://mystore.yifoutech.com/api";
+            //return "https://mystore.yifoutech.cn/api";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您',

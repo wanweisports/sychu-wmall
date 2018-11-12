@@ -3,9 +3,14 @@
         <image wx:if="{{userInfo && userInfo.headImg}}" class="userinfo-avatar" src="{{ userInfo.headImg }}" background-size="cover"></image>
         <view class="userinfo-info">
             <text class="userinfo-nickname">{{ userInfo.nickname }}</text>
-            <button class="weui-btn" type="primary" size="mini">
-                <text class="userinfo-rank">{{ userInfo.rankName }} ></text>
-            </button>
+            <navigator url="/pages/user/score-des/index" hover-class="navigator-hover">
+                <button class="weui-btn" type="primary" size="mini">
+                    <text class="userinfo-rank">{{ userInfo.rankName }} ></text>
+                </button>
+            </navigator>
+        </view>
+        <view class="scan-qrcode" bindtap="scanCode">
+            <image src="/images/sao.png"></image>
         </view>
     </view>
     <view class="userinfo-ft">

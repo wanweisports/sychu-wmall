@@ -30,6 +30,19 @@
 .userinfo-info .weui-btn {
     border-radius: 30rpx;
 }
+.userinfo .scan-qrcode {
+    width:48rpx;
+    height:48rpx;
+    float:right;
+    right:48rpx;
+    position:absolute;
+    right:48rpx;
+    top:48rpx;
+}
+.userinfo .scan-qrcode image {
+    width:48rpx;
+    height:48rpx;
+}
 .userinfo-ft {
     overflow:hidden;
     display:flex;
