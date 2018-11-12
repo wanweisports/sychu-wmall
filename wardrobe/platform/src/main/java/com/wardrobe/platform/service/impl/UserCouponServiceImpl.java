@@ -118,7 +118,7 @@ public class UserCouponServiceImpl extends BaseService implements IUserCouponSer
         if (cpid > 0) {
             UserCouponInfo userCouponInfo = getUserCouponInfo(cpid);
             userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_YES);
-            baseDao.save(userCouponInfo, userCouponInfo.getStatus());
+            baseDao.save(userCouponInfo, cpid);
         }
     }
 

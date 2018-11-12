@@ -37,9 +37,6 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base'], function ($, jquer
         });
     };
 
-    $(".wardrobe-add").on("click", function (e) {
-    });
-
     $(".wardrobe-list").on("click", ".wardrobe-set", function () {
         var wardrobeId = $(this).parents("tr").attr("data-id");
 

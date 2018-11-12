@@ -37,7 +37,19 @@ Page({
         goodDetail: {},
         goodDetailSize: {}
     },
-
+    onShareAppMessage: function () {
+        return app.onShareAppMessage({
+            path: '/pages/goods/details/index?id=' + this.data.goodId,
+            title: "[" + this.data.goodsDetail.brandName + "] " + this.data.goodsDetail.commName,
+            imgUrl: this.data.goodsDetail.resources[0]
+        });
+    },
+    previewImage: function () {
+        wx.previewImage({
+            current: this.data.goodsDetail.resources[this.data.swiperCurrent],
+            urls: this.data.goodsDetail.resources
+        });
+    },
     //事件处理函数
     swiperchange: function(e) {
         this.setData({
@@ -45,7 +57,7 @@ Page({
         })
     },
     bindColorTap: function (e) {
-        app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "navigateTo");
+        app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "redirectTo");
     },
     getGoodsDetail: function () {
         let content = this;
@@ -67,6 +79,9 @@ Page({
                     isFavorite: res.data.collection == 1
                 });
             }
+            else {
+                app.showToast(res.message || "获取商品详情失败");
+            }
         });
     },
     goShopCart: function() {
@@ -84,6 +99,9 @@ Page({
                     isFavorite: true
                 });
             }
+            else {
+                app.showToast(res.message || "收藏商品失败");
+            }
         });
     },
     removeShopFavorite: function () {
@@ -94,6 +112,9 @@ Page({
                 content.setData({
                     isFavorite: false
                 });
+            }
+            else {
+                app.showToast(res.message || "移除收藏商品失败");
             }
         });
     },
@@ -129,10 +150,17 @@ Page({
                     goodDetailSize: res.data
                 });
             }
+            else {
+                app.showToast(res.message || "获取商品详情尺码失败");
+            }
         });
     },
     saveShopCartAdd: function (sid, num, type) {
-        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function () {}, function () {});
+        app.wxRequest("/commodity/saveShoppingCart", {sid: sid, shoppingType: type, count: num}, function (res) {
+            if (res.code != 1) {
+                app.showToast(res.message || "添加购物车失败");
+            }
+        });
     },
 
     /***** 加购物车 *****/
@@ -188,7 +216,7 @@ Page({
 
         this.closePopupTap();
 
-        app.showToast("加入购物车成功", "success");
+        app.showToast("已加入购物车", "success");
     },
 
     /***** 加闪衣橱 *****/
@@ -252,7 +280,7 @@ Page({
         });
 
         this.closeShopOrderPopupTap();
-        app.showToast("加入配衣间成功", "success");
+        app.showToast("已加入配衣间", "success");
     },
 
     /**

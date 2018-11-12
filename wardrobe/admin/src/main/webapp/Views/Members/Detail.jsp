@@ -23,6 +23,46 @@
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
+    <div class="modal fade" id="member_value_dialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="alert alert-warning" id="member_value_tip">填写修正金额，请慎重考虑！</div>
+                    <form id="member_value_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="ps_num">
+                                <span class="text-danger">*</span> 修正值
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="ps_num" placeholder="请输入修正值" name="num"
+                                       data-val="true" data-val-required="修正值不能为空" autocomplete="off">
+                                <div data-valmsg-for="num" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="ps_remark">
+                                <span class="text-danger">*</span> 修正备注
+                            </label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="ps_remark" placeholder="请输入备注" name="remark"
+                                          data-val="true" data-val-required="备注不能为空" autocomplete="off"></textarea>
+                                <div data-valmsg-for="remark" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        <i class="fa fa-remove"></i> 取 消
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fa fa-check"></i> 确 认
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
@@ -31,6 +71,11 @@
                         <div class="card-header">
                             <strong>会员信息</strong>
                             <small>Members Information</small>
+                            <div class="card-header-actions">
+                                <a class="card-header-action btn-basket" href="/admin/members/transactions/log?id=${user.uid}">
+                                    <i class="icon-basket"></i> 交易记录
+                                </a>
+                            </div>
                         </div>
                         <div class="card-block">
                             <table class="table table-responsive-sm table-bordered member-info">
@@ -84,6 +129,17 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                                <i class="fa fa-bolt"></i> 修正金额
+                            </a>
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                                <i class="fa fa-bolt"></i> 修正薏米
+                            </a>
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                                <i class="fa fa-bolt"></i> 修正积分
+                            </a>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-header">
@@ -120,69 +176,10 @@
                             </table>
                         </div>
                     </div>
-                    <%--<div class="card">
-                        <div class="card-header">
-                            <strong>收货地址</strong>
-                            <small>Members Express Address</small>
-                        </div>
-                        <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered member-address">
-                                <thead>
-                                <tr>
-                                    <th>##</th>
-                                    <th>地址编号</th>
-                                    <th>省市区</th>
-                                    <th>详细地址</th>
-                                    <th>邮编</th>
-                                    <th>收货人姓名</th>
-                                    <th>收货人手机</th>
-                                    <th>是否默认</th>
-                                    <th>设置时间</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>U20180612101155</td>
-                                    <td>山东省-潍坊市-坊子区</td>
-                                    <td>舜王街道程戈庄村100号</td>
-                                    <td>262202</td>
-                                    <td>唐四毛</td>
-                                    <td>158****3167</td>
-                                    <td>是</td>
-                                    <td>2018-07-24 14:46:33</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>--%>
                 </div>
             </div>
             <!--/.row-->
         </div>
-
     </div>
 </layout:override>
 

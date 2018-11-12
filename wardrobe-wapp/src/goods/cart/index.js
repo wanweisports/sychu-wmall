@@ -12,6 +12,7 @@ Page({
         },
         delBtnWidth: 120    //删除按钮宽度单位（rpx）
     },
+    onShareAppMessage: null,
     toListPage:function(){
         app.redirect("/pages/goods/list/index", "switchTab");
     },
@@ -48,11 +49,18 @@ Page({
 
                 content.setGoodsList(content.getSaveHide(), content.totalPrice(), content.allSelect(), content.noSelect(), data.list);
             }
+            else {
+                app.showToast(res.message || "获取购物车列表失败", "none");
+            }
         });
     },
     // 删除购物车列表
     deleteShoppingCart: function (scid) {
-        app.wxRequest("/commodity/delShoppingCart", {scids: scid}, function (res) {});
+        app.wxRequest("/commodity/delShoppingCart", {scids: scid}, function (res) {
+            if (res.code != 1) {
+                app.showToast(res.message || "删除购物车列表失败", "none");
+            }
+        });
     },
     //获取元素自适应后的实际宽度
     getEleWidth: function (w) {
@@ -75,7 +83,7 @@ Page({
             delBtnWidth: delBtnWidth
         });
     },
-    onLoad: function () {
+    onShow: function () {
         this.initEleWidth();
         this.getShoppingCart();
     },
@@ -237,7 +245,7 @@ Page({
                 }
             }
             else {
-                app.showToast(res.message);
+                app.showToast(res.message || "增加商品数量失败");
             }
         });
     },
@@ -245,6 +253,10 @@ Page({
         let content = this;
         let index = e.currentTarget.dataset.index;
         let list = this.data.goodsList.list;
+
+        if (list[parseInt(index)].number <= 1) {
+            return;
+        }
 
         this.saveShopCartAdd(list[parseInt(index)].sid, -1, function (res) {
             if (res.code == 1) {
@@ -256,7 +268,7 @@ Page({
                 }
             }
             else {
-                app.showToast(res.message);
+                app.showToast(res.message || "增加商品数量失败");
             }
         });
     },

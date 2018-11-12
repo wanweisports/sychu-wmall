@@ -12,6 +12,7 @@ Page({
         },
         delBtnWidth: 120    //删除按钮宽度单位（rpx）
     },
+    onShareAppMessage: null,
     toListPage:function(){
         app.redirect("/pages/goods/list/index", "switchTab");
     },
@@ -75,7 +76,7 @@ Page({
             delBtnWidth: delBtnWidth
         });
     },
-    onLoad: function () {
+    onShow: function () {
         this.initEleWidth();
         this.getShoppingCart();
     },
@@ -245,6 +246,10 @@ Page({
         let content = this;
         let index = e.currentTarget.dataset.index;
         let list = this.data.goodsList.list;
+
+        if (list[parseInt(index)].number <= 1) {
+            return;
+        }
 
         this.saveShopCartAdd(list[parseInt(index)].sid, -1, function (res) {
             if (res.code == 1) {

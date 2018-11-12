@@ -30,10 +30,16 @@ public interface IDBConstant {
 
     String USER_SIZE = "USER_SIZE"; //尺码偏好
 
+    String TRANSACTIONS_SERVICE_TYPE = "TRANSACTIONS_SERVICE_TYPE"; //流水业务类型
+    String TRANSACTIONS_SERVICE_TYPE_ZF = "1"; //支付
+    String TRANSACTIONS_SERVICE_TYPE_CZ = "2"; //充值
+    String TRANSACTIONS_SERVICE_TYPE_JL = "3"; //奖励
+    String TRANSACTIONS_SERVICE_TYPE_TK = "4"; //退款
+
     String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
-    String TRANSACTIONS_TYPE_ZF = "10"; //支付
-    String TRANSACTIONS_TYPE_CZ = "20"; //充值
-    String TRANSACTIONS_TYPE_TK = "30"; //退款
+    String TRANSACTIONS_TYPE_WX = "1";    //微信（与订单支付方式保持一致）
+    String TRANSACTIONS_TYPE_YUE = "2";   //余额（与订单支付方式保持一致）
+    String TRANSACTIONS_TYPE_YCOID = "3"; //薏米
 
 
     String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小
@@ -62,5 +68,6 @@ public interface IDBConstant {
     String RESERVE_ORDER_STATUS = "RESERVE_ORDER_STATUS"; //预约单状态
     String RESERVE_ORDER_STATUS_YES = "1"; //正常
     String  RESERVE_ORDER_STATUS_NO = "2"; //取消
+
 
 }

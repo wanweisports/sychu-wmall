@@ -64,9 +64,13 @@ public interface ICommodityService {
 
     void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException;
 
-    void deleteCommodityBanner(int cid);
+    void deleteCommodityBanner(int cbid);
 
     Map<String, Object> getCommodityBanners();
+
+    List<Map<String, Object>> getCommodityBannersIn();
+
+    void updateClickRate(int cid);
 
     PageBean getBannerCommodityListIn(CommodityInputView commodityInputView);
 

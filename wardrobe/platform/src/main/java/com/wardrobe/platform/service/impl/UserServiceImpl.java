@@ -5,10 +5,7 @@ import com.wardrobe.common.bean.UserPerfectBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.*;
-import com.wardrobe.common.util.Arith;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,31 +75,33 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(ui != null) throw new MessageException("手机号已被注册，请重新输入！");
 
         UserInfo userInfo = getUserInfo(userId);
-        String inviteCode = userPerfectBean.getInviteCode();
+        synchronized (userInfo.getOpenId().intern()) {
+            String inviteCode = userPerfectBean.getInviteCode();
 
-        //userInfo.setSex(userPerfectBean.getSex());
-        userInfo.setAge(userPerfectBean.getAge());
-        userInfo.setDressStyle(userPerfectBean.getDressStyle());
-        userInfo.setUsualSize(userPerfectBean.getUsualSize());
-        userInfo.setMobile(userPerfectBean.getMobile());
-        userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
+            //userInfo.setSex(userPerfectBean.getSex());
+            userInfo.setAge(userPerfectBean.getAge());
+            userInfo.setDressStyle(userPerfectBean.getDressStyle());
+            userInfo.setUsualSize(userPerfectBean.getUsualSize());
+            userInfo.setMobile(userPerfectBean.getMobile());
+            userInfo.setIsPerfect(IDBConstant.LOGIC_STATUS_YES); //已完善资料
 
+            if (StrUtil.isNotBlank(inviteCode)) { //有邀请人时, 并且不能是自己的邀请码
+                Integer inviteCodeUserId = checkInviteCode(inviteCode, userId);
+                userInfo.setInvitedBy(inviteCodeUserId);
+                //其他操作：如邀请人增加积分..等等
 
-        if(StrUtil.isNotBlank(inviteCode)){ //有邀请人时, 并且不能是自己的邀请码
-            Integer inviteCodeUserId = checkInviteCode(inviteCode, userId);
-            userInfo.setInvitedBy(inviteCodeUserId);
-            //其他操作：如邀请人增加积分..等等
-
+            }
+            //根据手机号查询是否是老用户
+            UserOldInfo userOldInfo = baseDao.queryByHqlFirst("FROM UserOldInfo WHERE mobile = ?1", userInfo.getMobile());
+            if (userOldInfo != null) {
+                UserAccount userAccount = userAccountService.getUserAccount(userId);
+                userAccount.setScore(userAccount.getScore() + userOldInfo.getScore());
+                baseDao.save(userAccount, userAccount.getUid());
+                //计算等级
+                userAccountService.updateRank(userId);
+            }
+            baseDao.save(userInfo, userInfo.getUid());
         }
-        //根据手机号查询是否是老用户
-        UserOldInfo userOldInfo = baseDao.queryByHqlFirst("FROM UserOldInfo WHERE mobile = ?1", userInfo.getMobile());
-        if(userOldInfo != null){
-            UserAccount userAccount = userAccountService.getUserAccount(userId);
-            userAccount.setScore(userAccount.getScore() + userOldInfo.getScore());
-            baseDao.save(userAccount, userAccount.getUid());
-        }
-
-        baseDao.save(userInfo, userInfo.getUid());
     }
 
     /*
@@ -125,7 +124,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(8, 1);
+        Map<String, Object> data = new HashMap<>(11, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
@@ -133,10 +132,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
         data.put("inviteCode", userInfo.getInviteCode());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
+        Integer rank = userAccount.getRank();
         data.put("balance", userAccount.getBalance().doubleValue());
         data.put("ycoid", userAccount.getYcoid());
-        data.put("rank", userAccount.getRank());
+        data.put("rankName", sysRankService.getRankInfoByRank(rank).getRankName());
         data.put("point", userAccount.getScore());
+        data.put("rank", rank);
+        data.put("nextScore", sysRankService.getNextScore(rank));
 
         data.put("couponCount", userCouponService.getUserCouponCount(uid));
         return data;
@@ -204,15 +206,21 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         String nickname = userInputView.getNickname();
         String mobile = userInputView.getMobile();
+        String invitedBy = userInputView.getInvitedBy();
 
         StringBuilder headSql = new StringBuilder("SELECT ui.*, ua.balance, ua.ycoid, ua.score, ua.rank");
         StringBuilder bodySql = new StringBuilder(" FROM user_info ui, user_account ua");
         StringBuilder whereSql = new StringBuilder(" WHERE ui.uid = ua.uid");
         if(StrUtil.isNotBlank(nickname)){
-            whereSql.append(" AND ui.nickname = :nickname");
+            whereSql.append(" AND ui.nickname LIKE :nickname");
+            userInputView.setNickname("%" + nickname + "%");
         }
         if (StrUtil.isNotBlank(mobile)) {
             whereSql.append(" AND ui.mobile = :mobile");
+        }
+        if(StrUtil.isNotBlank(invitedBy)){
+            whereSql.append(" AND EXISTS(SELECT 1 FROM user_info uin WHERE uin.uid = ui.invitedBy AND uin.nickname LIKE :invitedBy)");
+            userInputView.setInvitedBy("%" + invitedBy + "%");
         }
         return super.getPageBean(headSql, bodySql, whereSql, userInputView);
     }

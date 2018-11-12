@@ -10,7 +10,7 @@ Page({
         allGoodsPrice:0,
 
         reserveDateList: [],
-        reserveDateIndex: 1,
+        reserveDateIndex: 0,
         reserveDateValue: "",
 
         reserveTimeStartList: [],
@@ -21,29 +21,24 @@ Page({
         reserveTimeEndIndex: [0, 0],
         reserveTimeEndValue: ""
     },
-
+    onShareAppMessage: null,
     initDate: function (startTime, endTime) {
         let today = new Date();
-        let todayStr = utils.formatDate(today);
 
-        let tomorrow = new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000);
-        let tomorrowStr = utils.formatDate(tomorrow);
+        let reserveDateList = [];
+        for (let rl = 0; rl < 14; rl++) {
+            let day = new Date(today.getTime() + (rl + 1) * 24 * 60 * 60 * 1000);
+            let dayStr = utils.formatDate(day);
 
-        let third = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
-        let thirdStr = utils.formatDate(third);
+            reserveDateList.push({
+                reserveDateValue: dayStr,
+                reserveDateText: dayStr,
+            });
+        }
 
         this.setData({
-            reserveDateList: [{
-                reserveDateValue: todayStr,
-                reserveDateText: "（今天）" + todayStr,
-            }, {
-                reserveDateValue: tomorrowStr,
-                reserveDateText: "（明天）" + tomorrowStr,
-            }, {
-                reserveDateValue: thirdStr,
-                reserveDateText: "（后天）" + thirdStr,
-            }],
-            reserveDateIndex: 1,
+            reserveDateList: reserveDateList,
+            reserveDateIndex: 0,
         });
 
         this.setData({

@@ -1,10 +1,7 @@
 package com.wardrobe.controller;
 
-import com.wardrobe.common.annotation.NotPerfect;
-import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.constant.IPlatformConstant;
-import com.wardrobe.common.constant.SmsUrlConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by cxs on 2018/7/30.
@@ -24,7 +20,6 @@ import java.util.Random;
 @Controller
 public class MessageController extends BaseController {
 
-    @NotPerfect
     @ResponseBody
     @RequestMapping("getCode")
     public ResponseBean getMessage(int type, String mobile) throws UnsupportedEncodingException{

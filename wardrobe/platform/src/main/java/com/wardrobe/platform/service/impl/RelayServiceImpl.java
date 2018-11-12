@@ -61,7 +61,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             //判断是否为关闭状态才能打开
             SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
             if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
-                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + lockId, CharsetUtil.UTF_8));
+                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.PULSE_OPEN + lockId, CharsetUtil.UTF_8));
             }
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
@@ -113,7 +113,11 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             //判断是否为关闭状态才能打开
             SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, driveId);
             if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
-                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + driveId, CharsetUtil.UTF_8));
+                if(driveId == 6){
+                    serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.PULSE_OPEN + driveId, CharsetUtil.UTF_8)); //大门电脉冲
+                }else {
+                    serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + driveId, CharsetUtil.UTF_8));  //开大门依然不变
+                }
             }
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));

@@ -7,6 +7,7 @@ Page({
         orderList: null
     },
 
+    onShareAppMessage: null,
     onReachBottom: function () {
         if (this.data.currentPage >= this.data.lastPage) {
             return app.showToast("已经最后一页", "none");

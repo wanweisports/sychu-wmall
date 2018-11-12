@@ -31,6 +31,7 @@ Page({
         dbids: [],
     },
 
+    onShareAppMessage: null,
     getCartSettle: function () {
         let content = this;
 

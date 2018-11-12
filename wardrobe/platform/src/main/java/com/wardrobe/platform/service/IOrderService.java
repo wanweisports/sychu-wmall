@@ -3,6 +3,7 @@ package com.wardrobe.platform.service;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDict;
+import com.wardrobe.common.po.UserOrderDetail;
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.view.OrderInputView;
 
@@ -20,7 +21,9 @@ public interface IOrderService {
 
     Integer saveOrderInfo(UserOrderInfo userOrderInfo, String scids, int uid) throws ParseException;
 
-    Map<String, Object> getRfidSettlemrnt(Map<String, Object> data, int uid) throws ParseException;
+    List<UserOrderDetail> getUserOrderDetails(int oid);
+
+    Map<String, Object> getRfidSettlement(Map<String, Object> data, int uid) throws ParseException;
 
     Integer saveRfidOrderInfo(UserOrderInfo userOrderInfo, String dbids, int uid) throws ParseException;
 
@@ -36,7 +39,7 @@ public interface IOrderService {
 
     void saveCancelReserveOrder(int roid, int uid);
 
-    Map<Object, Object> wxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
+    Map<Object, Object> saveWxPayPackage(OrderInputView orderInputView, String openId) throws Exception;
 
     void saveAsynNotify(String msgxml, HttpServletResponse response) throws Exception;
 

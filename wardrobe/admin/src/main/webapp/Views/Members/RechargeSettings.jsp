@@ -8,6 +8,12 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <link href="Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css?v=${static_resource_version}" rel="stylesheet">
     <style type="text/css">
+        .balance-list th {
+            padding: 0.75rem;
+        }
+        .balance-list td {
+            padding: .3rem 0.75rem;
+        }
         .member-info th, .member-account th {
             width: 10%;
         }
@@ -71,14 +77,14 @@
                         </div>
                         <div class="card-footer"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm balance-list">
+                            <table class="table table-striped table-bordered table-sm balance-list">
                                 <thead>
                                 <tr>
                                     <th>##</th>
                                     <th>充值金额</th>
                                     <th>赠送金额</th>
                                     <th>创建时间</th>
-                                    <th></th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -28,6 +28,8 @@ Page({
         userInfo: {}
     },
 
+    onShareAppMessage: null,
+
     getCartSettle: function () {
         let content = this;
 
@@ -165,7 +167,8 @@ Page({
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
-            scids: content.data.goodsListId.join(",")
+            scids: content.data.goodsListId.join(","),
+            payType: 1
         };
 
         if (content.data.serviceType == 1) {
@@ -177,29 +180,36 @@ Page({
         }
 
         app.wxRequest("/order/saveOrder", postData, function (res) {
-            // 清空购物车数据
-            app.clearCookie("shopCartInfo");
+            if (res.code == 1) {
+                // 清空购物车数据
+                app.clearCookie("shopCartInfo");
 
-            app.wxPay(res.data.oid, "/pages/user/order-list/index");
+                app.wxPay(res.data.oid, "/pages/user/order-list/index");
 
-            // 配置模板消息推送
-            //let postJsonString = {};
-            //postJsonString.keyword1 = { value: utils.formatTime(new Date()), color: '#173177' }
-            //postJsonString.keyword2 = { value: content.data.allGoodsAndYunPrice + '元', color: '#173177' }
-            //postJsonString.keyword3 = { value: res.data.data.orderNumber, color: '#173177' }
-            //postJsonString.keyword4 = { value: '订单已关闭', color: '#173177' }
-            // postJsonString.keyword5 = { value: '您可以重新下单，请在30分钟内完成支付', color:'#173177'}
-            // app.sendTempleMsg(res.data.data.id, -1,
-            //     'uJQMNVoVnpjRm18Yc6HSchn_aIFfpBn1CZRntI685zY', e.detail.formId,
-            //     'pages/index/index', JSON.stringify(postJsonString));
-            // postJsonString = {};
-            // postJsonString.keyword1 = { value: '您的订单已发货，请注意查收', color: '#173177' }
-            // postJsonString.keyword2 = { value: res.data.data.orderNumber, color: '#173177' }
-            // postJsonString.keyword3 = { value: res.data.data.dateAdd, color: '#173177' }
-            // app.sendTempleMsg(res.data.data.id, 2,
-            //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
-            //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
-        })
+                // 配置模板消息推送
+                //let postJsonString = {};
+                //postJsonString.keyword1 = { value: utils.formatTime(new Date()), color: '#173177' }
+                //postJsonString.keyword2 = { value: content.data.allGoodsAndYunPrice + '元', color: '#173177' }
+                //postJsonString.keyword3 = { value: res.data.data.orderNumber, color: '#173177' }
+                //postJsonString.keyword4 = { value: '订单已关闭', color: '#173177' }
+                // postJsonString.keyword5 = { value: '您可以重新下单，请在30分钟内完成支付', color:'#173177'}
+                // app.sendTempleMsg(res.data.data.id, -1,
+                //     'uJQMNVoVnpjRm18Yc6HSchn_aIFfpBn1CZRntI685zY', e.detail.formId,
+                //     'pages/index/index', JSON.stringify(postJsonString));
+                // postJsonString = {};
+                // postJsonString.keyword1 = { value: '您的订单已发货，请注意查收', color: '#173177' }
+                // postJsonString.keyword2 = { value: res.data.data.orderNumber, color: '#173177' }
+                // postJsonString.keyword3 = { value: res.data.data.dateAdd, color: '#173177' }
+                // app.sendTempleMsg(res.data.data.id, 2,
+                //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
+                //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
+                }
+            else {
+                app.showToast("创建订单失败", "none");
+            }
+        }, function () {
+            app.showToast("创建订单错误", "none");
+        });
     },
     addAddress: function () {
         let content = this;

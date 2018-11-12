@@ -67,8 +67,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         String newly = commodityInputView.getNewly();
         String hot = commodityInputView.getHot();
         Integer groupId = commodityInputView.getGroupId();
+        String orderBy = commodityInputView.getOrderBy();
 
-        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.brandName");
+        StringBuilder headSql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, ci.brandName");
         StringBuilder bodySql = new StringBuilder(" FROM commodity_info ci");
         StringBuilder whereSql = new StringBuilder(" WHERE ci.status = '").append(IDBConstant.LOGIC_STATUS_YES).append("'"); //小程序前端只查询上架商品
         if(StrUtil.isNotBlank(category)){
@@ -89,20 +90,25 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(groupId != null){
             whereSql.append(" AND ci.groupId = :groupId");
         }
-        whereSql.append(" ORDER BY ci.seqNo DESC, ci.createTime DESC");
-
+        whereSql.append(" ORDER BY ");
+        if(StrUtil.isNotBlank(orderBy)){
+            whereSql.append(orderBy).append(",");
+        }else {
+            whereSql.append(" ci.seqNo DESC, ci.createTime DESC");
+        }
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
 
     @Override
     public Map<String, Object> getCommodityDetail(int cid, int uid){
-        Map<String, Object> data = new HashMap<>(8, 1);
+        Map<String, Object> data = new HashMap<>(9, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeNames(cid));
         data.put("colors", getCommodityColors(commodityInfo.getGroupId()));
         data.put("commName", commodityInfo.getCommName());
         data.put("brandName", commodityInfo.getBrandName());
         data.put("price", commodityInfo.getPrice());
+        data.put("couPrice", commodityInfo.getCouPrice());
         data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
         data.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
@@ -111,12 +117,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> getCommodityDetailSelected(int cid){
-        Map<String, Object> data = new HashMap<>(6, 1);
+        Map<String, Object> data = new HashMap<>(7, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         data.put("sizes", getCommoditySizeList(cid));
         data.put("cid", commodityInfo.getCid());
         data.put("commName", commodityInfo.getCommName());
         data.put("price", commodityInfo.getPrice());
+        data.put("couPrice", commodityInfo.getCouPrice());
         data.put("resourcePath", getFmImg(commodityInfo.getCid())); //0表示封面图
         return data;
     }
@@ -180,12 +187,17 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodity.put("statusName", dictService.getDict(IDBConstant.COMM_STATUS, StrUtil.objToStr(commodity.get("status"))).getDictValue());
             commodity.put("resourcePath", getFmImg(cid));//0表示封面图
             commodity.put("collectionCount", getCollectionCount(cid));
+            commodity.put("sizeStockSum", getSizeStockSum(cid));
         });
         return pageBean;
     }
 
     private int getCollectionCount(int cid){
         return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_collection uc WHERE uc.cid = ?1", cid).intValue();
+    }
+
+    private int getSizeStockSum(int cid){
+        return baseDao.getUniqueResult("SELECT SUM(stock) FROM commodity_size WHERE cid = ?", cid).intValue();
     }
 
     private Map<String, Object> getType(Map<String, Object> commodity){
@@ -403,7 +415,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
-        data.put("productSizeList", getCommoditySizeList(cid));
         data.put("coverImg", getFmImgObj(cid));
         data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
         if(groupId != null) {
@@ -411,11 +422,18 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         data.put("sizeList", dictService.getDicts(IDBConstant.USER_SIZE));
 
-        CommodityBanner commodityBanner = getCommodityBanner(cid);
+        List<CommoditySize> commoditySizeList = getCommoditySizeList(cid);
+        int stockSum = 0;
+        for(CommoditySize commoditySize : commoditySizeList){
+            stockSum += commoditySize.getStock();
+        }
+        data.put("productSizeList", commoditySizeList);
+        data.put("stockSum", stockSum);
+        /*CommodityBanner commodityBanner = getCommodityBanner(cid);
         if(commodityBanner != null) {
             data.put("commodityBanner", commodityBanner);
             data.put("bannerImg", resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
-        }
+        }*/
         return data;
     }
 
@@ -510,7 +528,6 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException{
-        if(getCommodityBanner(commodityBanner.getCid()) != null) return;
         commodityBanner.setCreateTime(DateUtil.getNowDate());
         baseDao.save(commodityBanner, null);
 
@@ -521,8 +538,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             OssClient.putInputStream(sysResource.getInputStream(), sysResource.getResourcePath());
             //保存到数据库
             sysResource.setResourceSeq(commodityBanner.getSeqNo());
-            sysResource.setResourceServiceParentId(commodityBanner.getCid());
-            sysResource.setResourceServiceId(commodityBanner.getCid());
+            sysResource.setResourceServiceParentId(commodityBanner.getCbid());
+            sysResource.setResourceServiceId(commodityBanner.getCbid());
             sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
             sysResource.setResourceType(IDBConstant.RESOURCE_COMMODITY_IMG);
             baseDao.save(sysResource, null);
@@ -531,27 +548,45 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     @Override
-    public void deleteCommodityBanner(int cid){
-        baseDao.delete(getCommodityBanner(cid));
-        SysResources resource = resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
+    public void deleteCommodityBanner(int cbid){
+        baseDao.delete(getCommodityBanner(cbid));
+        SysResources resource = resourceService.getResource(cbid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG);
         if(resource != null){
             baseDao.delete(resource);
         }
     }
 
-    private CommodityBanner getCommodityBanner(int cid){
-        return baseDao.queryByHqlFirst("FROM CommodityBanner WHERE cid = ?1", cid);
+    private CommodityBanner getCommodityBanner(int cbid){
+        return baseDao.getToEvict(CommodityBanner.class, cbid);
     }
 
     @Override
     public Map<String, Object> getCommodityBanners(){
-        List<Map<String, Object>> list = baseDao.queryBySql("SELECT ci.cid, ci.commName FROM commodity_banner cb, commodity_info ci WHERE cb.cid = ci.cid ORDER BY cb.seqNo DESC, cb.createTime DESC");
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT cb.* FROM commodity_banner cb ORDER BY cb.seqNo DESC, cb.createTime DESC");
         list.parallelStream().forEach(map -> {
-            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cbid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
         });
         Map<String, Object> data = new HashMap<>(1, 1);
         data.put("list", list);
         return data;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommodityBannersIn(){
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT cb.* FROM commodity_banner cb ORDER BY cb.seqNo DESC, cb.createTime DESC");
+        list.parallelStream().forEach(map -> {
+            map.put("resourcePath", resourceService.getResourcePath(StrUtil.objToInt(map.get("cbid")), IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
+        });
+        return list;
+    }
+
+    @Override
+    public synchronized void updateClickRate(int cid){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        if(commodityInfo != null) {
+            commodityInfo.setClickRate(commodityInfo.getClickRate() + 1);
+            baseDao.save(commodityInfo, cid);
+        }
     }
 
     @Override

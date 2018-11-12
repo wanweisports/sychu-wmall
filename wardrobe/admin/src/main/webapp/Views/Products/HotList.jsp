@@ -14,7 +14,7 @@
             padding: 0.3rem 0.75rem;
         }
         .img-rounded {
-            width: 2rem;
+            height: 2rem;
         }
     </style>
 </layout:override>
@@ -34,19 +34,12 @@
                             <ol class="breadcrumb" style="background: inherit;padding: 0;margin: 0;">
                                 <c:if test="${hot=='1'}">
                                     <li class="breadcrumb-item">
+                                        <i class="icon-tag"></i>
                                         <strong>热门商品</strong>
-                                        <small>Hot Products</small>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <a href="/admin/products/hot/list?newly=1">
                                             <strong>最新商品</strong>
-                                            <small>Users Products</small>
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/banner/list">
-                                            <strong>banner商品</strong>
-                                            <small>Banner Products</small>
                                         </a>
                                     </li>
                                 </c:if>
@@ -54,39 +47,36 @@
                                     <li class="breadcrumb-item">
                                         <a href="/admin/products/hot/list?hot=1">
                                             <strong>热门商品</strong>
-                                            <small>Hot Products</small>
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item">
+                                        <i class="icon-tag"></i>
                                         <strong>最新商品</strong>
-                                        <small>Users Products</small>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="/admin/products/banner/list">
-                                            <strong>banner商品</strong>
-                                            <small>Banner Products</small>
-                                        </a>
                                     </li>
                                 </c:if>
                             </ol>
                         </div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm products-list">
+                            <table class="table table-striped table-sm table-bordered products-list">
                                 <thead>
                                 <tr>
+                                    <th>商品ID</th>
+                                    <th>商品编号</th>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
                                     <th>商品品类</th>
                                     <th>商品材质</th>
-                                    <th>商品原价</th>
-                                        <%--<th>优惠价格</th>--%>
-                                    <th>已售数量</th>
+                                    <th>原价</th>
+                                    <th>优惠价</th>
+                                    <th>已售</th>
                                     <th>商品状态</th>
-                                    <th></th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <c:forEach var="c" items="${page.list}" varStatus="status">
                                     <tr data-id="">
+                                        <td>${c.cid}</td>
+                                        <td>${c.commNo}</td>
                                         <td><img src="${c.resourcePath}" alt="商品名称" class="img-rounded"></td>
                                         <td>
                                             <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="商品名称">${c.commName}</a>
@@ -94,10 +84,8 @@
                                         <td>${c.styleName}</td>
                                         <td>${c.materialName}</td>
                                         <td>￥${c.price}</td>
-                                            <%--<td>￥399</td>--%>
-                                        <td>
-                                            <a href="/admin/products/transaction/records?cid=1" class="btn btn-sm btn-link">${c.saleCount}件</a>
-                                        </td>
+                                        <td>￥${c.couPrice}</td>
+                                        <td>${c.saleCount}件</td>
                                         <td>
                                             <span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>
                                         </td>

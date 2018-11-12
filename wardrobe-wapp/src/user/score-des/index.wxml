@@ -1,0 +1,65 @@
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-msg">
+            <view class="weui-msg__title">您目前的积分</view>
+            <view class="weui-msg__title">4500</view>
+            <view class="weui-msg__desc">再获取10500积分升级会员等级</view>
+            <view class="weui-msg__desc">消费1元得一分，积分永久有效</view>
+        </view>
+        <view class="weui-grids">
+            <view class="weui-grid">
+                <view class="weui-grid__label">普通会员</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">0-2999分</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">无折扣</view>
+            </view>
+        </view>
+        <view class="weui-grids">
+            <view class="weui-grid">
+                <view class="weui-grid__label">VIP1级会员</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">3000-14999分</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">享全场95折优惠</view>
+            </view>
+        </view>
+        <view class="weui-grids">
+            <view class="weui-grid">
+                <view class="weui-grid__label">VIP2级会员</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">15000-29999分</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">享全场9折优惠</view>
+            </view>
+        </view>
+        <view class="weui-grids">
+            <view class="weui-grid">
+                <view class="weui-grid__label">VIP3级会员</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">30000-79999分</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">享全场85折优惠</view>
+            </view>
+        </view>
+        <view class="weui-grids">
+            <view class="weui-grid">
+                <view class="weui-grid__label">VIP4级会员</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">80000分以上</view>
+            </view>
+            <view class="weui-grid">
+                <view class="weui-grid__label">享全场8折优惠</view>
+            </view>
+        </view>
+    </view>
+</view>

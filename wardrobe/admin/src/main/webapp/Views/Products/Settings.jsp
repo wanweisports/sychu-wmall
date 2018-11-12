@@ -30,7 +30,6 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>商品品类</strong>
-                            <small>Category</small>
                         </div>
                         <div class="card-block category-list">
                             <c:forEach var="c" items="${categoryList}">
@@ -48,7 +47,6 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>商品风格</strong>
-                            <small>Style</small>
                         </div>
                         <div class="card-block style-list">
                             <c:forEach var="s" items="${styleList}">
@@ -66,7 +64,6 @@
                     <div class="card">
                         <div class="card-header">
                             <strong>商品材质</strong>
-                            <small>Material</small>
                         </div>
                         <div class="card-block material-list">
                             <c:forEach var="m" items="${materialList}">

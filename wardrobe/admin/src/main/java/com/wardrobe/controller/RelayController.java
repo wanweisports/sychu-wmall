@@ -1,6 +1,7 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
+import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserDriveBean;
 import com.wardrobe.common.constant.IDBConstant;
@@ -21,6 +22,8 @@ import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
+ *  开大门：大门：https://mystore.yifoutech.com/relay/openDrive?driveId=1
+    关大门：大门：https://mystore.yifoutech.com/relay/closeDrive?driveId=1
  */
 @Controller
 @RequestMapping("relay")
@@ -84,6 +87,7 @@ public class RelayController extends BaseController {
 
     @Desc("开启门设备")
     @ResponseBody
+    @NotProtected
     @RequestMapping("openDrive")
     public ResponseBean openDrive(int driveId) throws Exception{
         SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
@@ -93,6 +97,7 @@ public class RelayController extends BaseController {
 
     @Desc("关闭门设备")
     @ResponseBody
+    @NotProtected
     @RequestMapping("closeDrive")
     public ResponseBean closeDrive(int driveId) throws Exception{
         SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
@@ -138,10 +143,11 @@ public class RelayController extends BaseController {
 
     @Desc("用户开启门设备")
     @ResponseBody
+    @NotProtected
     @RequestMapping("userOpenDrive")
     public ResponseBean userOpenDrive(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserOpenServerDrive(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -151,10 +157,11 @@ public class RelayController extends BaseController {
 
     @Desc("开启锁")
     @ResponseBody
+    @NotProtected
     @RequestMapping("userOpenLock")
     public ResponseBean userOpenLock(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserOpenServerLock(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -164,10 +171,11 @@ public class RelayController extends BaseController {
 
     @Desc("关闭锁")
     @ResponseBody
+    @NotProtected
     @RequestMapping("userCloseLock")
     public ResponseBean userCloseLock(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerLock(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
@@ -177,10 +185,11 @@ public class RelayController extends BaseController {
 
     @Desc("用户关闭门设备")
     @ResponseBody
+    @NotProtected
     @RequestMapping("userCloseDrive")
     public ResponseBean userCloseDrive(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(did));
+            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerDrive(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){

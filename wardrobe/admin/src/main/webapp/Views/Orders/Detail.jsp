@@ -7,14 +7,6 @@
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_CSS%>">
     <style type="text/css">
-        .product-image-file {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
         .size-list th {
             padding: 0.75rem;
         }
@@ -24,15 +16,15 @@
         .product-info th {
             width: 9rem;
         }
+        .img-rounded {
+            height: 2rem;
+        }
     </style>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/orders/detail.js?v=${static_resource_version}"></script>
-    <script type="text/javascript">
-
-    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -51,50 +43,38 @@
                                 <tr>
                                     <th>订单编号：</th>
                                     <td>${order.ono}</td>
-                                    <th>订单类型：</th>
-                                    <td colspan="5">
-                                        <c:if test="${order.orderType=='1'}">
-                                            商品订单
-                                        </c:if>
-                                    </td>
+                                    <th>订单状态：</th>
+                                    <td>${order.status}</td>
+                                    <th>支付状态：</th>
+                                    <td>${order.payStatus}</td>
                                 </tr>
                                 <tr>
                                     <th>订单总金额：</th>
                                     <td>${order.priceSum}</td>
-                                    <th>订单支付金额：</th>
-                                    <td colspan="5">${order.payPrice}</td>
-                                </tr>
-                                <tr>
-                                    <th>支付状态：</th>
-                                    <td>${order.payStatus}</td>
-                                    <th>订单状态：</th>
-                                    <td>${order.status}</td>
-                                </tr>
-                                <tr>
+                                    <th>支付金额：</th>
+                                    <td>${order.payPrice}</td>
                                     <th>支付时间</th>
-                                    <td colspan="5">${order.payTime}</td>
+                                    <td>${order.payTime}</td>
                                 </tr>
                                 <tr>
                                     <th>收货人姓名：</th>
                                     <td>${order.expressName}</td>
                                     <th>收货人电话：</th>
-                                    <td colspan="5">${order.expressMobile}</td>
+                                    <td>${order.expressMobile}</td>
+                                    <th>订单运费：</th>
+                                    <td>${order.freight}</td>
                                 </tr>
                                 <tr>
                                     <th>收货人详细地址：</th>
                                     <td colspan="5">${order.expressAddress}</td>
                                 </tr>
                                 <tr>
-                                    <th>运费：</th>
-                                    <td colspan="5">${order.freight}</td>
-                                </tr>
-                                <tr>
                                     <th>使用优惠券：</th>
-                                    <td colspan="5">${couponDesc}</td>
-                                </tr>
-                                <tr>
+                                    <td>${couponDesc}</td>
                                     <th>使用薏米：</th>
-                                    <td colspan="5">${order.ycoid}</td>
+                                    <td>${order.ycoid}</td>
+                                    <th>创建时间：</th>
+                                    <td><fmt:formatDate value="${order.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -102,11 +82,11 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <strong>订单商品详情列表</strong>
+                            <strong>商品列表</strong>
                             <small>Commodity List</small>
                         </div>
                         <div class="card-block">
-                            <table class="table table-responsive-sm table-bordered size-list">
+                            <table class="table table-striped table-bordered table-sm size-list">
                                 <thead>
                                 <tr>
                                     <th>商品图片</th>
@@ -124,11 +104,11 @@
                                     <c:forEach var="d" items="${order.userOrderDetails}">
                                     <tr data-id="${d.odid}">
                                         <td>
-                                            <img class="img-rounded" src="${d.itemImg}" width="100">
+                                            <img class="img-rounded" src="${d.itemImg}">
                                         </td>
                                         <td>${d.cid}</td>
                                         <td>${d.sid}</td>
-                                        <td>${d.itemName}</td>
+                                        <td><a href="/admin/products/detail?cid=${d.cid}" class="btn btn-sm btn-link" title="${d.itemName}">${d.itemName}</a></td>
                                         <td>${d.itemColor}</td>
                                         <td>${d.itemSize}</td>
                                         <td>${d.itemPrice}</td>
@@ -149,6 +129,6 @@
 </layout:override>
 
 <c:import url="../Shared/GeneralLayout.jsp">
-    <c:param name="menu" value="products"/>
+    <c:param name="menu" value="orders"/>
     <c:param name="subMenu" value="detail"/>
 </c:import>

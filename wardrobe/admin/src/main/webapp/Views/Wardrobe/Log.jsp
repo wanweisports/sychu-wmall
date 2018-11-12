@@ -57,7 +57,7 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm wardrobe-list">
+                            <table class="table table-striped table-bordered table-sm wardrobe-list">
                                 <thead>
                                 <tr>
                                     <th>运行时间</th>

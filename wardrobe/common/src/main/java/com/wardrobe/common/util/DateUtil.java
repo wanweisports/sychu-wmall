@@ -16,6 +16,7 @@ import java.util.List;
 public class DateUtil {
 	public static final String YYYYMMDD_S = "yyyyMMdd";
 	public static final String YYYYMMDD_HMS = "yyyyMMddHHmmss";
+	public static final String HH = "HH";
 	public static final String HHMM = "HH:mm";
     public static final String YYYY = "yyyy";
     public static final String YYYYMM = "yyyy-MM";
@@ -319,6 +320,27 @@ public class DateUtil {
 		return new Timestamp(new Date().getTime());
 	}
 
+	/**
+	 * 获得当天零时零分零秒
+	 * @return
+	 */
+	public static Date initDateByDay(){
+		return initDateByDay(new Date());
+	}
+
+	/**
+	 * 获得某天零时零分零秒
+	 * @return
+	 */
+	public static Date initDateByDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
 
 	/*
 	 * 注意事项：

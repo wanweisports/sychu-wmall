@@ -7,10 +7,18 @@ Page({
         orderGoods: []
     },
 
+    onShareAppMessage: null,
+
     toPayTap: function (e) {
         let orderId = e.currentTarget.dataset.id;
 
         app.wxPay(orderId, "/pages/user/order-list/index");
+    },
+
+    toWuliuTap: function (e) {
+        let orderId = e.currentTarget.dataset.id;
+
+        app.redirect("/pages/wuliu/index?id=" + orderId, "navigateTo");
     },
 
     onLoad: function (e) {

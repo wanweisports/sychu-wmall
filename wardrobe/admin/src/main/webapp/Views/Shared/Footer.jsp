@@ -2,6 +2,6 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 
 <footer class="app-footer">
-    Copyright &copy; 2017. <a href="javascript:">北体高科（北京）科技有限公司</a> All rights reserved.
-    <span class="float-right">Powered by <a href="http://idawn.cn:8020" target="_blank">北体高科</a></span>
+    Copyright &copy; 2017. <a href="javascript:">&nbsp;</a> All rights reserved.
+    <span class="float-right">Powered by <a href="javascript:;" target="_blank">idawn.jw</a></span>
 </footer>

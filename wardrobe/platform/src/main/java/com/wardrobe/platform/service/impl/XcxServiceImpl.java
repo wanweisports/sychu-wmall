@@ -44,13 +44,15 @@ public class XcxServiceImpl extends BaseService implements IXcxService {
 
         System.out.println("userInfo===>" + userInfo);
         String openId = userInfo.getString("openId");
-        UserInfo user = userService.getUserInfoByOpenId(openId);
-        if(user == null){
-            int gender = userInfo.getInt("gender");
-            user = new UserInfo(openId, StrUtil.EMPTY, userInfo.getString("nickName"), userInfo.getString("avatarUrl"), gender == 1 ? IDBConstant.USER_SEX_MALE : IDBConstant.USER_SEX_FEMALE);
-            userService.addUser(user);
+        synchronized (openId.intern()) {
+            UserInfo user = userService.getUserInfoByOpenId(openId);
+            if (user == null) {
+                int gender = userInfo.getInt("gender");
+                user = new UserInfo(openId, StrUtil.EMPTY, userInfo.getString("nickName"), userInfo.getString("avatarUrl"), gender == 1 ? IDBConstant.USER_SEX_MALE : IDBConstant.USER_SEX_FEMALE);
+                userService.addUser(user);
+            }
+            return userInfo;
         }
-        return userInfo;
     }
 
 }

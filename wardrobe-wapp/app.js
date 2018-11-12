@@ -3,14 +3,17 @@
 App({
     onLaunch: function () {
         this.setCookie('syc_appName', "衣否");
-
-        this.toLogin();
     },
 
     toLogin: function () {
+        let content = this;
         let sessionId = this.globalData.sessionId;
+
         if (!!sessionId) {
-            return this.checkSession(this.checkUserComplete, this.login);
+            return this.checkSession(this.checkUserComplete, function () {
+                content.globalData.sessionId = "";
+                content.login();
+            });
         }
 
         this.login();
@@ -66,16 +69,14 @@ App({
                         }, function (res) {
                             if (res.code == 1) {
                                 content.globalData.sessionId = res.data.sessionId;
-                                if (res.data.perfect == 2) {
-                                    wx.redirectTo({
-                                        url: "/pages/user/complete/index"
-                                    });
-                                }
-                                else {
-                                    wx.switchTab({
-                                        url: "/pages/index/index"
-                                    });
-                                }
+                                content.redirect(content.getCookie("syc_target"), content.getCookie("syc_redirect"));
+
+                                // if (res.data.perfect == 2) {
+                                //     content.redirect("/pages/user/complete/index");
+                                // }
+                                // else {
+                                //     content.redirect("/pages/index/index", "switchTab");
+                                // }
                             } else {
                                 content.showToast("授权登录失败", "none");
                             }
@@ -88,7 +89,7 @@ App({
                         wx.hideLoading();
 
                         content.showLog("[F][wx.getUserInfo]：" + JSON.stringify(err));
-                        //content.showToast("用户授权失败", "none");
+                        content.showToast("用户授权失败", "none");
                     }
                 });
             }
@@ -98,14 +99,14 @@ App({
     checkUserComplete: function (success, fail) {
         let content = this;
 
-        content.wxRequest(content.config.getApiHost() + '/user/isPerfect', {}, function (res) {
-            if (res.data.isPerfect == 2) {
-                wx.redirectTo({
-                    url: "/pages/user/complete/index"
-                });
-            }
-            else {
-                success(res);
+        content.wxRequest('/user/isPerfect', {}, function (res) {
+            if (res.code == 1) {
+                if (res.data.perfect == 2) {
+                    content.redirect("/pages/user/complete/index");
+                }
+                else {
+                    content.redirect("/pages/index/index", "switchTab");
+                }
             }
         }, function (err) {
             content.showLog("[F][/user/isPerfect]：" + JSON.stringify(err));
@@ -114,10 +115,10 @@ App({
     },
 
     sendTempleMsg: function (orderId, trigger, template_id, form_id, page, postJsonString){
-        var that = this;
+        let content = this;
 
         wx.request({
-            url: that.config.getApiHost() + '/template-msg/put',
+            url: content.config.getApiHost() + '/template-msg/put',
             method:'POST',
             header: {
                 'content-type': 'application/x-www-form-urlencoded'
@@ -157,14 +158,46 @@ App({
             'Cookie': 'JSESSIONID=' + content.globalData.sessionId
         };
 
+        url = url.indexOf(content.config.getApiHost()) == -1 ? content.config.getApiHost() + url : url;
+
         wx.request({
-            url    : content.config.getApiHost() + url,
+            url    : url,
             data   : data,
             header : header,
             success: function (res) {
-                success(res.data);
-
                 wx.hideLoading();
+
+                if (res.data.code == 10) {
+                    //content.showToast("授信登录过期，请重新登录！");
+                    content.globalData.sessionId = "";
+                    content.redirect("/pages/landing/index", "reLaunch");
+                }
+                else if (res.data.code == 20) {
+                    wx.showModal({
+                        title: '提 示',
+                        content: '请先完善信息！',
+                        showCancel: false,
+                        success: function (res) {
+                            if (res.confirm) {
+                                if (url.indexOf("/order/saveOrder") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=cart", "navigateTo");
+                                }
+                                else if (url.indexOf("/order/saveReserveOrder") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=room", "navigateTo");
+                                }
+                                 else if (url.indexOf("/relay/openDoor") > -1) {
+                                    content.redirect("/pages/user/complete/index?next=center", "navigateTo");
+                                }
+                                else {
+                                    content.redirect("/pages/user/complete/index", "navigateTo");
+                                }
+                            }
+                        }
+                    });
+                }
+                else {
+                    success(res.data);
+                }
             },
             fail: function (err) {
                 content.showLog("[F][" + url + "]：" + JSON.stringify(err));
@@ -205,19 +238,25 @@ App({
                     content.redirect(redirectUrl, "navigateTo");
                 }
                 else {
-                    wx.showToast({title: '调起支付失败:' + res.message})
+                    content.showToast('调起支付失败:' + res.message)
                 }
             },
             function (err) {
-                wx.showToast({title: '调起支付错误:' + err})
+                content.showToast('调起支付错误:' + err)
             }
         );
     },
-    onShareAppMessage: function () {
+    onShareAppMessage: function (option) {
+        option = option || {};
+
+        option.title = option.title || this.config.shareProfile;
+        option.path = option.path || '/pages/index/index';
+        option.imgUrl = option.imgUrl || '';
+
         return {
-            title : this.getCookie('syc_appName') + '——' + this.config.shareProfile,
-            path  : '/pages/landing/index',
-            withShareTicket: true,
+            title : option.title,
+            path  : option.path,
+            imgUrl: option.imgUrl,
             success: function(res) {
                 // 转发成功
             },
@@ -253,16 +292,22 @@ App({
     },
     // 显示提示
     showToast: function (message, type) {
-        wx.showToast({
-            title: message,
-            mask: true,
-            icon: type || "none"
-        });
+        setTimeout(function () {
+            wx.showToast({
+                title: message,
+                mask: true,
+                icon: type || "none"
+            });
+
+            setTimeout(function () {
+                wx.hideToast();  
+            }, 2000)
+        }, 0);
     },
     // 调试日志
     showLog: function (message) {
         let now = (new Date()).getTime();
-        if (this.isDebug) {
+        if (this.config.isDebug) {
             console.log(`[${now}]：${message}`);
         }
     },

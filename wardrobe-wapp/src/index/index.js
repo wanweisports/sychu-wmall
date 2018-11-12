@@ -15,7 +15,14 @@ Page({
         newlyGoods: [],
         hotGoods: []
     },
-    onLoad: function() {
+    onShareAppMessage: function () {
+        return app.onShareAppMessage({
+            path: '/pages/index/index',
+            title: app.getCookie("syc_appName") || "衣否",
+            imgUrl: "/images/logo.jpg"
+        });
+    },
+    onShow: function() {
         this.getBannerGoodsList();
         this.getHotGoodsList();
         this.getNewlyGoodsList();

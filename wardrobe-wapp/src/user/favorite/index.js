@@ -8,6 +8,7 @@ Page({
         currentPage: 1,
         goods: null
     },
+    onShareAppMessage: null,
     toDetailsTap: function (e) {
         let goodId = e.currentTarget.dataset.id;
 

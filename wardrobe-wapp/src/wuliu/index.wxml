@@ -2,11 +2,11 @@
     <view class="top-sec">
         <view class="a-row">
             <view class="label">物流单号</view>
-            <view class="text">{{orderDetail.logistics.trackingNumber}}</view>
+            <view class="text">20181101150911</view>
         </view>
         <view class="a-row">
             <view class="label">物流公司</view>
-            <view class="text">{{orderDetail.logistics.shipperName}}</view>
+            <view class="text">申请快递</view>
         </view>
     </view>
     <view class="sec-wrap">
@@ -14,25 +14,14 @@
             <view class="line-box"></view>
             <view class="a-row" wx:for-items="{{logisticsTraces}}" wx:key="{{index}}">
                 <view class="dot">
-                    <view class="active-dot" hidden="{{index== 0 ? false : true}}"><view class="yuan-red"></view></view>
-                    <view class="default-dot" hidden="{{index== 0 ? true : false}}"></view>
+                    <view class="active-dot" hidden="{{index == 0 ? false : true}}"><view class="yuan-red"></view></view>
+                    <view class="default-dot" hidden="{{index == 0 ? true : false}}"></view>
                 </view>
                 <view class="info">
-                    <view class="date-box">{{item.AcceptTime}}</view>
-                    <view class="text">{{item.AcceptStation}}</view>
+                    <view class="date-box">{{item.acceptTime}}</view>
+                    <view class="text">{{item.acceptStation}}</view>
                 </view>
             </view>
-
-            <!--<view class="a-row">
-                <view class="dot">
-                    <view class="default-dot"></view>
-                </view>
-                <view class="info">
-                    <view class="date-box">2016-12-25  15:00:22</view>
-                    <view class="text">货物已到达 上海千阳站</view>
-                </view>
-            </view>-->
-
         </view>
     </view>
 </view>

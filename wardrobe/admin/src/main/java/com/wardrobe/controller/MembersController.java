@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 /**
  * 会员管理
  */
@@ -49,9 +51,10 @@ public class MembersController extends BaseController {
     @NotProtected
     @RequestMapping(value = "/list")
     public String renderMembersList(UserInputView userInputView, Model model) {
-        model.addAllAttributes(JsonUtils.fromJson(userInputView));
+        Map<String, Object> params = JsonUtils.fromJsonDF(userInputView);
+        model.addAllAttributes(params);
         PageBean pageBean = userService.getUserListIn(userInputView);
-        super.setPageInfo(model, pageBean, "/admin/members/list", userInputView);
+        super.setPageInfo(model, pageBean, "/admin/members/list", params);
         return "Members/List";
     }
 
@@ -71,7 +74,7 @@ public class MembersController extends BaseController {
         return new ResponseBean(true);
     }
 
-    @Desc("会员充值流水")
+    @Desc("会员交易流水")
     @NotProtected
     @RequestMapping(value = "/transactions/log")
     public String renderMembersTransactionsLog(UserTransactionsInputView userTransactionsInputView, Model model) {
@@ -111,6 +114,13 @@ public class MembersController extends BaseController {
     public ResponseBean deleteRecharge(int dictId){
         dictService.deleteDict(dictId);
         return new ResponseBean(true);
+    }
+
+    @Desc("额度冲抵")
+    @NotProtected
+    @RequestMapping(value = "/data/against")
+    public String renderMembersDataAgainst(Model model) {
+        return "Members/DataAgainst";
     }
 
 }

@@ -5,6 +5,7 @@ Page({
         coupons: [],
         hasCoupons: false
     },
+    onShareAppMessage: null,
     getUserCouponsList: function () {
         let content = this;
 

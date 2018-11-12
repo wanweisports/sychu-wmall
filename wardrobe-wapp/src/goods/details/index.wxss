@@ -78,6 +78,13 @@ swiper-item image {
     font-weight: bold;
 }
 
+.goods-info .goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
+}
+
 .goods-colors {
     width: 100%;
     box-sizing: border-box;
@@ -222,6 +229,13 @@ swiper-item image {
     top: -26rpx;
 }
 
+.shop-num text {
+    background-color: #ff6850;
+    color: #fff;
+    border-radius: 10rpx;
+    padding: 4rpx 8rpx;
+}
+
 .footer-box .join-shop-cart {
     text-align: center;
     width: 250rpx;
@@ -304,6 +318,13 @@ swiper-item image {
     font-size: 26rpx;
     color: #e64340;
     margin-top: 20rpx;
+}
+
+.pop-goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
 }
 
 .pop-goods-close {

@@ -95,7 +95,7 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   <session-config>
-    <session-timeout>120</session-timeout>
+    <session-timeout>1440</session-timeout>
   </session-config>
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>

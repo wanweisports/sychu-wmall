@@ -82,9 +82,10 @@ public class ProductsController extends BaseController {
     @Desc("商品管理列表")
     @RequestMapping(value = "/list")
     public String renderProductsList(CommodityInputView commodityInputView, Model model) {
-        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        Map<String, Object> params = JsonUtils.fromJsonDF(commodityInputView);
+        model.addAllAttributes(params);
         PageBean pageBean = commodityService.getCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/list", commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/list", params);
         return "Products/List";
     }
 
@@ -220,6 +221,16 @@ public class ProductsController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("商品管理列表 -- 库存汇总")
+    @RequestMapping(value = "/sku/total")
+    public String renderProductsSkuTotal(CommodityInputView commodityInputView, Model model) {
+        PageBean pageBean = commodityService.getStockListIn(commodityInputView);
+        setPageInfo(model, pageBean, "/admin/products/sku/total", commodityInputView);
+        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
+        model.addAttribute("types", dictService.getDicts(IDBConstant.COMM_STOCK_TYPE));
+        return "Products/SkuTotal";
+    }
+
     @Desc("商品管理列表 -- 库存变更记录")
     @RequestMapping(value = "/sku/list")
     public String renderProductsSkuList(CommodityInputView commodityInputView, Model model) {
@@ -244,11 +255,8 @@ public class ProductsController extends BaseController {
 
     @Desc("商品管理列表 -- banner")
     @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
-    public String renderProductsBannerList(CommodityInputView commodityInputView, Model model) {
-        commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
-        model.addAllAttributes(JsonUtils.fromJsonDF(commodityInputView));
-        PageBean pageBean = commodityService.getBannerCommodityListIn(commodityInputView);
-        setPageInfo(model, pageBean, "/admin/products/banner/list", commodityInputView);
+    public String renderProductsBannerList(Model model) {
+        model.addAttribute("list", commodityService.getCommodityBannersIn());
         return "Products/BannerList";
     }
 

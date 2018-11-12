@@ -19,6 +19,8 @@ public class DiscountBean {
     private int cpid; //优惠券id,使用合法（满多少减正常）的优惠券id
     private double userDiscountSubPrice; //用户折扣减去金额
 
+    private String useBalance; //能否使用余额支付（余额需要大于支付金额）：1：是  2：否
+
     public double getSumOldPrice() {
         return sumOldPrice;
     }
@@ -81,6 +83,22 @@ public class DiscountBean {
 
     public void setCpid(int cpid) {
         this.cpid = cpid;
+    }
+
+    public double getUserDiscountSubPrice() {
+        return userDiscountSubPrice;
+    }
+
+    public void setUserDiscountSubPrice(double userDiscountSubPrice) {
+        this.userDiscountSubPrice = userDiscountSubPrice;
+    }
+
+    public String getUseBalance() {
+        return useBalance;
+    }
+
+    public void setUseBalance(String useBalance) {
+        this.useBalance = useBalance;
     }
 
     @Desc("计算用户等级折扣减去多少金额")

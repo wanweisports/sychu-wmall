@@ -9,6 +9,39 @@ Page({
 
         userInfo: {}
     },
+    onShareAppMessage: function (e) {
+        if (e.from === 'menu') {
+            return app.onShareAppMessage({
+                path: '/pages/index/index',
+                title: app.getCookie("syc_appName") || "衣否",
+                imgUrl: "/images/logo.jpg"
+            });
+        }
+        else if (e.from === 'button') {
+            return app.onShareAppMessage({
+                path: '/pages/index/index?inviteCode=' + this.data.userInfo.inviteCode,
+                title: app.getCookie("syc_appName") || "衣否",
+                imgUrl: "/images/logo.jpg"
+            });
+        }
+    },
+    scanCode: function () {
+        wx.scanCode({
+            onlyFromCamera: true,
+            success: function (res) {
+                if (res.result.indexOf("/relay/openDoor") > -1) {
+                    app.wxRequest(res.result, {}, function (res) {
+                        if (res.code == 1) {
+                            app.showToast("扫码开门成功");
+                        }
+                        else {
+                            app.showToast(res.message || "扫码开门失败");
+                        }
+                    });
+                }
+            }
+        });
+    },
     getUserInfo: function () {
         let content = this;
 
@@ -18,12 +51,13 @@ Page({
             });
         });
     },
-    onLoad: function () {
+    onShow: function () {
         this.getUserInfo();
     },
     inviteFriends : function () {
+        //<button open-type="share" class="item-share">邀请好友</button>
         wx.showModal({
-            content: '您的邀请码：' + this.data.userInfo.inviteCode || "66666",
+            content: ('您的邀请码：' + this.data.userInfo.inviteCode || "66666"),
             showCancel: false
         });
     },

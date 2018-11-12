@@ -3,7 +3,7 @@
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
             <block wx:for="{{goodsDetail.resources}}" wx:key="*this">
                 <swiper-item>
-                    <image src="{{item}}" class="slide-image" width="355" height="150" mode="aspectFit" lazy-load="true"/>
+                    <image src="{{item}}" class="slide-image" width="355" height="150" mode="aspectFit" lazy-load="true" bindtap="previewImage"/>
                 </swiper-item>
             </block>
         </swiper>
@@ -15,7 +15,10 @@
     </view>
     <view class="goods-info">
         <view class="goods-title">[{{goodsDetail.brandName}}]{{goodsDetail.commName}}</view>
-        <view class="goods-price" style="padding-left:35rpx;">¥ {{goodsDetail.price}}</view>
+        <view class="goods-price" style="padding-left:35rpx;">
+            <text class="goods-cur">￥{{goodsDetail.couPrice}}</text>
+            <text class="goods-old">￥{{goodsDetail.price}}</text>
+        </view>
 
         <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{!isFavorite}}">
             <text>收藏</text>
@@ -57,13 +60,13 @@
     <view class="footer-box">
         <view class="shop-syj-btn" bindtap="goShopOrderCart">
             <view class="shop-num">
-                <text wx:if="{{shopOrderNum > 0}}">({{shopOrderNum}})</text>
+                <text wx:if="{{shopOrderNum > 0}}">{{shopOrderNum}}</text>
             </view>
             <text>配衣间</text>
         </view>
         <view class="shop-cart-btn" bindtap="goShopCart">
             <view class="shop-num">
-                <text wx:if="{{shopCartNum > 0}}">({{shopCartNum}})</text>
+                <text wx:if="{{shopCartNum > 0}}">{{shopCartNum}}</text>
             </view>
             <text>购物车</text>
         </view>
@@ -80,7 +83,10 @@
                 </view>
                 <view class="pop-goods-des">
                     <view class="pop-goods-title">{{goodDetailSize.commName}}</view>
-                    <view class="pop-goods-price">¥ {{goodDetailSize.price}}</view>
+                    <view class="pop-goods-price">
+                        <text class="goods-cur">￥{{goodDetailSize.couPrice}}</text>
+                        <text class="goods-old">￥{{goodDetailSize.price}}</text>
+                    </view>
                 </view>
                 <view class="pop-goods-close" bindtap="closePopupTap"></view>
             </view>
@@ -118,7 +124,10 @@
                 </view>
                 <view class="pop-goods-des">
                     <view class="pop-goods-title">{{goodDetailSize.commName}}</view>
-                    <view class="pop-goods-price">¥ {{goodDetailSize.price}}</view>
+                    <view class="pop-goods-price">
+                        <text class="goods-cur">￥{{goodDetailSize.couPrice}}</text>
+                        <text class="goods-old">￥{{goodDetailSize.price}}</text>
+                    </view>
                 </view>
                 <view class="pop-goods-close" bindtap="closeShopOrderPopupTap"></view>
             </view>

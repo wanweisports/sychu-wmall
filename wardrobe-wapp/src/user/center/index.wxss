@@ -4,8 +4,8 @@
 }
 .userinfo {
     display: flex;
-    padding: 50rpx 50rpx;
-    background: #262626;
+    padding: 30rpx 30rpx;
+    background: #363636;
     width: 750rpx;
 }
 
@@ -18,13 +18,51 @@
 
 .userinfo-info {
     margin-left: 10rpx;
-    text-align: center;
 }
 
 .userinfo-nickname {
     margin-top: 40rpx;
     color: #FFF;
     display: block;
+    text-align:left;
+    padding-left: 20rpx
+}
+.userinfo-info .weui-btn {
+    border-radius: 30rpx;
+}
+.userinfo .scan-qrcode {
+    width:48rpx;
+    height:48rpx;
+    float:right;
+    right:48rpx;
+    position:absolute;
+    right:48rpx;
+    top:48rpx;
+}
+.userinfo .scan-qrcode image {
+    width:48rpx;
+    height:48rpx;
+}
+.userinfo-ft {
+    overflow:hidden;
+    display:flex;
+    background:#363636;
+    width:750rpx;
+    color:#fff;
+    padding:20rpx 0;
+}
+.userinfo-ft .uf-item {
+    float: left;
+    width: 32%;
+    text-align: center;
+    border-right: 1rpx solid #FFFFFF;
+}
+.userinfo-ft .uf-item:last-child {
+    border-right: none
+}
+.userinfo-ft .uf-item .uf-img {
+    width: 60rpx;
+    height: 60rpx;
 }
 .weui-btn {
     margin-top: 10rpx;

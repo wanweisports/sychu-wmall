@@ -21,7 +21,10 @@
                     <li class="breadcrumb-item active">会员详情</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'balance'}">
-                    <li class="breadcrumb-item active">充值金额设置</li>
+                    <li class="breadcrumb-item active">充值设置</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'against'}">
+                    <li class="breadcrumb-item active">额度冲抵</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'transactions'}">
                     <li class="breadcrumb-item active">交易记录</li>
@@ -45,6 +48,18 @@
                 <c:when test="${param.subMenu == 'edit'}">
                     <li class="breadcrumb-item"><a href="/admin/products/list">商品列表</a></li>
                     <li class="breadcrumb-item active">商品编辑</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'sku'}">
+                    <li class="breadcrumb-item active">库存日志</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'skuTotal'}">
+                    <li class="breadcrumb-item active">库存汇总</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'settings'}">
+                    <li class="breadcrumb-item active">商品设置</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'banner'}">
+                    <li class="breadcrumb-item active">轮播设置</li>
                 </c:when>
             </c:choose>
         </c:when>
@@ -70,8 +85,16 @@
                 <c:when test="${param.subMenu == 'list'}">
                     <li class="breadcrumb-item active">订单列表</li>
                 </c:when>
+                <c:when test="${param.subMenu == 'detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/orders/list">订单列表</a></li>
+                    <li class="breadcrumb-item active">订单详情</li>
+                </c:when>
                 <c:when test="${param.subMenu == 'reservation'}">
                     <li class="breadcrumb-item active">预约单列表</li>
+                </c:when>
+                <c:when test="${param.subMenu == 'reservation_detail'}">
+                    <li class="breadcrumb-item"><a href="/admin/orders/reservation">预约单列表</a></li>
+                    <li class="breadcrumb-item active">预约单详情</li>
                 </c:when>
                 <c:when test="${param.subMenu == 'refund'}">
                     <li class="breadcrumb-item active">退款订单</li>

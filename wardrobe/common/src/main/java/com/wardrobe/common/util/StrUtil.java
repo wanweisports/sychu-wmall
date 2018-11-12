@@ -54,6 +54,11 @@ public class StrUtil extends StringUtils {
         return String.valueOf(objStr);
     }
 
+    public static String objToStrDefEmpty(Object objStr){
+        if(objStr == null) return EMPTY;
+        return objToStr(objStr);
+    }
+
     public static String leftFillToLenth(String param, int requestLength, char fillUnit){
         while(param.length() < requestLength){
             param = String.valueOf(fillUnit) + param;
@@ -172,8 +177,12 @@ public class StrUtil extends StringUtils {
     }
 
     public static String objToHtmlParams(Object obj) {
+        return objToHtmlParams(JsonUtils.fromJsonDF(obj));
+    }
+
+    public static String objToHtmlParams(Map params) {
         StringBuilder htmlParams = new StringBuilder();
-        Set<Map.Entry<String, Object>> paraMapSet = JsonUtils.fromJsonDF(obj).entrySet();
+        Set<Map.Entry<String, Object>> paraMapSet = params.entrySet();
         paraMapSet.stream().forEach((Map.Entry<String, Object> param) -> {
             htmlParams.append("&").append(param.getKey()).append("=").append(param.getValue());
         });

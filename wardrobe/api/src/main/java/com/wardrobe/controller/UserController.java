@@ -1,8 +1,6 @@
 package com.wardrobe.controller;
 
 import com.wardrobe.common.annotation.Desc;
-import com.wardrobe.common.annotation.NotPerfect;
-import com.wardrobe.common.annotation.NotProtected;
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.bean.ResponseBean;
 import com.wardrobe.common.bean.UserPerfectBean;
@@ -10,7 +8,6 @@ import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.enum_.MobileMessageEnum;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.UserCollection;
-import com.wardrobe.common.util.FileUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.view.UserInputView;
 import com.wardrobe.platform.service.IUserCouponService;
@@ -24,7 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 
 @RequestMapping("user")
@@ -40,7 +40,6 @@ public class UserController extends BaseController {
     /*
      * 用户完善资料
      */
-    @NotPerfect
     @ResponseBody
     @RequestMapping("updateUser")
     public ResponseBean updateUser(UserPerfectBean userPerfectBean, String code){

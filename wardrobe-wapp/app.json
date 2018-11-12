@@ -10,17 +10,20 @@
         "pages/goods/reserve/index",
         "pages/goods/reserve-settle/index",
         "pages/user/center/index",
+        "pages/user/score-des/index",
         "pages/user/complete/index",
         "pages/user/mobile-check/index",
         "pages/user/mobile-modify/index",
         "pages/user/favorite/index",
         "pages/user/recharge/index",
         "pages/user/transactions/index",
+        "pages/user/transactions-ycoid/index",
         "pages/user/coupons/index",
         "pages/user/order-list/index",
         "pages/user/order-details/index",
         "pages/user/reserve/index",
-        "pages/user/protocols/user"
+        "pages/user/protocols/user",
+        "pages/wuliu/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -63,7 +66,7 @@
                 "pagePath": "pages/user/center/index",
                 "iconPath": "images/nav/my-off.png",
                 "selectedIconPath": "images/nav/my-on.png",
-                "text": "我的"
+                "text": "个人中心"
             }
         ]
     }

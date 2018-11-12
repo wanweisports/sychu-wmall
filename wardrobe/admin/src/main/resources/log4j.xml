@@ -11,7 +11,7 @@
 	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="./wardrobe_admin.log" />
 		<param name="Append" value="true" />
-		<param name="Threshold" value="INFO" />
+		<param name="Threshold" value="ERROR" />
 		<!-- Rollover at midnight each day -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="org.apache.log4j.PatternLayout">

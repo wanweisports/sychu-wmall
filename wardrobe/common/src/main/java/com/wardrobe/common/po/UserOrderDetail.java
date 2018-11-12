@@ -22,7 +22,7 @@ public class UserOrderDetail {
     private BigDecimal itemPrice;
     private Integer itemCount;
     private BigDecimal itemPriceSum;
-    private String itemType = IDBConstant.LOGIC_STATUS_YES;
+    private String itemType = IDBConstant.LOGIC_STATUS_YES; //1：普通 2：赠送
     private Integer dbid; //配送表id
     private Timestamp createTime;
     private Timestamp updateTime;

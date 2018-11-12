@@ -1,0 +1,15 @@
+@import "../../../style/weui.wxss";
+
+.weui-msg {
+    background: #FFFFFF;
+    padding: 40rpx;
+    margin-bottom: 16rpx
+}
+
+.weui-grids {
+    background: #FFFFFF;
+    border-top: none;
+}
+.weui-grids:first-child {
+    border-top: 1rpx solid #d9d9d9;
+}

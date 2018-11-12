@@ -18,7 +18,8 @@
     "bootstrap-datepicker": "^1.7.1",
     "jquery-timepicker-wvega": "^1.3.5",
     "echarts": "^4.1.0",
-    "dragula.js": "dragula#^3.7.2"
+    "dragula.js": "dragula#^3.7.2",
+    "datetimepicker": "^2.5.20"
   },
   "license": "MIT"
 }
