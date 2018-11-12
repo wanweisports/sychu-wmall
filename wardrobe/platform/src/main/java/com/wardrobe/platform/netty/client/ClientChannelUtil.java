@@ -24,6 +24,7 @@ public class ClientChannelUtil {
     public static int STATUS_CONNECT_ING = 1;
     public static int STATUS_RECONNECT = 2;
 
+    public static String PULSE_OPEN = "P";
     public static String LOCK_OPEN = "L";
     public static String LOCK_CLOSE = "D";
     public static String LOCK_OPEN_ALL = "LA";
