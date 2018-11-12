@@ -167,7 +167,8 @@ Page({
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
-            scids: content.data.goodsListId.join(",")
+            scids: content.data.goodsListId.join(","),
+            payType: 1
         };
 
         if (content.data.serviceType == 1) {
