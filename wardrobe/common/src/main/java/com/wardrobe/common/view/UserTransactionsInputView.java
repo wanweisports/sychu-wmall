@@ -8,6 +8,7 @@ public class UserTransactionsInputView extends BaseInputView {
     private Integer uid;
     private String nickname;
     private String mobile;
+    private String type;
 
     public Integer getUid() {
         return uid;
@@ -31,5 +32,13 @@ public class UserTransactionsInputView extends BaseInputView {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

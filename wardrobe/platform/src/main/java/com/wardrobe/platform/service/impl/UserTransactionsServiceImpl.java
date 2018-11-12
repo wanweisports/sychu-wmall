@@ -6,12 +6,14 @@ import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.po.UserTransactions;
 import com.wardrobe.common.util.Arith;
 import com.wardrobe.common.util.DateUtil;
+import com.wardrobe.common.util.SQLUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserTransactionsInputView;
 import com.wardrobe.platform.service.IUserTransactionsService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
             map.put("serviceTypeName",  StrUtil.objToStrDefEmpty(type) + serviceType);
             if(IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ.equals(map.get("serviceType"))){ //充值类型：小程序不需要进入详情
                 map.remove("serviceId");
+                map.put("type", IDBConstant.LOGIC_STATUS_NO); //充值类型归类到支付，供小程序查询
             }
         }
         return pageBean;
@@ -42,6 +45,8 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         Integer uid = userTransactionsInputView.getUid();
         String nickname = userTransactionsInputView.getNickname();
         String mobile = userTransactionsInputView.getMobile();
+        String type = userTransactionsInputView.getType();
+        Map inMap = new HashMap<>();
 
         StringBuilder headSql = new StringBuilder("SELECT ut.*, ui.nickname, ui.mobile");
         StringBuilder bodySql = new StringBuilder(" FROM user_transactions ut, user_info ui");
@@ -55,9 +60,15 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         if(StrUtil.isNotBlank(mobile)){
             whereSql.append(" AND ui.mobile = :mobile");
         }
+        if(StrUtil.isNotBlank(type)){
+            if(IDBConstant.TRANSACTIONS_TYPE_YUE.equals(type)) { //（2：充值与余额  3：薏米）
+                inMap.putAll(SQLUtil.getInToSQL("types", IDBConstant.TRANSACTIONS_TYPE_YUE, StrUtil.EMPTY));
+            }
+            whereSql.append(" AND ut.type IN (:types)");
+        }
         whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
         whereSql.append(" ORDER BY ut.createTime DESC");
-        return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
+        return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView, inMap);
     }
 
     @Override

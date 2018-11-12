@@ -28,7 +28,7 @@ public class SysRankServiceImpl extends BaseService implements ISysRankService {
     @Override
     public int getNextScore(int rank){
         if(getMaxRank() == rank) return 0;
-        return baseDao.getUniqueResult("SELECT rankScore FROM sys_rank_info WHERE rank > ? ORDER BY rid LIMIT 1", rank).intValue();
+        return baseDao.getUniqueResult("SELECT rankScore FROM sys_rank_info WHERE rank > ?1 ORDER BY rid LIMIT 1", rank).intValue();
     }
 
     @Override
