@@ -11,4 +11,8 @@ public interface ISysRankService {
 
     SysRankInfo getRankInfoByRank(int rank);
 
+    int getNextScore(int rank);
+
+    int getMaxRank();
+
 }

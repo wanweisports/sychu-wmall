@@ -124,7 +124,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(8, 1);
+        Map<String, Object> data = new HashMap<>(11, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
@@ -132,10 +132,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
         data.put("inviteCode", userInfo.getInviteCode());
 
         UserAccount userAccount = userAccountService.getUserAccount(uid);
+        Integer rank = userAccount.getRank();
         data.put("balance", userAccount.getBalance().doubleValue());
         data.put("ycoid", userAccount.getYcoid());
-        data.put("rankName", sysRankService.getRankInfoByRank(userAccount.getRank()).getRankName());
+        data.put("rankName", sysRankService.getRankInfoByRank(rank).getRankName());
         data.put("point", userAccount.getScore());
+        data.put("rank", rank);
+        data.put("nextScore", sysRankService.getNextScore(rank));
 
         data.put("couponCount", userCouponService.getUserCouponCount(uid));
         return data;
