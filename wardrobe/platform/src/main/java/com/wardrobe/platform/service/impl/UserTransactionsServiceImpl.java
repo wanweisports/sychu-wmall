@@ -46,7 +46,6 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         String nickname = userTransactionsInputView.getNickname();
         String mobile = userTransactionsInputView.getMobile();
         String type = userTransactionsInputView.getType();
-        Map inMap = new HashMap<>();
 
         StringBuilder headSql = new StringBuilder("SELECT ut.*, ui.nickname, ui.mobile");
         StringBuilder bodySql = new StringBuilder(" FROM user_transactions ut, user_info ui");
@@ -62,13 +61,14 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         }
         if(StrUtil.isNotBlank(type)){
             if(IDBConstant.TRANSACTIONS_TYPE_YUE.equals(type)) { //（2：充值与余额  3：薏米）
-                inMap.putAll(SQLUtil.getInToSQL("types", IDBConstant.TRANSACTIONS_TYPE_YUE, StrUtil.EMPTY));
+                whereSql.append(" AND ut.type IN ('").append(IDBConstant.TRANSACTIONS_TYPE_YUE).append("','").append(StrUtil.EMPTY).append("')");
+            }else{
+                whereSql.append(" AND ut.type = :type");
             }
-            whereSql.append(" AND ut.type IN (:types)");
         }
         whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
         whereSql.append(" ORDER BY ut.createTime DESC");
-        return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView, inMap);
+        return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
     }
 
     @Override
