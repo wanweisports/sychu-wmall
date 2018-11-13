@@ -1,64 +1,86 @@
 <view class="page">
     <view class="page__bd">
         <view class="weui-msg">
-            <view class="weui-msg__title">您目前的积分</view>
-            <view class="weui-msg__title">4500</view>
-            <view class="weui-msg__desc">再获取10500积分升级会员等级</view>
-            <view class="weui-msg__desc">消费1元得一分，积分永久有效</view>
+            <view class="weui-msg__title point-title">您的当前积分</view>
+            <view class="weui-msg__title point-value">{{userInfo.point}}</view>
+            <view class="weui-msg__desc" wx:if="{{userInfo.nextScore > 0}}">再获取{{userInfo.nextScore - userInfo.point}}积分即可升至下一等级</view>
+            <view class="weui-msg__desc" wx:if="{{userInfo.nextScore == 0}}">已经是最高会员等级</view>
         </view>
-        <view class="weui-grids">
-            <view class="weui-grid">
-                <view class="weui-grid__label">普通会员</view>
+        <view class="weui-article">
+            <view class="weui-article__section">
+                <view class="weui-article__h2">积分规则</view>
+                <view class="weui-article__p">* 消费1元及获得1积分，消费金额以订单实际支付金额为准</view>
+                <view class="weui-article__p">* 用户积分及等级永久有效</view>
+                <view class="weui-article__p">* 衣否对用户积分及等级有最终解释权</view>
             </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">0-2999分</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">无折扣</view>
-            </view>
-        </view>
-        <view class="weui-grids">
-            <view class="weui-grid">
-                <view class="weui-grid__label">VIP1级会员</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">3000-14999分</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">享全场95折优惠</view>
-            </view>
-        </view>
-        <view class="weui-grids">
-            <view class="weui-grid">
-                <view class="weui-grid__label">VIP2级会员</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">15000-29999分</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">享全场9折优惠</view>
-            </view>
-        </view>
-        <view class="weui-grids">
-            <view class="weui-grid">
-                <view class="weui-grid__label">VIP3级会员</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">30000-79999分</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">享全场85折优惠</view>
-            </view>
-        </view>
-        <view class="weui-grids">
-            <view class="weui-grid">
-                <view class="weui-grid__label">VIP4级会员</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">80000分以上</view>
-            </view>
-            <view class="weui-grid">
-                <view class="weui-grid__label">享全场8折优惠</view>
+            <view class="weui-article__section">
+                <view class="weui-article__h2">会员积分对照表</view>
+                <view class="weui-grids point-header">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">会员等级</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">对应积分</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">专享权益</view>
+                    </view>
+                </view>
+                <view class="weui-grids">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">普通会员</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">0-2999</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">无折扣</view>
+                    </view>
+                </view>
+                <view class="weui-grids">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">VIP1</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">3000-14999</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">全场95折优惠</view>
+                    </view>
+                </view>
+                <view class="weui-grids">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">VIP2</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">15000-29999</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">全场9折优惠</view>
+                    </view>
+                </view>
+                <view class="weui-grids">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">VIP3</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">30000-79999</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">全场85折优惠</view>
+                    </view>
+                </view>
+                <view class="weui-grids">
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">VIP4</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">80000及以上</view>
+                    </view>
+                    <view class="weui-grid">
+                        <view class="weui-grid__label">全场8折优惠</view>
+                    </view>
+                </view>
             </view>
         </view>
     </view>
