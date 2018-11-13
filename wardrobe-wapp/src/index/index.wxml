@@ -1,12 +1,15 @@
 <!--index.wxml-->
 <!--1px = 750/320 = 2.34rpx;-->
 
+<web-view src="{{bannerURL}}" wx:if="{{bannerRedirect}}"></web-view>
+
 <view class="container">
     <view class="swiper-container">
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
             <block wx:for="{{banners}}" wx:key="cid">
                 <swiper-item>
-                    <image bindtap="tapBanner" data-id="{{item.cid}}" src="{{item.resourcePath}}" class="slide-image" mode="aspectFit"  lazy-load="true"/>
+                    <image bindtap="tapBanner" data-id="{{item.cid}}" data-url="{{item.url}}" src="{{item.resourcePath}}" class="slide-image" 
+                        mode="aspectFit" lazy-load="true"/>
                 </swiper-item>
             </block>
         </swiper>

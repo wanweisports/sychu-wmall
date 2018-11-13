@@ -1,12 +1,13 @@
 <view class="container">
-    <view class="no-order" hidden="{{transactions.list ? true : false}}">
+    <view class="no-order" hidden="{{transactions ? true : false}}">
         <image src="/images/no-order.png" class="no-order-img"></image>
         <view class="text">暂无交易记录</view>
     </view>
     <view class="transactions-list">
-        <view wx:for="{{transactions.list}}" class="item" data-index="{{index}}" wx:key="{{index}}">
+        <view wx:for="{{transactions}}" class="item" data-index="{{index}}" wx:key="{{index}}">
             <view class="item-left">
-                <view><text class="transactions-balance">+ {{item.price}}个</text></view>
+                <view><text class="transactions-balance plus" wx:if="{{item.serviceType == 3}}">+ {{item.price}}个</text></view>
+                <view><text class="transactions-balance minus" wx:if="{{item.serviceType == 1}}">- {{item.price}}个</text></view>
                 <view><text class="transactions-type">{{item.serviceTypeName}}</text></view>
             </view>
             <view class="item-right">

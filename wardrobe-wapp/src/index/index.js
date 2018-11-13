@@ -13,7 +13,10 @@ Page({
 
         banners: [],
         newlyGoods: [],
-        hotGoods: []
+        hotGoods: [],
+
+        bannerRedirect: false,
+        bannerURL: "https://mp.weixin.qq.com/"
     },
     onShareAppMessage: function () {
         return app.onShareAppMessage({
@@ -23,6 +26,10 @@ Page({
         });
     },
     onShow: function() {
+        this.setData({
+            bannerRedirect: false
+        });
+
         this.getBannerGoodsList();
         this.getHotGoodsList();
         this.getNewlyGoodsList();
@@ -120,7 +127,14 @@ Page({
         app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
     },
     tapBanner: function(e) {
-        if (e.currentTarget.dataset.id != 0) {
+        console.log(e);
+        if (e.currentTarget.dataset.url) {
+            this.setData({
+                bannerRedirect: true,
+                bannerURL: e.currentTarget.dataset.url
+            });
+        }
+        else if (e.currentTarget.dataset.id > 0) {
             app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id, "navigateTo");
         }
     },

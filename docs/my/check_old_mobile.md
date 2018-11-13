@@ -1,11 +1,11 @@
 ### 请求地址
 
-/message/getCode
+/user/checkOldMobile
 
 ### 请求参数
  
 * mobile 原手机号、字符串类型
-* type 短信类型、整数类型（赋值2，表示验证原手机号）
+* code   验证码、字符串类型
 
 ### 返回结果
 
