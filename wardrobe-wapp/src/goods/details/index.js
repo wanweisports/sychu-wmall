@@ -59,6 +59,11 @@ Page({
     bindColorTap: function (e) {
         app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "redirectTo");
     },
+    statGoodsCount: function () {
+        let content = this;
+
+        app.wxRequest("/commodity/clickRate", {cid: content.data.goodId}, function (res) {});
+    },
     getGoodsDetail: function () {
         let content = this;
 
@@ -131,6 +136,7 @@ Page({
         });
 
         content.getGoodsDetail();
+        content.statGoodsCount();
     },
 
     getGoodsDetailSize: function (sid) {
