@@ -90,8 +90,7 @@
                                 <thead>
                                 <tr>
                                     <th>商品图片</th>
-                                    <th>商品id</th>
-                                    <th>尺码id</th>
+                                    <th>商品编码</th>
                                     <th>商品名称</th>
                                     <th>商品颜色</th>
                                     <th>商品尺码</th>
@@ -106,8 +105,7 @@
                                         <td>
                                             <img class="img-rounded" src="${d.itemImg}">
                                         </td>
-                                        <td>${d.cid}</td>
-                                        <td>${d.sid}</td>
+                                        <td>${d.commNo}</td>
                                         <td><a href="/admin/products/detail?cid=${d.cid}" class="btn btn-sm btn-link" title="${d.itemName}">${d.itemName}</a></td>
                                         <td>${d.itemColor}</td>
                                         <td>${d.itemSize}</td>

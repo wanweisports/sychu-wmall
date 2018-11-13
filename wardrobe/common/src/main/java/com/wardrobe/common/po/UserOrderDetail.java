@@ -27,6 +27,8 @@ public class UserOrderDetail {
     private Timestamp createTime;
     private Timestamp updateTime;
 
+    private String commNo;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "odid")
@@ -176,6 +178,15 @@ public class UserOrderDetail {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public String getCommNo() {
+        return commNo;
+    }
+
+    public void setCommNo(String commNo) {
+        this.commNo = commNo;
     }
 
     @Override

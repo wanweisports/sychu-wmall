@@ -23,6 +23,8 @@ public class ReserveOrderDetail {
     private Timestamp createTime;
     private Timestamp updateTime;
 
+    private String commNo;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "rdid")
@@ -152,6 +154,15 @@ public class ReserveOrderDetail {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public String getCommNo() {
+        return commNo;
+    }
+
+    public void setCommNo(String commNo) {
+        this.commNo = commNo;
     }
 
     @Override
