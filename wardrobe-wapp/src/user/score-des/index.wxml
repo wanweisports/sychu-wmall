@@ -9,7 +9,7 @@
         <view class="weui-article">
             <view class="weui-article__section">
                 <view class="weui-article__h2">积分规则</view>
-                <view class="weui-article__p">* 消费1元及获得1积分，消费金额以订单实际支付金额为准</view>
+                <view class="weui-article__p">* 消费1元即获赠1积分，消费金额以订单实际支付金额为准</view>
                 <view class="weui-article__p">* 用户积分及等级永久有效</view>
                 <view class="weui-article__p">* 衣否对用户积分及等级有最终解释权</view>
             </view>
