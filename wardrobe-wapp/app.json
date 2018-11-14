@@ -21,7 +21,6 @@
         "pages/user/coupons/index",
         "pages/user/order-list/index",
         "pages/user/order-details/index",
-        "pages/user/reserve/index",
         "pages/user/protocols/user",
         "pages/wuliu/index"
     ],
