@@ -338,8 +338,8 @@ App({
     config: {
         getApiHost: function () {
             //return "http://127.0.0.1:8070";
-            //return "https://mystore.yifoutech.com/api";
-            return "https://mystore.yifoutech.cn/api";
+            return "https://mystore.yifoutech.com/api";
+            //return "https://mystore.yifoutech.cn/api";
         },
         version: "1.0",
         shareProfile: '百款精品商品，总有一款适合您',
