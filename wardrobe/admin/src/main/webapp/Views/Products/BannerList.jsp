@@ -13,7 +13,7 @@
         .products-list td {
             padding: 0.3rem 0.75rem;
             word-break: break-all;
-            max-width: 40rem;
+            max-width: 34rem;
         }
         .img-rounded {
             height: 2rem;
