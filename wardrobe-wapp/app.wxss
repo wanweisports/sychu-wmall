@@ -33,3 +33,19 @@ page{
     text-align: left;
     font-size: 14px;
 }
+
+.my-contact {
+    position: fixed;
+    right: 20rpx;
+    bottom: 70rpx;
+    background: #179B16;
+    padding: 16rpx;
+    border-radius: 50rpx;
+    opacity: .8
+}
+
+.my-contact contact-button {
+    display:block;
+    margin:0 auto;
+    opacity: .8;
+}
