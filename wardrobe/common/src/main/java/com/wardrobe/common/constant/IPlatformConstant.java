@@ -63,4 +63,6 @@ public interface IPlatformConstant {
 
 	String OG_IMG_SUFFIX = "_OG"; //原图后缀
 	String YS_IMG_SUFFIX = "_YS"; //压缩图后缀
+
+	String DETAIL = "detail"; //详情标识
 }

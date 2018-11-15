@@ -266,18 +266,18 @@
                                     </label>
                                     <div class="col-md-10 text-center">
                                         <c:forEach var="i" begin="0" end="4">
-                                            <c:if test="${broadImgList[i] != null}">
+                                            <c:if test="${detailImgList[i] != null}">
                                                 <div class="pull-left mr-4">
                                                     <div style="width: 100%; position: relative">
-                                                        <button class="btn btn-danger btn-sm product-detail-remove" style="display: block" data-id="${broadImgList[i].resourceId}">
+                                                        <button class="btn btn-danger btn-sm product-detail-remove" style="display: block" data-id="${detailImgList[i].resourceId}">
                                                             <i class="fa fa-remove"></i>
                                                         </button>
-                                                        <img class="product-detail-show" src="${broadImgList[i].resourcePath}" data-id="${broadImgList[i].resourceId}">
+                                                        <img class="product-detail-show" src="${detailImgList[i].resourcePath}" data-id="${detailImgList[i].resourceId}">
                                                         <input type="file" class="product-image-file" name="file_detail_${i+1}"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
                                                     </div>
                                                 </div>
                                             </c:if>
-                                            <c:if test="${broadImgList[i] == null}">
+                                            <c:if test="${detailImgList[i] == null}">
                                                 <div class="pull-left mr-4">
                                                     <div style="width: 100%; position: relative">
                                                         <button class="btn btn-danger btn-sm product-detail-remove">
