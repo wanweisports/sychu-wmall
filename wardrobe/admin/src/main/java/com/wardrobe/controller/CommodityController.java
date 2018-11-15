@@ -115,4 +115,18 @@ public class CommodityController extends BaseController {
         outputStream.close();
     }
 
+    @ResponseBody
+    @RequestMapping("saveRecommend")
+    public ResponseBean saveRecommend(int cid, int recommendCid){
+        commodityService.saveRecommend(cid, recommendCid);
+        return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("delRecommend")
+    public ResponseBean delRecommend(int crid){
+        commodityService.deleteRecommend(crid);
+        return new ResponseBean(true);
+    }
+
 }

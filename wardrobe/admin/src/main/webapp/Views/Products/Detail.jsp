@@ -56,6 +56,28 @@
                 }
             });
         }
+
+        function saveRecommend(recommendCid, seqNo1){
+            $.post("/commodity/saveRecommend", {cid: ${product.cid}, recommendCid: recommendCid, seqNo: seqNo1}, function(res){
+                if(res.code == 1){
+                    window.location.reload();
+                }else{
+                    alert(res.message);
+                }
+            });
+        }
+
+        function delRecommend(crid){
+            if(window.confirm("确认删除吗？（不可恢复）")) {
+                $.post("/commodity/delRecommend", {crid: crid}, function (res) {
+                    if (res.code == 1) {
+                        window.location.reload();
+                    } else {
+                        alert(res.message);
+                    }
+                });
+            }
+        }
     </script>
 </layout:override>
 
@@ -312,13 +334,28 @@
                                     <th>商品编号</th>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
-                                    <th>商品品类</th>
-                                    <th>商品材质</th>
+                                    <th>品牌名称</th>
                                     <th>商品价格</th>
+                                    <th>优惠价格</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <c:forEach var="recommend" items="${recommendList}">
+                                        <tr>
+                                            <td>${recommend.commNo}</td>
+                                            <td><img src="${recommend.resourcePath}" width="100" /></td>
+                                            <td>${recommend.commName}</td>
+                                            <td>${recommend.brandName}</td>
+                                            <td>${recommend.price}</td>
+                                            <td>${recommend.couPrice}</td>
+                                            <td>
+                                                <a href="javascript:;" class="btn btn-sm btn-danger" onclick="delRecommend('${recommend.crid}')">
+                                                    <i class="fa fa-remove"></i> 删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
@@ -426,22 +463,32 @@
                 <div class="modal-body">
                     <form id="product_relation_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
                         <div class="form-group row">
-                            <label class="col-md-4 form-control-label" for="ps_num">
-                                <span class="text-danger">*</span> 关联商品
+                            <label class="col-md-4 form-control-label" for="recommendCid">
+                                <span class="text-danger">*</span> 关联商品ID
                             </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" id="cid" placeholder="请输入关联商品" name="cid"
-                                       data-val="true" data-val-required="关联商品不能为空" autocomplete="off">
+                                <input type="text" class="form-control" id="recommendCid" placeholder="请输入关联商品ID"
+                                       data-val="true" data-val-required="关联商品ID不能为空" autocomplete="off">
                                 <div data-valmsg-for="cid" data-valmsg-replace="true"></div>
                             </div>
                         </div>
+                        <%--<div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="seqNo1">
+                                <span class="text-danger">*</span> 显示排序
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="seqNo1" placeholder="请输入显示排序"
+                                       data-val="true" data-val-required="显示排序不能为空" autocomplete="off">
+                                <div data-valmsg-for="cid" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>--%>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                         <i class="fa fa-remove"></i> 取消
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" id="product_relation_save">
+                    <button type="button" class="btn btn-primary btn-sm" id="product_relation_save" onclick="saveRecommend($('#recommendCid').val(), $('#seqNo1').val())">
                         <i class="fa fa-check"></i> 保存
                     </button>
                 </div>

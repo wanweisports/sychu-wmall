@@ -413,7 +413,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> renderCommodityDetailIn(int cid){
-        Map<String, Object> data = new HashMap<>(8, 1);
+        Map<String, Object> data = new HashMap<>(10, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
@@ -432,12 +432,28 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         }
         data.put("productSizeList", commoditySizeList);
         data.put("stockSum", stockSum);
-        /*CommodityBanner commodityBanner = getCommodityBanner(cid);
-        if(commodityBanner != null) {
-            data.put("commodityBanner", commodityBanner);
-            data.put("bannerImg", resourceService.getResource(cid, IDBConstant.RESOURCE_COMMODITY_BANNER_IMG));
-        }*/
+        data.put("recommendList", getRecommendList(cid));
+
         return data;
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecommendList(int cid){
+        List<Map<String, Object>> list = baseDao.queryBySql("SELECT cr.crid, cr.recommendCid, cr.seqNo, ci.commName, ci.commNo, ci.brandName, ci.price, ci.couPrice FROM commodity_recommend cr, commodity_info ci WHERE cr.recommendCid = ci.cid AND cr.cid = ?", cid);
+        if(list != null && list.size() > 0){
+            for(Map<String, Object> commodity : list){
+                commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("recommendCid"))));
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public void deleteRecommend(int crid){
+        CommodityRecommend commodityRecommend = baseDao.getToEvict(CommodityRecommend.class, crid);
+        if(commodityRecommend != null){
+            baseDao.delete(commodityRecommend);
+        }
     }
 
     private List<Map<String, Object>> getCommodityColorByGroupId(int groupId){
@@ -736,6 +752,22 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         commodityInfo.setSeqNo(seqNo);
         baseDao.save(commodityInfo, cid);
+    }
+
+    @Override
+    public void saveRecommend(int cid, int recommendCid){
+        CommodityInfo commodityInfo = getCommodityInfo(cid);
+        if(commodityInfo == null) throw new MessageException("操作错误，请刷新页面！");
+        CommodityInfo recommendCommodityInfo = getCommodityInfo(recommendCid);
+        if(recommendCommodityInfo == null) throw new MessageException("推荐商品不存在，请查证后输入！");
+        if(baseDao.queryBySqlFirst("SELECT 1 FROM commodity_recommend WHERE cid = ? AND recommendCid = ?", cid, recommendCid) != null) throw new MessageException("推荐商品已存在，请勿重复添加！");
+        Timestamp nowDate = DateUtil.getNowDate();
+        CommodityRecommend cr = new CommodityRecommend();
+        cr.setCid(cid);
+        cr.setRecommendCid(recommendCid);
+        cr.setCreateTime(nowDate);
+        cr.setUpdateTime(nowDate);
+        baseDao.save(cr, null);
     }
 
 }

@@ -54,6 +54,10 @@ public interface ICommodityService {
 
     Map<String, Object> renderCommodityDetailIn(int cid);
 
+    List<Map<String, Object>> getRecommendList(int cid);
+
+    void deleteRecommend(int crid);
+
     void saveStock(CommodityStock commodityStock, boolean add);
 
     void saveOrderSubStock(UserOrderInfo userOrderInfo);
@@ -79,5 +83,7 @@ public interface ICommodityService {
     void deletecCommodity(int cid);
 
     void updateCommoditySeqNo(int cid, int seqNo);
+
+    void saveRecommend(int cid, int recommendCid);
 
 }
