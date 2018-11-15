@@ -183,9 +183,8 @@
                                 <tr>
                                     <th>详情图片：</th>
                                     <td colspan="5">
-                                        <img src="${coverImg.resourcePath}" style="width: 100px; height: 100px;" alt="封面图">
-                                        <c:forEach var="b" items="${broadImgList}" varStatus="status">
-                                            <img src="${b.resourcePath}" style="width: 100px; height: 100px;" alt="轮播图${status.index+1}">
+                                        <c:forEach var="b" items="${detailImgList}" varStatus="status">
+                                            <img src="${b.resourcePath}" style="width: 100px; height: 100px;" alt="详情图${status.index+1}">
                                         </c:forEach>
                                     </td>
                                 </tr>

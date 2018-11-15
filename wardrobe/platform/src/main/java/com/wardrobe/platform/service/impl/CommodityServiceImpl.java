@@ -111,6 +111,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         data.put("couPrice", commodityInfo.getCouPrice());
         data.put("desc", commodityInfo.getProductDesc());
         data.put("resources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG)));
+        data.put("detailResources", resourceService.getResourcesPath(resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_DETAIL_IMG)));
         data.put("collection", userService.getUserCollection(cid, uid) != null ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO);
         return data;
     }
@@ -247,7 +248,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> renderProductsAddIn(Integer cid){
-        Map<String, Object> data = new HashMap<>(9, 1);
+        Map<String, Object> data = new HashMap<>(10, 1);
         data.put("categoryList", dictService.getDicts(IDBConstant.COMM_CATEGORY));
         data.put("styleList", dictService.getDicts(IDBConstant.COMM_STYLE));
         data.put("materialList", dictService.getDicts(IDBConstant.COMM_MATERIAL));
@@ -258,6 +259,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             data.put("commoditySizeList", getCommoditySizeList(cid));
             data.put("coverImg", getFmImgObj(cid));
             data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+            data.put("detailImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_DETAIL_IMG));
         }
         return data;
     }
@@ -361,7 +363,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             sysResource.setResourceSeq(StrUtil.objToInt(name.substring(name.lastIndexOf(IPlatformConstant.UNDERLINE) + 1)));
             sysResource.setResourceServiceParentId(cid);
             sysResource.setResourceServiceId(coid);
-            sysResource.setResourceServiceType(IDBConstant.RESOURCE_COMMODITY_IMG);
+            sysResource.setResourceServiceType(name.contains(IPlatformConstant.DETAIL) ? IDBConstant.RESOURCE_COMMODITY_DETAIL_IMG : IDBConstant.RESOURCE_COMMODITY_IMG); //判断前端name是否包含detail字符串来判断是不是详情图片
             sysResource.setResourceType(IDBConstant.RESOURCE_TYPE_IMG);
             baseDao.save(sysResource, null);
         }
@@ -411,12 +413,13 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Override
     public Map<String, Object> renderCommodityDetailIn(int cid){
-        Map<String, Object> data = new HashMap<>(7, 1);
+        Map<String, Object> data = new HashMap<>(8, 1);
         CommodityInfo commodityInfo = getCommodityInfo(cid);
         Integer groupId = commodityInfo.getGroupId();
         data.put("product", getType(JsonUtils.fromJson(commodityInfo)));
         data.put("coverImg", getFmImgObj(cid));
         data.put("broadImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_IMG, 0));
+        data.put("detailImgList", resourceService.getResourcesByParentId(cid, IDBConstant.RESOURCE_COMMODITY_DETAIL_IMG));
         if(groupId != null) {
             data.put("groupCommodityColorList", getCommodityColorByGroupId(groupId));
         }

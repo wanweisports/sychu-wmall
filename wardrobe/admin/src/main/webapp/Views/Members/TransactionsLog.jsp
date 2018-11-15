@@ -41,10 +41,10 @@
                                         <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
-                                        <select class="form-control">
-                                            <option>全部交易</option>
-                                            <option>充值交易</option>
-                                            <option>购买交易</option>
+                                        <select class="form-control" name="serviceType">
+                                            <option value="">全部交易</option>
+                                            <option value="2" <c:if test="${serviceType=='2'}">selected</c:if>>充值交易</option>
+                                            <option value="1" <c:if test="${serviceType=='1'}">selected</c:if>>购买交易</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
@@ -57,8 +57,8 @@
                         </div>
                         <div class="card-footer text-right">
                             <div>
-                                <i class="fa fa-bookmark"></i>&nbsp;充值金额：<span class="badge badge-success">1000元</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;售卖金额：<span class="badge badge-danger">1000元</span>
+                                <i class="fa fa-bookmark"></i>&nbsp;充值金额：<span class="badge badge-success">${czPriceSum}元</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;售卖金额：<span class="badge badge-danger">${zfPriceSum}元</span>
                             </div>
                         </div>
                         <div class="card-block">
@@ -67,7 +67,7 @@
                                 <tr>
                                     <th>交易流水号</th>
                                     <th>交易业务类型</th>
-                                    <th>交易业务ID</th>
+                                    <%--<th>交易业务ID</th>--%>
                                     <th>交易余额</th>
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
@@ -79,7 +79,7 @@
                                 <tr data-id="">
                                     <td>${t.tid}</td>
                                     <td>${t.serviceTypeName}</td>
-                                    <td>${t.serviceId}</td>
+                                    <%--<td>${t.serviceId}</td>--%>
                                     <td>
                                         <span class="badge badge-success">${t.price}元</span>
                                     </td>

@@ -85,7 +85,9 @@ public class MembersController extends BaseController {
             model.addAttribute("nickname", userInfo.getNickname());
             model.addAttribute("mobile", userInfo.getMobile());
         }
+        userTransactionsInputView.setIsWxType(true);
         super.setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView), "/admin/members/transactions/log", userTransactionsInputView);
+        model.addAllAttributes(userTransactionsService.countTransactions(userTransactionsInputView));
         return "Members/TransactionsLog";
     }
 

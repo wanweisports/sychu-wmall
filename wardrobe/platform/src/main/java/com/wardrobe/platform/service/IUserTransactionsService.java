@@ -5,6 +5,7 @@ import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.view.UserTransactionsInputView;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/8/1.
@@ -18,5 +19,7 @@ public interface IUserTransactionsService {
     void addUserTransactions(int uid, double price, String serviceType, String type);
 
     PageBean getUserTransactionsListIn(UserTransactionsInputView userTransactionsInputView);
+
+    Map<String, Object> countTransactions(UserTransactionsInputView userTransactionsInputView);
 
 }

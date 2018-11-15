@@ -9,6 +9,8 @@ public class UserTransactionsInputView extends BaseInputView {
     private String nickname;
     private String mobile;
     private String type;
+    private boolean isWxType;
+    private String serviceType;
 
     public Integer getUid() {
         return uid;
@@ -40,5 +42,21 @@ public class UserTransactionsInputView extends BaseInputView {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isWxType() {
+        return isWxType;
+    }
+
+    public void setIsWxType(boolean isWxType) {
+        this.isWxType = isWxType;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }
