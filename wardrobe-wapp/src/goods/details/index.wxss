@@ -144,12 +144,17 @@ swiper-item image {
     margin-bottom: 30rpx;
 }
 
-.des-imgs {
+.goods-des-text {
+    margin-bottom: 20rpx;
+}
+
+.goods-des-images {
     width: 100%;
 }
 
-.des-imgs image {
+.goods-des-images image {
     width: 100%;
+    display: block;
 }
 
 .footer-box {

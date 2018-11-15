@@ -79,6 +79,10 @@ Page({
 
                 res.data.desc = res.data.desc.split(/\n/);
 
+                if (!res.data.detailResources || res.data.detailResources.length == 0) {
+                    res.data.detailResources = [];
+                }
+
                 content.setData({
                     goodsDetail: res.data,
                     isFavorite: res.data.collection == 1
