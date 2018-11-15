@@ -6,7 +6,6 @@ Page({
         sizeIndex     : 0,
         userSizeList  : [],
 
-        showTopTips   : "",
         isGetSMSCode  : false,
 
         isTimer       : false,
