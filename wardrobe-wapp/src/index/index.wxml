@@ -33,7 +33,7 @@
                 <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
                 <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">
                     <text class="goods-cur">￥{{item.couPrice}}</text>
-                    <text class="goods-old">￥{{item.price}}</text>
+                    <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
                 </view>
 
                 <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{item.collection != 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="new"></view>
@@ -55,7 +55,7 @@
                 <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
                 <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">
                     <text class="goods-cur">￥{{item.couPrice}}</text>
-                    <text class="goods-old">￥{{item.price}}</text>
+                    <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
                 </view>
 
                 <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{item.collection != 1}}" data-id="{{item.cid}}" data-index="{{index}}" data-type="hot"></view>

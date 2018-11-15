@@ -26,7 +26,7 @@ const handleError = function (err) {
 };
 
 gulp.task('clean', function () {
-    return del(['./pages/**'])
+    return del(['./build/**'])
 });
 
 gulp.task('watch', function () {
@@ -34,6 +34,13 @@ gulp.task('watch', function () {
     gulp.watch('./src/**/*.js', ['scripts']);
     gulp.watch('./src/**/*.wxml', ['templates']);
     gulp.watch('./src/**/*.wxss', ['wxss']);
+
+    gulp.watch(['app.json', 'project.config.json'], ['appJSON']);
+    gulp.watch('app.wxss', ['appWxss']);
+    gulp.watch('app.js', ['appJS']);
+
+    gulp.watch('./utils/**', ['copyUtils']);
+    gulp.watch('./images/**', ['copyImages']);
 });
 
 gulp.task('jsonLint', function () {
@@ -49,18 +56,18 @@ gulp.task('jsonLint', function () {
 
 gulp.task('json', ['jsonLint'], function () {
     return gulp.src('./src/**/*.json')
-        .pipe(gulp.dest('./pages'));
+        .pipe(gulp.dest('./build/pages'));
 });
 
 gulp.task('jsonPro', ['jsonLint'], function () {
     return gulp.src('./src/**/*.json')
         .pipe(jsonminify())
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('templates', function () {
     return gulp.src('./src/**/*.wxml')
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('templatesPro', function () {
@@ -70,18 +77,18 @@ gulp.task('templatesPro', function () {
             removeComments: true,
             keepClosingSlash: true
         }))
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('wxss', function () {
     return gulp.src('./src/**/*.wxss')
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('wxssPro', function () {
     return gulp.src('./src/**/*.wxss')
         .pipe(cleanCSS())
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('scripts', function () {
@@ -89,7 +96,7 @@ gulp.task('scripts', function () {
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
 });
 
 gulp.task('scriptsPro', function () {
@@ -100,14 +107,69 @@ gulp.task('scriptsPro', function () {
         .pipe(uglify({
             compress: true,
         }))
-        .pipe(gulp.dest('./pages'))
+        .pipe(gulp.dest('./build/pages'))
+});
+
+/*******/
+
+gulp.task('appJSON', ['jsonLint'], function () {
+    return gulp.src(['app.json', 'project.config.json'])
+        .pipe(gulp.dest('./build'));
+});
+
+gulp.task('appJSONPro', ['jsonLint'], function () {
+    return gulp.src(['app.json', 'project.config.json'])
+        .pipe(jsonminify())
+        .pipe(gulp.dest('./build'))
+});
+
+gulp.task('appWxss', function () {
+    return gulp.src('app.wxss')
+        .pipe(gulp.dest('./build'))
+});
+
+gulp.task('appWxssPro', function () {
+    return gulp.src('app.wxss')
+        .pipe(cleanCSS())
+        .pipe(gulp.dest('./build'))
+});
+
+gulp.task('appJS', function () {
+    return gulp.src('app.js')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('./build'))
+});
+
+gulp.task('appJSPro', function () {
+    return gulp.src(['app.js'])
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(uglify({
+            compress: true,
+        }))
+        .pipe(gulp.dest('./build'))
+});
+
+/*******/
+
+gulp.task('copyUtils', function () {
+    return gulp.src(['./utils/**'])
+        .pipe(gulp.dest('./build/utils'))
+});
+
+gulp.task('copyImages', function () {
+    return gulp.src(['./images/**'])
+        .pipe(gulp.dest('./build/images'))
 });
 
 gulp.task('dev', ['clean'], function () {
-    runSequence('json', 'templates', 'wxss', 'scripts', 'watch');
+    runSequence('json', 'templates', 'wxss', 'scripts', 'appJSON', 'appWxss', 'appJS', 'copyUtils', 'copyImages', 'watch');
 });
 
-gulp.task('build', ['jsonPro', 'templatesPro', 'wxssPro', 'scriptsPro']);
+gulp.task('build', ['jsonPro', 'templatesPro', 'wxssPro', 'scriptsPro', 'appJSONPro', 'appWxssPro', 'appJSPro', 'copyUtils', 'copyImages']);
 
 gulp.task('pro', ['clean'], function () {
     runSequence('build');

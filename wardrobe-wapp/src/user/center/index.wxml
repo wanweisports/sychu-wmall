@@ -62,7 +62,7 @@
         <navigator url="/pages/user/mobile-check/index" hover-class="navigator-hover">修改手机号</navigator>
     </view>
     <view class="my-contact">
-        <contact-button type="default-light" size="40" session-from="weapp"></contact-button>
+        <contact-button type="default-light" size="40" session-from="page:center"></contact-button>
     </view>
 
     <view style="height:20rpx;background: #eee;width:100%;"></view>
