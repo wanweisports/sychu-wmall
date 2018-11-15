@@ -12,7 +12,11 @@
 {
     "nickname"       : "String 用户昵称",
     "headImg"        : "String 用户头像地址",
-    "mobile"         : "String 手机号",
-    "mobileEllipsis" : "String 脱敏手机号"
+    "mobile"         : "String 用户脱敏手机号",
+    "mobileEllipsis" : "String 用户手机号",
 }
 ```
+
+### 备注
+
+备用接口
