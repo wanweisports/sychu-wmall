@@ -43,6 +43,9 @@ page{
 .transactions-list .item .transactions-balance {
     color: #e64340;
 }
+.transactions-list .item .transactions-balance.plus {
+    color: #179B16;
+}
 .transactions-list .item .transactions-type {
     color: #999999;
     font-size: 24rpx;

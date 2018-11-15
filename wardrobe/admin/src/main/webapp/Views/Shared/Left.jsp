@@ -130,11 +130,6 @@
                             <i class="icon-arrow-right"></i> 交易记录
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'against')}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'against')}">active</c:if>" href="/admin/members/data/against">
-                            <i class="icon-arrow-right"></i> 额度冲抵
-                        </a>
-                    </li>
                     <li class="nav-item <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'members' && (param.subMenu == 'balance')}">active</c:if>" href="/admin/members/recharge/settings">
                             <i class="icon-arrow-right"></i> 充值设置

@@ -1,0 +1,1 @@
+"use strict";var app=getApp();Page({data:{userInfo:{}},onShareAppMessage:null,onShow:function(){this.getUserInfo()},getUserInfo:function(){var e=this;app.wxRequest("/user/userCenter",{},function(t){e.setData({userInfo:t.data})})}});

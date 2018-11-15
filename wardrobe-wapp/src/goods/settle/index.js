@@ -25,7 +25,17 @@ Page({
         useYcoid: 0,
         hasYcoid: false,
 
-        userInfo: {}
+        userBalance: 0,
+
+        payType      : 1, 
+        payTypeIndex : 0,
+        payTypeList  : [{
+            value: 1,
+            text: "微信支付"
+        }, {
+            value: 2,
+            text: "余额支付"
+        }]
     },
 
     onShareAppMessage: null,
@@ -79,6 +89,28 @@ Page({
                     useYcoid: res.data.useYcoid
                 });
             }
+        });
+    },
+
+    getUserBalance: function () {
+        let content = this;
+
+        app.wxRequest("/account/userAccountBalance", {}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    userBalance : res.data.balance
+                });
+            }
+        });
+    },
+
+    bindPayTypeChange: function (e) {
+        let index = e.detail.value;
+
+
+        this.setData({
+            payTypeIndex : index,
+            payType : this.data.payTypeList[index].value
         });
     },
 
@@ -163,12 +195,27 @@ Page({
             return;
         }
 
+        if (content.data.payType == 2 && content.data.allGoodsAndYunPrice > content.data.userBalance) {
+            wx.showModal({
+                title: '提 示',
+                content: '您的余额不足，请先去充值或者取消选择微信支付！',
+                cancelText: "取消",
+                confirmText: "去充值",
+                success: function (res) {
+                    if (res.confirm) {
+                        app.redirect("/pages/user/recharge/index")
+                    }
+                }
+            });
+            return;
+        }
+
         let postData = {
             expressName: content.data.curAddressData.linkMan,
             expressMobile: content.data.curAddressData.mobile,
             expressAddress: content.data.curAddressData.address,
             scids: content.data.goodsListId.join(","),
-            payType: 1
+            payType: content.data.payType
         };
 
         if (content.data.serviceType == 1) {

@@ -111,16 +111,9 @@ public class MembersController extends BaseController {
     @Desc("删除充值")
     @ResponseBody
     @RequestMapping(value = "/recharge/deleteRecharge")
-    public ResponseBean deleteRecharge(int dictId){
+    public ResponseBean deleteRecharge(int dictId) {
         dictService.deleteDict(dictId);
         return new ResponseBean(true);
-    }
-
-    @Desc("额度冲抵")
-    @NotProtected
-    @RequestMapping(value = "/data/against")
-    public String renderMembersDataAgainst(Model model) {
-        return "Members/DataAgainst";
     }
 
 }

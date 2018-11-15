@@ -1,5 +1,3 @@
-@import 'style/weui.wxss';
-
 page{
     background-color: #F8F8F8;
     font-size: 16px;
@@ -32,4 +30,24 @@ page{
     color: #888888;
     text-align: left;
     font-size: 14px;
+}
+
+.my-contact {
+    position: fixed;
+    right: 20rpx;
+    bottom: 70rpx;
+    background: #179B16;
+    padding: 16rpx;
+    border-radius: 50rpx;
+    opacity: .8
+}
+
+.my-contact.detail {
+    bottom: 170rpx;
+}
+
+.my-contact contact-button {
+    display:block;
+    margin:0 auto;
+    opacity: .8;
 }

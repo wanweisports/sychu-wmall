@@ -103,17 +103,16 @@
                                 <thead>
                                 <tr>
                                     <th>商品ID</th>
-                                    <th>商品编号</th>
+                                    <th>编号</th>
                                     <th>商品图片</th>
                                     <th>商品名称</th>
                                     <th>商品品类</th>
-                                    <th>商品材质</th>
-                                    <th>商品价格</th>
-                                    <th>商品优惠价</th>
+                                    <th>价格</th>
+                                    <th>优惠价</th>
                                     <th>已售</th>
                                     <th>点击量</th>
                                     <th>已收藏</th>
-                                    <th>排序</th>
+                                    <th>优先级</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -127,7 +126,6 @@
                                         <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
                                     <td>${c.styleName}</td>
-                                    <td>${c.materialName}</td>
                                     <td>￥${c.price}</td>
                                     <td>￥${c.couPrice}</td>
                                     <%--<td>￥399</td>--%>

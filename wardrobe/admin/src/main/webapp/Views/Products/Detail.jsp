@@ -324,7 +324,7 @@
                             </table>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-primary">
+                            <a href="#product_relation_dialog" class="btn btn-primary" data-toggle="modal">
                                 <i class="fa fa-star"></i> 设置推荐
                             </a>
                         </div>
@@ -414,6 +414,35 @@
                         <i class="fa fa-remove"></i> 取消
                     </button>
                     <button type="button" class="btn btn-primary btn-sm" id="product_sku_save">
+                        <i class="fa fa-check"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="product_relation_dialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="product_relation_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <div class="form-group row">
+                            <label class="col-md-4 form-control-label" for="ps_num">
+                                <span class="text-danger">*</span> 关联商品
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="cid" placeholder="请输入关联商品" name="cid"
+                                       data-val="true" data-val-required="关联商品不能为空" autocomplete="off">
+                                <div data-valmsg-for="cid" data-valmsg-replace="true"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        <i class="fa fa-remove"></i> 取消
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" id="product_relation_save">
                         <i class="fa fa-check"></i> 保存
                     </button>
                 </div>

@@ -131,13 +131,13 @@
                         </div>
                         <div class="card-footer">
                             <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
-                                <i class="fa fa-bolt"></i> 修正金额
+                                <i class="fa fa-bolt"></i> 冲抵余额
                             </a>
                             <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
-                                <i class="fa fa-bolt"></i> 修正薏米
+                                <i class="fa fa-bolt"></i> 冲抵薏米
                             </a>
                             <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
-                                <i class="fa fa-bolt"></i> 修正积分
+                                <i class="fa fa-bolt"></i> 冲抵积分
                             </a>
                         </div>
                     </div>
