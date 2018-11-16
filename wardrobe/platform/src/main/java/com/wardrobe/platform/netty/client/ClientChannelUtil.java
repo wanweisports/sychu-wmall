@@ -6,9 +6,11 @@ import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
+import com.wardrobe.platform.netty.reconnect.client.HeartBeatClientHandler;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.util.CharsetUtil;
+import org.apache.log4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.List;
  * 获取方法不加同步锁，修改或删除方法加，避免死锁
  */
 public class ClientChannelUtil {
+
+    private static Logger logger = Logger.getLogger(HeartBeatClientHandler.class);
 
     public static int STATUS_NOT_CONNECT = 0;
     public static int STATUS_CONNECT_ING = 1;
@@ -43,7 +47,7 @@ public class ClientChannelUtil {
             if (clientBean != null) {
                 clientBean.setStatus(STATUS_RECONNECT);
             }
-            System.out.println("r:" + clientBeans.size() + ":" + clientBean.getPort()  + ":" +  clientBean.getStatus());
+            logger.info("r:" + clientBeans.size() + ":" + clientBean.getPort() + ":" + clientBean.getStatus());
         }
     }
 
@@ -78,7 +82,7 @@ public class ClientChannelUtil {
                 clientBean.setServiceChannel(channel);
                 clientBean.setStatus(STATUS_CONNECT_ING);
             }
-            System.out.println("c:" + clientBeans.size() + ":" + clientBean.getPort()  + ":" + clientBean.getStatus());
+            logger.info("c:" + clientBeans.size() + ":" + clientBean.getPort() + ":" + clientBean.getStatus());
         }catch (Exception e){
             e.printStackTrace();
             throw new MessageException();
@@ -145,17 +149,17 @@ public class ClientChannelUtil {
 
             serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.READ_STATUS + deviceNo, CharsetUtil.UTF_8));
 
-            System.out.println("serverChannel：" + serverChannel);
+            logger.info("serverChannel：" + serverChannel);
             long start = System.currentTimeMillis();
             while ((System.currentTimeMillis()-start) <= 5000 && deviceBean.getStatus() == null) { //5秒内轮询等待TCP消息返回
                 try {
-                    System.out.println("等待中...");
+                    logger.info("等待中...");
                     Thread.sleep(200L);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println("等待完毕..." + deviceBean.getStatus());
+            logger.info("等待完毕..." + deviceBean.getStatus());
             return deviceBean;
         }
     }
