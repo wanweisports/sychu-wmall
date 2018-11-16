@@ -38,25 +38,30 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //super.channelRead(ctx, msg); //不能打开，否则ref=0（被此方法读取过），则报错
-        System.out.println("===channelRead===");
-
-        System.out.println("Heartbeat-client:" + msg);
-        String message = getMessage((ByteBuf) msg);
-        System.out.println("message-client:" + message);
-        if(message.equals("Heartbeat")){
-            ctx.write("has read message from server");
-            ctx.flush();
-        }else{ //获取设备状态
-            if(message != null && message.contains("Relay")){
-                //0：状态  1：设备号[1-8]
-                String[] statusName = message.split(" ");
-                SysDeviceControl deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
-                if(deviceBean != null){
-                    deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
+        try{
+            logger.info("===channelRead===");
+            logger.info("Heartbeat-client:" + msg);
+            String message = getMessage((ByteBuf) msg);
+            logger.info("message-client:" + message);
+            if(message.equals("Heartbeat")){
+                ctx.write("has read message from server");
+                ctx.flush();
+            }else{ //获取设备状态
+                if(message != null && message.contains("Relay")){
+                    //0：状态  1：设备号[1-8]
+                    String[] statusName = message.split(" ");
+                    SysDeviceControl deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
+                    if(deviceBean != null){
+                        deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
+                    }
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("channelRead===>" + e.getMessage());
+        }finally {
+            ReferenceCountUtil.release(msg);
         }
-        ReferenceCountUtil.release(msg);
     }
 
     @Override
