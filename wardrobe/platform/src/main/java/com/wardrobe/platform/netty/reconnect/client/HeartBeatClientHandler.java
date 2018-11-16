@@ -10,6 +10,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -19,6 +20,8 @@ import java.util.Date;
  * 心跳检测业务类
  */
 public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
+
+    private Logger logger = Logger.getLogger(HeartBeatClientHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -58,10 +61,10 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        System.out.println("异常退出123:" + cause.getMessage());
+        logger.error("异常退出123:" + cause.getMessage());
         Channel channel = ctx.channel();
         if(channel.isActive()) ctx.close();
-        System.out.println("channel===>" + channel);
+        logger.error("channel===>" + channel);
         ClientChannelUtil.clearServerChannel(channel);
     }
 
