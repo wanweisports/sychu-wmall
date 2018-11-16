@@ -64,6 +64,25 @@
         </view>
     </view>
 
+    <view class="goods-des-info" wx:if="{{goodsList && goodsList.length > 0}}">
+        <view class="label-title">商品推荐</view>
+        <view class="goods-text">
+            <view class="goods-container">
+                <view class="goods-box" wx:for-items="{{goodsList}}" wx:key="{{index}}">
+                   <view class="img-box" bindtap="toDetailsTap" data-id="{{item.cid}}">
+                       <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"></image>
+                   </view>
+                   <view class="goods-brand" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.brandName}}</view>
+                   <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
+                   <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">
+                        <text class="goods-cur">￥{{item.couPrice}}</text>
+                        <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
+                   </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
     <view class="footer-box">
         <view class="shop-syj-btn" bindtap="goShopOrderCart">
             <view class="shop-num">

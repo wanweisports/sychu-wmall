@@ -204,6 +204,76 @@ swiper-item image {
     background-position: 50% 16rpx;
 }
 
+.goods-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: content-box;
+    padding: 24rpx;
+}
+
+.goods-box {
+    width: 339rpx;
+    height: 595rpx;
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 24rpx;
+    position: relative;
+}
+
+.goods-box .img-box {
+    width: 339rpx;
+    height: 452rpx;
+    overflow: hidden;
+}
+
+.goods-box .img-box image {
+    width: auto;
+    max-width: 100%;
+    height: 452rpx;
+    display: block;
+    margin: 0 auto;
+}
+
+.goods-box .goods-brand {
+    width: 280rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 26rpx;
+    padding: 12rpx 0 0 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-title {
+    width: 280rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 24rpx;
+    padding: 8rpx 0 0 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-price {
+    width: 280rpx;
+    overflow: hidden;
+    font-size: 26rpx;
+    font-weight: 700;
+    padding: 14rpx 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
+}
+
 .footer-box .shop-cart-btn .shop-num {
     position: absolute;
     color: #e64340;
