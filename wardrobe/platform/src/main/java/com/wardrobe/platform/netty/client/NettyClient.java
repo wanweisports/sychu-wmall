@@ -80,7 +80,8 @@ public class NettyClient {
             }
         }.start();*/
 
-        NettyClient nettyClient = new NettyClient("192.168.1.198", 4001, null);
+        //NettyClient nettyClient = new NettyClient("192.168.1.198", 4001, null);
+        NettyClient nettyClient = new NettyClient("localhost", 9900, null);
         try {
             nettyClient.clientServer();
         }catch (Exception e){e.printStackTrace();}

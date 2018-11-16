@@ -6,6 +6,7 @@ import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -53,6 +54,15 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
             }
         }
         ReferenceCountUtil.release(msg);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        System.out.println("异常退出123:" + cause.getMessage());
+        Channel channel = ctx.channel();
+        if(channel.isActive()) ctx.close();
+        System.out.println("channel===>" + channel);
+        ClientChannelUtil.clearServerChannel(channel);
     }
 
     /**
