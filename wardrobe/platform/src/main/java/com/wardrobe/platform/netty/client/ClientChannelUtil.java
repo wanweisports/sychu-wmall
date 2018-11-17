@@ -153,7 +153,7 @@ public class ClientChannelUtil {
             long start = System.currentTimeMillis();
             while ((System.currentTimeMillis()-start) <= 5000 && deviceBean.getStatus() == null) { //5秒内轮询等待TCP消息返回
                 try {
-                    logger.info("等待中...");
+                    logger.info("等待中...~" + clientBeans.size());
                     Thread.sleep(200L);
                 } catch (Exception e) {
                     e.printStackTrace();
