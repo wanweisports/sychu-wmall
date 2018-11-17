@@ -144,12 +144,17 @@ swiper-item image {
     margin-bottom: 30rpx;
 }
 
-.des-imgs {
+.goods-des-text {
+    margin-bottom: 20rpx;
+}
+
+.goods-des-images {
     width: 100%;
 }
 
-.des-imgs image {
+.goods-des-images image {
     width: 100%;
+    display: block;
 }
 
 .footer-box {
@@ -197,6 +202,76 @@ swiper-item image {
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAAAXNSR0IArs4c6QAABElJREFUWAntWctrE0EYn5ndLfVR+9CqSGt9HAoGRI8KPqJitFJKYrogePTmwaMe+yd4EooXD55CeyhIaVQoPlCEiE+KVKEtrY9qI9bGGjc7M36TdO1mu7O7gTabgwubmfnm8f2+b38z880Eof/Pfw+UeQAPDd3dUSigY4SwRsYYtmoJIRzyi4ypL5PJU68tedgpKRRoknPaSSnfzjneZr2iDO8ezguJVCq9O2ygln6CEGmwCrJUUfABWV215QAYzfgp5Zzt8GtTrXqiafgeQtjwUogxbubAFa821aorgkilUhsVpWUrpabwOFIUtgXm3xk7CFXNX4/H4z/ssjDyrl4bHR2tn5vLX7MDAg8/RIh/s8uqkVdVlRuGaRCy/pOuR3OugAWQgYGRKwCyuRqggugAWjJFQSNFCkg6fJbIQxGD8whj/KQUMFj0JRRkHkphXhlSwLAo1JSHhR2w+b6XAta03zXnYUrJGyngnp6eBbAp5/GFqlyFF8bGnk5JAQs0tcRjjPnbvr4+5gOY1QwtGDPfCieq4kf2lDwsosxwH4zJ997e7o8ChaeH83mjJjxMCCp61xfw+Pjz72BdIVz/FrUHAyxIDjvMbJiAwWGziUTsq4XBkxKlRuHueJyjVxZYkfoCxtgMk8cm5/Nl50nPVUJYJFYKsDKUB7bi++fP62Wbly/gjo6tsxMT3wTkf6Go4BXExtm1s4Ln4CQ/duFC16RTxz8Qzgp7GWLjyzD5Wi0ZxuhpMnk2bZWrmfpyeAlMGY/hzmJLNUHadQUC7Aw1IZAODbAvh4V1qso+meaynTARm1Kp4X2qqq36dITbJ84Yzep6l+v5MRCH4VCqZrPGVbif0JZhr20OjnB3kslzGaeWQJSIRqPgX1q2HjoHWu0yxupetzEDARYdFeXPI1jZfrsNshYyoMac27iBKGF1HBp63FAoLHZCbLoB7gss8aqmZnGyKLlIpO1NJBLxvJGqSDHcFtXB2lyRwRUpkDSuWOHAwPBBIMgRmIAtQBEDNpEP+TwbuXix66dEh6sYDF5HSFMU5kYExlkHK88cxL3P4vHYc9cOS8KKAA8Opo8Ct044ByQEL1C66YauHw7E8Uwmo01OZi+B0ducY8GW/6S3t+vuSnlJEnjS3b49vAkocNxtIFg6G1T15zG3OjfZ9HR2vztYcfegHEqn0xvc+glZYMB1dagNAEvbM4Z2yZQ45aZJOpwyqwxfEM/PG5utsjOVAnA2XM0y/J/iqVdRiJSqnh3tIA0DzcDEYHaZPQ+feMpe9spT6n19QIgxL+sfGLBYBSBKe+A+EM/V11NJ3coejY3kBcTUv1bWiA2KvPO6OA8MWAyeSJx+IPZ4WIbgGks8mMIKMc65drO7u3uxJPP/jcVivyDAuQV9Z6zWpa9HMjt3bh60ZG6plCtuje0y8TdDa2trvhRn2Gsqy/f392vt7e0kl8uZuq5Tv95/AQmDhsP8JExtAAAAAElFTkSuQmCC") no-repeat center;
     background-size: 48rpx auto;
     background-position: 50% 16rpx;
+}
+
+.goods-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: content-box;
+    padding: 24rpx;
+}
+
+.goods-box {
+    width: 339rpx;
+    height: 595rpx;
+    background-color: #fff;
+    overflow: hidden;
+    margin-bottom: 24rpx;
+    position: relative;
+}
+
+.goods-box .img-box {
+    width: 339rpx;
+    height: 452rpx;
+    overflow: hidden;
+}
+
+.goods-box .img-box image {
+    width: auto;
+    max-width: 100%;
+    height: 452rpx;
+    display: block;
+    margin: 0 auto;
+}
+
+.goods-box .goods-brand {
+    width: 280rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 26rpx;
+    padding: 12rpx 0 0 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-title {
+    width: 280rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 24rpx;
+    padding: 8rpx 0 0 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-price {
+    width: 280rpx;
+    overflow: hidden;
+    font-size: 26rpx;
+    font-weight: 700;
+    padding: 14rpx 0;
+    color: #353535;
+    margin-left: 24rpx;
+}
+
+.goods-box .goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
 }
 
 .footer-box .shop-cart-btn .shop-num {

@@ -17,7 +17,7 @@
         <view class="goods-title">[{{goodsDetail.brandName}}]{{goodsDetail.commName}}</view>
         <view class="goods-price" style="padding-left:35rpx;">
             <text class="goods-cur">￥{{goodsDetail.couPrice}}</text>
-            <text class="goods-old">￥{{goodsDetail.price}}</text>
+            <text class="goods-old" wx:if="{{goodsDetail.couPrice != goodsDetail.price}}">￥{{goodsDetail.price}}</text>
         </view>
 
         <view class="favorite unselected" bindtap="addShopFavorite" wx:if="{{!isFavorite}}">
@@ -37,9 +37,16 @@
     <view class="goods-des-info">
         <view class="label-title">商品介绍</view>
         <view class="goods-text">
-            <block wx:for="{{goodsDetail.desc}}" wx:key="*this">
-                <view>{{item}}</view>
-            </block>
+            <view class="goods-des-text">
+                <block wx:for="{{goodsDetail.desc}}" wx:key="*this">
+                    <view>{{item}}</view>
+                </block>
+            </view>
+            <view class="goods-des-images" wx:if="{{goodsDetail.detailResources.length > 0}}">
+                <block wx:for="{{goodsDetail.detailResources}}" wx:key="*this">
+                    <image src="{{item}}" mode="aspectFit" lazy-load="true" />
+                </block>
+            </view>
         </view>
     </view>
     <view class="goods-des-info">
@@ -54,6 +61,25 @@
         <view class="goods-text">
             <view>衣否支持7天无理由退换货。</view>
             <view>详情请关注“衣否”公众号，联系客服。</view>
+        </view>
+    </view>
+
+    <view class="goods-des-info" wx:if="{{goodsList && goodsList.length > 0}}">
+        <view class="label-title">商品推荐</view>
+        <view class="goods-text">
+            <view class="goods-container">
+                <view class="goods-box" wx:for-items="{{goodsList}}" wx:key="{{index}}">
+                   <view class="img-box" bindtap="toDetailsTap" data-id="{{item.cid}}">
+                       <image src="{{item.resourcePath}}" class="image" mode="aspectFill" lazy-load="true"></image>
+                   </view>
+                   <view class="goods-brand" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.brandName}}</view>
+                   <view class="goods-title" bindtap="toDetailsTap" data-id="{{item.cid}}">{{item.commName}}</view>
+                   <view class="goods-price" bindtap="toDetailsTap" data-id="{{item.cid}}">
+                        <text class="goods-cur">￥{{item.couPrice}}</text>
+                        <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
+                   </view>
+                </view>
+            </view>
         </view>
     </view>
 
@@ -72,6 +98,10 @@
         </view>
         <view class="now-buy" bindtap="toAddShopOrderCart">加入配衣间</view>
         <view class="join-shop-cart" bindtap="toAddShopCart">加入购物车</view>
+    </view>
+
+    <view class="my-contact detail">
+        <contact-button type="default-light" size="40" session-from="page:detail;cid:{{goodId}}"></contact-button>
     </view>
 
     <view class="show-popup" hidden="{{hideShopPopup}}">

@@ -333,6 +333,43 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         $this.nextAll(".product-image-file").val("");
     });
 
+    /* detail img *************************************************/
+    var $fileDetailImages = $(".product-detail-file");
+    var resourceDetailIds = [];
+    $fileDetailImages.on("change", function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var file = $this[0].files[0];
+
+        if ($this.prevAll(".product-detail-remove").attr("data-id")) {
+            resourceDetailIds.push($this.prevAll(".product-detail-remove").attr("data-id"));
+            $this.prevAll(".product-detail-remove").removeAttr("data-id");
+        }
+
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+            if (fileReader.readyState == fileReader.DONE) {
+                $this.prevAll(".product-detail-show").attr('src', fileReader.result);
+                $this.prevAll(".product-detail-remove").show();
+            }
+        };
+        fileReader.readAsDataURL(file);
+    });
+
+    var $fileDetailImagesRemove = $(".product-detail-remove");
+    $fileDetailImagesRemove.on("click", function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        if (!!$this.attr("data-id")) {
+            resourceDetailIds.push($this.attr("data-id"));
+        }
+        $this.hide();
+        $this.nextAll(".product-detail-show").attr('src', "/Content/images/upload.png");
+        $this.nextAll(".product-detail-file").val("");
+    });
+
     /* save *************************************************/
     // 表单校验配置
     $(document).ready(function () {
@@ -386,6 +423,7 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         e.preventDefault();
 
         $("[name='resourceIds']").val(resourceIds.join(","));
+        $("[name='resourceDetailIds']").val(resourceDetailIds.join(","));
 
         var $form = $("#product_form");
         var conditions = $form.serializeArray();

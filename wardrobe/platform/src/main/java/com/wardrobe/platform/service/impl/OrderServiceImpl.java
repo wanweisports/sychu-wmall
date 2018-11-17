@@ -809,11 +809,15 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         List<UserOrderDetail> userOrderDetails = userOrderInfo.getUserOrderDetails();
         userOrderDetails.parallelStream().forEach(userOrderDetail -> {
             userOrderDetail.setItemImg(resourceService.parseImgPath(userOrderDetail.getItemImg()));
+            CommodityInfo commodityInfo = commodityService.getCommodityInfo(userOrderDetail.getCid());
+            if(commodityInfo != null){
+                userOrderDetail.setCommNo(commodityInfo.getCommNo());
+            }
         });
         userOrderInfo.setPayStatus(dictService.getDictValue(IDBConstant.ORDER_PAY_STATUS, userOrderInfo.getPayStatus()));
         userOrderInfo.setStatus(dictService.getDictValue(IDBConstant.ORDER_STATUS, userOrderInfo.getStatus()));
 
-        Map<String, Object> data = new HashMap<>(2, 1);
+        Map<String, Object> data = new HashMap<>(3, 1);
         data.put("order", userOrderInfo);
         data.put("couponDesc", userCouponService.getUserCouponDescIn(userOrderInfo.getCpid()));
         return data;
@@ -825,6 +829,10 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         List<ReserveOrderDetail> userOrderDetails = userOrderInfo.getReserveOrderDetails();
         userOrderDetails.parallelStream().forEach(userOrderDetail -> {
             userOrderDetail.setResItemImg(resourceService.parseImgPath(userOrderDetail.getResItemImg()));
+            CommodityInfo commodityInfo = commodityService.getCommodityInfo(userOrderDetail.getCid());
+            if(commodityInfo != null){
+                userOrderDetail.setCommNo(commodityInfo.getCommNo());
+            }
         });
         userOrderInfo.setStatus(dictService.getDictValue(IDBConstant.RESERVE_ORDER_STATUS, userOrderInfo.getStatus()));
 

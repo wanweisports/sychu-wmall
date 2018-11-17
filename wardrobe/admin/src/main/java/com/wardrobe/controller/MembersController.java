@@ -85,7 +85,9 @@ public class MembersController extends BaseController {
             model.addAttribute("nickname", userInfo.getNickname());
             model.addAttribute("mobile", userInfo.getMobile());
         }
+        userTransactionsInputView.setIsWxType(true);
         super.setPageInfo(model, userTransactionsService.getUserTransactionsListIn(userTransactionsInputView), "/admin/members/transactions/log", userTransactionsInputView);
+        model.addAllAttributes(userTransactionsService.countTransactions(userTransactionsInputView));
         return "Members/TransactionsLog";
     }
 
@@ -111,16 +113,9 @@ public class MembersController extends BaseController {
     @Desc("删除充值")
     @ResponseBody
     @RequestMapping(value = "/recharge/deleteRecharge")
-    public ResponseBean deleteRecharge(int dictId){
+    public ResponseBean deleteRecharge(int dictId) {
         dictService.deleteDict(dictId);
         return new ResponseBean(true);
-    }
-
-    @Desc("额度冲抵")
-    @NotProtected
-    @RequestMapping(value = "/data/against")
-    public String renderMembersDataAgainst(Model model) {
-        return "Members/DataAgainst";
     }
 
 }

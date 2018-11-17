@@ -4,10 +4,7 @@ import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.po.UserTransactions;
-import com.wardrobe.common.util.Arith;
-import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.common.util.SQLUtil;
-import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.UserTransactionsInputView;
 import com.wardrobe.platform.service.IUserTransactionsService;
 import org.springframework.stereotype.Service;
@@ -46,6 +43,8 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         String nickname = userTransactionsInputView.getNickname();
         String mobile = userTransactionsInputView.getMobile();
         String type = userTransactionsInputView.getType();
+        boolean wxType = userTransactionsInputView.isWxType();
+        String serviceType = userTransactionsInputView.getServiceType();
 
         StringBuilder headSql = new StringBuilder("SELECT ut.*, ui.nickname, ui.mobile");
         StringBuilder bodySql = new StringBuilder(" FROM user_transactions ut, user_info ui");
@@ -66,7 +65,12 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
                 whereSql.append(" AND ut.type = :type");
             }
         }
-        whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
+        if(!wxType) {
+            whereSql.append(" AND ut.type != '").append(IDBConstant.TRANSACTIONS_TYPE_WX).append("'"); //小程序用户不查询微信支付的流水
+        }
+        if(StrUtil.isNotBlank(serviceType)){
+            whereSql.append(" AND ut.serviceType = :serviceType");
+        }
         whereSql.append(" ORDER BY ut.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, userTransactionsInputView);
     }
@@ -112,6 +116,37 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
     @Override
     public PageBean getUserTransactionsListIn(UserTransactionsInputView userTransactionsInputView){
         return getUserTransactionsList(userTransactionsInputView);
+    }
+
+    @Override
+    public Map<String, Object> countTransactions(UserTransactionsInputView userTransactionsInputView){
+        Integer uid = userTransactionsInputView.getUid();
+        String nickname = userTransactionsInputView.getNickname();
+        String mobile = userTransactionsInputView.getMobile();
+        StringBuilder sql = new StringBuilder("SELECT SUM(ut.price) FROM user_transactions ut, user_info ui WHERE ut.uid = ui.uid AND ut.serviceType = :serviceType");
+        if(uid != null){
+            sql.append(" AND ut.uid = :uid");
+        }
+        if(StrUtil.isNotBlank(nickname)){
+            sql.append(" AND ui.nickname = :nickname");
+        }
+        if(StrUtil.isNotBlank(mobile)){
+            sql.append(" AND ui.mobile = :mobile");
+        }
+        userTransactionsInputView.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ);
+        Map<String, Object> paraMap = JsonUtils.fromJson(userTransactionsInputView);
+        Number czPriceSum = baseDao.getUniqueResult(sql.toString(), paraMap);
+
+        sql.append(" AND ut.type != :type");
+        userTransactionsInputView.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF);
+        paraMap.put("type", IDBConstant.TRANSACTIONS_TYPE_YCOID);
+        Number zfPriceSum = baseDao.getUniqueResult(sql.toString(), paraMap);
+
+
+        Map<String, Object> returnMap = new HashMap<>(2, 1);
+        returnMap.put("czPriceSum", czPriceSum != null ? czPriceSum.doubleValue() : 0);
+        returnMap.put("zfPriceSum", zfPriceSum != null ? zfPriceSum.doubleValue() : 0);
+        return returnMap;
     }
 
 }

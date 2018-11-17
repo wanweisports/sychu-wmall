@@ -364,6 +364,33 @@ require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'fromToJson', 'jque
         $this.nextAll(".product-image-file").val("");
     });
 
+    /* detail img *************************************************/
+    var $fileDetailImages = $(".product-detail-file");
+    $fileDetailImages.on("change", function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var file = $this[0].files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+            if (fileReader.readyState == fileReader.DONE) {
+                $this.prevAll(".product-detail-show").attr('src', fileReader.result);
+                $this.prevAll(".product-detail-remove").show();
+            }
+        };
+        fileReader.readAsDataURL(file);
+    });
+
+    var $fileDetailImagesRemove = $(".product-detail-remove");
+    $fileDetailImagesRemove.on("click", function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        $this.hide();
+        $this.nextAll(".product-detail-show").attr('src', "/Content/images/upload.png");
+        $this.nextAll(".product-detail-file").val("");
+    });
+
     /* save *************************************************/
     // 表单校验配置
     $(document).ready(function () {

@@ -35,7 +35,9 @@ Page({
 
         goodId: 0,
         goodDetail: {},
-        goodDetailSize: {}
+        goodDetailSize: {},
+
+        goodsList: []
     },
     onShareAppMessage: function () {
         return app.onShareAppMessage({
@@ -59,6 +61,30 @@ Page({
     bindColorTap: function (e) {
         app.redirect('/pages/goods/details/index?id=' + e.currentTarget.dataset.id, "redirectTo");
     },
+    statGoodsCount: function () {
+        let content = this;
+
+        app.wxRequest("/commodity/clickRate", {cid: content.data.goodId}, function (res) {});
+    },
+    toDetailsTap: function(e) {
+        app.redirect("/pages/goods/details/index?id=" + e.currentTarget.dataset.id);
+    },
+    getGoodsList: function () {
+        let content = this;
+
+        app.wxRequest("/commodity/recommendList", {cid: content.data.goodId}, function (res) {
+            if (res.code == 1) {
+                content.setData({
+                    goodsList: data.list
+                });
+            }
+            else {
+                content.setData({
+                    goodsList: []
+                });
+            }
+        });
+    },
     getGoodsDetail: function () {
         let content = this;
 
@@ -73,6 +99,10 @@ Page({
                 }
 
                 res.data.desc = res.data.desc.split(/\n/);
+
+                if (!res.data.detailResources || res.data.detailResources.length == 0) {
+                    res.data.detailResources = [];
+                }
 
                 content.setData({
                     goodsDetail: res.data,
@@ -131,6 +161,7 @@ Page({
         });
 
         content.getGoodsDetail();
+        content.statGoodsCount();
     },
 
     getGoodsDetailSize: function (sid) {

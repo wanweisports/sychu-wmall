@@ -6,9 +6,11 @@ import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.netty.client.bean.DeviceBean;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -18,6 +20,8 @@ import java.util.Date;
  * 心跳检测业务类
  */
 public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
+
+    private Logger logger = Logger.getLogger(HeartBeatClientHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -34,25 +38,39 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //super.channelRead(ctx, msg); //不能打开，否则ref=0（被此方法读取过），则报错
-        System.out.println("===channelRead===");
-
-        System.out.println("Heartbeat-client:" + msg);
-        String message = getMessage((ByteBuf) msg);
-        System.out.println("message-client:" + message);
-        if(message.equals("Heartbeat")){
-            ctx.write("has read message from server");
-            ctx.flush();
-        }else{ //获取设备状态
-            if(message != null && message.contains("Relay")){
-                //0：状态  1：设备号[1-8]
-                String[] statusName = message.split(" ");
-                SysDeviceControl deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
-                if(deviceBean != null){
-                    deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
+        try{
+            logger.info("===channelRead===");
+            logger.info("Heartbeat-client:" + msg);
+            String message = getMessage((ByteBuf) msg);
+            logger.info("message-client:" + message);
+            if(message.equals("Heartbeat")){
+                ctx.write("has read message from server");
+                ctx.flush();
+            }else{ //获取设备状态
+                if(message != null && message.contains("Relay")){
+                    //0：状态  1：设备号[1-8]
+                    String[] statusName = message.split(" ");
+                    SysDeviceControl deviceBean = ClientChannelUtil.getDeviceBean(ctx.channel(), StrUtil.objToInt(statusName[1]));
+                    if(deviceBean != null){
+                        deviceBean.setStatus(statusName[0].replace("\r\n", StrUtil.EMPTY));
+                    }
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("channelRead===>" + e.getMessage());
+        }finally {
+            ReferenceCountUtil.release(msg);
         }
-        ReferenceCountUtil.release(msg);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        logger.error("异常退出123:" + cause.getMessage());
+        Channel channel = ctx.channel();
+        if(channel.isActive()) ctx.close();
+        logger.error("channel===>" + channel);
+        ClientChannelUtil.clearServerChannel(channel);
     }
 
     /**

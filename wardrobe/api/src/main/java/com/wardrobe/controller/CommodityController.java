@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -101,6 +103,15 @@ public class CommodityController extends BaseController {
     public ResponseBean clickRate(int cid){
         commodityService.updateClickRate(cid);
         return new ResponseBean(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("recommendList")
+    public ResponseBean getRecommendList(int cid){
+        List<Map<String, Object>> recommendList = commodityService.getRecommendList(cid);
+        Map data = new HashMap<>(1, 1);
+        data.put("list", recommendList);
+        return new ResponseBean(data);
     }
 
 }

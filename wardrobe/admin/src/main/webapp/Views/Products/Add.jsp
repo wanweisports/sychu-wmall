@@ -32,6 +32,26 @@
             width: 100px;
             height: 100px;
         }
+        .product-detail-remove {
+            position: absolute;
+            right: -.75rem;
+            top: -.75rem;
+            border-radius: 1rem;
+            z-index: 100;
+            display: none;
+        }
+        .product-detail-file {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+        .product-detail-show {
+            width: 100px;
+            height: 100px;
+        }
     </style>
 </layout:override>
 
@@ -80,13 +100,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-2 form-control-label" for="p_productDesc">
-                                        <span class="text-danger">*</span> 商品描述
+                                    <label class="col-md-2 form-control-label" for="p_productDesc">商品描述
                                     </label>
                                     <div class="col-md-8">
                                         <textarea class="form-control" id="p_productDesc" placeholder="请输入商品描述" name="productDesc"
-                                               data-val="true" data-val-required="商品描述不能为空" autocomplete="off"></textarea>
-                                        <div data-valmsg-for="productDesc" data-valmsg-replace="true"></div>
+                                                  autocomplete="off"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -222,6 +240,58 @@
                                                 <input type="file" class="product-image-file" name="file_4"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
                                             </div>
                                             <p>轮播图4</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 form-control-label">
+                                        <span class="text-danger">*</span> 详情图片
+                                    </label>
+                                    <div class="col-md-10 text-center">
+                                        <div class="pull-left mr-4">
+                                            <div style="width: 100%; position: relative">
+                                                <button class="btn btn-danger btn-sm product-detail-remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                                <img class="product-detail-show" src="/Content/images/upload.png">
+                                                <input type="file" class="product-detail-file" name="file_detail_0"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                            </div>
+                                        </div>
+                                        <div class="pull-left mr-4">
+                                            <div style="width: 100%; position: relative">
+                                                <button class="btn btn-danger btn-sm product-detail-remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                                <img class="product-detail-show" src="/Content/images/upload.png">
+                                                <input type="file" class="product-detail-file" name="file_detail_1"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                            </div>
+                                        </div>
+                                        <div class="pull-left mr-4">
+                                            <div style="width: 100%; position: relative">
+                                                <button class="btn btn-danger btn-sm product-detail-remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                                <img class="product-detail-show" src="/Content/images/upload.png">
+                                                <input type="file" class="product-detail-file" name="file_detail_2"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                            </div>
+                                        </div>
+                                        <div class="pull-left mr-4">
+                                            <div style="width: 100%; position: relative">
+                                                <button class="btn btn-danger btn-sm product-detail-remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                                <img class="product-detail-show" src="/Content/images/upload.png">
+                                                <input type="file" class="product-detail-file" name="file_detail_3"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                            </div>
+                                        </div>
+                                        <div class="pull-left mr-4">
+                                            <div style="width: 100%; position: relative">
+                                                <button class="btn btn-danger btn-sm product-detail-remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                                <img class="product-detail-show" src="/Content/images/upload.png">
+                                                <input type="file" class="product-detail-file" name="file_detail_4"> <%--此处name不能和其他file的name相同，封面图后缀固定写0--%>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

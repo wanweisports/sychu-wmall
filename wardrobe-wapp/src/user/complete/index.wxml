@@ -1,7 +1,5 @@
 <view class="page">
     <view class="page__bd">
-        <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{showTopTips}}</view>
-
         <view class="weui-cells__tips">请准确填写生日信息以便会员享受生日福利：</view>
 
         <view class="weui-cells__title">基本信息</view>
@@ -73,7 +71,6 @@
                 </view>
             </label>
         </checkbox-group>
-
 
         <view class="weui-btn-area">
             <button class="weui-btn" type="primary" bindtap="userComplete">进入衣否</button>
