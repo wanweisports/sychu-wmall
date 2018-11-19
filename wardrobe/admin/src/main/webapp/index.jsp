@@ -1,7 +1,7 @@
 <html>
 <body>
 <script>
-    window.location.href = "/admin/dashboard/index";
+    window.location.href = "/admin/products/list?status=1";
 </script>
 </body>
 </html>

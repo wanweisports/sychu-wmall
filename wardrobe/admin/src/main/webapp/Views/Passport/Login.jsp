@@ -87,16 +87,16 @@
                             </form>
                         </div>
                     </div>
-                    <%--<div class="card py-5 d-md-down-none" style="width:44%">
+                    <div class="card py-5 d-md-down-none" style="width:44%">
                         <div class="card-block text-center">
-                            <div style="width: 60%; margin: 0 auto">
-                                <img src="/Content/images/logo.png?v=${static_resource_version}" style="width: 100%;">
-                                <p class="text-muted mt-2">您还没有账户吗？</p>
-                                &lt;%&ndash;<a href="/admin/passport/register" class="btn btn-primary active">立即注册!</a>&ndash;%&gt;
-                                <p class="text-muted mt-2">请联系管理员，为您分配账号。</p>
-                            </div>
+                            <%--<div style="width: 60%; margin: 0 auto">--%>
+                                <%--<img src="/Content/images/logo.png?v=${static_resource_version}" style="width: 100%;">--%>
+                                <%--<p class="text-muted mt-2">您还没有账户吗？</p>--%>
+                                <%--&lt;%&ndash;<a href="/admin/passport/register" class="btn btn-primary active">立即注册!</a>&ndash;%&gt;--%>
+                                <%--<p class="text-muted mt-2">请联系管理员，为您分配账号。</p>--%>
+                            <%--</div>--%>
                         </div>
-                    </div>--%>
+                    </div>
                 </div>
             </div>
         </div>

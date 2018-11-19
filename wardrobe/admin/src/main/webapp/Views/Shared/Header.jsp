@@ -8,18 +8,21 @@
         <li class="nav-item">
             <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;">☰</a>
         </li>
+        <%--<li class="nav-item px-3">--%>
+            <%--<a class="nav-link" href="/admin/dashboard/index">商城首页</a>--%>
+        <%--</li>--%>
         <li class="nav-item px-3">
-            <a class="nav-link" href="/admin/dashboard/index">商城首页</a>
+            <a class="nav-link" href="/admin/products/list?status=1">商品列表</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link" href="/admin/venue/coaches">商品列表</a>
+            <a class="nav-link" href="/admin/orders/list">订单列表</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link" href="/admin/class/list">会员列表</a>
+            <a class="nav-link" href="/admin/members/list">会员列表</a>
         </li>
-        <li class="nav-item px-3">
-            <a class="nav-link" href="/admin/data/summary">收支统计</a>
-        </li>
+        <%--<li class="nav-item px-3">--%>
+            <%--<a class="nav-link" href="/admin/data/summary">收支统计</a>--%>
+        <%--</li>--%>
     </ul>
     <ul class="nav navbar-nav ml-auto">
         <li class="nav-item d-md-down-none" style="display: none">
@@ -28,7 +31,7 @@
                 <span class="badge badge-pill badge-danger">5</span>
             </a>
         </li>
-        <li class="nav-item d-md-down-none pr-4">
+        <li class="nav-item d-md-down-none pr-4" style="display: none">
             <a class="nav-link" href="/admin/helper/index">
                 <i class="icon-docs"></i> 操作指南
             </a>

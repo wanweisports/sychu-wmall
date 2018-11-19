@@ -200,15 +200,15 @@
     <!-- Breadcrumb Menu-->
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <a class="btn btn-secondary" href="javascript:;" data-target="#contact_online" data-toggle="modal">
-                <i class="icon-speech"></i> &nbsp;联系我们
+            <%--<a class="btn btn-secondary" href="javascript:;" data-target="#contact_online" data-toggle="modal">--%>
+                <%--<i class="icon-speech"></i> &nbsp;联系我们--%>
+            <%--</a>--%>
+            <a class="btn btn-secondary" href="/admin/wardrobe/dashboard">
+                <i class="icon-home"></i> &nbsp;运行面板
             </a>
-            <a class="btn btn-secondary" href="/admin/dashboard/index">
-                <i class="icon-home"></i> &nbsp;商城首页
-            </a>
-            <a class="btn btn-secondary" href="/admin/settings/log">
-                <i class="icon-info"></i> &nbsp;系统日志
-            </a>
+            <%--<a class="btn btn-secondary" href="/admin/settings/log">--%>
+                <%--<i class="icon-info"></i> &nbsp;系统日志--%>
+            <%--</a>--%>
         </div>
     </li>
 </ol>
