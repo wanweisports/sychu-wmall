@@ -28,6 +28,8 @@ requirejs.config({
 require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'payment', 'jquery.form'], function ($, jqueryAlert) {
     'use strict';
 
+    $(".table-window").width($(window).width() - 270);
+
     $.postJSON = function(url, data, callback) {
         return $.ajax({
             'type' : 'POST',

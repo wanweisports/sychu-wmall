@@ -7,11 +7,11 @@
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/dashboard/index">
-                    <i class="icon-home"></i> 商城首页
-                </a>
-            </li>
+            <%--<li class="nav-item">--%>
+                <%--<a class="nav-link" href="/admin/dashboard/index">--%>
+                    <%--<i class="icon-home"></i> 商城首页--%>
+                <%--</a>--%>
+            <%--</li>--%>
 
             <li class="nav-item nav-dropdown <c:if test="${param.menu == 'products'}">open</c:if>">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;">
@@ -138,6 +138,7 @@
                 </ul>
             </li>
 
+                <!---
             <li class="nav-item nav-dropdown <c:if test="${param.menu == 'active'}">open</c:if>">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;">
                     <i class="icon-badge"></i> 促销管理
@@ -216,6 +217,7 @@
                     </li>
                 </ul>
             </li>
+            --->
         </ul>
     </nav>
 </div>

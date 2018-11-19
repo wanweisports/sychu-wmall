@@ -13,6 +13,7 @@
         .products-list td {
             padding: 0.3rem 0.75rem;
             min-width: 5rem;
+            word-break: keep-all;
         }
         .products-list td input.set-seq-value {
             width: 3rem;
@@ -20,6 +21,12 @@
         }
         .img-rounded {
             height: 2rem;
+        }
+        .products-list td .products-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 20rem;
         }
     </style>
 </layout:override>
@@ -99,64 +106,64 @@
                         </div>
                         <div class="card-footer text-right"></div>
                         <div class="card-block">
-                            <table class="table table-striped table-sm table-bordered products-list">
-                                <thead>
-                                <tr>
-                                    <th>商品ID</th>
-                                    <th>编号</th>
-                                    <th>商品图片</th>
-                                    <th>商品名称</th>
-                                    <th>商品品类</th>
-                                    <th>价格</th>
-                                    <th>优惠价</th>
-                                    <th>已售</th>
-                                    <th>点击量</th>
-                                    <th>已收藏</th>
-                                    <th>优先级</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="c" items="${page.list}" varStatus="status">
-                                <tr data-id="">
-                                    <td>${c.cid}</td>
-                                    <td>${c.commNo}</td>
-                                    <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
-                                    <td>
-                                        <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
-                                    </td>
-                                    <td>${c.styleName}</td>
-                                    <td>￥${c.price}</td>
-                                    <td>￥${c.couPrice}</td>
-                                    <%--<td>￥399</td>--%>
-                                    <td>${c.saleCount}件</td>
-                                    <td>${c.clickRate}次</td>
-                                    <td>${c.collectionCount}人</td>
-                                    <td>
-                                        <input type="text" class="set-seq-value" value="${c.seqNo}" data-id="${c.cid}" />
-                                    </td>
-                                    <%--<td>--%>
-                                        <%--<span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>--%>
-                                    <%--</td>--%>
-                                    <td>
-                                        <c:if test="${c.status=='1'}">
-                                            <a href="javascript:;" class="btn btn-sm btn-danger js-status-down" title="下架" data-id="${c.cid}">
-                                                <i class="fa fa-level-down"></i> 下架
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${c.status!='1'}">
-                                            <a href="javascript:;" class="btn btn-sm btn-primary js-status-top" title="上架" data-id="${c.cid}">
-                                                <i class="fa fa-level-up"></i> 上架
-                                            </a>
-                                        </c:if>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-status-del" title="删除" data-id="${c.cid}">
-                                            <i class="fa fa-remove"></i> 删除
-                                        </a>
-                                    </td>
-                                </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                            <div class="table-window" style="overflow:auto;">
+                                <table class="table table-striped table-sm table-bordered products-list" style="width: 88rem;">
+                                    <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>商品图片</th>
+                                        <th>商品名称</th>
+                                        <th>商品品类</th>
+                                        <th>价格</th>
+                                        <th>优惠价</th>
+                                        <th>已售</th>
+                                        <th>点击量</th>
+                                        <th>已收藏</th>
+                                        <th>优先级</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="c" items="${page.list}" varStatus="status">
+                                        <tr data-id="">
+                                            <td>${c.commNo}</td>
+                                            <td><img src="${c.resourcePath}" alt="${c.commName}" class="img-rounded"></td>
+                                            <td>
+                                                <a href="/admin/products/detail?cid=${c.cid}" class="products-name" title="${c.commName}">${c.commName}</a>
+                                            </td>
+                                            <td>${c.styleName}</td>
+                                            <td>￥${c.price}</td>
+                                            <td>￥${c.couPrice}</td>
+                                                <%--<td>￥399</td>--%>
+                                            <td>${c.saleCount}件</td>
+                                            <td>${c.clickRate}次</td>
+                                            <td>${c.collectionCount}人</td>
+                                            <td>
+                                                <input type="text" class="set-seq-value" value="${c.seqNo}" data-id="${c.cid}" />
+                                            </td>
+                                                <%--<td>--%>
+                                                <%--<span class="badge <c:if test="${c.status=='1'}">badge-success</c:if><c:if test="${c.status!='1'}">badge-danger</c:if>">${c.statusName}</span>--%>
+                                                <%--</td>--%>
+                                            <td>
+                                                <c:if test="${c.status=='1'}">
+                                                    <a href="javascript:;" class="btn btn-sm btn-danger js-status-down" title="下架" data-id="${c.cid}">
+                                                        <i class="fa fa-level-down"></i> 下架
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${c.status!='1'}">
+                                                    <a href="javascript:;" class="btn btn-sm btn-primary js-status-top" title="上架" data-id="${c.cid}">
+                                                        <i class="fa fa-level-up"></i> 上架
+                                                    </a>
+                                                </c:if>
+                                                <a href="javascript:;" class="btn btn-sm btn-danger product-users-cancel js-status-del" title="删除" data-id="${c.cid}">
+                                                    <i class="fa fa-remove"></i> 删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div>
                                 <%@ include file="../Shared/Pagination.jsp" %>
                             </div>
