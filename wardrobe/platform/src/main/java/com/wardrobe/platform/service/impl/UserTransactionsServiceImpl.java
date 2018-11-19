@@ -138,7 +138,7 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         Number czPriceSum = baseDao.getUniqueResult(sql.toString(), paraMap);
 
         sql.append(" AND ut.type != :type");
-        userTransactionsInputView.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF);
+        paraMap.put("serviceType", IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF);
         paraMap.put("type", IDBConstant.TRANSACTIONS_TYPE_YCOID);
         Number zfPriceSum = baseDao.getUniqueResult(sql.toString(), paraMap);
 
