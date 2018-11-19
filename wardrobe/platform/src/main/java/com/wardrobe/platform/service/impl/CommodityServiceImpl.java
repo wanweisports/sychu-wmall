@@ -12,10 +12,7 @@ import com.wardrobe.common.util.FileUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.CommodityInputView;
-import com.wardrobe.platform.service.ICommodityService;
-import com.wardrobe.platform.service.IResourceService;
-import com.wardrobe.platform.service.IUserService;
-import com.wardrobe.platform.service.IXlsExportImportService;
+import com.wardrobe.platform.service.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -46,6 +43,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
 
     @Autowired
     private IXlsExportImportService xlsExportImportService;
+
+    @Autowired
+    private IOperatorService operatorService;
 
     @Override
     public PageBean getCommodityList(CommodityInputView commodityInputView){
@@ -514,15 +514,21 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         PageBean pageBean = getStocks(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
         list.stream().forEach(commodity -> {
+            String type = StrUtil.objToStr(commodity.get("type"));
+            Integer operatorId = StrUtil.objToInt(commodity.get("operatorId"));
             commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
-            commodity.put("typeName", dictService.getDict(IDBConstant.COMM_STOCK_TYPE, StrUtil.objToStr(commodity.get("type"))).getDictValue());
+            commodity.put("typeName", dictService.getDict(IDBConstant.COMM_STOCK_TYPE, type).getDictValue());
+            if(IDBConstant.COMM_STOCK_TYPE_SALE.equals(type) && operatorId != null) { //商品出售
+                UserInfo userInfo = userService.getUserInfo(operatorId);
+                commodity.put("nickname", userInfo != null ? userInfo.getNickname() : null);
+            }
         });
         return pageBean;
     }
 
     private PageBean getStocks(CommodityInputView commodityInputView){
         String type = commodityInputView.getType();
-        Integer commId = commodityInputView.getCommId();
+        Integer sid = commodityInputView.getSid();
         String startTime = commodityInputView.getStartTime();
         String endTime = commodityInputView.getEndTime();
 
@@ -532,18 +538,120 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
         if(StrUtil.isNotBlank(type)){
             whereSql.append(" AND ct.type = :type");
         }
-        /*if(commId != null){
-            whereSql.append(" AND ci.cid = :commId");
-        }*/
+        if(sid != null){
+            whereSql.append(" AND ct.sid = :sid");
+        }
         if(StrUtil.isNotBlank(startTime)){
             whereSql.append(" AND ct.createTime >= :startTime");
+            commodityInputView.setStartTime(startTime + IPlatformConstant.time00);
         }
         if(StrUtil.isNotBlank(endTime)){
             whereSql.append(" AND ct.createTime <= :endTime");
+            commodityInputView.setEndTime(endTime + IPlatformConstant.time24);
         }
         whereSql.append(" ORDER BY ct.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, commodityInputView);
     }
+
+    @Override
+    public Map<String, Object> getStocksSumIn(CommodityInputView commodityInputView){
+        PageBean pageBean = getStocksSum(commodityInputView);
+        List<Map<String, Object>> list = pageBean.getList();
+        list.stream().forEach(commodity -> {
+            commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
+        });
+
+        Map<String, Object> returnMap = new HashMap<>(7, 1);
+        returnMap.put("pageBean", pageBean);
+        returnMap.put("commodityCountSum", getCommodityStockNum(commodityInputView));
+
+        commodityInputView.setType(IDBConstant.COMM_STOCK_TYPE_ADD);
+        returnMap.put("commodityInSum", getStockNum(commodityInputView));
+
+        commodityInputView.setType(IDBConstant.COMM_STOCK_TYPE_SUB);
+        returnMap.put("commodityOutSum", getStockNum(commodityInputView));
+
+        commodityInputView.setType(IDBConstant.COMM_STOCK_TYPE_SALE);
+        returnMap.put("commoditySellSum", getStockNum(commodityInputView));
+
+        returnMap.put("commodityStockSum", getSurplusStockNum(commodityInputView));
+        return returnMap;
+    }
+
+    private PageBean getStocksSum(CommodityInputView commodityInputView){
+        String startTime = commodityInputView.getStartTime();
+        String endTime = commodityInputView.getEndTime();
+
+        StringBuilder headSql = new StringBuilder("SELECT any_value(ci.cid) cid, any_value(ct.sid) sid, any_value(ci.commName) commName, any_value(cs.size) size, any_value(cc.colorName) colorName, SUM(ct.num) numSum, any_value(cs.stock) stock");
+        headSql.append(" ,(SELECT IFNULL(SUM(ct1.num),0) FROM commodity_stock ct1 WHERE ct1.sid = ct.sid AND ct1.type = '").append(IDBConstant.COMM_STOCK_TYPE_ADD).append("') in_");
+        headSql.append(" ,(SELECT IFNULL(SUM(ct2.num),0) FROM commodity_stock ct2 WHERE ct2.sid = ct.sid AND ct2.type = '").append(IDBConstant.COMM_STOCK_TYPE_SUB).append("') out_");
+        headSql.append(" ,(SELECT IFNULL(SUM(ct3.num),0) FROM commodity_stock ct3 WHERE ct3.sid = ct.sid AND ct3.type = '").append(IDBConstant.COMM_STOCK_TYPE_SALE).append("') sell_");
+        StringBuilder bodySql = new StringBuilder(" FROM commodity_stock ct, commodity_size cs, commodity_color cc, commodity_info ci");
+        StringBuilder whereSql = new StringBuilder(" WHERE ct.sid = cs.sid AND cs.cid = cc.cid AND cs.cid = ci.cid");
+        if(StrUtil.isNotBlank(startTime)){
+            whereSql.append(" AND ct.createTime >= :startTime");
+            commodityInputView.setStartTime(startTime + IPlatformConstant.time00);
+        }
+        if(StrUtil.isNotBlank(endTime)){
+            whereSql.append(" AND ct.createTime <= :endTime");
+            commodityInputView.setEndTime(endTime + IPlatformConstant.time24);
+        }
+        whereSql.append(" GROUP BY ct.sid");
+        whereSql.append(" ORDER BY any_value(ct.createTime) DESC");
+
+        return super.getPageBean(headSql, bodySql, whereSql, commodityInputView, true);
+    }
+
+    private int getStockNum(CommodityInputView commodityInputView){
+        String startTime = commodityInputView.getStartTime();
+        String endTime = commodityInputView.getEndTime();
+        StringBuilder sql = new StringBuilder("SELECT IFNULL(SUM(ct.num),0) FROM commodity_stock ct WHERE ct.type = :type");
+        if(StrUtil.isNotBlank(startTime)){
+            sql.append(" AND ct.createTime >= :startTime");
+        }
+        if(StrUtil.isNotBlank(endTime)){
+            sql.append(" AND ct.createTime <= :endTime");
+        }
+
+        return baseDao.getAllCount(sql.toString(), JsonUtils.fromJson(commodityInputView));
+    }
+
+    private int getCommodityStockNum(CommodityInputView commodityInputView){
+        String startTime = commodityInputView.getStartTime();
+        String endTime = commodityInputView.getEndTime();
+        StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT ct.sid) commodityCount FROM commodity_info ci, commodity_size cs, commodity_stock ct");
+        sql.append(" WHERE ci.cid = cs.cid AND cs.sid = ct.sid");
+        if(StrUtil.isNotBlank(startTime)){
+            sql.append(" AND ct.createTime >= :startTime");
+        }
+        if(StrUtil.isNotBlank(endTime)){
+            sql.append(" AND ct.createTime <= :endTime");
+        }
+
+        return baseDao.getAllCount(sql.toString(), JsonUtils.fromJson(commodityInputView));
+    }
+
+    private int getSurplusStockNum(CommodityInputView commodityInputView){
+        String startTime = commodityInputView.getStartTime();
+        String endTime = commodityInputView.getEndTime();
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT ct.sid FROM commodity_size cs, commodity_stock ct");
+        sql.append(" WHERE cs.sid = ct.sid");
+        if(StrUtil.isNotBlank(startTime)){
+            sql.append(" AND ct.createTime >= :startTime");
+        }
+        if(StrUtil.isNotBlank(endTime)){
+            sql.append(" AND ct.createTime <= :endTime");
+        }
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), JsonUtils.fromJson(commodityInputView));
+        int count = 0;
+        if(list != null && list.size() > 0){
+            for(Map<String, Object> map : list){
+                count += baseDao.getUniqueResult("SELECT IFNULL(SUM(stock), 0) FROM commodity_size WHERE sid = ?1", map.get("sid")).intValue();
+            }
+        }
+        return count;
+    }
+
 
     @Override
     public void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException{

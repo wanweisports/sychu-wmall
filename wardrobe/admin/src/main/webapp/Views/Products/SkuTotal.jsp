@@ -33,7 +33,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>商品库存汇总<span class="text-danger">--开发中</span></strong>
+                            <strong>商品库存汇总</strong>
                         </div>
                         <div class="card-block">
                             <form id="products_query_form" method="get" class="form-horizontal" action="/admin/products/sku/total" <%--novalidate onsubmit="return false;"--%>>
@@ -56,11 +56,11 @@
                         </div>
                         <div class="card-footer text-right">
                             <div>
-                                <i class="fa fa-bookmark"></i>&nbsp;商品总数：<span class="badge badge-info">1000件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;商品入库：<span class="badge badge-success">+ 1000件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;商品售卖：<span class="badge badge-danger">- 1000件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;商品出库：<span class="badge badge-warning">- 10件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;剩余库存：<span class="badge badge-info">1000件</span>
+                                <i class="fa fa-bookmark"></i>&nbsp;商品总数：<span class="badge badge-info">${commodityCountSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品入库：<span class="badge badge-success">+ ${commodityInSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品售卖：<span class="badge badge-danger">- ${commodityOutSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品出库：<span class="badge badge-warning">- ${commoditySellSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;剩余库存：<span class="badge badge-info">${commodityStockSum}件</span>
                             </div>
                         </div>
                         <div class="card-block">
@@ -85,12 +85,12 @@
                                         <a href="/admin/products/detail?cid=${c.cid}" class="btn btn-sm btn-link" title="${c.commName}">${c.commName}</a>
                                     </td>
                                     <td>颜色：${c.colorName}，尺码：${c.size}</td>
-                                    <td><span class="badge badge-success">+ 1000件</span></td>
-                                    <td><span class="badge badge-danger">- 990件</span></td>
-                                    <td><span class="badge badge-warning">- 0件</span></td>
-                                    <td><span class="badge badge-info">10件</span></td>
+                                    <td><span class="badge badge-success">+ ${c.in_}件</span></td>
+                                    <td><span class="badge badge-danger">- ${c.out_}件</span></td>
+                                    <td><span class="badge badge-warning">- ${c.sell_}件</span></td>
+                                    <td><span class="badge badge-info">${c.stock}件</span></td>
                                     <td>
-                                        <a href="/admin/products/sku/list?id=${c.cid}" class="btn btn-sm btn-primary" title="变更记录" data-id="${c.cid}">
+                                        <a href="/admin/products/sku/list?sid=${c.sid}" class="btn btn-sm btn-primary" title="变更记录" data-id="${c.cid}">
                                             <i class="fa fa-list"></i> 变更记录
                                         </a>
                                     </td>

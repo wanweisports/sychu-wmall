@@ -23,6 +23,7 @@ public class CommodityInputView extends BaseInputView {
 
     private String commNo;
     private Integer commId;
+    private Integer sid;
 
     public String getCategory() {
         return category;
@@ -142,5 +143,13 @@ public class CommodityInputView extends BaseInputView {
 
     public void setCommId(Integer commId) {
         this.commId = commId;
+    }
+
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 }

@@ -66,6 +66,8 @@ public interface ICommodityService {
 
     PageBean getStockListIn(CommodityInputView commodityInputView);
 
+    Map<String, Object> getStocksSumIn(CommodityInputView commodityInputView);
+
     void saveCommodityBanner(CommodityBanner commodityBanner, MultipartHttpServletRequest multipartRequest) throws IOException;
 
     void deleteCommodityBanner(int cbid);

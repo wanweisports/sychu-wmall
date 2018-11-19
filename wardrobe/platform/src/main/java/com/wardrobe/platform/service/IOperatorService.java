@@ -9,4 +9,8 @@ public interface IOperatorService {
 
     OperatorInfo loginIn(OperatorInfo operatorInfo);
 
+    String getOperatorInfoName(Integer operatorId);
+
+    OperatorInfo getOperatorInfo(int operatorId);
+
 }

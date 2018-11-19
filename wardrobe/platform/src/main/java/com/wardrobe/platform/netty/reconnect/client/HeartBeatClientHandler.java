@@ -60,7 +60,11 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
             e.printStackTrace();
             logger.error("channelRead===>" + e.getMessage());
         }finally {
-            ReferenceCountUtil.release(msg);
+            try{
+                ReferenceCountUtil.release(msg);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

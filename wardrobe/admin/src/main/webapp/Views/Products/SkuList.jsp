@@ -98,7 +98,7 @@
                                         </c:if>
                                     </td>
                                     <td>${c.remark}</td>
-                                    <td>${c.operatorId}</td>
+                                    <td>${c.nickname != null ? c.nickname : '管理员'}</td>
                                     <td><fmt:formatDate value="${c.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                 </tr>
                                 </c:forEach>
