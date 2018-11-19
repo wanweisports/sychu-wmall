@@ -58,8 +58,8 @@
                             <div>
                                 <i class="fa fa-bookmark"></i>&nbsp;商品总数：<span class="badge badge-info">${commodityCountSum}件</span>&nbsp;
                                 <i class="fa fa-bookmark"></i>&nbsp;商品入库：<span class="badge badge-success">+ ${commodityInSum}件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;商品售卖：<span class="badge badge-danger">- ${commodityOutSum}件</span>&nbsp;
-                                <i class="fa fa-bookmark"></i>&nbsp;商品出库：<span class="badge badge-warning">- ${commoditySellSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品售卖：<span class="badge badge-danger">- ${commoditySellSum}件</span>&nbsp;
+                                <i class="fa fa-bookmark"></i>&nbsp;商品出库：<span class="badge badge-warning">- ${commodityOutSum}件</span>&nbsp;
                                 <i class="fa fa-bookmark"></i>&nbsp;剩余库存：<span class="badge badge-info">${commodityStockSum}件</span>
                             </div>
                         </div>

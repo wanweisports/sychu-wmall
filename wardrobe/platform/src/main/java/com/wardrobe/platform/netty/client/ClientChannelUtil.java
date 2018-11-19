@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class ClientChannelUtil {
 
-    private static Logger logger = Logger.getLogger(HeartBeatClientHandler.class);
+    private static Logger logger = Logger.getLogger(ClientChannelUtil.class);
 
     public static int STATUS_NOT_CONNECT = 0;
     public static int STATUS_CONNECT_ING = 1;
@@ -153,13 +153,13 @@ public class ClientChannelUtil {
             long start = System.currentTimeMillis();
             while ((System.currentTimeMillis()-start) <= 5000 && deviceBean.getStatus() == null) { //5秒内轮询等待TCP消息返回
                 try {
-                    logger.info("等待中...~" + clientBeans.size());
+                    logger.info("wait...~" + clientBeans.size());
                     Thread.sleep(200L);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            logger.info("等待完毕..." + deviceBean.getStatus());
+            logger.info("wait success..." + deviceBean.getStatus());
             return deviceBean;
         }
     }
