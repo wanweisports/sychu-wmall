@@ -557,9 +557,9 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     public Map<String, Object> getStocksSumIn(CommodityInputView commodityInputView){
         PageBean pageBean = getStocksSum(commodityInputView);
         List<Map<String, Object>> list = pageBean.getList();
-        list.stream().forEach(commodity -> {
+        for(Map<String, Object> commodity : list){
             commodity.put("resourcePath", getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
-        });
+        }
 
         Map<String, Object> returnMap = new HashMap<>(7, 1);
         returnMap.put("pageBean", pageBean);

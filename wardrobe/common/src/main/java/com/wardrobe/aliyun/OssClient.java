@@ -48,6 +48,7 @@ public class OssClient {
     }
 
     public static String getImgPath(String path){
+        if(path != null && path.contains(OSS_IMG_DO_MAIN)) return path;
         return OSS_IMG_DO_MAIN + "/" + path;
     }
 
