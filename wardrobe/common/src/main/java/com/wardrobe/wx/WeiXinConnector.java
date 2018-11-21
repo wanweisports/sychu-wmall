@@ -94,7 +94,7 @@ public class WeiXinConnector {
 		WxMssBean wxMssBean = new WxMssBean();
 		wxMssBean.setForm_id(userOrderInfo.getPrepayId());
 		wxMssBean.setTouser(toUserOpenId);
-		wxMssBean.setPage("pages/landing/index");
+		wxMssBean.setPage("pages/user/order-details/index?id="+userOrderInfo.getOid());
 		wxMssBean.setTemplate_id("fWMHzkV10pTOxjLkQcdQI6CBQ3ReR0UqIYqj04SPPNI");
 		Map<String, TemplateData> data = new HashedMap(5, 1);
 
@@ -146,7 +146,7 @@ public class WeiXinConnector {
 		WxMssBean wxMssBean = new WxMssBean();
 		wxMssBean.setForm_id(userOrderInfo.getPrepayId());
 		wxMssBean.setTouser(toUserOpenId);
-		wxMssBean.setPage("pages/landing/index");
+		wxMssBean.setPage("pages/user/transactions/index");
 		wxMssBean.setTemplate_id("bHWxbxTtM8E1D8uxwcDkmH2j44Iy6aVQ_PztH53KpSc");
 		Map<String, TemplateData> data = new HashedMap(6, 1);
 
@@ -194,7 +194,7 @@ public class WeiXinConnector {
 		WxMssBean wxMssBean = new WxMssBean();
 		wxMssBean.setForm_id(userOrderInfo.getPrepayId());
 		wxMssBean.setTouser(toUserOpenId);
-		wxMssBean.setPage("pages/landing/index");
+		wxMssBean.setPage("pages/user/order-details/index?id="+userOrderInfo.getOid());
 		wxMssBean.setTemplate_id("MwOUnIoFVmHCv4wr14GUvPyGHptPltFvYBNFpLMV8Uw");
 		Map<String, TemplateData> data = new HashedMap(5, 1);
 
