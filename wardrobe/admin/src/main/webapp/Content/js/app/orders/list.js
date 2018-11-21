@@ -8,6 +8,8 @@ requirejs.config({
 
         "alert"     : 'utils/jqueryAlert/alert/alert',
 
+        "jquery.validate"              : 'bower_components/jquery.validation/dist/jquery.validate',
+
         "base"      : 'js/widgets/base',
         "override"  : 'js/widgets/override'
     },
@@ -23,7 +25,7 @@ requirejs.config({
     urlArgs: '_=' + new Date().getTime()
 });
 
-require(['jquery', 'alert', 'override', 'bootstrap', 'base'], function ($, jqueryAlert) {
+require(['jquery', 'alert', 'override', 'bootstrap', 'base', 'jquery.validate'], function ($, jqueryAlert) {
     'use strict';
 
     $(".js-status-del").click(function(){

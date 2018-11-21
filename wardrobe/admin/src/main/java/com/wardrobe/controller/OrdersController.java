@@ -61,6 +61,15 @@ public class OrdersController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("订单发货")
+    @ResponseBody
+    @RequestMapping("orderExpressFH")
+    public ResponseBean orderExpressFH(int oid, String expressCompany) throws Exception{
+        orderService.saveOrderExpressFH(oid, expressCompany);
+        return new ResponseBean(true);
+    }
+
+
     @Desc("退款订单列表")
     @RequestMapping(value = "/refund")
     public String renderOrdersRefund(OrderInputView orderInputView, Model model) {

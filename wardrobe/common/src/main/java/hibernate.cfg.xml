@@ -1,3 +1,4 @@
+<!--
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
     "-//Hibernate/Hibernate Configuration DTD//EN"
@@ -34,7 +35,7 @@
     <mapping class="com.wardrobe.common.po.SysRfidInfo"/>
     <mapping class="com.wardrobe.common.po.OperatorInfo"/>
     <mapping class="com.wardrobe.common.po.CommodityRecommend"/>
-    <!-- DB schema will be updated if needed -->
-    <!-- <property name="hbm2ddl.auto">update</property> -->
+    &lt;!&ndash; DB schema will be updated if needed &ndash;&gt;
+    &lt;!&ndash; <property name="hbm2ddl.auto">update</property> &ndash;&gt;
   </session-factory>
-</hibernate-configuration>
+</hibernate-configuration>-->

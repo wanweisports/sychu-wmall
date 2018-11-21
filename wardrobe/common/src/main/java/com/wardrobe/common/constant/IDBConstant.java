@@ -62,6 +62,7 @@ public interface IDBConstant {
     String ORDER_STATUS_RETURN_ING = "2"; //申请退款
     String ORDER_STATUS_RETURN = "3";     //退款成功
     String ORDER_STATUS_REFUSE = "4";     //退款拒绝
+    String ORDER_STATUS_FH     = "5";     //已发货
 
     String USER_COUPON = "USER_COUPON"; //优惠券类型
     String COUPON_SERVICE_TYPE = "100008"; //满减优惠类型

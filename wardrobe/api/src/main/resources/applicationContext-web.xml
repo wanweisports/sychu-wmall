@@ -58,6 +58,7 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
 				<prop key="hibernate.jdbc.fetch_size">50</prop>
 				<prop key="hibernate.jdbc.batch_size">50</prop>
 				
@@ -76,7 +77,10 @@
 			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/> 
 			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
 			<tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception"/>
-			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>		 
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+
+			<!--<tx:method name="new*" propagation="SUPPORTS"/>-->
+
 			<tx:method name="*" read-only="true" propagation="SUPPORTS"/> 			
 		</tx:attributes>
 	</tx:advice>

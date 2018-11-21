@@ -36,6 +36,10 @@ public class UserOrderInfo {
     private String serviceType;
     private Integer cpid;
     private Integer ycoid;
+    private String prepayId;
+    private Timestamp expressTime;
+    private String expressCompany;
+
     private String useBalance; //使用余额支付（可同时使用衣橱币与优惠券，优先扣除衣橱币）
 
     @Id
@@ -248,6 +252,36 @@ public class UserOrderInfo {
 
     public void setYcoid(Integer ycoid) {
         this.ycoid = ycoid;
+    }
+
+    @Basic
+    @Column(name = "prepayId")
+    public String getPrepayId() {
+        return prepayId;
+    }
+
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
+    }
+
+    @Basic
+    @Column(name = "expressTime")
+    public Timestamp getExpressTime() {
+        return expressTime;
+    }
+
+    public void setExpressTime(Timestamp expressTime) {
+        this.expressTime = expressTime;
+    }
+
+    @Basic
+    @Column(name = "expressCompany")
+    public String getExpressCompany() {
+        return expressCompany;
+    }
+
+    public void setExpressCompany(String expressCompany) {
+        this.expressCompany = expressCompany;
     }
 
     @Transient
