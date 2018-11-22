@@ -337,9 +337,9 @@ App({
 
     config: {
         getApiHost: function () {
-            return "https://mystore.yifoutech.com/api";
+            return "https://mystore.yifoutech.cn/api";
         },
-        version: "1.0.0",
+        version: "beta v1.0.0",
         shareProfile: '百款精品商品，总有一款适合您',
         isDebug: false
     }

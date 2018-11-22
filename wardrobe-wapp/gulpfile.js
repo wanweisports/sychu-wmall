@@ -153,6 +153,18 @@ gulp.task('appJSPro', function () {
         .pipe(gulp.dest('./build'))
 });
 
+gulp.task('appJSTest', function () {
+    return gulp.src(['testApp.js'])
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(uglify({
+            compress: true,
+        }))
+        .pipe(rename("app.js"))
+        .pipe(gulp.dest('./build'))
+});
+
 /*******/
 
 gulp.task('copyUtils', function () {
@@ -173,4 +185,10 @@ gulp.task('build', ['jsonPro', 'templatesPro', 'wxssPro', 'scriptsPro', 'appJSON
 
 gulp.task('pro', ['clean'], function () {
     runSequence('build');
+});
+
+gulp.task('testBuild', ['jsonPro', 'templatesPro', 'wxssPro', 'scriptsPro', 'appJSONPro', 'appWxssPro', 'appJSTest', 'copyUtils', 'copyImages']);
+
+gulp.task('test', ['clean'], function () {
+    runSequence('testBuild');
 });
