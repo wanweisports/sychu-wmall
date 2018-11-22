@@ -39,7 +39,10 @@
                 <view class="text-box">
                     <view class="arow arow01">
                         <view class="goods-name">{{item.name}}</view>
-                        <view class="goods-price">¥ {{item.price}}</view>
+                        <view class="goods-price">
+                            <text class="goods-cur">￥{{item.couPrice}}</text>
+                            <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
+                        </view>
                     </view>
                     <view class="arow">
                         <view class="goods-label">{{item.label}}</view>

@@ -22,6 +22,7 @@
         "pages/user/order-list/index",
         "pages/user/order-details/index",
         "pages/user/protocols/user",
+        "pages/user/reserve/index",
         "pages/wuliu/index"
     ],
     "window": {

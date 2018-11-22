@@ -51,3 +51,10 @@ page{
     margin:0 auto;
     opacity: .8;
 }
+
+.goods-price .goods-old {
+    font-size: 22rpx;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 10rpx;
+}

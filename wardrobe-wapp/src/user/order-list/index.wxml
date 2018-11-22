@@ -7,9 +7,12 @@
         <view class="a-order" wx:for-items="{{orderList}}" wx:key="{{index}}">
             <view class="order-date" bindtap="orderDetail" data-id="{{item.oid}}">
                 <view class="date-box">订单号: {{item.ono}} </view>
-                <view class="status" wx:if="{{item.payStatus == 1}}">已支付</view>
-                <view class="status red" wx:if="{{item.payStatus == 2}}">待支付</view>
-                <view class="status red" wx:if="{{item.payStatus == 3}}">已取消</view>
+                <view class="status" wx:if="{{item.status==1 && item.payStatus == 1}}">已支付</view>
+                <view class="status red" wx:if="{{item.status==1 && item.payStatus == 2}}">待支付</view>
+                <view class="status red" wx:if="{{item.status==1 && item.payStatus == 3}}">已取消</view>
+                <view class="status red" wx:if="{{item.status==2}}">申请退款</view>
+                <view class="status red" wx:if="{{item.status==3}}">退款成功</view>
+                <view class="status red" wx:if="{{item.status==4}}">退款拒绝</view>
             </view>
             <view bindtap="orderDetail" data-id="{{item.oid}}">
                 <scroll-view class="goods-img-container" scroll-x="true">

@@ -38,8 +38,16 @@
             <view class="row-label">商品金额</view>
             <view class="right-text">¥ {{orderDetail.priceSum}}</view>
         </view>
+        <view class="row-box">
+            <view class="row-label">运费</view>
+            <view class="right-text">¥ {{orderDetail.freight}}</view>
+        </view>
+        <view class="row-box">
+            <view class="row-label">合计金额</view>
+            <view class="right-text">¥ {{orderDetail.payPrice}}</view>
+        </view>
     </view>
-    <view class="jiesuan-box">
+    <view class="jiesuan-box" hidden="true">
         <view class="left-price">
             <view class="total">合计：¥ {{orderDetail.payPrice}}</view>
         </view>

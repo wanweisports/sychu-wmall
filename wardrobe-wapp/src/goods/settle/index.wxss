@@ -126,7 +126,6 @@ form{
 .peisong-way .right-text{
     font-size: 28rpx;
     color: #666;
-    padding-right: 30rpx;
 }
 .peisong-way .liuyan{
     width: 510rpx;

@@ -25,6 +25,8 @@ Page({
         useYcoid: 0,
         hasYcoid: false,
 
+        discount: "",
+
         userBalance: 0,
 
         payType      : 1, 
@@ -67,7 +69,8 @@ Page({
                     useYcoid: 0,
                     ycoidList: ycoid > 0 ? [{textShow: "不使用薏米", ycoid: "0"}, {textShow: res.data.ycoid + "薏米", ycoid: res.data.ycoid}] : [{textShow: "没有薏米", ycoid: "0"}],
                     hasYcoid: ycoid > 0,
-                    yunPrice: res.data.freight
+                    yunPrice: res.data.freight,
+                    discount: res.data.discount * 100 > 0 ? (res.data.discount * 100 + "").replace("0", "") + "折" : ""
                 });
             }
         });
@@ -157,6 +160,10 @@ Page({
                 });
             }
         }
+    },
+
+    onShow: function () {
+        this.getUserBalance();
     },
 
     onLoad: function () {

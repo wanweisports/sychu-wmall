@@ -128,7 +128,7 @@ Page({
         let goodsListId = [];
         for (let i = 0; i < shopList.length; i++) {
             let carShopBean = shopList[i];
-            allGoodsPrice += carShopBean.price * carShopBean.number;
+            allGoodsPrice += carShopBean.couPrice * carShopBean.number;
             goodsListId.push(shopList[i].scid);
         }
 

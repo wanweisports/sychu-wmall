@@ -20,7 +20,10 @@
                     <view class="text-box">
                         <view class="goods-title">{{item.name}}</view>
                         <view class="goods-label">{{item.label}}</view>
-                        <view class="goods-price">¥ {{item.price}}</view>
+                        <view class="goods-price">
+                            <text class="goods-cur">￥{{item.couPrice}}</text>
+                            <text class="goods-old" wx:if="{{item.couPrice != item.price}}">￥{{item.price}}</text>
+                        </view>
                         <view class="buy-num">
                             <view class="jian-btn {{item.number == 1 ? 'disabled' : ''}}" catchtap="jianBtnTap" data-index="{{index}}">-</view>
                             <input  type="number" value="{{item.number}}" disabled/>
