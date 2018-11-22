@@ -10,20 +10,21 @@ import com.wardrobe.common.po.*;
 import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.OrderInputView;
 import com.wardrobe.platform.service.*;
+import com.wardrobe.wx.WeiXinConnector;
 import com.wardrobe.wx.http.HttpConnect;
 import com.wardrobe.wx.util.ConfigUtil;
 import com.wardrobe.wx.util.PayCommonUtil;
 import com.wardrobe.wx.util.SignUtil;
 import com.wardrobe.wx.util.XMLUtil;
+import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.*;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
-import java.util.Date;
 
 /**
  * Created by cxs on 2018/8/6.
@@ -610,6 +611,9 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                 paySign: param.data.paySign,*/
             logger.info("V3 jsApi package:" + finaPackage);
             finalpackage.put("finaPackage", finaPackage);
+            //更新订单预支付id（模版消息form_id需要）
+            baseDao.updateBySql("UPDATE user_order_info SET prepayId = ?1 WHERE oid = ?2", prepay_id, oId);
+
             return finalpackage;
             //logger.info("V3 jsApi package:"+finaPackage);
             //return finaPackage;
@@ -718,11 +722,28 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
                                 }
                             }
                         }
+                        try{
+                            //推送支付成功消息
+                            JSONObject jsonObject = WeiXinConnector.sendOrderPaySuccess(ConfigUtil.APPID, ConfigUtil.APP_SECRECT, userOrderInfo, openid);
+                            System.out.println("sendOrderPaySuccess===>" + jsonObject.toString());
+                        }catch (Exception e){
+                            logger.error(e.getMessage());
+                            e.printStackTrace();
+                        }
                     }else if(IDBConstant.LOGIC_STATUS_NO.equals(orderType)){ //充值订单
                         //增加用户账号余额
                         userAccountService.updateRechargePrice(userOrderInfo);
                         //交易流水(充值)
                         userTransactionsService.addOrderUserTransactions(userOrderInfo, IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ, StrUtil.EMPTY); //充值不拼接type
+                        try{
+                            //推送充值成功消息
+                            UserAccount userAccount = userAccountService.getUserAccount(uid);
+                            JSONObject jsonObject = WeiXinConnector.sendOrderCZSuccess(ConfigUtil.APPID, ConfigUtil.APP_SECRECT, userOrderInfo, openid, userAccount);
+                            System.out.println("sendOrderCZSuccess===>" + jsonObject.toString());
+                        }catch (Exception e){
+                            logger.error(e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
                 }
             }else{
@@ -783,7 +804,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
         if(uid != null){
             whereSql.append(" AND uoi.uid = :uid");
         }
-        whereSql.append(" AND uoi.orderType != '").append(IDBConstant.LOGIC_STATUS_NO).append("'"); //只查询购物的订单(1：普通订单，2：充值，3：射频订单)
+        whereSql.append(" AND uoi.orderType != '").append(IDBConstant.LOGIC_STATUS_NO).append("'"); //只查询购物的订单，不查询充值订单(1：普通订单，2：充值，3：射频订单)
         whereSql.append(" ORDER BY uoi.createTime DESC");
         return super.getPageBean(headSql, bodySql, whereSql, orderInputView);
     }
@@ -964,6 +985,24 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
             count += StrUtil.objToInt(map.get("count"));
         }
         return count;
+    }
+
+    @Override
+    public void saveOrderExpressFH(int oid, String expressCompany){
+        UserOrderInfo userOrderInfo = getUserOrderInfoAndDetails(oid);
+        userOrderInfo.setExpressTime(DateUtil.getNowDate());
+        userOrderInfo.setExpressCompany(expressCompany);
+        userOrderInfo.setStatus(IDBConstant.ORDER_STATUS_FH); //状态为：已发货
+        baseDao.save(userOrderInfo, oid);
+
+        try{
+            //推送模版消息：发货通知
+            UserInfo userInfo = userService.getUserInfo(userOrderInfo.getUid());
+            WeiXinConnector.sendOrderFHSuccess(ConfigUtil.APPID, ConfigUtil.APP_SECRECT, userOrderInfo, userInfo.getOpenId());
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

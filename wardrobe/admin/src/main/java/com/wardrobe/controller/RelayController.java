@@ -161,6 +161,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userOpenLock")
     public ResponseBean userOpenLock(UserDriveBean userDriveBean) throws Exception{
         try{
+            userDriveBean.setDid(did);
             userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserOpenServerLock(userDriveBean);
             return new ResponseBean(true);
@@ -175,6 +176,7 @@ public class RelayController extends BaseController {
     @RequestMapping("userCloseLock")
     public ResponseBean userCloseLock(UserDriveBean userDriveBean) throws Exception{
         try{
+            userDriveBean.setDid(did);
             userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerLock(userDriveBean);
             return new ResponseBean(true);

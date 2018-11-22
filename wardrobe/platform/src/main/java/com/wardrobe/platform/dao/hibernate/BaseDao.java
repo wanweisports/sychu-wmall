@@ -100,7 +100,7 @@ public class BaseDao extends HibernateDaoSupport implements IBaseDao {
     @Override
     public void save(final Object obj, final Serializable id){
         getHibernateTemplate().execute((Session s) -> {
-            s.clear();
+            //s.clear();
             if (id == null) {
                 s.save(obj);
             } else {

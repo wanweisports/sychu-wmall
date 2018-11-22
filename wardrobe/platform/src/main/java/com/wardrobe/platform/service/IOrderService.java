@@ -67,4 +67,6 @@ public interface IOrderService {
 
     int getOrderCommodityCount(List<Map<String, Object>> settments);
 
+    void saveOrderExpressFH(int oid, String expressCompany);
+
 }
