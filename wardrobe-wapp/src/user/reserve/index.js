@@ -8,10 +8,32 @@ Page({
         sumPrice: 0,
         goodsList:[],
         wardrobeInfo: {},
+        locksList: [],
         hasWardrobeInfo: false
     },
 
     onShareAppMessage: null,
+
+    getWardrobeOrderLocks: function () {
+        let content = this;
+
+        app.wxRequest("/order/nowCanOpenLock", {did: content.data.wardrobeInfo.did}, function (res) {
+            if (res.code == 1) {
+                let data = res.data.locks;
+
+                if (data.length > 0) {
+                    content.setData({
+                        locksList: data
+                    });
+                }
+                else {
+                    content.setData({
+                        locksList: null
+                    });
+                }
+            }
+        });
+    },
 
     getWardrobeOrder: function () {
         let content = this;
@@ -26,6 +48,7 @@ Page({
                         hasWardrobeInfo: true
                     });
                     content.getWardrobeOrderDetail(data[0].roid);
+                    content.getWardrobeOrderLocks();
                 }
                 else {
                     content.setData({

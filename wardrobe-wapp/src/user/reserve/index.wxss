@@ -144,10 +144,26 @@ order-detail{
     font-size: 28rpx;
     color: #000;
 }
+.peisong-way .row-label.row-label-order{
+    color: #e64340;
+}
 .peisong-way .right-text{
     font-size: 28rpx;
     color: #666;
     padding-right: 30rpx;
+}
+.peisong-way .right-text-order{
+    color: #e64340;
+}
+.peisong-way  .to-scan-btn {
+    width:100%;
+    text-align: center;
+    height: 100%;
+    line-height: 100rpx;
+    background-color: #e64340;
+    font-size:32rpx;
+    color:#ffffff;
+    border-radius: 0;
 }
 .peisong-way .liuyan{
     width: 510rpx;
