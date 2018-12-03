@@ -1,0 +1,16 @@
+<view class="container">
+    <view class="order-detail">
+        <view class="address-box">
+            <view class="show-address">
+                <view class="name-tel">{{wardrobeInfo.name}}  {{wardrobeInfo.startTime}}-{{wardrobeInfo.endTime}}</view>
+                <view class="addr-text">{{wardrobeInfo.address}}</view>
+            </view>
+        </view>
+        <view class="peisong-way">
+            <view class="row-box" wx:for-items="{{locksList}}" wx:key="{{index}}">
+                <view class="row-label">{{item.name}}(试用柜)</view>
+                <view class="right-text right-text-order" bindtap="openLock" data-id="{{item.dcid}}">开锁</view>
+            </view>
+        </view>
+    </view>
+</view>

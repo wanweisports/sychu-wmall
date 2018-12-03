@@ -33,6 +33,7 @@ Page({
                     app.wxRequest(res.result, {}, function (res) {
                         if (res.code == 1) {
                             app.showToast("扫码开门成功");
+                            app.redirect("/pages/user/center-access/index", "navigateTo");
                         }
                         else {
                             app.showToast(res.message || "扫码开门失败");

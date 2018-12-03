@@ -19,12 +19,13 @@
                 <view class="row-label">预约时间</view>
                 <view class="right-text">{{wardrobeInfo.resStartTime}}-{{wardrobeInfo.resEndTime}}</view>
             </view>
-            <button class="to-pay-btn" bindtap="scanOrder">扫码开门</button>
         </view>
         <view class="peisong-way">
-            <view class="row-box">
-                <view class="row-label">{{wardrobeInfo.sdcName}}</view>
-                <view class="right-text" bindtap="openLock" data-id="{{wardrobeInfo.dcid}}">开锁</view>
+            <button class="to-scan-btn" bindtap="scanOrder">扫码开门</button>
+            <view class="row-box" wx:for-items="{{locksList}}" wx:key="{{index}}">
+                <view class="row-label row-label-order" wx:if="{{item.dcid == wardrobeInfo.dcid}}">{{item.name}}(预约柜)</view>
+                <view class="row-label" wx:if="{{item.dcid != wardrobeInfo.dcid}}">{{item.name}}(试用柜)</view>
+                <view class="right-text right-text-order" bindtap="openLock" data-id="{{item.dcid}}">开锁</view>
             </view>
         </view>
         <view class="goods-list">
