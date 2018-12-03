@@ -2,6 +2,7 @@ package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.po.UserOrderInfo;
+import com.wardrobe.common.po.UserTransactions;
 import com.wardrobe.common.view.UserTransactionsInputView;
 
 import java.math.BigDecimal;
@@ -21,5 +22,7 @@ public interface IUserTransactionsService {
     PageBean getUserTransactionsListIn(UserTransactionsInputView userTransactionsInputView);
 
     Map<String, Object> countTransactions(UserTransactionsInputView userTransactionsInputView);
+
+    void saveCorrect(UserTransactions userTransactions);
 
 }

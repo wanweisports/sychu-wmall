@@ -15,7 +15,7 @@ public class SysRankServiceImpl extends BaseService implements ISysRankService {
         Number rank = baseDao.getUniqueResult("SELECT rank FROM sys_rank_info WHERE rankScore <= ?1 ORDER BY rid DESC LIMIT 1", scopeSum);
         if(rank != null){
             int r = rank.intValue();
-            if(r > oldRank) return r;
+            if(r != oldRank) return r; //可能升级，也可能降低【通用于后台冲抵功能】
         }
         return null;
     }

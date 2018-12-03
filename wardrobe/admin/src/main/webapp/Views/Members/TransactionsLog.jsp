@@ -72,6 +72,7 @@
                                     <th>会员昵称</th>
                                     <th>手机号码</th>
                                     <th>交易时间</th>
+                                    <th>备注</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -86,6 +87,7 @@
                                     <td>${t.nickname}</td>
                                     <td>${t.mobile}</td>
                                     <td>${t.createTime}</td>
+                                    <td>${t.remark}</td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>

@@ -20,6 +20,46 @@
 <layout:override name="<%=Blocks.BLOCK_HEADER_SCRIPTS%>">
     <script type="text/javascript" src="Content/js/require.js?v=${static_resource_version}"
             data-main="Content/js/app/members/detail.js?v=${static_resource_version}"></script>
+
+    <script type="text/javascript">
+        function showCorrect(type){
+            $("#type").val(type);
+        }
+
+        function saveCorrect(obj){
+            var price = $("#price").val();
+            if(!$.trim(price)){
+                alert("请输入修正值！");
+                return;
+            }
+            if(!$.trim($("#remark").val())){
+                alert("请输入备注！");
+                return;
+            }
+            var type = $("#type").val();
+            var msg = "";
+            if(type == 2){
+                msg = "确认冲抵【余额】为：" + price + "吗？";
+            }
+            if(type == 3){
+                msg = "确认冲抵【薏米】为：" + price + "吗？";
+            }
+            if(type == 10){
+                msg = "确认冲抵【积分】为：" + price + "吗？";
+            }
+            if(window.confirm(msg)){
+                $(obj).prop("disabled", true).val("<i class='fa fa-check'></i> 提交中...");
+                $.post("/admin/members/correct", $("#member_value_form").serialize(), function(res){
+                    if(res.code == 1){
+                        window.location.reload();
+                    }else{
+                        alert(res.message);
+                        $(obj).prop("disabled", false).val("<i class='fa fa-check'></i> 确 认");
+                    }
+                });
+            }
+        }
+    </script>
 </layout:override>
 
 <layout:override name="<%=Blocks.BLOCK_BODY%>">
@@ -29,22 +69,24 @@
                 <div class="modal-body">
                     <div class="alert alert-warning" id="member_value_tip">填写修正金额，请慎重考虑！</div>
                     <form id="member_value_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
+                        <input type="text" id="uid" name="uid" value="${user.uid}">
+                        <input type="text" id="type" name="type" />
                         <div class="form-group row">
-                            <label class="col-md-4 form-control-label" for="ps_num">
+                            <label class="col-md-4 form-control-label" for="price">
                                 <span class="text-danger">*</span> 修正值
                             </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" id="ps_num" placeholder="请输入修正值" name="num"
+                                <input type="text" class="form-control" id="price" placeholder="请输入修正值" name="price"
                                        data-val="true" data-val-required="修正值不能为空" autocomplete="off">
                                 <div data-valmsg-for="num" data-valmsg-replace="true"></div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 form-control-label" for="ps_remark">
+                            <label class="col-md-4 form-control-label" for="remark">
                                 <span class="text-danger">*</span> 修正备注
                             </label>
                             <div class="col-md-8">
-                                <textarea class="form-control" id="ps_remark" placeholder="请输入备注" name="remark"
+                                <textarea class="form-control" id="remark" placeholder="请输入备注" name="remark"
                                           data-val="true" data-val-required="备注不能为空" autocomplete="off"></textarea>
                                 <div data-valmsg-for="remark" data-valmsg-replace="true"></div>
                             </div>
@@ -55,7 +97,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                         <i class="fa fa-remove"></i> 取 消
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="saveCorrect(this)">
                         <i class="fa fa-check"></i> 确 认
                     </button>
                 </div>
@@ -130,13 +172,13 @@
                             </table>
                         </div>
                         <div class="card-footer">
-                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal" onclick="showCorrect(2)">
                                 <i class="fa fa-bolt"></i> 冲抵余额
                             </a>
-                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal" onclick="showCorrect(3)">
                                 <i class="fa fa-bolt"></i> 冲抵薏米
                             </a>
-                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal">
+                            <a href="#member_value_dialog" class="btn btn-danger" data-toggle="modal" onclick="showCorrect(10)">
                                 <i class="fa fa-bolt"></i> 冲抵积分
                             </a>
                         </div>

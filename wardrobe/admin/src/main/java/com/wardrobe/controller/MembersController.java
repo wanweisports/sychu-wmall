@@ -9,6 +9,7 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDict;
 import com.wardrobe.common.po.UserInfo;
+import com.wardrobe.common.po.UserTransactions;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.common.view.UserInputView;
@@ -115,6 +116,14 @@ public class MembersController extends BaseController {
     @RequestMapping(value = "/recharge/deleteRecharge")
     public ResponseBean deleteRecharge(int dictId) {
         dictService.deleteDict(dictId);
+        return new ResponseBean(true);
+    }
+
+    @Desc("冲抵")
+    @ResponseBody
+    @RequestMapping(value = "correct")
+    public ResponseBean saveCorrect(UserTransactions userTransactions){
+        userTransactionsService.saveCorrect(userTransactions);
         return new ResponseBean(true);
     }
 

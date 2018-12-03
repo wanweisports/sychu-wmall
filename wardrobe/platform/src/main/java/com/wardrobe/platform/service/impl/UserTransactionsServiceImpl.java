@@ -2,11 +2,15 @@ package com.wardrobe.platform.service.impl;
 
 import com.wardrobe.common.bean.PageBean;
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.exception.MessageException;
+import com.wardrobe.common.po.UserAccount;
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.common.po.UserTransactions;
 import com.wardrobe.common.util.*;
 import com.wardrobe.common.view.UserTransactionsInputView;
+import com.wardrobe.platform.service.IUserAccountService;
 import com.wardrobe.platform.service.IUserTransactionsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -19,6 +23,9 @@ import java.util.Map;
  */
 @Service
 public class UserTransactionsServiceImpl extends BaseService implements IUserTransactionsService {
+
+    @Autowired
+    private IUserAccountService userAccountService;
 
     @Override
     public PageBean getUserTransactionsList(UserTransactionsInputView userTransactionsInputView){
@@ -147,6 +154,55 @@ public class UserTransactionsServiceImpl extends BaseService implements IUserTra
         returnMap.put("czPriceSum", czPriceSum != null ? czPriceSum.doubleValue() : 0);
         returnMap.put("zfPriceSum", zfPriceSum != null ? zfPriceSum.doubleValue() : 0);
         return returnMap;
+    }
+
+    @Override
+    public void saveCorrect(UserTransactions userTransactions){
+        UserAccount userAccount = userAccountService.getUserAccount(userTransactions.getUid());
+
+        String type = userTransactions.getType();
+        double price = userTransactions.getPrice().doubleValue();
+        boolean isSaveLog = false;
+        switch (type){
+            case IDBConstant.TRANSACTIONS_TYPE_YUE:   //余额
+                if(price > 0){
+                    userTransactions.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_CZ); //增加余额=充值余额
+                    userTransactions.setType(StrUtil.EMPTY);
+                }else{
+                    userTransactions.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF); //减少余额=支付余额
+                }
+
+                userAccount.setBalance(Arith.conversion(Arith.add(userAccount.getBalance().doubleValue(), price)));
+                if(userAccount.getBalance().doubleValue() < 0) throw new MessageException("冲抵后用户金额小于0，请重新输入！");
+                baseDao.save(userAccount, userAccount.getUid());
+
+                isSaveLog = true;
+                break;
+            case IDBConstant.TRANSACTIONS_TYPE_YCOID: //薏米
+                if(price > 0){
+                    userTransactions.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_JL); //增加薏米=奖励薏米
+                }else{
+                    userTransactions.setServiceType(IDBConstant.TRANSACTIONS_SERVICE_TYPE_ZF); //减少薏米=支付薏米
+                }
+
+                userAccount.setYcoid(userAccount.getYcoid() + (int) price);
+                if(userAccount.getYcoid() < 0) throw new MessageException("冲抵后用户薏米小于0，请重新输入！");
+                baseDao.save(userAccount, userAccount.getUid());
+
+                isSaveLog = true;
+                break;
+            case IDBConstant.TRANSACTIONS_TYPE_SCORE: //积分
+                userAccountService.addUserScore(userAccount.getUid(), price); //可能升级，也可能降级
+                if(userAccountService.getUserAccount(userTransactions.getUid()).getScore() < 0) throw new MessageException("冲抵后用户积分小于0，请重新输入！");
+                break;
+            default:
+                break;
+        }
+        if(isSaveLog) {
+            userTransactions.setPrice(Arith.conversion(Math.abs(price)));
+            userTransactions.setCreateTime(DateUtil.getNowDate());
+            baseDao.save(userTransactions, null);
+        }
     }
 
 }

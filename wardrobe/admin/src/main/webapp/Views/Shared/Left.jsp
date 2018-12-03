@@ -71,11 +71,11 @@
                             <i class="icon-arrow-right"></i> 运行面板
                         </a>
                     </li>
-                    <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'log'}">open</c:if>">
+                    <%--<li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'log'}">open</c:if>">
                         <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'log'}">active</c:if>" href="/admin/wardrobe/running/log">
                             <i class="icon-arrow-right"></i> 运行日志
                         </a>
-                    </li>
+                    </li>--%>
                 </ul>
             </li>
 

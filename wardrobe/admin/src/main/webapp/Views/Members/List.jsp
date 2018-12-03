@@ -87,9 +87,9 @@
                                         <td>${user.invitedByUserName}</td>
                                         <td><fmt:formatDate value="${user.registerTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-danger btn-sm member-stop">
+                                            <%--<a href="javascript:;" class="btn btn-danger btn-sm member-stop">
                                                 <i class="fa fa-stop-circle-o"></i> 停用
-                                            </a>
+                                            </a>--%>
                                         </td>
                                     </tr>
                                 </c:forEach>

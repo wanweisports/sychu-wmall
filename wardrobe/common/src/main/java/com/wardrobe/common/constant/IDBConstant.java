@@ -38,10 +38,11 @@ public interface IDBConstant {
     String TRANSACTIONS_SERVICE_TYPE_TK = "4"; //退款
 
     String TRANSACTIONS_TYPE = "TRANSACTIONS_TYPE"; //流水类型
-    String TRANSACTIONS_TYPE_WX = "1";    //微信（与订单支付方式保持一致）
-    String TRANSACTIONS_TYPE_YUE = "2";   //余额（与订单支付方式保持一致）
-    String TRANSACTIONS_TYPE_YCOID = "3"; //薏米
+    String TRANSACTIONS_TYPE_WX = "1";     //微信（与订单支付方式保持一致）
+    String TRANSACTIONS_TYPE_YUE = "2";    //余额（与订单支付方式保持一致）
+    String TRANSACTIONS_TYPE_YCOID = "3";  //薏米
 
+    String TRANSACTIONS_TYPE_SCORE = "10"; //积分
 
     String RECHARGE_TYPE = "RECHARGE_TYPE"; //充值大小
 
