@@ -61,18 +61,17 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("链路关闭");
+        ClientChannelUtil.clearServerChannel(ctx.channel());
         if(reconnect){
             System.out.println("链路关闭，将进行重连" + attempts);
             //if(attempts < 12){
             attempts++;
             //重连的间隔时间会越来越长
-            int timeout = 2;
+            int timeout = 3;
             timer.newTimeout(this, timeout, TimeUnit.SECONDS);
             //}
         }
         ctx.fireChannelInactive();
-
-        ClientChannelUtil.clearServerChannel(ctx.channel());
     }
 
     public void run(Timeout timeout) throws Exception {
@@ -99,6 +98,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
                 if(!succed){
                     System.out.println("重连失败");
                     f.channel().pipeline().fireChannelInactive();
+                    ClientChannelUtil.clearServerChannel(f.channel());
                 }else{
                     System.out.println("重连成功");
                 }

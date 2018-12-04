@@ -116,7 +116,7 @@ public class RfidBean {
         ((RFIDReaderHelper) readerHelper).realTimeInventory(RfidCache.BA, (byte) 0x01);
         long start = System.currentTimeMillis();
         while ((System.currentTimeMillis()-start) <= 5000 && currentReadCount < maxReadCount){
-            System.out.println(maxReadCount + "等待中..." + currentReadCount);
+            System.out.println(maxReadCount + "等待中....." + currentReadCount);
             sleep(50);
         }
         return epcList;

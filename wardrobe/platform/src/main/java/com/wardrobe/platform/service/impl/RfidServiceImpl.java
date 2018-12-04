@@ -151,12 +151,12 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
         List<String> epcs = rb.getEpcs(count);
         System.out.println(epcs);
         //查询某个商场当天柜子里的衣服
-        StringBuilder sql = new StringBuilder("SELECT cd.dbid, ci.cid, ci.commName, ci.price, sdc.`name`, 1 count, rfidEpc FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
-        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.dbTime = CURDATE()");
+        StringBuilder sql = new StringBuilder("SELECT cd.dbid, ci.cid, ci.commName, ci.couPrice, ci.price, sdc.`name`, 1 count, rfidEpc, cc.colorName, cz.size FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci, commodity_color cc, commodity_size cz");
+        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND ci.cid = cc.cid AND cz.sid = cd.sid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.dbTime = CURDATE()");
         List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES);
         List<Map<String, Object>> payCommoditys = new ArrayList<>();
         for(Map<String, Object> map : list){
-            String rfidEpc = map.get("rfidEpc").toString();
+            String rfidEpc = StrUtil.objToStr(map.get("rfidEpc"));
             boolean exist = false;
             for(String epc : epcs){
                 if(epc.equals(rfidEpc)){

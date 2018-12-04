@@ -52,6 +52,7 @@ public class ClientChannelUtil {
     }
 
     public synchronized static void clearServerChannel(Channel channel) { //   /192.168.207.156:9900
+        if(channel == null) return;
         InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
         if(socketAddress != null) {
             ClientBean clientBean = getClientBean(socketAddress.getHostString(), socketAddress.getPort());
@@ -69,6 +70,7 @@ public class ClientChannelUtil {
 
     public synchronized static void connectServerChannel(Channel channel, List<SysDeviceControl> deviceControls) {
         try{
+            if(channel == null) return;
             ClientBean clientBean = getClientBean(channel);
             if(clientBean == null){
                 InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
@@ -151,9 +153,17 @@ public class ClientChannelUtil {
 
             logger.info("serverChannel：" + serverChannel);
             long start = System.currentTimeMillis();
-            while ((System.currentTimeMillis()-start) <= 5000 && deviceBean.getStatus() == null) { //5秒内轮询等待TCP消息返回
+            while ((System.currentTimeMillis()-start) <= 3000 && deviceBean.getStatus() == null) { //3秒内轮询等待TCP消息返回
                 try {
                     logger.info("wait...~" + clientBeans.size());
+                    for(ClientBean clientBean : clientBeans){
+                        logger.info(clientBean.getHost() + ":" + clientBean.getPort());
+                        logger.info("=====================================");
+                        logger.info("isActive：" + clientBean.getServiceChannel().isActive());
+                        logger.info("iaOpen：" + clientBean.getServiceChannel().isOpen());
+                        logger.info("isWritable：" + clientBean.getServiceChannel().isWritable());
+                        logger.info("=====================================");
+                    }
                     Thread.sleep(200L);
                 } catch (Exception e) {
                     e.printStackTrace();

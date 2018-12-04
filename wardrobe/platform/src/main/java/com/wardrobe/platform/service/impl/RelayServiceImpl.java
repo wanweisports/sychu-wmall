@@ -277,14 +277,14 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         //7.下发柜门开门指令
         openServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
 
-        /*Timestamp nowDate = DateUtil.getNowDate();
+        Timestamp nowDate = DateUtil.getNowDate();
         SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
         sysDeviceControl.setOpenTime(nowDate);
         sysDeviceControl.setLock(IDBConstant.LOGIC_STATUS_YES); //开启
         baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
 
         sysDeviceInfo.setOpenLockTime(nowDate);
-        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
         //8.用户试衣
 
 
@@ -297,10 +297,10 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         //7.下发柜门开门指令
         closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
 
-        /*SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
+        SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
         sysDeviceControl.setCloseTime(DateUtil.getNowDate());
         sysDeviceControl.setLock(IDBConstant.LOGIC_STATUS_NO); //锁住
-        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());*/
+        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
     }
 
     @Desc("扫码开门==出门")
