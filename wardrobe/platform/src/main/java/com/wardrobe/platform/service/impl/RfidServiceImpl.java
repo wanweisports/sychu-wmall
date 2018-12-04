@@ -17,6 +17,7 @@ import com.wardrobe.platform.rfid.rfid.rxobserver.bean.RXInventoryTag;
 import com.wardrobe.platform.rfid.util.StringTool;
 import com.wardrobe.platform.service.IRfidService;
 import com.wardrobe.platform.service.IUserShoppingCartService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ import java.util.*;
  */
 @Service
 public class RfidServiceImpl extends BaseService implements IRfidService {
+
+    private Logger logger = Logger.getLogger(RfidServiceImpl.class);
 
     @Autowired
     private IUserShoppingCartService userShoppingCartService;
@@ -75,7 +78,9 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
 
             @Override
             public void onLostConnect() {
-
+                logger.error("===============onLostConnect==================");
+                RfidCache.closeRfid(ip1, port1);
+                logger.error("===============射频断开==================");
             }
         };
         return mListener;
