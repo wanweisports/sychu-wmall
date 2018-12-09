@@ -24,12 +24,16 @@ public class RfidCache {
         }
     }
 
-    public static synchronized void closeRfid(RfidBean rfidBean){
-        RfidBean rb = getRfidBean(rfidBean);
+    public static synchronized void closeRfid(String ip, int port){
+        RfidBean rb = getRfidBean(ip, port);
         if(rb != null){
             rfidBeans.remove(rb);
             rb.getmConnector().disConnect();
         }
+    }
+
+    public static synchronized void closeRfid(RfidBean rfidBean){
+        closeRfid(rfidBean.getIp(), rfidBean.getPort());
     }
 
     public static RfidBean getRfidBean(RfidBean rfidBean){
