@@ -142,13 +142,19 @@ App({
         })
     },
 
-    wxRequest: function (url, data, success, fail, isNotLogin) {
+    wxRequest: function (url, data, success, fail, isNotLogin, option) {
         let content = this;
 
-        wx.showLoading({
-            title: "加载中",
-            mask: true
-        });
+        option = option || {
+            isLoading: true
+        };
+
+        if (option.isLoading) {
+            wx.showLoading({
+                title: "加载中",
+                mask: true
+            });
+        }
 
         success = success || new Function();
         fail = fail || new Function();
@@ -165,7 +171,9 @@ App({
             data   : data,
             header : header,
             success: function (res) {
-                wx.hideLoading();
+                if (option.isLoading) {
+                    wx.hideLoading();
+                }
 
                 if (res.data.code == 10) {
                     //content.showToast("授信登录过期，请重新登录！");
@@ -203,7 +211,9 @@ App({
                 content.showLog("[F][" + url + "]：" + JSON.stringify(err));
                 fail(err);
 
-                wx.hideLoading();
+                if (option.isLoading) {
+                    wx.hideLoading();
+                }
             }
         });
     },

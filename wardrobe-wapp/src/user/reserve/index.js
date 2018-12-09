@@ -47,6 +47,7 @@ Page({
                         wardrobeInfo: data[0],
                         hasWardrobeInfo: true
                     });
+
                     content.getWardrobeOrderDetail(data[0].roid);
                     content.getWardrobeOrderLocks();
                 }
@@ -124,16 +125,41 @@ Page({
         });
     },
 
+    readCartSettle: function (callback) {
+        let content = this;
+
+        app.wxRequest("/rfid/readRfid", {did: this.data.wardrobeInfo.did}, function (res) {
+            if (res.code == 1) {
+                let goodsList = res.data.data.commoditys;
+                if (!goodsList || goodsList.length <= 0) {
+                    return callback(true);
+                }
+            }
+
+            callback(false);
+        }, function () {
+            callback(false);
+        });
+    },
+
     leave: function () {
+        let content = this;
+
         wx.showModal({
             title: "提 示",
-            content: "您确定要离开吗？确认完后会立即开门",
+            content: "开门前请将未结算的衣服放回衣柜，确认离开吗？",
             success: function (res) {
                 if (res.confirm) {
-                    app.wxRequest("/relay/closeDoor", {did: 6}, function (res) {
-                        if (res.code == 1) {
-                            app.showToast("开门成功", "success");
+                    content.readCartSettle(function (status) {
+                        if (!status) {
+                            return app.showToast("请将未结算的衣服放回衣柜中！");
                         }
+
+                        app.wxRequest("/relay/closeDoor", {did: 6}, function (res) {
+                            if (res.code == 1) {
+                                app.showToast("开门成功", "success");
+                            }
+                        });
                     });
                 }
             }

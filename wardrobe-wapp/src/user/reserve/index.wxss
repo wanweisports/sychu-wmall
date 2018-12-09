@@ -220,6 +220,16 @@ order-detail{
     color:#333333;
     border-radius: 0;
 }
+.jiesuan-box .to-cancel-btn{
+    width:50%;
+    text-align: center;
+    height: 100%;
+    line-height: 100rpx;
+    background-color: #ffc107;
+    font-size:32rpx;
+    color:#ffffff;
+    border-radius: 0;
+}
 
 
 .jiesuan-box  .left-price{
