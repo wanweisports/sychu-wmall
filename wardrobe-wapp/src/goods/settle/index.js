@@ -257,7 +257,7 @@ Page({
                 // app.sendTempleMsg(res.data.data.id, 2,
                 //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
                 //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
-                }
+            }
             else {
                 app.showToast("创建订单失败", "none");
             }

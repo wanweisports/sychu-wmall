@@ -36,62 +36,6 @@ Page({
         let content = this;
 
         app.wxRequest("/rfid/readRfid", {did: this.data.did}, function (res) {
-//             res = {
-//     "code": "1",
-//     "message": "操作成功",
-//     "data": {
-// "discount": 0.95,
-//         "sumPrice": 2202.22,          
-//         "sumOldPrice": 2512.33,      
-//         "sumOldDisPrice": 2312.33,    
-//         "userDiscountSubPrice":200,   
-//         "couponPrice": 0,             
-// "useYcoid": 0,                         
-// "ycoid": 500,        
-//         "commoditys": [{
-//             "price": 178.2,
-//             "resourcePath": "https://oss-admin.oss-cn-b6c5.jpg",
-//             "name": "柜子2号",
-//             "commName": "惠维2018秋女装 ",
-//             "cid": 19,
-// "dbid": 1
-//         }, {
-//             "price": 59,
-//             "resourcePath": "https://oss157aceb3a2b7a60.jpg",
-//             "name": "柜子2号",
-//             "commName": "洛蔓希性感透视装女士内衣白上衣+黑裙",
-//             "cid": 17,
-//             "dbid": 2
-//         }, {
-//             "price": 100.99,
-//             "resourcePath": "https://oss2fa.jpg",
-//             "name": "柜子1号",
-//             "commName": "商品3",
-//             "cid": 14,
-// "dbid": 3
-//         }],
-//         "coupons": [{    
-//                 "dictValue": "满1000元可使用",
-//                 "dictValue2": "满1000元减100",
-//                 "fullPrice":1000,    
-//                 "cpid": 1,
-//                 "status": "1",  
-//                 "couponPrice": 100,
-//                 "dueTime": "2018-09-22 12:30:00" 
-//             },
-//             {
-//                 "dictValue": "满2500元可使用",
-//                 "fullPrice":2500,
-//                 "cpid": 2,
-//                 "status": "1",
-//                 "couponPrice": 300,
-//                 "dueTime": "2018-09-22 10:50:00"
-//             }
-//         ]
-//     }
-// }
-
-
             if (res.code == 1) {
                 let coupons = res.data.coupons;
                 let ycoid = res.data.ycoid;
@@ -196,6 +140,12 @@ Page({
             if (res.code == 1) {
                 app.wxPay(res.data.oid, "/pages/user/order-list/index");
             }
+            else {
+                app.showToast("创建订单失败", "none");
+            }
+        }, function () {
+            app.showToast("创建订单错误", "none");
+        });
 
             // 配置模板消息推送
             // var postJsonString = {};
@@ -214,6 +164,5 @@ Page({
             // app.sendTempleMsg(res.data.data.id, 2,
             //     'GeZutJFGEWzavh69savy_KgtfGj4lHqlP7Zi1w8AOwo', e.detail.formId,
             //     'pages/order-details/index?id=' + res.data.data.id, JSON.stringify(postJsonString));
-        })
     }
 });
