@@ -38,6 +38,12 @@
                         <view class="right-text">{{coupons[couponsIndex].textShow}}</view>
                 </picker>
             </view>
+            <view class="row-box">
+                <view class="row-label">支付方式</view>
+                <picker bindchange="bindPayTypeChange" value="{{payTypeIndex}}" range="{{payTypeList}}" range-key="{{'text'}}">
+                    <view class="right-text">{{payTypeList[payTypeIndex].text}}</view>
+                </picker>
+            </view>
         </view>
         <view class="goods-info">
             <view class="row-box">

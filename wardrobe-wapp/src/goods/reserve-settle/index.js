@@ -29,11 +29,25 @@ Page({
 
         did: "",
         dbids: [],
+
+        payType      : 1, 
+        payTypeIndex : 0,
+        payTypeList  : [{
+            value: 1,
+            text: "微信支付"
+        }, {
+            value: 2,
+            text: "余额支付"
+        }]
     },
 
     onShareAppMessage: null,
     getCartSettle: function () {
         let content = this;
+
+
+        var cc = {"code":"1","message":"操作成功","data":{"sumOldPrice":2279.0,"code":"1","sumPrice":1823.2,"data":{"commoditys":[{"rfidEpc":"02 12 24 20","price":799.0,"dbid":82.0,"resourcePath":"https://oss-admin.oss-cn-beijing.aliyuncs.com/img/0e27323d529446718b2cc0f953aef614.jpg","name":"柜子1号","count":1.0,"commName":"麂皮连衣裙","couPrice":799.0,"cid":336.0},{"rfidEpc":"02 12 20 50","price":1480.0,"dbid":94.0,"resourcePath":"https://oss-admin.oss-cn-beijing.aliyuncs.com/img/7ee835e407894240b248973836205d35_YS.jpg","name":"柜子4号","count":1.0,"commName":"材质优选|开叉喇叭裤","couPrice":1480.0,"cid":102.0}],"sumPrice":2279.0},"cpid":"0","freight":0.0,"discount":0.8,"message":"操作成功","useBalance":"2","coupons":[{"dictValue":"满1000元可使用","serviceType":100008,"uid":84,"dictValue2":"满1000减100","createTime":"2018-10-15 12:05:50","cpid":6,"couponPrice":100.00,"updateTime":null,"fullPrice":1000.00,"dueTime":"2018-12-14","status":"1"},{"dictValue":"满1000元可使用","serviceType":100008,"uid":84,"dictValue2":"满1000减100","createTime":"2018-10-15 12:05:50","cpid":8,"couponPrice":100.00,"updateTime":null,"fullPrice":1000.00,"dueTime":"2018-12-14","status":"1"},{"dictValue":"满2500元可使用","serviceType":100008,"uid":84,"dictValue2":"满2500减300","createTime":"2018-10-15 12:05:50","cpid":7,"couponPrice":300.00,"updateTime":null,"fullPrice":2500.00,"dueTime":"2018-12-14","status":"2"}],"ycoid":0,"couponPrice":0.0,"userDiscountSubPrice":455.8,"useYcoid":"0","sumOldDisPrice":1823.2}}
+        
 
         app.wxRequest("/rfid/readRfid", {did: this.data.did}, function (res) {
             if (res.code == 1) {
@@ -106,6 +120,16 @@ Page({
         }
     },
 
+    bindPayTypeChange: function (e) {
+        let index = e.detail.value;
+
+
+        this.setData({
+            payTypeIndex : index,
+            payType : this.data.payTypeList[index].value
+        });
+    },
+
      bindYcoidChange: function (e) {
         let curYcoid = this.data.ycoidList[e.detail.value]; 
 
@@ -130,11 +154,33 @@ Page({
     createOrder:function () {
         let content = this;
 
+         if (content.data.payType == 2 && content.data.allGoodsAndYunPrice > content.data.userBalance) {
+            wx.showModal({
+                title: '提 示',
+                content: '您的余额不足，请先去充值或者取消选择微信支付！',
+                cancelText: "取消",
+                confirmText: "去充值",
+                success: function (res) {
+                    if (res.confirm) {
+                        app.redirect("/pages/user/recharge/index")
+                    }
+                }
+            });
+            return;
+        }
+
         let postData = {
             dbids: content.data.dbids,
-            serviceType: content.data.serviceType,
-            cpid: content.data.cpid
+            payType: content.data.payType
         };
+
+        if (content.data.serviceType == 1) {
+            postData.serviceType = content.data.serviceType;
+            postData.cpid = content.data.cpid;
+        }
+        else if (content.data.serviceType == 2) {
+            postData.serviceType = content.data.serviceType;
+        }
 
         app.wxRequest("/order/saveRfidOrder", postData, function (res) {
             if (res.code == 1) {

@@ -80,7 +80,7 @@ Page({
         wx.scanCode({
             scanType: "qrCode",
             success: function (res) {
-                app.wxRequest("/relay/openDoor", {did: content.data.wardrobeInfo.did}, function (res) {
+                app.wxRequest("/relay/openDoor", {did: 6}, function (res) {
                     if (res.code == 1) {
                         app.showToast("扫码开门成功", "success");
                     }
@@ -130,7 +130,7 @@ Page({
             content: "您确定要离开吗？确认完后会立即开门",
             success: function (res) {
                 if (res.confirm) {
-                    app.wxRequest("/relay/closeDoor", {}, function (res) {
+                    app.wxRequest("/relay/closeDoor", {did: 6}, function (res) {
                         if (res.code == 1) {
                             app.showToast("开门成功", "success");
                         }

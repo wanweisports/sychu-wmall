@@ -12,5 +12,10 @@
                 <view class="right-text right-text-order" bindtap="openLock" data-id="{{item.dcid}}">开锁</view>
             </view>
         </view>
+
+         <view class="jiesuan-box">
+            <button class="to-leave-btn" bindtap="leave">直接离开</button>
+            <button class="to-pay-btn" bindtap="toCartOrder">试衣结算</button>
+        </view>
     </view>
 </view>
