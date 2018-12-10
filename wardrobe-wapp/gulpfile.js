@@ -13,6 +13,7 @@ const rename = require("gulp-rename");
 const runSequence = require('run-sequence');
 const jsonlint = require("gulp-jsonlint");
 const cleanCSS = require('gulp-clean-css');
+const replace = require('gulp-replace');
 
 let colors = gutil.colors;
 
@@ -144,6 +145,7 @@ gulp.task('appJS', function () {
 
 gulp.task('appJSPro', function () {
     return gulp.src(['app.js'])
+        .pipe(replace(/version:\s"(.+)"/, 'version:' + (new Date()).getTime()))
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -155,6 +157,7 @@ gulp.task('appJSPro', function () {
 
 gulp.task('appJSTest', function () {
     return gulp.src(['testApp.js'])
+        .pipe(replace(/version:\s"(.+)"/, 'version:' + (new Date()).getTime()))
         .pipe(babel({
             presets: ['es2015']
         }))
