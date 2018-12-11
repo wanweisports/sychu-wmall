@@ -196,7 +196,7 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
     }
 
     private Map checkRfidEpc(String rfidEpc){
-        Map<String, Object> map = baseDao.queryBySqlFirst("SELECT ci.commName FROM sys_commodity_distribution cd, commodity_info ci WHERE cd.cid = cd.cid AND cd.rfidEpc = ?1", rfidEpc);
+        Map<String, Object> map = baseDao.queryBySqlFirst("SELECT ci.commName FROM sys_commodity_distribution cd, commodity_info ci WHERE cd.cid = ci.cid AND cd.rfidEpc = ?1 AND cd.dbTime = CURDATE()", rfidEpc);
         if(map != null) throw new MessageException("标签码与【" + map.get("commName") + "】重复，请检查后再试！");
         return map;
     }

@@ -59,4 +59,16 @@ public class RfidCache {
         return rb != null && rb.getmConnector().isConnected() ? rb : null;
     }
 
+    public static RfidBean getRfidBeanAndOpen(RfidBean rfidBean){
+        RfidBean rb = getRfidBean(rfidBean);
+        if(rb != null){
+            rb = isConnect(rb); //判断是否连接
+            if(rb == null){
+                closeRfid(rb);
+            }
+            return rb;
+        }
+        return null;
+    }
+
 }

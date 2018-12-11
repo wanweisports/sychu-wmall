@@ -42,7 +42,6 @@ public class DistributionController extends BaseController {
     private ICommodityService commodityService;
 
     @Desc("柜子列表")
-    @NotProtected
     @RequestMapping(value = "/settings")
     public String renderDistributionSettings(Model model, DeviceInputView deviceInputView) {
         if(StrUtil.isBlank(deviceInputView.getDbTime())){ //默认当天
@@ -58,7 +57,6 @@ public class DistributionController extends BaseController {
     }
 
     @Desc("衣服列表")
-    @NotProtected
     @RequestMapping(value = "/products")
     public String renderDistributionProducts(CommodityInputView commodityInputView, Model model) {
         commodityInputView.setStatus(IDBConstant.LOGIC_STATUS_YES);
@@ -70,7 +68,6 @@ public class DistributionController extends BaseController {
     }
 
     @Desc("预约单列表")
-    @NotProtected
     @RequestMapping(value = "/orders")
     public String renderDistributionOrders(OrderInputView orderInputView, Model model) {
         model.addAllAttributes(JsonUtils.fromJsonDF(orderInputView));

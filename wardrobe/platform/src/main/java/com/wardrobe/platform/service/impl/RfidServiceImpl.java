@@ -192,7 +192,7 @@ public class RfidServiceImpl extends BaseService implements IRfidService {
             Integer did = sysDeviceInfo.getDid();
             List<Map<String, Object>> sysRfidInfos = baseDao.queryBySql("SELECT * FROM sys_rfid_info WHERE did = ?1", did);
             sysRfidInfos.stream().forEach(map -> {
-                map.put("rfidBean", RfidCache.getRfidBean(new RfidBean(map.get("ip").toString(), StrUtil.objToInt(map.get("port")))));
+                map.put("rfidBean", RfidCache.getRfidBeanAndOpen(new RfidBean(map.get("ip").toString(), StrUtil.objToInt(map.get("port")))));
             });
             data.put("sysRfidInfos", sysRfidInfos);
         }
