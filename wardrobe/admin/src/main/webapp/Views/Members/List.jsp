@@ -38,6 +38,9 @@
                             <form id="members_query_form" method="get" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
+                                        <input type="text" name="nickname" class="form-control" placeholder="会员名" value="${nickname}" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-2">
                                         <input type="text" name="mobile" class="form-control" placeholder="会员手机号" value="${mobile}" autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
