@@ -124,7 +124,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
      */
     @Override
     public Map<String, Object> getUserCenter(int uid){
-        Map<String, Object> data = new HashMap<>(11, 1);
+        Map<String, Object> data = new HashMap<>(12, 1);
 
         UserInfo userInfo = getUserInfo(uid);
         data.put("nickname", userInfo.getNickname());
@@ -141,6 +141,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         data.put("nextScore", sysRankService.getNextScore(rank));
 
         data.put("couponCount", userCouponService.getUserCouponCount(uid));
+        data.put("didStatus", userInfo.getDidStatus());
         return data;
     }
 
@@ -268,6 +269,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
             commodity.put("resourcePath", commodityService.getFmImg(StrUtil.objToInt(commodity.get("cid"))));//0表示封面图
         });
         return pageBean;
+    }
+
+    @Override
+    public void updateDidStatus(int uid, String didStatus) {
+        UserInfo userInfo = getUserInfo(uid);
+        userInfo.setDidStatus(didStatus);
+        baseDao.save(userInfo, uid);
     }
 
 }

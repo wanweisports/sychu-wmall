@@ -151,6 +151,13 @@ public class UserController extends BaseController {
         return new ResponseBean(setPageInfo(pageBean));
     }
 
+    @ResponseBody
+    @RequestMapping("updateDidStatus")
+    public ResponseBean updateDidStatus(String didStatus){
+        userService.updateDidStatus(getUserInfo().getUid(), didStatus);
+        return new ResponseBean(true);
+    }
+
     public static void main(String[] args) throws Exception{
         FileInputStream inputStream = new FileInputStream(new File("D:\\Users\\HHHHH\\0-shiyijian2018-07-17\\img\\2.JPG"));
 

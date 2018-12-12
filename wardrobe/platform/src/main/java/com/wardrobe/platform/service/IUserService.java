@@ -46,4 +46,6 @@ public interface IUserService {
 
     PageBean userCollections(UserInputView userInputView);
 
+    void updateDidStatus(int uid, String didStatus);
+
 }

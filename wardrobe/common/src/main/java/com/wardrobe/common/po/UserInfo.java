@@ -30,6 +30,7 @@ public class UserInfo {
     private String isPerfect;
     private Timestamp registerTime;
     private Timestamp createTime;
+    private String didStatus;
 
     public UserInfo() {
     }
@@ -191,6 +192,14 @@ public class UserInfo {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public String getDidStatus() {
+        return didStatus;
+    }
+
+    public void setDidStatus(String didStatus) {
+        this.didStatus = didStatus;
     }
 
     public UserInfo init(){
