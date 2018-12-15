@@ -38,6 +38,18 @@ Page({
 
         app.toLogin();
     },
+    onShow: function () {
+        let content = this;
+
+        app.checkUserStatus(function (result) {
+            if (result) {
+                app.setCookie("syc_fitting", "yes");
+            }
+            else {
+                app.setCookie("syc_fitting", "no");
+            }
+        });
+    },
     onGetUserInfo: function (event) {
         if (event.type.toLowerCase() == "getuserinfo" && event.detail.errMsg.toLowerCase() == "getuserinfo:ok") {
             app.globalData.sessionId = "";

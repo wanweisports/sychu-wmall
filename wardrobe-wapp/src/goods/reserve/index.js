@@ -155,7 +155,7 @@ Page({
             return;
         }
 
-        if ((new Date(reserveStartTime)).getTime() <= (new Date()).getTime()) {
+        if ((new Date(reserveStartTime.replace(/\-/g, "/"))).getTime() <= (new Date()).getTime()) {
             wx.showModal({
                 title: '提 示',
                 content: '开始时间不能小于当前时间！！',
@@ -164,7 +164,7 @@ Page({
             return;
         }
 
-        if ((new Date(reserveEndTime)).getTime() - (new Date(reserveStartTime)).getTime() > (2 * 60 * 60 * 1000)) {
+        if ((new Date(reserveEndTime.replace(/\-/g, "/"))).getTime() - (new Date(reserveStartTime.replace(/\-/g, "/"))).getTime() > (2 * 60 * 60 * 1000)) {
             wx.showModal({
                 title: '提 示',
                 content: '预约时长不能超过2小时！！',

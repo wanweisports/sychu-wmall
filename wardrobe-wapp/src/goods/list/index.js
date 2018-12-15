@@ -288,5 +288,32 @@ Page({
                 app.showToast(res.message || "获取商品列表失败");
             }
         });
+    },
+    onShow: function () {
+        this.updateUserStatus();
+    },
+    updateUserStatus: function () {
+        let content = this;
+
+        if (app.getCookie("syc_fitting") == "yes") {
+            wx.showModal({
+                title: "提 示",
+                content: "当前检测到您还在试衣中，您还要'继续试衣'吗？",
+                confirmText: "继续试衣",
+                cancelText: "已完成",
+                success: function (res) {
+                    if (res.confirm) {
+                        app.redirect("/pages/user/center-access/index", "redirectTo");
+                    }
+                    else {
+                        app.updateUserStatus(2, function (status) {
+                            if (status) {
+                                app.getCookie("syc_fitting", "no");
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 });

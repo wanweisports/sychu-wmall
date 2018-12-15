@@ -69,7 +69,12 @@ App({
                         }, function (res) {
                             if (res.code == 1) {
                                 content.globalData.sessionId = res.data.sessionId;
-                                content.redirect(content.getCookie("syc_target"), content.getCookie("syc_redirect"));
+                                if (!content.getCookie("syc_leave")) {
+                                    content.redirect(content.getCookie("syc_target"), content.getCookie("syc_redirect"));
+                                }
+                                else {
+                                    content.redirect(content.getCookie("syc_leave"), "redirectTo");
+                                }
 
                                 // if (res.data.perfect == 2) {
                                 //     content.redirect("/pages/user/complete/index");
@@ -111,6 +116,39 @@ App({
         }, function (err) {
             content.showLog("[F][/user/isPerfect]：" + JSON.stringify(err));
             fail(err)
+        });
+    },
+
+    checkUserStatus: function (callback) {
+        let content = this;
+
+        content.wxRequest('/user/userCenter', {}, function (res) {
+            if (res.code == 1) {
+                if (res.data.didStatus == 1) {
+                    return callback(true);
+                }
+            }
+            callback(false);
+        }, function (err) {
+            content.showLog("[F][/user/userCenter]：" + JSON.stringify(err));
+            callback(false)
+        });
+    },
+
+    updateUserStatus: function (status, callback) {
+        let content = this;
+
+        status = status || 2;
+
+        content.wxRequest('/user/updateDidStatus', {didStatus: status}, function (res) {
+            if (res.code == 1) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        }, function (err) {
+            content.showLog("[F][/user/updateDidStatus]：" + JSON.stringify(err));
+            callback(false)
         });
     },
 

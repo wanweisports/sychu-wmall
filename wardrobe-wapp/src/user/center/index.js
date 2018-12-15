@@ -33,7 +33,7 @@ Page({
                     app.wxRequest(res.result, {}, function (res) {
                         if (res.code == 1) {
                             app.showToast("扫码开门成功");
-                            app.redirect("/pages/user/center-access/index", "navigateTo");
+                            app.redirect("/pages/user/center-access/index", "redirectTo");
                         }
                         else {
                             app.showToast(res.message || "扫码开门失败");
@@ -54,6 +54,7 @@ Page({
     },
     onShow: function () {
         this.getUserInfo();
+        this.updateUserStatus();
     },
     inviteFriends : function () {
         //<button open-type="share" class="item-share">邀请好友</button>
@@ -64,5 +65,29 @@ Page({
     },
     recharge: function () {
         app.redirect("/pages/user/recharge/index", "navigateTo");
+    },
+    updateUserStatus: function () {
+        let content = this;
+
+        if (app.getCookie("syc_fitting") == "yes") {
+            wx.showModal({
+                title: "提 示",
+                content: "当前检测到您还在试衣中，您还要'继续试衣'吗？",
+                confirmText: "继续试衣",
+                cancelText: "已完成",
+                success: function (res) {
+                    if (res.confirm) {
+                        app.redirect("/pages/user/center-access/index", "redirectTo");
+                    }
+                    else {
+                        app.updateUserStatus(2, function (status) {
+                            if (status) {
+                                app.getCookie("syc_fitting", "no");
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 });

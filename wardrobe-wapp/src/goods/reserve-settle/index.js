@@ -124,11 +124,13 @@ Page({
         this.setData({
             stopTimer: true
         });
+        app.clearCookie('syc_leave');
     },
     onUnload: function () {
         this.setData({
             stopTimer: true
         });
+        app.clearCookie('syc_leave');
     },
 
     countCartSettle: function () {
@@ -207,6 +209,10 @@ Page({
 
         content.getCartSettle(e.did);
         content.getUserBalance();
+    },
+
+    onShow: function () {
+        app.setCookie('syc_leave', "/pages/user/reserve/index");
     },
 
     createOrder:function () {
