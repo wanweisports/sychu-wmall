@@ -25,9 +25,14 @@ Page({
     initDate: function (startTime, endTime) {
         let today = new Date();
 
+        if (today.getHours() >= 17) {
+            today.setTime(today.getTime() + 24 * 60 * 60 * 1000);
+        }
+
         let reserveDateList = [];
         for (let rl = 0; rl < 14; rl++) {
-            let day = new Date(today.getTime() + (rl + 1) * 24 * 60 * 60 * 1000);
+            let day = new Date();
+            day.setTime(today.getTime() + (rl + 1) * 24 * 60 * 60 * 1000);
             let dayStr = utils.formatDate(day);
 
             reserveDateList.push({
