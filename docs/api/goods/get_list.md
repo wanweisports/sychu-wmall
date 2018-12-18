@@ -15,23 +15,23 @@
 
 ```json
 {
-    "count": 2,       #总条数
-    "pageSize": 10,    #每页条数
-    "lastPage": 1,     #总页数
-    "currentPage": 1,  #当前页
+    "count": 2,         #总条数
+    "pageSize": 10,     #每页条数
+    "lastPage": 1,      #总页数
+    "currentPage": 1,   #当前页
     "list": [{          #商品列表
-        "commName": "商品2",   #商品名称 
-        "brandName":"耐克",    #商品品牌
-        "resourcePath": "https://321.jpg",  #图片地址
-        "price": 900,   #商品价格
-        "couPrice": 800, #优惠价格
-        "cid": 2       #商品id
+        "commName": "商品2",                 #商品名称 
+        "brandName":"耐克",                  #商品品牌
+        "resourcePath": "https://321.jpg",   #图片地址
+        "price": 900,                        #商品价格
+        "couPrice": 800,                     #优惠价格
+        "cid": 2                             #商品id
     }, {
         "commName": "商品1",
-        "brandName":"耐克",    #商品品牌
+        "brandName":"耐克",
         "resourcePath": "https://123.jpg",
         "price": 1000,
-        "couPrice": 800, #优惠价格
+        "couPrice": 800
         "cid": 1
     }, {
         ...

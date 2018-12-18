@@ -12,11 +12,11 @@
 {
     "list": [{
         "title": "我是标题1",
-        "url": "https://www.baidu.com", 【新2018-11-07】
-        "resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs. 94.jpg"
+        "url": "https://www.baidu.com",
+        "resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs.94.jpg"
     }, {
         "title": "我是标题2",
-        "url": "https://www.google.com",【新2018-11-07】
+        "url": "https://www.google.com",
         "resourcePath": "https://oss-admb6.jpg"
     }, {
         ...

@@ -17,14 +17,14 @@
     "currentPage": 1,
     "list": [{                  #购物车列表
         "resourcePath": "https://123.jpg", #图片地址
-        "colorName": "紫色",  #颜色
-        "commName": "123",  #商品名称
-        "size": "M",            #尺码名称
-        "scid": 2,             #购物车id
-        "price": 12,           #商品价格
-        "count": 2            #商品数量
+        "colorName": "紫色",                #颜色
+        "commName": "123",                  #商品名称
+        "size": "M",                        #尺码名称
+        "scid": 2,                          #购物车id
+        "price": 12,                        #商品价格
+        "count": 2                          #商品数量
     }, {
-        "resourcePath": "https://123.jpg", #图片地址
+        "resourcePath": "https://123.jpg",
         "colorName": "紫色",
         "commName": "商品2",
         "size": "XL",
@@ -32,7 +32,7 @@
         "price": 900.22,
         "count": 3
     }, {
-        "resourcePath": "https://123.jpg", #图片地址
+        "resourcePath": "https://123.jpg",
         "colorName": "黄色",
         "commName": "商品3",
         "size": "M",

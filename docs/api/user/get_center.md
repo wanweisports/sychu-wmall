@@ -18,6 +18,7 @@
     "ycoid"       : "Integer 用户薏米",
     "inviteCode"  : "String 用户邀请码",
     "couponCount" : "Integer 用户优惠券数量",
-    "nextScore"   : "Integer 下一级的用户积分（返回0时，说明已经是最高等级）"
+    "nextScore"   : "Integer 下一级的用户积分（返回0时，说明已经是最高等级）",
+    "didStatus"   : "Integer 试衣状态（1：正在试衣  2：未试衣）"
 }
 ```
