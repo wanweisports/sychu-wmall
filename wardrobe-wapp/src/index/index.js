@@ -34,7 +34,18 @@ Page({
         this.getHotGoodsList();
         this.getNewlyGoodsList();
 
-        this.updateUserStatus();
+        let content = this;
+
+        app.checkUserStatus(function (result) {
+            if (result) {
+                app.setCookie("syc_fitting", "yes");
+            }
+            else {
+                app.setCookie("syc_fitting", "no");
+            }
+
+            content.updateUserStatus();
+        });
     },
     getBannerGoodsList: function () {
         let content = this;
