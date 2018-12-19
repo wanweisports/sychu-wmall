@@ -227,6 +227,9 @@
                                         <button type="submit" class="btn btn-primary distribution-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>
+                                        <button type="submit" class="btn btn-primary distribution-copy-btn">
+                                            <i class="fa fa-copy"></i> 复制昨日数据
+                                        </button>
                                     </div>
                                 </div>
                             </form>
