@@ -103,6 +103,13 @@ public class DistributionController extends BaseController {
         return new ResponseBean(true);
     }
 
+    @Desc("添加衣服到某个衣柜")
+    @ResponseBody
+    @RequestMapping(value = "/copyLockCommodity")
+    public ResponseBean copyLockCommodity(){
+        return new ResponseBean(true);
+    }
+
     @Desc("修改射频标签码")
     @ResponseBody
     @RequestMapping(value = "/updateRfidEpc")

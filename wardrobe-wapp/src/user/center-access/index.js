@@ -42,6 +42,19 @@ Page({
             }
         });
     },
+    getWardrobeOrder: function () {
+        let content = this;
+
+        app.wxRequest("/order/reserveOrderInfo", {}, function (res) {
+            if (res.code == 1) {
+                let data = res.data.list;
+
+                if (data.length > 0) {
+                    app.redirect("/pages/user/reserve/index", "redirectTo");
+                }
+            }
+        });
+    },
     openLock: function (e) {
         app.wxRequest("/relay/openLock", {lockId: e.currentTarget.dataset.id}, function (res) {
             if (res.code == 1) {
@@ -50,7 +63,12 @@ Page({
         });
     },
     onShow: function () {
+        this.getWardrobeOrder();
+        
         this.getWardrobeList();
+        app.setCookie('syc_leave', "/pages/user/center-access/index");
+
+        this.yesUserStatus();
     },
     toCartOrder: function () {
         app.redirect("/pages/goods/reserve-settle/index?did=" + this.data.wardrobeInfo.did, "navigateTo");
@@ -87,10 +105,39 @@ Page({
                         app.wxRequest("/relay/closeDoor", {did: 6}, function (res) {
                             if (res.code == 1) {
                                 app.showToast("开门成功", "success");
+                                content.noUserStatus();
+
+                                app.redirect("/pages/index/index", "switchTab");
                             }
                         });
                     });
                 }
+            }
+        });
+    },
+
+    onHide: function () {
+        app.clearCookie('syc_leave');
+    },
+    onUnload: function () {
+        app.clearCookie('syc_leave');
+    },
+
+    yesUserStatus: function () {
+        let content = this;
+
+        app.updateUserStatus(1, function (status) {
+            if (status) {
+                app.getCookie("syc_fitting", "yes");
+            }
+        });
+    },
+    noUserStatus: function () {
+        let content = this;
+
+        app.updateUserStatus(2, function (status) {
+            if (status) {
+                app.getCookie("syc_fitting", "no");
             }
         });
     }

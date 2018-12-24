@@ -13,7 +13,7 @@
     "list": [{
         "commNo": "商品编号",
         "brandName": "品牌1",
-        "recommendCid": 2,  #商品id
+        "recommendCid": 2,       #商品id
         "price": 900.22,
         "resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs.com/img/94a4d496b90c430496c571d36774b2fa.jpg",
         "commName": "商品2",
@@ -21,7 +21,7 @@
     }, {
         "commNo": "商品编号1",
         "brandName": "品牌2",
-        "recommendCid": 9, #商品id
+        "recommendCid": 9,
         "price": 12,
         "resourcePath": "https://oss-admin.oss-cn-beijing.aliyuncs.com/img/94a4d496b90c430496c571d36774b2fa.jpg",
         "commName": "123",

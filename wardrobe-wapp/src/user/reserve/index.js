@@ -84,6 +84,7 @@ Page({
                 app.wxRequest("/relay/openDoor", {did: 6}, function (res) {
                     if (res.code == 1) {
                         app.showToast("扫码开门成功", "success");
+                        content.yesUserStatus();
                     }
                 });
             }
@@ -158,10 +159,31 @@ Page({
                         app.wxRequest("/relay/closeDoor", {did: 6}, function (res) {
                             if (res.code == 1) {
                                 app.showToast("开门成功", "success");
+                                content.noUserStatus();
+
+                                app.redirect("/pages/index/index", "switchTab");
                             }
                         });
                     });
                 }
+            }
+        });
+    },
+    yesUserStatus: function () {
+        let content = this;
+
+        app.updateUserStatus(1, function (status) {
+            if (status) {
+                app.getCookie("syc_fitting", "yes");
+            }
+        });
+    },
+    noUserStatus: function () {
+        let content = this;
+
+        app.updateUserStatus(2, function (status) {
+            if (status) {
+                app.getCookie("syc_fitting", "no");
             }
         });
     }

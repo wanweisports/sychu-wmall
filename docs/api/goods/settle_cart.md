@@ -12,15 +12,15 @@
 {
     "discount": 0.95,
     "sumPrice": 2202.22,          #最终支付金额
-    "sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）【新10-17】
-    "sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）【新10-17】
-    "userDiscountSubPrice":200,   #用户等级折扣减去了多少金额【新10-17】
-    "couponPrice": 0,             #使用的优惠券金额【新10-17】
-    "useYcoid": 0,                #使用的衣橱币数量【新10-17】
-    "ycoid": 500,             #用户当前衣橱币数量
-    "balance": 3000,          #用户总余额【新11-01】
-    "useBalance": 1,              #是否可以使用余额支付1：是 2：否【新11-01】
-    "freight": 13,   #【新10-16，运费】
+    "sumOldPrice": 2512.33,       #商品总金额（未减去用户折扣）
+    "sumOldDisPrice": 2312.33,    #商品总金额（减去用户折扣）
+    "userDiscountSubPrice":200,   #用户等级折扣减去了多少金额
+    "couponPrice": 0,             #使用的优惠券金额
+    "useYcoid": 0,                #使用的衣橱币数量
+    "ycoid": 500,                 #用户当前衣橱币数量
+    "balance": 3000,              #用户总余额
+    "useBalance": 1,              #是否可以使用余额支付1：是 2：否
+    "freight": 13,                #运费
     "list": [{
         "colorName": "黄色",
         "size": "M",
