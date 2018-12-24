@@ -98,6 +98,25 @@
                 });
             }
         }
+
+        function updateDistributionDate(btn){
+            var dbTime = $("#dbTime").val();
+            if(!dbTime){
+                alert("请选择配送时间");
+                return;
+            }
+            if(window.confirm("确认将" + dbTime + "的配送商品更新到今天吗？")) {
+                $(btn).prop("disabled", true).text("正在处理..");
+                $.post("/admin/distribution/updateDistributionDate", {dbTime: dbTime}, function (res) {
+                    alert(res.message);
+                    if(res.code == 1){
+                        window.location.reload();
+                    }else{
+                        $(btn).prop("disabled", false).html('<i class="fa"></i> 更 新');
+                    }
+                });
+            }
+        }
     </script>
 </layout:override>
 
@@ -223,9 +242,14 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-1">
                                         <button type="submit" class="btn btn-primary distribution-query-btn">
                                             <i class="fa fa-search"></i> 检 索
+                                        </button>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn" id="distribution_update_btn" onclick="updateDistributionDate(this)">
+                                            <i class="fa"></i> 更 新
                                         </button>
                                     </div>
                                 </div>

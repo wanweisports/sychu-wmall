@@ -233,7 +233,8 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
             commodityInputView.setCommName("%" + commName + "%");
         }
         if(StrUtil.isNotBlank(commNo)){
-            whereSql.append(" AND ci.commNo = :commNo");
+            whereSql.append(" AND ci.commNo LIKE :commNo");
+            commodityInputView.setCommNo("%" + commNo + "%");
         }
         if(StrUtil.isNotBlank(status)){
             whereSql.append(" AND ci.status = :status");

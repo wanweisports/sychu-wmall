@@ -35,7 +35,7 @@
                             <strong>会员列表</strong>
                         </div>
                         <div class="card-block">
-                            <form id="members_query_form" method="get" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
+                            <form id="members_query_form" method="post" class="form-horizontal" action="/admin/members/list"<%-- novalidate onsubmit="return false;"--%>>
                                 <div class="form-group row">
                                     <div class="col-md-2">
                                         <input type="text" name="nickname" class="form-control" placeholder="会员名" value="${nickname}" autocomplete="off">
@@ -46,7 +46,7 @@
                                     <div class="col-md-2">
                                         <input type="text" name="invitedBy" class="form-control" placeholder="邀请人" value="${invitedBy}" autocomplete="off">
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-5">
                                         <button type="submit" class="btn btn-primary members-query-btn">
                                             <i class="fa fa-search"></i> 检 索
                                         </button>

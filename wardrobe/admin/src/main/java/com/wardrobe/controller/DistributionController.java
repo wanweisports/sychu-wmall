@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +109,14 @@ public class DistributionController extends BaseController {
     public ResponseBean updateRfidEpc(SysCommodityDistribution commodityDistribution){
         deviceService.updateRfidEpc(commodityDistribution);
         return new ResponseBean(true);
+    }
+
+    @Desc("修改配送日期")
+    @ResponseBody
+    @RequestMapping(value = "/updateDistributionDate")
+    public ResponseBean updateDistributionDate(String dbTime) throws ParseException {
+        Integer count = deviceService.updateDistributionDate(dbTime);
+        return new ResponseBean(true, "更新成功" + count + "条记录！");
     }
 
 }

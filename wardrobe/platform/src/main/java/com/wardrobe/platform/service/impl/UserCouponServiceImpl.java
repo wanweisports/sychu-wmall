@@ -25,6 +25,17 @@ import java.util.Map;
 public class UserCouponServiceImpl extends BaseService implements IUserCouponService {
 
     @Override
+    public void updateExpiredCoupons(){
+        List<UserCouponInfo> userCouponInfos = baseDao.queryByHql("FROM UserCouponInfo WHERE status = ?1 AND dueTime < ?2", IDBConstant.LOGIC_STATUS_NO, new java.sql.Date(System.currentTimeMillis()));
+        if(userCouponInfos != null && userCouponInfos.size() > 0){
+            userCouponInfos.stream().forEach(userCouponInfo -> {
+                userCouponInfo.setStatus(IDBConstant.LOGIC_STATUS_OTHER); //已过期
+                baseDao.save(userCouponInfo, userCouponInfo.getCpid());
+            });
+        }
+    }
+
+    @Override
     public int getUserCouponCount(int userId){
         return baseDao.getUniqueResult("SELECT COUNT(1) FROM user_coupon_info uci WHERE uci.uid = ?1 AND uci.status = ?2", userId, IDBConstant.LOGIC_STATUS_NO).intValue();
     }

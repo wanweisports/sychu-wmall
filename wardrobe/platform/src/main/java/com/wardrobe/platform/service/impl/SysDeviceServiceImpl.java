@@ -14,7 +14,6 @@ import com.wardrobe.common.view.DeviceInputView;
 import com.wardrobe.platform.service.ISysDeviceService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
@@ -25,7 +24,7 @@ import java.util.Map;
 /**
  * Created by cxs on 2018/8/24.
  */
-@Service()
+@Service
 public class SysDeviceServiceImpl extends BaseService implements ISysDeviceService {
 
     @Override
@@ -193,6 +192,20 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
         SysCommodityDistribution commodityDistributionDB = getCommodityDistribution(commodityDistribution.getDbid());
         commodityDistributionDB.setRfidEpc(commodityDistribution.getRfidEpc());
         baseDao.save(commodityDistributionDB, commodityDistributionDB.getDbid());
+    }
+
+    @Override
+    public Integer updateDistributionDate(String dbTime) throws ParseException{
+        java.sql.Date date = new java.sql.Date(DateUtil.stringToDate(dbTime, DateUtil.YYYYMMDD).getTime());
+        java.sql.Date nowDate = new java.sql.Date(System.currentTimeMillis());
+        List<SysCommodityDistribution> commodityDistributions = baseDao.queryByHql("FROM SysCommodityDistribution cd WHERE cd.dbTime = ?1", date);
+        if(commodityDistributions != null && commodityDistributions.size() > 0){
+            commodityDistributions.stream().forEach(commodityDistribution -> {
+                commodityDistribution.setDbTime(nowDate);
+                baseDao.save(commodityDistribution, commodityDistribution.getDbid());
+            });
+        }
+        return commodityDistributions.size();
     }
 
     private Map checkRfidEpc(String rfidEpc){

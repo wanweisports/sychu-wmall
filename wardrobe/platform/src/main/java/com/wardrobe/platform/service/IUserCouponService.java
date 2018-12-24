@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public interface IUserCouponService {
 
+    void updateExpiredCoupons();
+
     int getUserCouponCount(int userId);
 
     List<Map<String, Object>> getUserCoupons(int userId);

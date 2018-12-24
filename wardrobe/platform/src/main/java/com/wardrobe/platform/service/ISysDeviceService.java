@@ -42,4 +42,6 @@ public interface ISysDeviceService {
 
     void updateRfidEpc(SysCommodityDistribution commodityDistribution);
 
+    Integer updateDistributionDate(String dbTime) throws ParseException;
+
 }

@@ -69,8 +69,8 @@
                 <div class="modal-body">
                     <div class="alert alert-warning" id="member_value_tip">填写修正金额，请慎重考虑！</div>
                     <form id="member_value_form" method="post" class="form-horizontal" novalidate onsubmit="return false;">
-                        <input type="text" id="uid" name="uid" value="${user.uid}">
-                        <input type="text" id="type" name="type" />
+                        <input type="hidden" id="uid" name="uid" value="${user.uid}">
+                        <input type="hidden" id="type" name="type" />
                         <div class="form-group row">
                             <label class="col-md-4 form-control-label" for="price">
                                 <span class="text-danger">*</span> 修正值
@@ -209,7 +209,8 @@
                                     <td>￥${c.couponPrice}</td>
                                     <td>
                                         <c:if test="${c.status == '1'}">已使用</c:if>
-                                        <c:if test="${c.status != '1'}">未使用</c:if>
+                                        <c:if test="${c.status == '2'}">未使用</c:if>
+                                        <c:if test="${c.status == '3'}">已过期</c:if>
                                     </td>
                                     <td>${c.dueTime}</td>
                                 </tr>

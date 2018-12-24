@@ -2,6 +2,7 @@ package com.wardrobe.platform.task;
 
 import com.wardrobe.common.po.UserOrderInfo;
 import com.wardrobe.platform.service.IOrderService;
+import com.wardrobe.platform.service.IUserCouponService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +21,9 @@ public class OrderJob {
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private IUserCouponService userCouponService;
+
     @Scheduled(cron = "0 0/1 * * * ?")   //@Scheduled(cron = "0 0 15 * * ?")//每周四12点执行
     public void execute() {
         try {
@@ -28,6 +32,7 @@ public class OrderJob {
             List<UserOrderInfo> overtimeOrders = orderService.getOvertimeOrders();
             orderService.updateOvertimeOrders(overtimeOrders);
 
+            userCouponService.updateExpiredCoupons();
             System.out.println("===================================================================");
         } catch (Exception ex) {
             logger.error("orderJob error!", ex);

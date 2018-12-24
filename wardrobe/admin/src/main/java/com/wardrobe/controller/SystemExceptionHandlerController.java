@@ -23,7 +23,7 @@ public class SystemExceptionHandlerController {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseBean exceptionHandler(Exception e, HttpServletRequest request)throws Exception{
-        logger.error(DateUtil.dateToString(new Date(), DateUtil.YYYYMMDDHHMMSS) + "【admin错误日志】：" + e.getMessage());
+        logger.error(DateUtil.dateToString(new Date(), DateUtil.YYYYMMDDHHMMSS) + "【admin错误日志】：" + e.getMessage(), e);
         if(InterceptorHelp.isAjax(request)) {
             e.printStackTrace();
             if(e instanceof MessageException) {
