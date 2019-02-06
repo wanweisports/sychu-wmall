@@ -61,9 +61,9 @@ public class WardrobeController extends BaseController {
 
     @Desc("试衣间面板")
     @RequestMapping(value = "/dashboard")
-    public String renderWardrobeDashboard(Model model) {
-        model.addAllAttributes(relayService.getRealyIndexsIn());
-        model.addAllAttributes(rfidService.getSysRfidIndexsIn());
+    public String renderWardrobeDashboard(int did, Model model) {
+        model.addAllAttributes(relayService.readAll(did));
+        /*model.addAllAttributes(rfidService.getSysRfidIndexsIn());*/
         return "Wardrobe/Dashboard";
     }
 

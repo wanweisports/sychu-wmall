@@ -26,7 +26,7 @@ public class RfidController extends BaseController {
     private int rfid1 = 1;
     private int rfid2 = 2;
 
-    @Desc("连接射频")
+/*    @Desc("连接射频")
     @ResponseBody
     @RequestMapping(value = "/connectRfid")
     public ResponseBean connectRfid(int rfid){
@@ -42,17 +42,17 @@ public class RfidController extends BaseController {
         SysRfidInfo rfidInfo = rfidService.getRfidInfo(rfid);
         rfidService.closeRfid(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()));
         return new ResponseBean(true);
-    }
+    }*/
 
-    @Desc("测试读取射频电子标签")
+    /*@Desc("测试读取射频电子标签")
     @ResponseBody
     @RequestMapping(value = "/readEpcLabelCK")
     public ResponseBean readEpcLabelCK(int did){
         SysRfidInfo rfidInfo = rfidService.getSysRfidInfoByDid(did, IDBConstant.LOGIC_STATUS_YES);
         return new ResponseBean(rfidService.readEpcLabelIn(new RfidBean(rfidInfo.getIp(), rfidInfo.getPort(), rfidInfo.getWorkAntenna()), 10));
-    }
+    }*/
 
-    @Desc("读取商场射频电子标签")
+/*    @Desc("读取商场射频电子标签")
     @ResponseBody
     @NotProtected
     @RequestMapping(value = "/readEpcLabelSC")
@@ -64,6 +64,6 @@ public class RfidController extends BaseController {
             e.printStackTrace();
             return new ResponseBean(e.getMessage());
         }
-    }
+    }*/
 
 }

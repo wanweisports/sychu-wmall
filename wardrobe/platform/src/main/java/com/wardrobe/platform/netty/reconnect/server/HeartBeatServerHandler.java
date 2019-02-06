@@ -1,5 +1,11 @@
 package com.wardrobe.platform.netty.reconnect.server;
 
+import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.platform.netty.client.ClientChannelUtil2;
+import com.wardrobe.platform.netty.client.bean.ClientBean;
+import com.wardrobe.platform.rfid.util.StringTool;
+import com.wardrobe.platform.service.ISysDeviceService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -11,8 +17,10 @@ import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 心跳检测业务处理类
@@ -20,6 +28,11 @@ import java.net.InetAddress;
 public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    private ISysDeviceService sysDeviceService;
+    public HeartBeatServerHandler(ISysDeviceService sysDeviceService){
+        this.sysDeviceService = sysDeviceService;
+    }
 
     /**
      * 覆盖 channelActive 方法 在channel被启用的时候触发 (在建立连接的时候)
@@ -45,17 +58,52 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("server channelRead..");
-        String message = getMessage((ByteBuf) msg);
-        System.out.println(ctx.channel().remoteAddress() + "->Server :" + message);
-        if(message.equals("Heartbeat")){
-            ctx.write("has read message from client");
-            ctx.flush();
-        }else{
-            //返回客户端消息
-            ctx.writeAndFlush(sendMsg("服务端说：我收到你的消息了====="));
+        try{
+            System.out.println("server channelRead.." + msg);
+            String message = getMessage((ByteBuf) msg);
+            System.out.println(ctx.channel().remoteAddress() + "->Server :" + message);
+            String[] strAryHex = message.split(" ");
+            if(message.contains("AA CA FF")){ //心跳：A5 5A 1F 00 00 01 AA CA FF
+                ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(message.split(" "), strAryHex.length)));
+            }else{
+                ClientBean clientBean = ClientChannelUtil2.getClientBeanByMsg(message);
+                String comm = strAryHex[6];
+                switch (comm){ //读取某个试衣间所有硬件状态
+                    case "DC":
+                        for(int i = 7; i < strAryHex.length-2;){
+                            String hex = strAryHex[i];
+                            if("DA".equals(hex)){       //大门(0)
+                                clientBean.getDeviceControl(0).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[i + 1])));
+                                i=i+2;
+                            }else if("DB".equals(hex)){ //柜子(1-8)
+                                clientBean.getDeviceControl(Integer.parseInt(strAryHex[i+1])).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[i + 2])));
+                                i=i+3;
+                            }
+                        }
+                        break;
+                    case "DA":
+                        clientBean.getDeviceControl(0).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[7])));
+                        break;
+                    case "DB":
+                        clientBean.getDeviceControl(Integer.parseInt(strAryHex[7])).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[8])));
+                        break;
+                    case "DD": //读取当前射频标签数量，硬件返回:0x05 RFID1 RFID2 …RFID5,  0x05:RFID数量，RFID1-5：RFID标签的值。
+                        List<String> rfids = new ArrayList<>();
+                        for(int i = 8; i < strAryHex.length-2;i++){
+                            rfids.add(strAryHex[i]);
+                        }
+                        clientBean.setRfidDatas(rfids);
+                        break;
+                }
+                if(clientBean != null) {
+                    clientBean.setReadStatus(IDBConstant.LOGIC_STATUS_YES);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            ReferenceCountUtil.release(msg);
         }
-        ReferenceCountUtil.release(msg);
     }
 
     //待解决===channelActive====handlerAdded
@@ -64,12 +112,14 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("服务端handlerAdded");
         Channel incoming = ctx.channel();
         channels.add(incoming);
-        System.out.println("cs：" + channels.size());
+        String deviceNo = "1F 00 00 01";
+        ClientChannelUtil2.connectServerChannel(incoming, deviceNo, sysDeviceService.getDeviceControl(deviceNo)); //试衣间1，先固定写
+        /*System.out.println("cs：" + channels.size());
         for (Channel channel : channels){
             System.out.println("服务端handlerAdded：" + incoming.remoteAddress());
             channel.writeAndFlush(sendMsg("服务端说：欢迎[" + incoming.remoteAddress() + "]加入，当前总连接数：" + channels.size() + "\n"));
         }
-        incoming.writeAndFlush(sendMsg("欢迎来到" + InetAddress.getLocalHost().getHostName() + " service!"));
+        incoming.writeAndFlush(sendMsg("欢迎来到" + InetAddress.getLocalHost().getHostName() + " service!"));*/
     }
 
     @Override
@@ -77,10 +127,11 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("服务端handlerRemoved");
         Channel leaving = ctx.channel();
         channels.remove(leaving);
-        for (Channel channel : channels){
+        ClientChannelUtil2.clearServerChannel(leaving);
+        /*for (Channel channel : channels){
             System.out.println("handlerRemoved：" + leaving.remoteAddress());
             channel.writeAndFlush(sendMsg("服务端说：[" + leaving.remoteAddress() + "]离开，当前总连接数：" + channels.size()));
-        }
+        }*/
     }
 
     /**
@@ -102,6 +153,7 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
         System.out.println(ctx.channel().remoteAddress() + "发生异常，退出，当前总连接数：" + channels.size());
+        ClientChannelUtil2.clearServerChannel(ctx.channel());
     }
 
     /**
@@ -111,8 +163,9 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         byte[] con = new byte[buf.readableBytes()];
         buf.readBytes(con);
         try {
-            return new String(con, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+            //return new String(con, "UTF-8");
+            return StringTool.byteArrayToString(con, 0, con.length);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

@@ -1,5 +1,6 @@
 package com.wardrobe.platform.netty.client;
 
+import com.wardrobe.platform.rfid.util.StringTool;
 import com.wardrobe.platform.service.ISysDeviceService;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -80,10 +81,10 @@ public class NettyClient {
             }
         }.start();*/
 
-        //NettyClient nettyClient = new NettyClient("192.168.1.198", 4001, null);
-        NettyClient nettyClient = new NettyClient("localhost", 9900, null);
+        NettyClient nettyClient = new NettyClient("127.0.0.1", 9900, null);
+        //NettyClient nettyClient = new NettyClient("server.natappfree.cc", 32911, null);
         try {
-            nettyClient.clientServer();
+            nettyClient.clientServer().channel().closeFuture().sync();
         }catch (Exception e){e.printStackTrace();}
     }
 

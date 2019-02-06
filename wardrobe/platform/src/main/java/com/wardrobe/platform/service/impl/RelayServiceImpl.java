@@ -4,25 +4,25 @@ import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.bean.UserDriveBean;
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.exception.MessageException;
-import com.wardrobe.common.po.ReserveOrderInfo;
 import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 import com.wardrobe.common.util.DateUtil;
-import com.wardrobe.platform.netty.client.ClientChannelUtil;
-import com.wardrobe.platform.netty.client.NettyClient;
-import com.wardrobe.platform.netty.client.bean.DeviceBean;
+import com.wardrobe.common.util.StrUtil;
+import com.wardrobe.platform.netty.client.ClientChannelUtil2;
+import com.wardrobe.platform.netty.client.bean.ClientBean;
+import com.wardrobe.platform.rfid.bean.RfidBean;
+import com.wardrobe.platform.rfid.cache.RfidCache;
 import com.wardrobe.platform.service.IOrderService;
 import com.wardrobe.platform.service.IRelayService;
 import com.wardrobe.platform.service.ISysDeviceService;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.util.CharsetUtil;
+import com.wardrobe.platform.service.IUserShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxs on 2018/9/10.
@@ -42,6 +42,11 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     }
 
     @Override
+    public SysDeviceControl getSysDeviceControl(int dcid){
+        return baseDao.getToEvict(SysDeviceControl.class, dcid);
+    }
+
+/*    @Override
     public synchronized boolean connectServer(String ip, int port) throws Exception{
         Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
         if(serverChannel == null) {
@@ -51,39 +56,28 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
         }
-    }
+        return true;
+    }*/
 
-    @Override
-    public synchronized void openServerLock(String ip, int port, int lockId) throws Exception{
+/*    @Override
+    public synchronized void openServerLock(int did, int lockId) throws Exception{
         //判断是否连接中
-        if(ClientChannelUtil.isOpen(ip, port)) {
-            Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            //判断是否为关闭状态才能打开
-            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
-            if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
-                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.PULSE_OPEN + lockId, CharsetUtil.UTF_8));
-            }
-        }else{
-            throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
-        }
+        ClientChannelUtil2.isOpenThrowable();
+
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEvent(clientBean, new String[]{"DB", "0"+lockId, "01"});
     }
 
     @Override
-    public synchronized void closeServerLock(String ip, int port, int lockId){
+    public synchronized void closeServerLock(int did, int lockId){
         //判断是否连接中
-        if(ClientChannelUtil.isOpen(ip, port)) {
-            Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            //判断是否为打开状态才能关闭
-            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, lockId);
-            if(ClientChannelUtil.READ_OPEN.equals(deviceBean.getStatus())) {
-                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + lockId, CharsetUtil.UTF_8));
-            }
-        }else{
-            throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
-        }
-    }
+        ClientChannelUtil2.isOpenThrowable();
 
-    @Override
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEvent(clientBean, new String[]{"DB", "0"+lockId, "00"});
+    }*/
+
+/*    @Override
     public synchronized void openServerAllLock(String ip, int port){
         //判断是否连接中
         if(ClientChannelUtil.isOpen(ip, port)) {
@@ -103,87 +97,61 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         }else{
             throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
         }
-    }
+    }*/
 
-    @Override
-    public synchronized void openServerDrive(String ip, int port, int driveId){
+/*    @Override
+    public synchronized void openServerDrive(int did){
         //判断是否连接中
-        if(ClientChannelUtil.isOpen(ip, port)) {
-            Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            //判断是否为关闭状态才能打开
-            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, driveId);
-            if(ClientChannelUtil.READ_CLOSE.equals(deviceBean.getStatus())) {
-                if(driveId == 6){
-                    serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.PULSE_OPEN + driveId, CharsetUtil.UTF_8)); //大门电脉冲
-                }else {
-                    serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_OPEN + driveId, CharsetUtil.UTF_8));  //开大门依然不变
-                }
-            }
-        }else{
-            throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
-        }
+        ClientChannelUtil2.isOpenThrowable();
+
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEvent(clientBean, new String[]{"DA", "01"});
     }
 
     @Override
-    public synchronized void closeServerDrive(String ip, int port, int driveId){
+    public synchronized void closeServerDrive(int did){
         //判断是否连接中
-        if(ClientChannelUtil.isOpen(ip, port)) {
-            Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
-            //判断是否为打开状态才能关闭
-            SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(serverChannel, driveId);
-            if(ClientChannelUtil.READ_OPEN.equals(deviceBean.getStatus())) {
-                serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.LOCK_CLOSE + driveId, CharsetUtil.UTF_8));
-            }
-        }else{
-            throw new MessageException(ClientChannelUtil.getNowStatus(ip, port));
-        }
-    }
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
 
-    @Override
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        //判断是否为关闭状态才能打开
+        ClientChannelUtil2.sendEvent(clientBean, new String[]{"DA", "00"});
+    }*/
+
+/*    @Override
     public Map<String, Object> getRealyIndexsIn(){
         Map<String, Object> data = new HashMap<>(5, 1);
         SysDeviceInfo sysDeviceInfo = baseDao.queryByHqlFirst("FROM SysDeviceInfo");
         if(sysDeviceInfo != null) {
             //获取8个柜子的状态
-            String doorIp = sysDeviceInfo.getDoorIp();
+            *//*String doorIp = sysDeviceInfo.getDoorIp();
             Integer doorPort = sysDeviceInfo.getDoorPort();
             String lockIp = sysDeviceInfo.getLockIp();
-            Integer lockPort = sysDeviceInfo.getLockPort();
+            Integer lockPort = sysDeviceInfo.getLockPort();*//*
             data.put("deviceInfo", sysDeviceInfo);
-            data.put("doorStatus", ClientChannelUtil.getNowStatus(doorIp, doorPort)); //门连接状态
-            data.put("lockStatus", ClientChannelUtil.getNowStatus(lockIp, lockPort)); //锁连接状态
-
-            //获取门的状态
-            if(ClientChannelUtil.isOpen(doorIp, doorPort)) {
+            //获取硬件的状态
+            if(ClientChannelUtil2.isOpen()) {
                 List<SysDeviceControl> deviceDoorControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", sysDeviceInfo.getDid(), IDBConstant.LOGIC_STATUS_YES);
                 deviceDoorControls.stream().forEach(deviceControl -> {
                     SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(doorIp, doorPort), deviceControl.getLockId());
                     deviceControl.setStatus(deviceBean.getStatus());
                 });
                 data.put("deviceDoorControls", deviceDoorControls);
-            }
 
+                data.put("conStatus", true);
+            }else{
+                data.put("conStatus", false); //服务器连接状态
+            }
             //获取锁的状态
-            data.put("deviceControls", getAllDeviceControls(lockIp, lockPort, sysDeviceInfo.getDid()));
+            *//*data.put("deviceControls", getAllDeviceControls(lockIp, lockPort, sysDeviceInfo.getDid()));*//*
         }
         return data;
-    }
-
-    private List<SysDeviceControl> getAllDeviceControls(String lockIp, int lockPort, int did){
-        if(ClientChannelUtil.isOpen(lockIp, lockPort)) {
-            List<SysDeviceControl> deviceControls = baseDao.queryByHql("FROM SysDeviceControl WHERE did = ?1 AND type = ?2", did, IDBConstant.LOGIC_STATUS_NO);
-            deviceControls.stream().forEach(deviceControl -> {
-                SysDeviceControl deviceBean = ClientChannelUtil.readDriveStatus(ClientChannelUtil.getServerChannel(lockIp, lockPort), deviceControl.getLockId());
-                deviceControl.setStatus(deviceBean.getStatus());
-            });
-            return deviceControls;
-        }
-        return null;
-    }
+    }*/
 
     @Override
     public void openDoor(int did, int uid){
-        SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
+        /*SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
         ReserveOrderInfo reserveOrderInfo = orderService.getLastReserveOrderInfo(uid);
         //1.判断射频（除了已支付的衣服标签，是否都检查到了，再开门）
         if(1==1){}
@@ -197,10 +165,10 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             } catch (MessageException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
-    @Override
+    /*@Override
     public void closeDoor(int did, int uid){
         SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
         try {
@@ -230,20 +198,20 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         } catch (MessageException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void downlineRelay(String ip, int port){
         Channel serverChannel = ClientChannelUtil.getServerChannel(ip, port);
         if(serverChannel != null){
             serverChannel.eventLoop().parent().shutdownGracefully();
         }
-    }
+    }*/
 
     @Desc("扫码开门==进门")
     @Override
     public synchronized void saveUserOpenServerDrive(UserDriveBean userDriveBean) throws Exception{
-        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
         //2. 试衣间可用？
         if(!IDBConstant.LOGIC_STATUS_YES.equals(sysDeviceInfo.getStatus())){ //N: 提示 试衣间当前不可用，请稍后再试
             Date datePrev15 = DateUtil.addHHMMTime(new Date(), Calendar.MINUTE, -16);
@@ -265,7 +233,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         sysDeviceInfo.setOpenTime(nowDate);
         sysDeviceInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //占用
         sysDeviceInfo.setOpenLockTime(nowDate);
-        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
 
 
     }
@@ -273,7 +241,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     @Desc("扫码开柜门")
     @Override
     public synchronized void saveUserOpenServerLock(UserDriveBean userDriveBean) throws Exception {
-        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
         //7.下发柜门开门指令
         openServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
 
@@ -284,7 +252,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
 
         sysDeviceInfo.setOpenLockTime(nowDate);
-        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
         //8.用户试衣
 
 
@@ -293,20 +261,20 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     @Desc("扫码关柜门")
     @Override
     public synchronized void saveUserCloseServerLock(UserDriveBean userDriveBean) throws Exception {
-        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
         //7.下发柜门开门指令
         closeServerLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort(), userDriveBean.getDriveId());
 
         SysDeviceControl sysDeviceControl = deviceService.getSysDeviceControl(userDriveBean.getDriveId());
         sysDeviceControl.setCloseTime(DateUtil.getNowDate());
         sysDeviceControl.setLock(IDBConstant.LOGIC_STATUS_NO); //锁住
-        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());
+        baseDao.save(sysDeviceControl, sysDeviceControl.getDcid());*/
     }
 
     @Desc("扫码开门==出门")
     @Override
     public synchronized void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception{
-        SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
+        /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
 
         //9.出门与支付
         //判断是否所有锁关闭状态才能打开（出）大门
@@ -314,10 +282,10 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         StringBuilder msg = new StringBuilder();
         if(allDeviceControls != null){
             allDeviceControls.stream().forEach(deviceControl -> {
-                if (ClientChannelUtil.READ_OPEN.equals(deviceControl.getStatus())) {
+                *//*if (ClientChannelUtil.READ_OPEN.equals(deviceControl.getStatus())) { //暂时
                     if(msg.length() > 0) msg.append("、");
                     msg.append(deviceControl.getName());
-                }
+                }*//*
             });
         }
         if(msg.length() > 0){ //检查柜门关闭状态已全部关闭？N： 提示 请关好柜门再出门
@@ -345,7 +313,140 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         sysDeviceInfo.setCloseTime(DateUtil.getNowDate());
         sysDeviceInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //解除占用
         sysDeviceInfo.setOpenLockTime(null);
-        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());
+        baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
+    }
+
+    @Desc("开大门")
+    @Override
+    public synchronized Map<String, Object> openDoor(int did){
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DA", "01"});
+
+        sleep();
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("status", clientBean.getDeviceControl(0).getReadStatus());
+        return data;
+    }
+
+    public void sleep(){
+        try{
+            Thread.sleep(500L);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Desc("关大门")
+    @Override
+    public synchronized Map<String, Object> closeDoor(int did){
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DA", "00"});
+
+        sleep();
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("status", clientBean.getDeviceControl(0).getReadStatus());
+        return data;
+    }
+
+    @Desc("开柜门")
+    @Override
+    public synchronized Map<String, Object> openLock(int did, int lock){
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DB", "0" + lock, "01"});
+
+        sleep();
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("status", clientBean.getDeviceControl(lock).getReadStatus());
+        return data;
+    }
+
+    @Desc("关柜门")
+    @Override
+    public synchronized Map<String, Object> closeLock(int did, int lock){
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DB", "0" + lock, "00"});
+
+        sleep();
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("status", clientBean.getDeviceControl(lock).getReadStatus());
+        return data;
+    }
+
+    @Desc("读取某个试衣间所有硬件状态")
+    @Override
+    public synchronized Map<String, Object> readAll(int did){
+        Map<String, Object> data = new HashMap<>();
+        SysDeviceInfo sysDeviceInfo = baseDao.queryByHqlFirst("FROM SysDeviceInfo WHERE did = ?1", did);
+        data.put("deviceInfo", sysDeviceInfo);
+        if(ClientChannelUtil2.isOpen()) {
+            ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+            ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DC"});
+
+            sleep();
+            data.put("status", IDBConstant.LOGIC_STATUS_YES); //连接状态
+            data.put("deviceControls", clientBean.getSysDeviceControls());
+            data.put("connDate", DateUtil.dateToString(clientBean.getConnDate(), DateUtil.YYYYMMDDHHMMSS));
+        }else{
+            data.put("status", IDBConstant.LOGIC_STATUS_NO); //连接状态
+        }
+        return data;
+    }
+
+    @Desc("测试读取射频电子标签")
+    @Override
+    public synchronized Map<String, Object> rfidRead(int did){
+        //判断是否连接中
+        ClientChannelUtil2.isOpenThrowable();
+        ClientBean clientBean = ClientChannelUtil2.getClientBean(did);
+        ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DD"});
+
+        sleep();
+        Map<String, Object> data = new HashMap<>(1, 1);
+        data.put("rfids", clientBean.getRfidDatas());
+        return data;
+    }
+
+    @Autowired
+    private IUserShoppingCartService userShoppingCartService;
+
+    @Override
+    public Map<String, Object> readEpcLabelApi(int did){
+        //判断是否连接中
+        Map<String, Object> rfidMap = rfidRead(did);
+        System.out.println(rfidMap);
+
+        List<String> epcs = (List<String>) rfidMap.get("rfids");
+
+        //查询某个商场当天柜子里的衣服
+        StringBuilder sql = new StringBuilder("SELECT cd.dbid, ci.cid, ci.commName, ci.couPrice, ci.price, sdc.`name`, 1 count, rfidEpc, cc.colorName, cz.size FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci, commodity_color cc, commodity_size cz");
+        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND ci.cid = cc.cid AND cz.sid = cd.sid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.dbTime = CURDATE()");
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES);
+        List<Map<String, Object>> payCommoditys = new ArrayList<>();
+        for(Map<String, Object> map : list){
+            String rfidEpc = StrUtil.objToStr(map.get("rfidEpc"));
+            boolean exist = false;
+            for(String epc : epcs){
+                if(epc.equals(rfidEpc)){
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                payCommoditys.add(map);
+            }
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("commoditys", payCommoditys);
+        map.put("sumPrice", userShoppingCartService.countSumPrice(payCommoditys));
+        return map;
     }
 
 }

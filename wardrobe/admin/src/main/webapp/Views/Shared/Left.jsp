@@ -67,7 +67,7 @@
                         </a>
                     </li>
                     <li class="nav-item <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'dashboard'}">open</c:if>">
-                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'dashboard'}">active</c:if>" href="/admin/wardrobe/dashboard">
+                        <a class="nav-link <c:if test="${param.menu == 'wardrobe' && param.subMenu == 'dashboard'}">active</c:if>" href="/admin/wardrobe/dashboard?did=1">
                             <i class="icon-arrow-right"></i> 运行面板
                         </a>
                     </li>

@@ -32,7 +32,7 @@ public interface ISysDeviceService {
 
     SysDeviceControl getSysDeviceControl(int dcid);
 
-    List<SysDeviceControl> getDeviceControl(String ip, int port);
+    List<SysDeviceControl> getDeviceControl(String deviceNo);
 
     Map<String, Object> getDistributionSetting(DeviceInputView deviceInputView);
 

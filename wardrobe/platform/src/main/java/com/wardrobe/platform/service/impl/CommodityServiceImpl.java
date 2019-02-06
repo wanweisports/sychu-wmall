@@ -198,7 +198,7 @@ public class CommodityServiceImpl extends BaseService implements ICommodityServi
     }
 
     private int getSizeStockSum(int cid){
-        return baseDao.getUniqueResult("SELECT SUM(stock) FROM commodity_size WHERE cid = ?", cid).intValue();
+        return baseDao.getUniqueResult("SELECT IFNULL(SUM(stock), 0) FROM commodity_size WHERE cid = ?", cid).intValue();
     }
 
     private Map<String, Object> getType(Map<String, Object> commodity){

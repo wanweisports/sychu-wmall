@@ -83,20 +83,20 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="wardrobe_doorIp">
-                                <span class="text-danger">*</span> 大门地址
+                                <span class="text-danger">*</span> 试衣间编码
                             </label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="wardrobe_doorIp" placeholder="大门IP地址" name="doorIp"
-                                       data-val="true" data-val-required="大门IP地址不能为空" autocomplete="off">
+                                <input type="text" class="form-control" id="wardrobe_doorIp" placeholder="试衣间编码" name="doorIp"
+                                       data-val="true" data-val-required="试衣间编码不能为空" autocomplete="off">
                                 <div data-valmsg-for="doorIp" data-valmsg-replace="true"></div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" style="display: none;">
                                 <input type="text" class="form-control" id="wardrobe_doorPort" placeholder="大门IP端口" name="doorPort"
                                        data-val="true" data-val-required="大门IP端口不能为空" autocomplete="off">
                                 <div data-valmsg-for="doorPort" data-valmsg-replace="true"></div>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" style="display: none;">
                             <label class="col-md-3 form-control-label" for="wardrobe_cabinetIp">
                                 <span class="text-danger">*</span> 柜子地址
                             </label>
@@ -162,8 +162,8 @@
                                 <tr>
                                     <th>试衣间名称</th>
                                     <th>所在地址</th>
-                                    <th>大门地址</th>
-                                    <th>柜子地址</th>
+                                    <th>试衣间编码</th>
+                                    <%--<th>柜子地址</th>--%>
                                     <th>试衣间状态</th>
                                     <th>操作</th>
                                 </tr>
@@ -173,8 +173,8 @@
                                     <tr data-id="123">
                                         <td>${d.name}</td>
                                         <td>${d.address}</td>
-                                        <td>${d.doorIp}:${d.doorPort}</td>
-                                        <td>${d.lockIp}:${d.lockPort}</td>
+                                        <td>${d.doorIp}</td>
+                                        <%--<td>${d.lockIp}:${d.lockPort}</td>--%>
 
                                         <c:if test="${d.status == '1'}">
                                             <td class="text-success">已开放</td>

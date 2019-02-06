@@ -1,3 +1,4 @@
+/*
 package com.wardrobe.platform.netty.client;
 
 import com.wardrobe.common.constant.IDBConstant;
@@ -16,10 +17,12 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by cxs on 2018/9/9.
  * 获取方法不加同步锁，修改或删除方法加，避免死锁
- */
+ *//*
+
 public class ClientChannelUtil {
 
     private static Logger logger = Logger.getLogger(ClientChannelUtil.class);
@@ -116,7 +119,7 @@ public class ClientChannelUtil {
 
     public static String getNowStatus(String ip, int port){
         ClientBean clientBean = getClientBean(ip, port);
-        return clientBean != null && STATUS_CONNECT_ING == clientBean.getStatus() ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO;
+        return clientBean != null && STATUS_CONNECT_ING == clientBean.getReadStatus() ? IDBConstant.LOGIC_STATUS_YES : IDBConstant.LOGIC_STATUS_NO;
     }
 
     public static boolean isOpen(String ip, int port){
@@ -175,3 +178,4 @@ public class ClientChannelUtil {
     }
 
 }
+*/

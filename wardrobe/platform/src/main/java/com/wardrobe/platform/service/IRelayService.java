@@ -1,6 +1,7 @@
 package com.wardrobe.platform.service;
 
 import com.wardrobe.common.bean.UserDriveBean;
+import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.po.SysDeviceInfo;
 
 import java.util.Map;
@@ -12,31 +13,33 @@ public interface IRelayService {
 
     SysDeviceInfo getSysDeviceInfo(int did);
 
-    boolean connectServer(String ip, int port) throws Exception;
+    SysDeviceControl getSysDeviceControl(int dcid);
 
-    void openServerLock(String ip, int port, int lockId) throws Exception;
+/*    boolean connectServer(String ip, int port) throws Exception;*/
 
-    void closeServerLock(String ip, int port, int lockId);
+/*    void openServerLock(int did, int lockId) throws Exception;
 
-    void openServerAllLock(String ip, int port);
+    void closeServerLock(int did, int lockId);*/
 
-    void closeServerAllLock(String ip, int port);
+/*    void openServerAllLock(String ip, int port);
 
-    void openServerDrive(String ip, int port, int driveId);
+    void closeServerAllLock(String ip, int port);*/
 
-    void closeServerDrive(String ip, int port, int driveId);
+/*    void openServerDrive(int did);
 
-    Map<String, Object> getRealyIndexsIn();
+    void closeServerDrive(int did);*/
+
+/*    Map<String, Object> getRealyIndexsIn();*/
 
     void openDoor(int did, int uid);
 
-    void closeDoor(int did, int uid);
+/*    void closeDoor(int did, int uid);
 
     void openLock(int dcid) throws Exception;
 
-    void closeLock(int dcid) throws Exception;
+    void closeLock(int dcid) throws Exception;*/
 
-    void downlineRelay(String ip, int port);
+/*    void downlineRelay(String ip, int port);*/
 
     void saveUserOpenServerDrive(UserDriveBean userDriveBean) throws Exception;
 
@@ -45,5 +48,19 @@ public interface IRelayService {
     void saveUserCloseServerLock(UserDriveBean userDriveBean) throws Exception;
 
     void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception;
+
+    Map<String, Object> openDoor(int did);
+
+    Map<String, Object> closeDoor(int did);
+
+    Map<String, Object> openLock(int did, int lock);
+
+    Map<String, Object> closeLock(int did, int lock);
+
+    Map<String, Object> readAll(int did);
+
+    Map<String, Object> rfidRead(int did);
+
+    Map<String, Object> readEpcLabelApi(int did);
 
 }

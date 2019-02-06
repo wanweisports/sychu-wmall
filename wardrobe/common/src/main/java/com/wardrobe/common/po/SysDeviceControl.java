@@ -15,10 +15,13 @@ public class SysDeviceControl {
     private String type;
     private String lock;
     private String status;
+    private String dcode;
     private Timestamp createTime;
     private Timestamp updateTime;
     private Timestamp openTime;
     private Timestamp closeTime;
+
+    private String readStatus;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -89,6 +92,16 @@ public class SysDeviceControl {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "dcode")
+    public String getDcode() {
+        return dcode;
+    }
+
+    public void setDcode(String dcode) {
+        this.dcode = dcode;
     }
 
     @Basic
@@ -165,4 +178,12 @@ public class SysDeviceControl {
         this.closeTime = closeTime;
     }
 
+    @Transient
+    public String getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(String readStatus) {
+        this.readStatus = readStatus;
+    }
 }

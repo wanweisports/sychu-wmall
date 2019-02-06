@@ -29,7 +29,7 @@ public class RfidController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/readRfid")
     public ResponseBean readRfid(int did) throws ParseException{
-        String response = HttpUtil.sendGet(rfidUrl + "/readEpcLabelSC?did=" + did);
+        String response = HttpUtil.sendGet(relayUrl + "/readEpcLabelSC?did=" + did);
         System.out.println("response--->" + response);
         Map map = JsonUtils.fromJson(response, Map.class);
         String code = map.get("code").toString();

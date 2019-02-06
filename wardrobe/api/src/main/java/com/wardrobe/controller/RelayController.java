@@ -3,18 +3,16 @@ package com.wardrobe.controller;
 import com.wardrobe.common.annotation.Desc;
 import com.wardrobe.common.annotation.Perfect;
 import com.wardrobe.common.bean.ResponseBean;
-import com.wardrobe.common.constant.IDBConstant;
-import com.wardrobe.common.po.SysDeviceInfo;
+import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.util.HttpUtil;
 import com.wardrobe.common.util.JsonUtils;
-import com.wardrobe.platform.netty.client.ClientChannelUtil;
 import com.wardrobe.platform.service.IRelayService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +21,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("relay")
 public class RelayController extends BaseController {
+
+    private Logger logger = Logger.getLogger(RelayController.class);
 
     @Autowired
     private IRelayService relayService;
@@ -33,25 +33,7 @@ public class RelayController extends BaseController {
     @RequestMapping("openDoor")
     public ResponseBean openDoor(int did) throws Exception{
         //String response = HttpUtil.sendGet(relayUrl + "/userOpenDrive?driveId="+did); //射频版
-        String response = HttpUtil.sendGet(relayUrl + "/openDrive?driveId="+did);  //直接开门版
-        Map map = JsonUtils.fromJson(response, Map.class);
-        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
-    }
-
-    @Desc("开启锁")
-    @ResponseBody
-    @RequestMapping("openLock")
-    public ResponseBean openLock(int lockId) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userOpenLock?driveId="+lockId);
-        Map map = JsonUtils.fromJson(response, Map.class);
-        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
-    }
-
-    @Desc("关锁")
-    @ResponseBody
-    @RequestMapping("closeLock")
-    public ResponseBean closeLock(int lockId) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userCloseLock?driveId="+lockId);
+        String response = HttpUtil.sendGet(relayUrl + "/openDrive?did)="+did);  //直接开门版
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }
@@ -61,7 +43,35 @@ public class RelayController extends BaseController {
     @RequestMapping("closeDoor")
     public ResponseBean closeDoor(int did) throws Exception{
         //String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?driveId="+did); //射频版
-        String response = HttpUtil.sendGet(relayUrl + "/closeDrive?driveId="+did); //直接关门版
+        String response = HttpUtil.sendGet(relayUrl + "/closeDrive?did="+did); //直接关门版
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
+    }
+
+    @Desc("开启锁")
+    @ResponseBody
+    @RequestMapping("openLock")
+    public ResponseBean openLock(int lockId) throws Exception{
+        /*String response = HttpUtil.sendGet(relayUrl + "/userOpenLock?driveId="+lockId);*/
+        System.out.println("sys-用户开启锁lockId：" + lockId);
+        logger.info("logger.info---用户开启锁lockId：" + lockId);
+
+        SysDeviceControl sysDeviceControl = relayService.getSysDeviceControl(lockId);
+        String response = HttpUtil.sendGet(relayUrl + "/openLock?did=" + sysDeviceControl.getDid() + "lockId=" + sysDeviceControl.getLockId());
+        Map map = JsonUtils.fromJson(response, Map.class);
+        return new ResponseBean(map.get("code").toString(), map.get("message").toString());
+    }
+
+    @Desc("关锁")
+    @ResponseBody
+    @RequestMapping("closeLock")
+    public ResponseBean closeLock(int lockId) throws Exception{
+        //String response = HttpUtil.sendGet(relayUrl + "/userCloseLock?driveId="+lockId);
+        System.out.println("sys-用户关锁lockId：" + lockId);
+        logger.info("logger.info---用户关锁lockId：" + lockId);
+
+        SysDeviceControl sysDeviceControl = relayService.getSysDeviceControl(lockId);
+        String response = HttpUtil.sendGet(relayUrl + "/closeLock?did=" + sysDeviceControl.getDid() + "lockId=" + sysDeviceControl.getLockId());
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }

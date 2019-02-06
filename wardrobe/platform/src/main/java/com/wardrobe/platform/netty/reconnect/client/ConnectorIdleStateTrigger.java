@@ -1,5 +1,6 @@
 package com.wardrobe.platform.netty.reconnect.client;
 
+import com.wardrobe.platform.rfid.util.StringTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -27,9 +28,12 @@ public class ConnectorIdleStateTrigger extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         logger.info("[client]: xi tiao jian ce!!!");
+        System.out.println("[client]: xi tiao jian ce!!!");
         if(evt instanceof IdleStateEvent){
             IdleState state = ((IdleStateEvent) evt).state();
             if(state == IdleState.WRITER_IDLE) {
+                /*String[] strAryHex = {"A5", "5A", "1F" ,"00" ,"00" ,"01" ,"AA" ,"CA" ,"FF"};
+                ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(strAryHex, strAryHex.length)));*/
                 ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
             }
         }else{

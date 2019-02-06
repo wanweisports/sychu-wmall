@@ -1,19 +1,11 @@
 package com.wardrobe.platform.netty.reconnect.client;
 
-import com.wardrobe.platform.netty.client.ClientChannelUtil;
-import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.service.ISysDeviceService;
-import com.wardrobe.platform.service.impl.SysDeviceServiceImpl;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.util.CharsetUtil;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.ContextLoader;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +44,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
         try{
             Channel channel = ctx.channel();
             InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
-            ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(socketAddress.getHostString(), socketAddress.getPort()));
+            //ClientChannelUtil.connectServerChannel(channel, deviceService.getDeviceControl(socketAddress.getHostString(), socketAddress.getPort()));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -61,7 +53,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("链路关闭");
-        ClientChannelUtil.clearServerChannel(ctx.channel());
+        //ClientChannelUtil.clearServerChannel(ctx.channel());
         if(reconnect){
             System.out.println("链路关闭，将进行重连" + attempts);
             //if(attempts < 12){
@@ -98,7 +90,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
                 if(!succed){
                     System.out.println("重连失败");
                     f.channel().pipeline().fireChannelInactive();
-                    ClientChannelUtil.clearServerChannel(f.channel());
+                    //ClientChannelUtil.clearServerChannel(f.channel());
                 }else{
                     System.out.println("重连成功");
                 }

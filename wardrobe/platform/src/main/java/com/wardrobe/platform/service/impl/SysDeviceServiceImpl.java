@@ -119,11 +119,8 @@ public class SysDeviceServiceImpl extends BaseService implements ISysDeviceServi
     }
 
     @Override
-    public List<SysDeviceControl> getDeviceControl(String ip, int port){
-        List<SysDeviceControl> deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.doorIp = ?1 AND sdi.doorPort = ?2 AND sdc.type = ?3", ip, port, IDBConstant.LOGIC_STATUS_YES);
-        if(deviceControls == null || deviceControls.size() == 0){
-            deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.lockIp = ?1 AND sdi.lockPort = ?2 AND sdc.type = ?3", ip, port, IDBConstant.LOGIC_STATUS_NO);
-        }
+    public List<SysDeviceControl> getDeviceControl(String deviceNo){
+        List<SysDeviceControl> deviceControls = baseDao.queryByHql("SELECT sdc FROM SysDeviceInfo sdi, SysDeviceControl sdc WHERE sdi.did = sdc.did AND sdi.doorIp = ?1", deviceNo);
         return deviceControls;
     }
 
