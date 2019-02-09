@@ -332,7 +332,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
     public void sleep(){
         try{
-            Thread.sleep(500L);
+            //Thread.sleep(500L);
         }catch (Exception e){
             e.printStackTrace();
         }

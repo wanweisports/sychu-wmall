@@ -41,7 +41,10 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(ctx.channel().remoteAddress() + " active!");
+        Channel incoming = ctx.channel();
+        System.out.println(incoming.remoteAddress() + " active!");
+        String deviceNo = "1F 00 00 01";
+        ClientChannelUtil2.connectServerChannel(incoming, deviceNo, sysDeviceService.getDeviceControl(deviceNo)); //试衣间1，先固定写
         super.channelActive(ctx);
     }
 
@@ -51,8 +54,10 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(ctx.channel().remoteAddress() + " inactive!");
-        channels.remove(ctx.channel());
+        Channel leaving = ctx.channel();
+        System.out.println(leaving.remoteAddress() + " inactive!");
+        channels.remove(leaving);
+        ClientChannelUtil2.clearServerChannel(leaving);
         super.channelInactive(ctx);
     }
 
@@ -81,16 +86,25 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
                             }
                         }
                         break;
-                    case "DA":
+                    case "DA": //开关大门
                         clientBean.getDeviceControl(0).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[7])));
                         break;
-                    case "DB":
+                    case "DB": //开关柜子
                         clientBean.getDeviceControl(Integer.parseInt(strAryHex[7])).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[8])));
                         break;
                     case "DD": //读取当前射频标签数量，硬件返回:0x05 RFID1 RFID2 …RFID5,  0x05:RFID数量，RFID1-5：RFID标签的值。
                         List<String> rfids = new ArrayList<>();
+                        StringBuilder rfid = new StringBuilder();
+                        int rfisSize = 0;
                         for(int i = 8; i < strAryHex.length-2;i++){
-                            rfids.add(strAryHex[i]);
+                            if(rfid.length() > 0) rfid.append(" ");
+                            rfid.append(strAryHex[i]);
+                            rfisSize++;
+                            if(rfisSize == 12){ //rfid标签码 12长度一个
+                                rfids.add(rfid.toString());
+                                rfid.setLength(0);
+                                rfisSize = 0;
+                            }
                         }
                         clientBean.setRfidDatas(rfids);
                         break;
@@ -112,8 +126,6 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("服务端handlerAdded");
         Channel incoming = ctx.channel();
         channels.add(incoming);
-        String deviceNo = "1F 00 00 01";
-        ClientChannelUtil2.connectServerChannel(incoming, deviceNo, sysDeviceService.getDeviceControl(deviceNo)); //试衣间1，先固定写
         /*System.out.println("cs：" + channels.size());
         for (Channel channel : channels){
             System.out.println("服务端handlerAdded：" + incoming.remoteAddress());

@@ -95,7 +95,7 @@
                 }else{
                     $("#testReads").html(res.message);
                 }
-                $(btn).prop("disabled", false).text("测试读取");
+                $(btn).prop("disabled", false).text("测试读取射频标签码");
             });
         }
 
@@ -260,7 +260,7 @@
                                     <div class="card">
                                         <div class="card-body p-3 d-flex align-items-center">
                                             <div>
-                                                <button type="button" class="btn btn-success" onclick="readEpcLabel(this, '${deviceInfo.did}')">测试读取</button>
+                                                <button type="button" class="btn btn-success" onclick="readEpcLabel(this, '${deviceInfo.did}')">测试读取射频标签码</button>
                                             </div>
                                             <div class="card-body p-3 align-items-center" style="color: red;" id="testReads">
                                         </div>

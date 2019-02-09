@@ -72,7 +72,7 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
                 ctx.channel().writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(comms, comms.length)));
             }
             if("DD".equals(comm)){
-                String[] comms = "A5 5A 1F 00 00 01 DD 05 01 02 03 04 05 FA FF".split(" ");
+                String[] comms = "A5 5A 1F 00 00 01 DD 04 E2 00 00 15 68 15 02 51 14 80 83 D9 E2 00 00 15 68 15 02 51 14 90 81 A9 E2 00 00 15 68 15 02 51 14 60 83 DD E2 00 00 15 68 15 02 51 15 00 7F 7D C0 FF".split(" ");
                 ctx.channel().writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(comms, comms.length)));
             }
         }catch (Exception e){

@@ -12,6 +12,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by cxs on 2019/1/22.
@@ -24,7 +26,9 @@ public class ClientChannelUtil2 {
 
     private static List<ClientBean> clientBeans = new ArrayList<>();
 
-    public synchronized static void connectServerChannel(Channel channel, String deviceNo, List<SysDeviceControl> deviceControls) {
+    //private static ExecutorService es = Executors.newFixedThreadPool(1);
+
+    public static void connectServerChannel(Channel channel, String deviceNo, List<SysDeviceControl> deviceControls) {
         try{
             if(channel == null) return;
             clientBeans.clear(); //只有一个连接
@@ -46,7 +50,7 @@ public class ClientChannelUtil2 {
         }
     }
 
-    public synchronized static void clearServerChannel(Channel channel) {
+    public static void clearServerChannel(Channel channel) {
         if(channel == null) return;
         clientBeans.clear(); //只有一个连接
     }
@@ -59,26 +63,26 @@ public class ClientChannelUtil2 {
         if(!isOpen()) throw new MessageException("硬件未连接，请稍候再试！");
     }
 
-    public synchronized static ClientBean getClientBean(int did){
+    public static ClientBean getClientBean(int did){
         for(ClientBean clientBean : clientBeans){
             if(clientBean.getDid() == did) return clientBean;
         }
         return null;
     }
 
-    public synchronized static ClientBean getClientBean(String deviceNo){
+    public static ClientBean getClientBean(String deviceNo){
         for(ClientBean clientBean : clientBeans){
             if(clientBean.getDeviceNo().equals(deviceNo)) return clientBean;
         }
         return null;
     }
 
-    public synchronized static String getDeviceNo(String message){
+    public static String getDeviceNo(String message){
         String[] comms = message.split(" ");
         return new StringBuilder().append(comms[2]).append(" ").append(comms[3]).append(" ").append(comms[4]).append(" ").append(comms[5]).toString();
     }
 
-    public synchronized static ClientBean getClientBeanByMsg(String message){
+    public static ClientBean getClientBeanByMsg(String message){
         return getClientBean(getDeviceNo(message));
     }
 
@@ -105,6 +109,9 @@ public class ClientChannelUtil2 {
         sendComm.add(Integer.toHexString(checkSum).toUpperCase());
         sendComm.add("FF");
         clientBean.getServiceChannel().writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(sendComm.toArray(new String[sendComm.size()]), sendComm.size())));
+        /*es.execute(() -> {
+            clientBean.getServiceChannel().writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(sendComm.toArray(new String[sendComm.size()]), sendComm.size())));
+        });*/
     }
 
     public static void readAllStatus(ClientBean clientBean){
@@ -113,15 +120,15 @@ public class ClientChannelUtil2 {
 
             logger.info("serverChannel：" + clientBean.getServiceChannel());
             long start = System.currentTimeMillis();
-            while ((System.currentTimeMillis()-start) <= 1200 && clientBean.getReadStatus() == null) { //3秒内轮询等待TCP消息返回
+            while ((System.currentTimeMillis()-start) <= 3000 && clientBean.getReadStatus() == null) { //3秒内轮询等待TCP消息返回
                 try {
-                    logger.info("wait...~" + clientBeans.size());
+                    logger.info("wait...~" + clientBeans.size() + "-connect size.");
                     System.out.println(clientBean.getReadStatus());
                     for(ClientBean cb : clientBeans){
                         logger.info(cb.getHost() + ":" + cb.getPort());
                         logger.info("=====================================");
                         logger.info("isActive：" + cb.getServiceChannel().isActive());
-                        logger.info("iaOpen：" + cb.getServiceChannel().isOpen());
+                        logger.info("isOpen：" + cb.getServiceChannel().isOpen());
                         logger.info("isWritable：" + cb.getServiceChannel().isWritable());
                         logger.info("=====================================");
                     }

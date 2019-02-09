@@ -28,7 +28,7 @@ public class ServerHandlerInit extends ChannelInitializer<SocketChannel> {
         // 字符串解码 和 编码
         /*pipeline.addLast("decoder", new StringDecoder());
         pipeline.addLast("encoder", new StringDecoder());*/
-        pipeline.addLast(new IdleStateHandler(8, 0, 0, TimeUnit.SECONDS));
+        pipeline.addLast(new IdleStateHandler(120, 0, 0, TimeUnit.SECONDS));
         pipeline.addLast(idleStateTrigger);
         pipeline.addLast(new HeartBeatServerHandler(sysDeviceService));
         //自己的逻辑
