@@ -41,30 +41,17 @@ public class RelayController extends BaseController {
         return null;
     }
 
-/*    @Desc("开启全部锁")
-    @ResponseBody
-    @RequestMapping("openAllLock")
-    public ResponseBean openAllLock() throws Exception{
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        relayService.openServerAllLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
-        return new ResponseBean(true);
-    }*/
-
-/*    @Desc("关闭全部锁")
-    @ResponseBody
-    @RequestMapping("closeAllLock")
-    public ResponseBean closeAllLock(){
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        relayService.closeServerAllLock(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
-        return new ResponseBean(true);
-    }*/
-
     @Desc("开启门设备")
     @ResponseBody
     @NotProtected
     @RequestMapping("openDrive")
     public ResponseBean openDrive(int did) throws Exception{
-        return new ResponseBean(relayService.openDoor(did));
+        try {
+            return new ResponseBean(relayService.openDoor(did));
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            e.printStackTrace();
+            return new ResponseBean(e.getMessage());
+        }
     }
 
     @Desc("关闭门设备")
@@ -72,21 +59,38 @@ public class RelayController extends BaseController {
     @NotProtected
     @RequestMapping("closeDrive")
     public ResponseBean closeDrive(int did) throws Exception{
-        return new ResponseBean(relayService.closeDoor(did));
+        try {
+            return new ResponseBean(relayService.closeDoor(did));
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            e.printStackTrace();
+            return new ResponseBean(e.getMessage());
+        }
     }
 
     @Desc("开启锁")
     @ResponseBody
+    @NotProtected
     @RequestMapping("openLock")
     public ResponseBean openLock(int did, int lockId) throws Exception{
-        return new ResponseBean(relayService.openLock(did, lockId));
+        try {
+            return new ResponseBean(relayService.openLock(did, lockId));
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            e.printStackTrace();
+            return new ResponseBean(e.getMessage());
+        }
     }
 
     @Desc("关闭锁")
     @ResponseBody
+    @NotProtected
     @RequestMapping("closeLock")
     public ResponseBean closeLock(int did, int lockId){
-        return new ResponseBean(relayService.closeLock(did, lockId));
+        try {
+            return new ResponseBean(relayService.closeLock(did, lockId));
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            e.printStackTrace();
+            return new ResponseBean(e.getMessage());
+        }
     }
 
     @Desc("测试读取射频电子标签")
@@ -108,39 +112,6 @@ public class RelayController extends BaseController {
             return new ResponseBean(e.getMessage());
         }
     }
-/*    @Desc("断开大门")
-    @ResponseBody
-    @RequestMapping("downlineDoor")
-    public ResponseBean downlineDoor(){
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        relayService.downlineRelay(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort());
-        return new ResponseBean(true);
-    }
-
-    @Desc("断开柜子")
-    @ResponseBody
-    @RequestMapping("downlineLock")
-    public ResponseBean downlineLock(){
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        relayService.downlineRelay(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort());
-        return new ResponseBean(true);
-    }*/
-
-/*    @Desc("获取门连接状态")
-    @ResponseBody
-    @RequestMapping("getGateConnectStatus")
-    public ResponseBean getGateConnectStatus(int did){
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(sysDeviceInfo.getDoorIp(), sysDeviceInfo.getDoorPort()));}});
-    }
-
-    @Desc("获取锁连接状态")
-    @ResponseBody
-    @RequestMapping("getLockConnectStatus")
-    public ResponseBean getLockConnectStatus(){
-        SysDeviceInfo sysDeviceInfo = relayService.getSysDeviceInfo(did);
-        return new ResponseBean(new HashMap(1,1){{put("statusName", ClientChannelUtil.getNowStatus(sysDeviceInfo.getLockIp(), sysDeviceInfo.getLockPort()));}});
-    }*/
 
     //##################################################################################################################
 

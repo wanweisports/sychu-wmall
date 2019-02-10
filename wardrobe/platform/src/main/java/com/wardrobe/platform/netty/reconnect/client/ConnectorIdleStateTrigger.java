@@ -31,7 +31,7 @@ public class ConnectorIdleStateTrigger extends ChannelInboundHandlerAdapter {
         System.out.println("[client]: xi tiao jian ce!!!");
         if(evt instanceof IdleStateEvent){
             IdleState state = ((IdleStateEvent) evt).state();
-            if(state == IdleState.WRITER_IDLE) {
+            if(state == IdleState.WRITER_IDLE) { /* 4秒发送一次心跳数据 */
                 String[] strAryHex = {"A5", "5A", "1F" ,"00" ,"00" ,"01" ,"AA" ,"CA" ,"FF"};
                 ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(strAryHex, strAryHex.length)));
                 //ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());

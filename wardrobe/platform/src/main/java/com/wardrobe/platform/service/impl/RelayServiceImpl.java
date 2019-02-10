@@ -431,15 +431,8 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES);
         List<Map<String, Object>> payCommoditys = new ArrayList<>();
         for(Map<String, Object> map : list){
-            String rfidEpc = StrUtil.objToStr(map.get("rfidEpc"));
-            boolean exist = false;
-            for(String epc : epcs){
-                if(epc.equals(rfidEpc)){
-                    exist = true;
-                    break;
-                }
-            }
-            if(!exist){
+            String rfidEpc = StrUtil.objToStrDefEmpty(map.get("rfidEpc"));
+            if(epcs == null || !epcs.contains(rfidEpc)){ //未在射频读取的标签内，则需要返回给小程序用户
                 payCommoditys.add(map);
             }
         }

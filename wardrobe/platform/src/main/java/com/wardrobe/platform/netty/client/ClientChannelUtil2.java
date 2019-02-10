@@ -52,14 +52,18 @@ public class ClientChannelUtil2 {
 
     public static void clearServerChannel(Channel channel) {
         if(channel == null) return;
-        clientBeans.clear(); //只有一个连接
+        clientBeans.stream().forEach(cb -> {
+            if(cb.getServiceChannel() == channel) {
+                clientBeans.clear(); //只有一个连接
+            }
+        });
     }
 
-    public synchronized static boolean isOpen(){
+    public static boolean isOpen(){
         return clientBeans.size() > 0;
     }
 
-    public synchronized static void isOpenThrowable(){
+    public static void isOpenThrowable(){
         if(!isOpen()) throw new MessageException("硬件未连接，请稍候再试！");
     }
 

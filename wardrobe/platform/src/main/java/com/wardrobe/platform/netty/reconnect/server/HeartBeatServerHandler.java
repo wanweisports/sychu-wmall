@@ -51,13 +51,13 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
     /**
      * channel 通道 Inactive 不活跃的
      * 当客户端主动断开服务端的链接后，这个通道就是不活跃的。也就是说客户端与服务端的关闭了通信通道并且不可以传输数据
+     * 退出执行顺序：1.exceptionCaught 2.channelInactive 3.handlerRemoved
+     * （exceptionCaught方法中处理掉线逻辑）
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         Channel leaving = ctx.channel();
         System.out.println(leaving.remoteAddress() + " inactive!");
-        channels.remove(leaving);
-        ClientChannelUtil2.clearServerChannel(leaving);
         super.channelInactive(ctx);
     }
 
@@ -134,12 +134,13 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         incoming.writeAndFlush(sendMsg("欢迎来到" + InetAddress.getLocalHost().getHostName() + " service!"));*/
     }
 
+    /**
+     * 退出执行顺序：1.exceptionCaught 2.channelInactive 3.handlerRemoved
+     * （exceptionCaught方法中处理掉线逻辑）
+     **/
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         System.out.println("服务端handlerRemoved");
-        Channel leaving = ctx.channel();
-        channels.remove(leaving);
-        ClientChannelUtil2.clearServerChannel(leaving);
         /*for (Channel channel : channels){
             System.out.println("handlerRemoved：" + leaving.remoteAddress());
             channel.writeAndFlush(sendMsg("服务端说：[" + leaving.remoteAddress() + "]离开，当前总连接数：" + channels.size()));
@@ -160,12 +161,20 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         // ctx.flush().close().sync(); // 第三种：改成这种写法也可以，但是这中写法，没有第一种方法的好。
     }
 
+    /**
+     * 不管是主动退出还是断网，都会依次执行这3个方法(只需要在此方法写退出逻辑即可)：1.exceptionCaught 2.channelInactive 3.handlerRemoved
+     *  退出执行顺序：1.exceptionCaught 2.channelInactive 3.handlerRemoved
+     * （exceptionCaught方法中处理掉线逻辑）
+     **/
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
-        System.out.println(ctx.channel().remoteAddress() + "发生异常，退出，当前总连接数：" + channels.size());
-        ClientChannelUtil2.clearServerChannel(ctx.channel());
+
+        Channel leaving = ctx.channel();
+        channels.remove(leaving);
+        ClientChannelUtil2.clearServerChannel(leaving);
+        System.out.println(leaving.remoteAddress() + "发生异常，退出，当前总连接数：" + channels.size());
     }
 
     /**
