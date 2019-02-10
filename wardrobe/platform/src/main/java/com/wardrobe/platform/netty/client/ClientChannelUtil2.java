@@ -124,7 +124,7 @@ public class ClientChannelUtil2 {
 
             logger.info("serverChannel：" + clientBean.getServiceChannel());
             long start = System.currentTimeMillis();
-            while ((System.currentTimeMillis()-start) <= 3000 && clientBean.getReadStatus() == null) { //3秒内轮询等待TCP消息返回
+            while ((System.currentTimeMillis()-start) <= 10000 && clientBean.getReadStatus() == null) { //10秒内轮询等待TCP消息返回
                 try {
                     logger.info("wait...~" + clientBeans.size() + "-connect size.");
                     System.out.println(clientBean.getReadStatus());

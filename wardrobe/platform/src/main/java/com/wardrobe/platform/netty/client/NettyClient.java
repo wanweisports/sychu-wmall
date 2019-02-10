@@ -81,11 +81,16 @@ public class NettyClient {
             }
         }.start();*/
 
-        NettyClient nettyClient = new NettyClient("127.0.0.1", 9900, null);
+        /*NettyClient nettyClient = new NettyClient("127.0.0.1", 9900, null);
         //NettyClient nettyClient = new NettyClient("server.natappfree.cc", 32911, null);
         try {
             nettyClient.clientServer().channel().closeFuture().sync();
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){e.printStackTrace();}*/
+
+        ClientChannelUtil2 c1 = new ClientChannelUtil2();
+        System.out.println(c1 == c1);
+        System.out.println(c1.equals(c1));
+
     }
 
 }
