@@ -11,19 +11,11 @@ import java.util.Date;
  */
 public class UserDriveBean {
 
-    private int driveId;
     private int uid;
     private int roid;
     private int did;
+    private int lockId;
     private SysDeviceInfo sysDeviceInfo;
-
-    public int getDriveId() {
-        return driveId;
-    }
-
-    public void setDriveId(int driveId) {
-        this.driveId = driveId;
-    }
 
     public int getUid() {
         return uid;
@@ -47,6 +39,14 @@ public class UserDriveBean {
 
     public void setDid(int did) {
         this.did = did;
+    }
+
+    public int getLockId() {
+        return lockId;
+    }
+
+    public void setLockId(int lockId) {
+        this.lockId = lockId;
     }
 
     public SysDeviceInfo getSysDeviceInfo() {

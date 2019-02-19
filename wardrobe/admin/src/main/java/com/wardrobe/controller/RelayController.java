@@ -121,10 +121,22 @@ public class RelayController extends BaseController {
     @RequestMapping("userOpenDrive")
     public ResponseBean userOpenDrive(UserDriveBean userDriveBean) throws Exception{
         try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
-            relayService.saveUserOpenServerDrive(userDriveBean);
+            relayService.apiOpenDoor(userDriveBean);
             return new ResponseBean(true);
-        }catch (MessageException e){
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
+            return new ResponseBean(e.getMessage());
+        }
+    }
+
+    @Desc("用户关闭门设备")
+    @ResponseBody
+    @NotProtected
+    @RequestMapping("userCloseDrive")
+    public ResponseBean userCloseDrive(UserDriveBean userDriveBean) throws Exception{
+        try{
+            relayService.apiCloseDoor(userDriveBean);
+            return new ResponseBean(true);
+        }catch (MessageException e){ //由于是api请求过来的接口，admin处理未按ajax处理错误，这里用try一下
             return new ResponseBean(e.getMessage());
         }
     }
@@ -151,20 +163,6 @@ public class RelayController extends BaseController {
         try{
             userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
             relayService.saveUserCloseServerLock(userDriveBean);
-            return new ResponseBean(true);
-        }catch (MessageException e){
-            return new ResponseBean(e.getMessage());
-        }
-    }
-
-    @Desc("用户关闭门设备")
-    @ResponseBody
-    @NotProtected
-    @RequestMapping("userCloseDrive")
-    public ResponseBean userCloseDrive(UserDriveBean userDriveBean) throws Exception{
-        try{
-            userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
-            relayService.saveUserCloseServerDrive(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
             return new ResponseBean(e.getMessage());

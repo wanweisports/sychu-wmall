@@ -49,6 +49,10 @@ public interface IRelayService {
 
     void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception;
 
+    void apiOpenDoor(UserDriveBean userDriveBean);
+
+    void apiCloseDoor(UserDriveBean userDriveBean);
+
     Map<String, Object> openDoor(int did);
 
     Map<String, Object> closeDoor(int did);

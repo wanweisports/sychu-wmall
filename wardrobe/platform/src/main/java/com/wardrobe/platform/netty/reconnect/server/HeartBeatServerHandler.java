@@ -1,6 +1,7 @@
 package com.wardrobe.platform.netty.reconnect.server;
 
 import com.wardrobe.common.constant.IDBConstant;
+import com.wardrobe.common.po.SysDeviceControl;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil2;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
@@ -64,7 +65,7 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
         try{
             System.out.println("server channelRead.." + msg);
             String message = getMessage((ByteBuf) msg);
-            System.out.println(ctx.channel().remoteAddress() + "->Server :" + message);
+            System.out.println(ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
             String[] strAryHex = message.split(" ");
             if(message.contains("AA CA FF")){ //心跳：A5 5A 1F 00 00 01 AA CA FF
                 ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(message.split(" "), strAryHex.length)));
@@ -79,7 +80,9 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
                                 clientBean.getDeviceControl(0).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[i + 1])));
                                 i=i+2;
                             }else if("DB".equals(hex)){ //柜子(1-8)
-                                clientBean.getDeviceControl(Integer.parseInt(strAryHex[i+1])).setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[i + 2])));
+                                SysDeviceControl deviceControl = clientBean.getDeviceControl(Integer.parseInt(strAryHex[i + 1]));
+                                if(deviceControl == null) break;
+                                deviceControl.setReadStatus(StrUtil.objToStr(Integer.parseInt(strAryHex[i + 2])));
                                 i=i+3;
                             }
                         }

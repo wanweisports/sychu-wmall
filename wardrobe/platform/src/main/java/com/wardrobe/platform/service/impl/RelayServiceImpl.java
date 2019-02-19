@@ -37,12 +37,12 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     private IOrderService orderService;
 
     @Override
-    public SysDeviceInfo getSysDeviceInfo(int did){
+    public SysDeviceInfo getSysDeviceInfo(int did) {
         return deviceService.getSysDeviceInfo(did);
     }
 
     @Override
-    public SysDeviceControl getSysDeviceControl(int dcid){
+    public SysDeviceControl getSysDeviceControl(int dcid) {
         return baseDao.getToEvict(SysDeviceControl.class, dcid);
     }
 
@@ -150,7 +150,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     }*/
 
     @Override
-    public void openDoor(int did, int uid){
+    public void openDoor(int did, int uid) {
         /*SysDeviceInfo sysDeviceInfo = deviceService.getSysDeviceInfo(did);
         ReserveOrderInfo reserveOrderInfo = orderService.getLastReserveOrderInfo(uid);
         //1.判断射频（除了已支付的衣服标签，是否都检查到了，再开门）
@@ -210,7 +210,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
     @Desc("扫码开门==进门")
     @Override
-    public synchronized void saveUserOpenServerDrive(UserDriveBean userDriveBean) throws Exception{
+    public synchronized void saveUserOpenServerDrive(UserDriveBean userDriveBean) throws Exception {
         /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
         //2. 试衣间可用？
         if(!IDBConstant.LOGIC_STATUS_YES.equals(sysDeviceInfo.getStatus())){ //N: 提示 试衣间当前不可用，请稍后再试
@@ -234,8 +234,6 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         sysDeviceInfo.setStatus(IDBConstant.LOGIC_STATUS_NO); //占用
         sysDeviceInfo.setOpenLockTime(nowDate);
         baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
-
-
     }
 
     @Desc("扫码开柜门")
@@ -273,7 +271,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
     @Desc("扫码开门==出门")
     @Override
-    public synchronized void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception{
+    public synchronized void saveUserCloseServerDrive(UserDriveBean userDriveBean) throws Exception {
         /*SysDeviceInfo sysDeviceInfo = userDriveBean.getSysDeviceInfo();
 
         //9.出门与支付
@@ -315,6 +313,42 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         sysDeviceInfo.setOpenLockTime(null);
         baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
     }
+
+    @Desc("扫码开门==进门")
+    @Override
+    public synchronized void apiOpenDoor(UserDriveBean userDriveBean) {
+        //判断柜子是否都关闭，外面用户才能进大门
+        int did = userDriveBean.getDid();
+        Map<String, Object> readAllMap = readAll(did);
+        if (IDBConstant.LOGIC_STATUS_YES.equals(readAllMap.get("status"))) {
+            List<SysDeviceControl> deviceControls = (List<SysDeviceControl>) readAllMap.get("deviceControls");
+            for (SysDeviceControl deviceControl : deviceControls) { //检查8个柜子状态
+                if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("试衣间已有顾客在试衣，请稍候再试^^");
+            }
+            openDoor(did);
+        } else {
+            throw new MessageException("设备未连接，请联系管理员！");
+        }
+    }
+
+    @Desc("扫码开门==出门")
+    @Override
+    public synchronized void apiCloseDoor(UserDriveBean userDriveBean){
+        //判断柜子是否都关闭，里面用户才能出大门
+        int did = userDriveBean.getDid();
+        Map<String, Object> readAllMap = readAll(did);
+        if (IDBConstant.LOGIC_STATUS_YES.equals(readAllMap.get("status"))) {
+            List<SysDeviceControl> deviceControls = (List<SysDeviceControl>) readAllMap.get("deviceControls");
+            for (SysDeviceControl deviceControl : deviceControls) { //检查8个柜子状态
+                if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("请关闭所有柜子再出大门，谢谢^^");
+            }
+            closeDoor(did);
+        } else {
+            throw new MessageException("设备未连接，请联系管理员！");
+        }
+    }
+
+    /***********************************************************************/
 
     @Desc("开大门")
     @Override
@@ -417,6 +451,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     @Autowired
     private IUserShoppingCartService userShoppingCartService;
 
+    @Desc("查询某个商场当天柜子里的衣服(查询状态=1)，支付后，配送表衣服状态变为已售出(=2)")
     @Override
     public Map<String, Object> readEpcLabelApi(int did){
         //判断是否连接中
@@ -427,8 +462,8 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
 
         //查询某个商场当天柜子里的衣服
         StringBuilder sql = new StringBuilder("SELECT cd.dbid, ci.cid, ci.commName, ci.couPrice, ci.price, sdc.`name`, 1 count, rfidEpc, cc.colorName, cz.size FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci, commodity_color cc, commodity_size cz");
-        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND ci.cid = cc.cid AND cz.sid = cd.sid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.dbTime = CURDATE()");
-        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES);
+        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND ci.cid = cc.cid AND cz.sid = cd.sid AND sdc.did = ?1 AND sdc.`status` = ?2 AND cd.status = ?3 AND cd.dbTime = CURDATE()");
+        List<Map<String, Object>> list = baseDao.queryBySql(sql.toString(), did, IDBConstant.LOGIC_STATUS_YES, IDBConstant.LOGIC_STATUS_YES);
         List<Map<String, Object>> payCommoditys = new ArrayList<>();
         for(Map<String, Object> map : list){
             String rfidEpc = StrUtil.objToStrDefEmpty(map.get("rfidEpc"));
