@@ -387,7 +387,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
             executorService.execute(() -> {
                 try {
                     Thread.sleep(3000L);
-                    openLock(did, userDriveBean.getLockId());
+                    closeLock(did, userDriveBean.getLockId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
