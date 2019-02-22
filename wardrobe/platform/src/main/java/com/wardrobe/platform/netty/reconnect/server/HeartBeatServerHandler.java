@@ -2,6 +2,7 @@ package com.wardrobe.platform.netty.reconnect.server;
 
 import com.wardrobe.common.constant.IDBConstant;
 import com.wardrobe.common.po.SysDeviceControl;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.common.util.StrUtil;
 import com.wardrobe.platform.netty.client.ClientChannelUtil2;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
@@ -17,14 +18,18 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * 心跳检测业务处理类
  */
 public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
+
+    private Logger logger = Logger.getLogger(HeartBeatServerHandler.class);
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -63,9 +68,11 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try{
+            Date date = new Date();
             System.out.println("server channelRead.." + msg);
             String message = getMessage((ByteBuf) msg);
-            System.out.println(ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
+            logger.warn(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + ":" + ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
+            System.out.println(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + "::" + ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
             String[] strAryHex = message.split(" ");
             if(message.contains("AA CA FF")){ //心跳：A5 5A 1F 00 00 01 AA CA FF
                 ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(message.split(" "), strAryHex.length)));

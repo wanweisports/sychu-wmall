@@ -141,21 +141,21 @@ public class RelayController extends BaseController {
         }
     }
 
-    @Desc("开启锁")
+    @Desc("用户开启锁")
     @ResponseBody
     @NotProtected
     @RequestMapping("userOpenLock")
     public ResponseBean userOpenLock(UserDriveBean userDriveBean) throws Exception{
         try{
             userDriveBean.setSysDeviceInfo(relayService.getSysDeviceInfo(userDriveBean.getDid()));
-            relayService.saveUserOpenServerLock(userDriveBean);
+            relayService.userOpenLock(userDriveBean);
             return new ResponseBean(true);
         }catch (MessageException e){
             return new ResponseBean(e.getMessage());
         }
     }
 
-    @Desc("关闭锁")
+    @Desc("用户关闭锁")
     @ResponseBody
     @NotProtected
     @RequestMapping("userCloseLock")

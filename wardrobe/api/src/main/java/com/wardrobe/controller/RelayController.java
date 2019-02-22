@@ -57,7 +57,8 @@ public class RelayController extends BaseController {
         logger.info("logger.info---openLock lockId：" + lockId);
 
         SysDeviceControl sysDeviceControl = relayService.getSysDeviceControl(lockId);
-        String response = HttpUtil.sendGet(relayUrl + "/openLock?did=" + sysDeviceControl.getDid() + "&lockId=" + sysDeviceControl.getLockId());
+        /*String response = HttpUtil.sendGet(relayUrl + "/openLock?did=" + sysDeviceControl.getDid() + "&lockId=" + sysDeviceControl.getLockId());*/
+        String response = HttpUtil.sendGet(relayUrl + "/userOpenLock?did=" + sysDeviceControl.getDid() + "&lockId=" + sysDeviceControl.getLockId());
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());
     }

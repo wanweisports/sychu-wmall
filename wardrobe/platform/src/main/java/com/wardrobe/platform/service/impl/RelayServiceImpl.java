@@ -23,12 +23,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by cxs on 2018/9/10.
  */
 @Service
 public class RelayServiceImpl extends BaseService implements IRelayService {
+
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     @Autowired
     private ISysDeviceService deviceService;
@@ -252,8 +256,6 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         sysDeviceInfo.setOpenLockTime(nowDate);
         baseDao.save(sysDeviceInfo, sysDeviceInfo.getDid());*/
         //8.用户试衣
-
-
     }
 
     @Desc("扫码关柜门")
@@ -326,6 +328,15 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
                 if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("试衣间已有顾客在试衣，请稍候再试^^");
             }
             openDoor(did);
+            //几秒后关闭
+            executorService.execute(()-> {
+                    try{
+                        Thread.sleep(5000L);
+                        closeDoor(did);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+            });
         } else {
             throw new MessageException("设备未连接，请联系管理员！");
         }
@@ -340,9 +351,47 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         if (IDBConstant.LOGIC_STATUS_YES.equals(readAllMap.get("status"))) {
             List<SysDeviceControl> deviceControls = (List<SysDeviceControl>) readAllMap.get("deviceControls");
             for (SysDeviceControl deviceControl : deviceControls) { //检查8个柜子状态
-                if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("请关闭所有柜子再出大门，谢谢^^");
+                if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("请放回所有衣服并关闭所有柜子后再离开试衣间^^");
             }
-            closeDoor(did);
+            openDoor(did);
+            //几秒后关闭
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(5000L);
+                    closeDoor(did);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            throw new MessageException("设备未连接，请联系管理员！");
+        }
+    }
+
+    @Desc("用户开柜")
+    @Override
+    public synchronized void userOpenLock(UserDriveBean userDriveBean){
+        //判断柜子是否都关闭，里面用户才能出大门
+        int did = userDriveBean.getDid();
+        Map<String, Object> readAllMap = readAll(did);
+        if (IDBConstant.LOGIC_STATUS_YES.equals(readAllMap.get("status"))) {
+            List<SysDeviceControl> deviceControls = (List<SysDeviceControl>) readAllMap.get("deviceControls");
+            for (SysDeviceControl deviceControl : deviceControls) { //检查大门状态
+                if(deviceControl.getLockId() == 0) { //大门
+                    if (!"0".equals(deviceControl.getReadStatus())) throw new MessageException("请关闭大门再开启柜子，谢谢^^");
+                }
+            }
+            openLock(did, userDriveBean.getLockId());
+
+            //几秒后关闭柜子
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(3000L);
+                    openLock(did, userDriveBean.getLockId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         } else {
             throw new MessageException("设备未连接，请联系管理员！");
         }

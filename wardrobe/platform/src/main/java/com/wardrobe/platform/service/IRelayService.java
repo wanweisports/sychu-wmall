@@ -53,6 +53,8 @@ public interface IRelayService {
 
     void apiCloseDoor(UserDriveBean userDriveBean);
 
+    void userOpenLock(UserDriveBean userDriveBean);
+
     Map<String, Object> openDoor(int did);
 
     Map<String, Object> closeDoor(int did);
