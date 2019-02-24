@@ -71,8 +71,8 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
             Date date = new Date();
             System.out.println("server channelRead.." + msg);
             String message = getMessage((ByteBuf) msg);
-            logger.warn(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + ":" + ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
-            System.out.println(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + "::" + ctx.channel().remoteAddress() + ": jie-shou-data :" + message);
+            logger.warn(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + ":" + ctx.channel() + ": jie-shou-data :" + message);
+            System.out.println(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + "::" + ctx.channel() + ": jie-shou-data :" + message);
             String[] strAryHex = message.split(" ");
             if(message.contains("AA CA FF")){ //心跳：A5 5A 1F 00 00 01 AA CA FF
                 ctx.writeAndFlush(Unpooled.copiedBuffer(StringTool.stringArrayToByteArray(message.split(" "), strAryHex.length)));

@@ -2,6 +2,7 @@ package com.wardrobe.platform.netty.client;
 
 import com.wardrobe.common.exception.MessageException;
 import com.wardrobe.common.po.SysDeviceControl;
+import com.wardrobe.common.util.DateUtil;
 import com.wardrobe.platform.netty.client.bean.ClientBean;
 import com.wardrobe.platform.rfid.util.StringTool;
 import io.netty.buffer.Unpooled;
@@ -10,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,14 +26,15 @@ public class ClientChannelUtil2 {
 
     private static Logger logger = Logger.getLogger(ClientChannelUtil2.class);
 
-    private static List<ClientBean> clientBeans = new ArrayList<>();
+    private static List<ClientBean> clientBeans = new ArrayList();
 
     //private static ExecutorService es = Executors.newFixedThreadPool(1);
 
     public static void connectServerChannel(Channel channel, String deviceNo, List<SysDeviceControl> deviceControls) {
         try{
-            if(channel == null) return;
-            clientBeans.clear(); //只有一个连接
+            if(channel == null || clientBeans.size() > 0) return; //只有一个连接
+            //clientBeans.clear();
+            logger.warn(DateUtil.dateToString(new Date(), DateUtil.YYYYMMDDHHMMSS) + ":connect:" + channel);
 
             InetSocketAddress socketAddress = (InetSocketAddress)channel.remoteAddress();
             ClientBean clientBean = new ClientBean(deviceControls);
@@ -52,11 +55,15 @@ public class ClientChannelUtil2 {
 
     public static void clearServerChannel(Channel channel) {
         if(channel == null) return;
-        clientBeans.stream().forEach(cb -> {
-            if(cb.getServiceChannel() == channel) {
-                clientBeans.clear(); //只有一个连接
+        Date date = new Date();
+        for (int i = 0; i < clientBeans.size(); i++) {
+            ClientBean clientBean = clientBeans.get(i);
+            if(clientBean.getServiceChannel() == channel) {
+                logger.warn(DateUtil.dateToString(date, DateUtil.YYYYMMDDHHMMSS) + ":close conn:" + channel);
+                clientBeans.remove(clientBean);
+                break;
             }
-        });
+        }
     }
 
     public static boolean isOpen(){
