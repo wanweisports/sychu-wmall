@@ -16,6 +16,7 @@ import com.wardrobe.platform.service.IOrderService;
 import com.wardrobe.platform.service.IRelayService;
 import com.wardrobe.platform.service.ISysDeviceService;
 import com.wardrobe.platform.service.IUserShoppingCartService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ import java.util.concurrent.Executors;
  */
 @Service
 public class RelayServiceImpl extends BaseService implements IRelayService {
+
+    private Logger logger = Logger.getLogger(RelayServiceImpl.class);
 
     ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -523,6 +526,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         Map<String, Object> map = new HashMap<>();
         map.put("commoditys", payCommoditys);
         map.put("sumPrice", userShoppingCartService.countSumPrice(payCommoditys));
+        logger.info("readEpcLabelApi======>" + payCommoditys + "，sumPrice====>" + map.get("sumPrice"));
         return map;
     }
 

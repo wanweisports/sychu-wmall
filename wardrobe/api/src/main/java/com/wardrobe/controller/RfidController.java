@@ -6,13 +6,13 @@ import com.wardrobe.common.constant.IPlatformConstant;
 import com.wardrobe.common.util.HttpUtil;
 import com.wardrobe.common.util.JsonUtils;
 import com.wardrobe.platform.service.IOrderService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,6 +21,8 @@ import java.util.Map;
 @RequestMapping("rfid")
 @Controller
 public class RfidController extends BaseController {
+
+    private Logger logger = Logger.getLogger(RfidController.class);
 
     @Autowired
     private IOrderService orderService;
@@ -35,8 +37,10 @@ public class RfidController extends BaseController {
         String code = map.get("code").toString();
         if(IPlatformConstant.SUCCESS_CODE.equals(code)) {
             map = orderService.getRfidSettlement(map, getUserInfo().getUid());
+            logger.info("api===true===readRfid======>" + map);
             return new ResponseBean(map);
         }
+        logger.info("api===false===readRfid======>" + map);
         return new ResponseBean(code, map.get("message").toString());
     }
 
