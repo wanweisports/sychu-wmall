@@ -176,10 +176,10 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
 
     @Override
     public Map<String, Object> settlementRfidCount(UserCouponInputView userCouponInputView, int uid) throws ParseException{
-        StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
-        sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND cd.dbid IN(:dbids)");
         String dbids = userCouponInputView.getDbids();
         if(StrUtil.isNotBlank(dbids)) {
+            StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
+            sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND cd.dbid IN(:dbids)");
             List<Map<String, Object>> settlement = baseDao.queryBySql(sql.toString(), new HashMap<String, Object>() {{
                 putAll(SQLUtil.getInToSQL("dbids", dbids));
             }});
