@@ -179,18 +179,20 @@ public class UserShoppingCartServiceImpl extends BaseService implements IUserSho
         StringBuilder sql = new StringBuilder("SELECT ci.cid, ci.commName, ci.price, ci.couPrice, sdc.`name`, 1 count FROM sys_commodity_distribution cd, sys_device_control sdc, commodity_info ci");
         sql.append(" WHERE cd.dcid = sdc.dcid AND cd.cid = ci.cid AND cd.dbid IN(:dbids)");
         String dbids = userCouponInputView.getDbids();
-        List<Map<String, Object>> settlement = baseDao.queryBySql(sql.toString(), new HashMap() {{
-            putAll(SQLUtil.getInToSQL("dbids", dbids));
-        }});
-        double sumPrice = 0;
-        for(Map<String, Object> map : settlement){
-            sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
-        }
+        if(StrUtil.isNotBlank(dbids)) {
+            List<Map<String, Object>> settlement = baseDao.queryBySql(sql.toString(), new HashMap<String, Object>() {{
+                putAll(SQLUtil.getInToSQL("dbids", dbids));
+            }});
+            double sumPrice = 0;
+            for (Map<String, Object> map : settlement) {
+                sumPrice = Arith.add(sumPrice, Arith.mul(StrUtil.objToDouble(map.get("couPrice")), StrUtil.objToInt(map.get("count"))));
+            }
 
-        Map<String, Object> data = new HashMap<>(10, 1);
-        DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, null);
-        data.putAll(JsonUtils.fromJson(discountBean));
-        return data;
+            Map<String, Object> data = new HashMap<>(10, 1);
+            DiscountBean discountBean = concessionalPrice(sumPrice, userCouponInputView.getServiceType(), userCouponInputView.getCpid(), uid, null);
+            data.putAll(JsonUtils.fromJson(discountBean));
+        }
+        return new HashMap<>(1);
     }
 
     @Desc("计算优惠")

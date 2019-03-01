@@ -42,7 +42,8 @@ public class RelayController extends BaseController {
     @ResponseBody
     @RequestMapping("closeDoor")
     public ResponseBean closeDoor(int did) throws Exception{
-        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?did="+did); //判断柜子版
+        logger.info("closeDoor===did:" + did);
+        String response = HttpUtil.sendGet(relayUrl + "/userCloseDrive?did=1"); //判断柜子版
         //String response = HttpUtil.sendGet(relayUrl + "/closeDrive?did="+did); //直接关门版
         Map map = JsonUtils.fromJson(response, Map.class);
         return new ResponseBean(map.get("code").toString(), map.get("message").toString());

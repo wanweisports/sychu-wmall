@@ -469,6 +469,7 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     @Desc("读取某个试衣间所有硬件状态")
     @Override
     public synchronized Map<String, Object> readAll(int did){
+        logger.info("readAll===did:" + did);
         Map<String, Object> data = new HashMap<>();
         SysDeviceInfo sysDeviceInfo = baseDao.queryByHqlFirst("FROM SysDeviceInfo WHERE did = ?1", did);
         data.put("deviceInfo", sysDeviceInfo);
