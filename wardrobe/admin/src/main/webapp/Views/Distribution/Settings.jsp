@@ -284,10 +284,10 @@
                                                     </td>
                                                     <th>${comm.rno != null ? comm.rno : '-'}</th>
                                                     <td>
-                                                        <c:if test="${comm.status == '1'}">
+                                                        <c:if test="${comm.status1 == '1'}">
                                                             正常
                                                         </c:if>
-                                                        <c:if test="${comm.status == '2'}">
+                                                        <c:if test="${comm.status1 == '2'}">
                                                             已出售
                                                         </c:if>
                                                     </td>

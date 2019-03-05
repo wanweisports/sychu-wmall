@@ -99,6 +99,7 @@ public class ClientChannelUtil2 {
 
     public synchronized static void sendEventWait(ClientBean clientBean, String[] comms){
         clientBean.setReadStatus(null); //获取中
+        clientBean.setRfidDatas(null);  //清空射频缓存
         sendEvent(clientBean, comms);
         readAllStatus(clientBean);
     }
@@ -128,13 +129,11 @@ public class ClientChannelUtil2 {
     public static void readAllStatus(ClientBean clientBean){
         synchronized (clientBean) {
             //serverChannel.writeAndFlush(Unpooled.copiedBuffer(ClientChannelUtil.READ_STATUS + deviceNo, CharsetUtil.UTF_8));
-
             logger.info("serverChannel：" + clientBean.getServiceChannel());
             long start = System.currentTimeMillis();
             while ((System.currentTimeMillis()-start) <= 15000 && clientBean.getReadStatus() == null) { //15秒内轮询等待TCP消息返回
                 try {
-                    logger.info("wait...~" + clientBeans.size() + "-connect size.");
-                    System.out.println(clientBean.getReadStatus());
+                    logger.info("wait...~" + clientBeans.size() + "-connect size. readStatus" + clientBean.getReadStatus());
                     for(ClientBean cb : clientBeans){
                         logger.info(cb.getHost() + ":" + cb.getPort());
                         logger.info("=====================================");

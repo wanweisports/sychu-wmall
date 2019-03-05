@@ -496,8 +496,11 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
         ClientChannelUtil2.sendEventWait(clientBean, new String[]{"DD"});
 
         sleep();
-        Map<String, Object> data = new HashMap<>(1, 1);
+        Map<String, Object> data = new HashMap<>(2, 1);
         data.put("rfids", clientBean.getRfidDatas());
+        data.put("readStatus", clientBean.getReadStatus());
+        logger.warn("rfidRead===>" + data);
+        if(clientBean.getReadStatus() == null) throw new MessageException("设备读取超时，请重试或联系管理员！");
         return data;
     }
 
@@ -509,7 +512,6 @@ public class RelayServiceImpl extends BaseService implements IRelayService {
     public Map<String, Object> readEpcLabelApi(int did){
         //判断是否连接中
         Map<String, Object> rfidMap = rfidRead(did);
-        System.out.println(rfidMap);
 
         List<String> epcs = (List<String>) rfidMap.get("rfids");
 
